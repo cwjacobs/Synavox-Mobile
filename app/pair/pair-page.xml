@@ -1,0 +1,22 @@
+<Page class="page" loaded="onLoaded" navigatingTo="onNavigatingTo" xmlns="http://schemas.nativescript.org/tns.xsd">
+	<ActionBar class="action-bar">
+		<!-- 
+        Use the NavigationButton as a side-drawer button in Android
+        because ActionItems are shown on the right side of the ActionBar
+        -->
+		<NavigationButton ios:visibility="collapsed" icon="res://menu" tap="onDrawerButtonTap"></NavigationButton>
+		<ActionItem icon="res://navigation/menu" android:visibility="collapsed" tap="onDrawerButtonTap" ios.position="left"></ActionItem>
+		<Label class="action-bar-title" text="Pair"></Label>
+	</ActionBar>
+	<StackLayout>
+		<GridLayout class="page-content">
+			<Label class="page-icon fa" id="page-icon" text="&#xf09e;"></Label>
+			<Label class="page-placeholder" text="Page content goes here" />
+			<StackLayout>
+				<image src="~/images/pair.jpg" width="100%" height="auto" />
+				<Label class="tagDisplay" text="{{ tagId, 'Synavox Mobile Tag Id: ' + tagId}}" />
+				<TextField class="tagDisplay" text="{{ medicineName }}" hint="Enter Medicine Name"/>
+			</StackLayout>
+		</GridLayout>
+	</StackLayout>
+</Page>
