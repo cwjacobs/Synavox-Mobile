@@ -157,11 +157,10 @@ function findAudio(fTagId: string): string {
             audioPath = value.audioPath;
         }
     })
-
     return audioPath;
 }
 
 function playAudio(audioPath: string): void {
     let audioPlayer = new AudioPlayer(audioPath);
-    audioPlayer.togglePlay()
+    AudioPlayer.togglePlay()
 }

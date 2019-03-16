@@ -11,11 +11,11 @@
 	<StackLayout>
 		<GridLayout class="page-content">
 			<Label class="page-icon fa" id="page-icon" text="&#xf09e;"></Label>
-			<Label class="page-placeholder" text="Page content goes here" />
 			<StackLayout>
 				<image src="~/images/pair.jpg" width="100%" height="auto" />
 				<Label class="tagDisplay" text="{{ tagId, 'Synavox Mobile Tag Id: ' + tagId}}" />
 				<TextField class="tagDisplay" text="{{ medicineName }}" hint="Enter Medicine Name"/>
+				<Button style="margin-top: 60px;" text="Pause" onTap="onPauseTap" />
 			</StackLayout>
 		</GridLayout>
 	</StackLayout>

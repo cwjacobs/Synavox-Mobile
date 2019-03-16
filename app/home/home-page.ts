@@ -2,11 +2,10 @@ import { RadSideDrawer } from "nativescript-ui-sidedrawer";
 import * as app from "tns-core-modules/application";
 import { EventData, Observable } from "tns-core-modules/data/observable";
 import { NavigatedData, Page } from "tns-core-modules/ui/page";
-import { ListView } from "tns-core-modules/ui/list-view";
 
 import { HomeViewModel } from "./home-view-model";
 import { TestData } from "../data-models/test-data"
-
+import { MedicineBinding } from "../data-models/medicine-binding";
 import { AudioPlayer } from '../audio-player/audio-player';
 
 let viewModel: HomeViewModel = null;
@@ -28,13 +27,23 @@ export function onLoaded(args: EventData) {
 }
 
 export function onItemTap(args: EventData) {
-    
-    var eventName = args.eventName;
+    let audioPlayer = new AudioPlayer(findAudio("-674590-106"));
+    AudioPlayer.togglePlay();
+}
 
-    const listView = <ListView>args.object;;
-    console.dir(listView);
+export function onPauseTap(args: EventData) {
+    let audioPlayer: AudioPlayer = new AudioPlayer();
+    AudioPlayer.pausePlay();
+};
 
-    console.dir(args);
-    // let audioPlayer = new AudioPlayer();
-    // audioPlayer.togglePlay();
+function findAudio(fTagId: string): string {
+    let audioPath: string = "not-found";
+    let testData: TestData = new TestData();
+    let medicineBindings: MedicineBinding[] = testData.getStaticTestData();
+    medicineBindings.forEach(value => {
+        if (value.tagId === fTagId) {
+            audioPath = value.audioPath;
+        }
+    })
+    return audioPath;
 }

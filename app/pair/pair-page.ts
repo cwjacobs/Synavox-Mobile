@@ -4,6 +4,7 @@ import { EventData } from "tns-core-modules/data/observable";
 import { NavigatedData, Page } from "tns-core-modules/ui/page";
 
 import { PairViewModel } from "./pair-view-model";
+import { AudioPlayer } from "~/audio-player/audio-player";
 
 let page: Page = null;
 let viewModel: PairViewModel = null;
@@ -24,5 +25,7 @@ export function onDrawerButtonTap(args: EventData) {
     sideDrawer.showDrawer();
 };
 
-export function onItemTap(args: EventData) {
+export function onPauseTap(args: EventData) {
+    let audioPlayer: AudioPlayer = new AudioPlayer();
+    AudioPlayer.pausePlay();
 };

@@ -24,6 +24,7 @@
 				<!-- </GridLayout> -->
 			</ListView.itemTemplate>
 		</ListView>
+		<Button style="margin-top: 30px;" text="Pause" onTap="onPauseTap" />
 	</StackLayout>
 	<!-- </GridLayout> -->
 </Page>
