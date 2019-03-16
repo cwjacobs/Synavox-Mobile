@@ -1,4 +1,4 @@
-<Page navigatingTo="onNavigatingTo" xmlns="http://schemas.nativescript.org/tns.xsd">
+<Page navigatingTo="onNavigatingTo" loaded="onLoaded" xmlns:FS="nativescript-filter-select" xmlns="http://schemas.nativescript.org/tns.xsd">
 	<ActionBar class="action-bar">
 		<!-- 
         Use the NavigationButton as a side-drawer button in Android
@@ -11,9 +11,12 @@
 	<GridLayout class="page-content">
 		<StackLayout>
 			<image src="~/images/search.jpg" width="100%" height="auto" />
-			<Label class="page-icon fa" text="&#xf002;"></Label>
-			<Label class="page-placeholder" text="Page content goes here">
-			</Label>
+			<Label class="title" text="My Medicines"></Label>
+			<StackLayout class="searchPageContent">
+				<FS:FilterSelect class="item" items="{{ myMedicineList }}" hint="Press Select to choose medicine" modal_title="My Medicines" search_param="medicineName" primary_key="tagId" change="{{ onSelect }}" />
+			</StackLayout>
+			<Label class="page-icon fa" onTap="onSearchTapped" text="&#xf002;"></Label>
+			<!-- <Label class="page-placeholder" text="Page content goes here" /> -->
 		</StackLayout>
 	</GridLayout>
 </Page>

@@ -27,7 +27,7 @@ export function onLoaded(args: EventData) {
 }
 
 export function onItemTap(args: EventData) {
-    let audioPlayer = new AudioPlayer(findAudio("-674590-106"));
+    let audioPlayer = new AudioPlayer(findAudio("77-475-106"));
     AudioPlayer.togglePlay();
 }
 
