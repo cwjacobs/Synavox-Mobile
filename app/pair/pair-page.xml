@@ -9,13 +9,25 @@
 		<Label class="action-bar-title" text="Pair"></Label>
 	</ActionBar>
 	<StackLayout>
-		<GridLayout class="page-content">
+		<GridLayout class="page-content synavox-page-content">
 			<Label class="page-icon fa" id="page-icon" text="&#xf09e;"></Label>
 			<StackLayout>
 				<image src="~/images/pair.jpg" width="100%" height="auto" />
 				<Label class="tagDisplay" text="{{ tagId, 'Synavox Mobile Tag Id: ' + tagId}}" />
 				<TextField class="tagDisplay" text="{{ medicineName }}" hint="Enter Medicine Name"/>
-				<Button style="margin-top: 60px;" text="Pause" onTap="onPauseTap" />
+				<ListView class="list" items="{{ myMedicineList }}" itemTap="onItemTap">
+					<ListView.itemTemplate>
+						<GridLayout row="*" col="*,*">
+							<Label class="fa" style="text-align: right; margin-right: 10px;" text="&#xf02b;" row="0" col="0"/>
+							<Label style="padding: 10px" text="{{ medicineName }}" row="0" col="1"/>
+						</GridLayout>
+					</ListView.itemTemplate>
+				</ListView>
+				<StackLayout orientation="horizontal" class="button-row">
+					<Button class="button btn-primary" text="Bind" onTap="onBindTap" />
+					<Button class="button test-button" text="Pause" onTap="onPauseTap" />
+					<Button class="button btn-primary" text="Cancel" onTap="onCancelTap" />
+				</StackLayout>
 			</StackLayout>
 		</GridLayout>
 	</StackLayout>
