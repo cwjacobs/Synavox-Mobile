@@ -16,12 +16,10 @@
 		<Label class="list title" text="My Medicines"></Label>
 		<ListView class="list" items="{{ myMedicineList }}" itemTap="onItemTap">
 			<ListView.itemTemplate>
-				<StackLayout>
-					<!-- <GridLayout orientation="horizontal" row="*" col="*,*"> -->
+				<GridLayout row="*" col="*,*">
 					<Label class="fa" style="text-align: right; margin-right: 10px;" text="&#xf29e;" row="0" col="0"/>
 					<Label style="padding: 10px" text="{{ medicineName }}" row="0" col="1"/>
-				</StackLayout>
-				<!-- </GridLayout> -->
+				</GridLayout>
 			</ListView.itemTemplate>
 		</ListView>
 		<Button style="margin-top: 30px;" text="Pause" onTap="onPauseTap" />

@@ -13,6 +13,7 @@ export class PairViewModel extends Observable {
     private page: Page = null;
     private tagId: string = "";
     private medicineName: string = "";
+    private audioPlayer: AudioPlayer = new AudioPlayer();
 
     public lastNdefDiscovered: string = "Press a button...";
 
@@ -43,7 +44,7 @@ export class PairViewModel extends Observable {
                         this.nfc.setOnTagDiscoveredListener((data: NfcTagData) => {
                             let fTagId = formatTagId(data.id);
                             let audioPath = findAudio(fTagId);
-                            if(audioPath === "not-found") {
+                            if (audioPath === "not-found") {
                                 alert("New tag, would you like to bind it now?");
                             }
                             else {
@@ -161,6 +162,6 @@ function findAudio(fTagId: string): string {
 }
 
 function playAudio(audioPath: string): void {
-    let audioPlayer = new AudioPlayer(audioPath);
-    AudioPlayer.togglePlay()
+    AudioPlayer.useAudio(audioPath);
+    AudioPlayer.togglePlay();
 }

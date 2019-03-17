@@ -6,6 +6,23 @@ export class AudioPlayer {
     constructor(audioPath?: string) {
         AudioPlayer._player = new TNSPlayer();
         AudioPlayer._player.debug = true; // set true to enable TNSPlayer console logs for debugging.
+        // AudioPlayer._player
+        //     .initFromFile({
+        //         audioFile: audioPath, // ~ = app directory
+        //         loop: false,
+        //         completeCallback: AudioPlayer._trackComplete.bind(this),
+        //         errorCallback: AudioPlayer._trackError.bind(this)
+        //     })
+        //     .then(() => {
+        //         AudioPlayer._player.getAudioTrackDuration().then(duration => {
+        //             // iOS: duration is in seconds
+        //             // Android: duration is in milliseconds
+        //             console.log(`audio duration:`, duration);
+        //         });
+        //     });
+    }
+
+    public static useAudio(audioPath: string) {
         AudioPlayer._player
             .initFromFile({
                 audioFile: audioPath, // ~ = app directory
