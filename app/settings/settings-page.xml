@@ -16,9 +16,13 @@
 	<GridLayout class="page-content">
 		<StackLayout>
 			<image src="~/images/settings.jpg" width="100%" height="auto" />
+			<Label class="title fa" text="Language &#xf1ab;"></Label>
+			<StackLayout title="{{ language }}" orientation="horizontal">
+				<button text="English" onTap="onEnglishTap" />
+				<button text="Spanish" onTap="onSpanishTap" />
+			</StackLayout>
 			<Label class="page-icon fa" text="&#xf013;"></Label>
-			<Label class="page-placeholder" text="Page content goes here">
-			</Label>
+			<Label class="page-placeholder" text="Page content goes here" />
 		</StackLayout>
 	</GridLayout>
 </Page>
