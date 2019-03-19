@@ -15,7 +15,7 @@
 				<image src="~/images/pair.jpg" width="100%" height="auto" />
 				<Label class="tagDisplay" text="{{ tagId, 'Synavox Mobile Tag Id: ' + tagId}}" />
 				<TextField class="tagDisplay" text="{{ medicineName }}" hint="Enter Medicine Name"/>
-				<ListView class="list" items="{{ myMedicineList }}" itemTap="onItemTap">
+				<ListView class="list" id="medicineList" items="{{ myMedicineList }}" itemTap="onItemTap">
 					<ListView.itemTemplate>
 						<GridLayout rows="*" columns="*,*">
 							<Label style="padding: 10px" text="{{ medicineName }}" row="0" col="0"/>
@@ -24,11 +24,9 @@
 					</ListView.itemTemplate>
 				</ListView>
 				<GridLayout class="button-row" rows="*" columns="*,*,*">
-					<!-- <StackLayout orientation="horizontal" class="button-row"> -->
-					<Button class="button btn-primary" text="Save" onTap="onBindTap" row="0" col="0" onTap="onSaveTap" />
-					<Button class="button test-button fa" text="Stop &#xf29e;" onTap="onPauseTap" row="0" col="1" />
-					<Button class="button btn-primary" text="Cancel" onTap="onCancelTap" row="0" col="2" onTap="onCancelTap" />
-					<!-- </StackLayout> -->
+					<Button class="button btn-primary" text="Save" row="0" col="0" onTap="onSaveTap" />
+					<Button class="button test-button fa" text="Stop &#xf29e;" onTap="onStopTap" row="0" col="1" />
+					<Button class="button btn-primary" text="Cancel" row="0" col="2" onTap="onCancelTap" />
 				</GridLayout>
 			</StackLayout>
 		</GridLayout>

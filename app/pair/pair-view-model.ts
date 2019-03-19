@@ -7,6 +7,7 @@ import { Page } from "tns-core-modules/ui/page/page";
 import { MedicineBinding } from "../data-models/medicine-binding";
 import { TestData } from "../data-models/test-data";
 import { AudioPlayer } from "~/audio-player/audio-player";
+import { getCurrentLanguage, getCurrentBindings } from "../home/home-page";
 
 export class PairViewModel extends Observable {
     private nfc: Nfc = null;
@@ -14,6 +15,7 @@ export class PairViewModel extends Observable {
     private tagId: string = "";
     private medicineName: string = "";
     private audioPlayer: AudioPlayer = new AudioPlayer();
+    private medicineBindings: MedicineBinding[] = null;
 
     public lastNdefDiscovered: string = "Press a button...";
 
@@ -21,6 +23,7 @@ export class PairViewModel extends Observable {
         super();
         this.page = page;
         this.nfc = new Nfc();
+        this.medicineBindings = getCurrentBindings();
 
         SelectedPageService.getInstance().updateSelectedPage("Pair");
     }
@@ -152,7 +155,8 @@ function formatTagId(data: number[]): string {
 function findAudio(fTagId: string): string {
     let audioPath: string = "not-found";
     let testData: TestData = new TestData();
-    let medicineBindings: MedicineBinding[] = testData.getStaticTestData();
+
+    let medicineBindings: MedicineBinding[] = getCurrentBindings();
     medicineBindings.forEach(value => {
         if (value.tagId === fTagId) {
             audioPath = value.audioPath;

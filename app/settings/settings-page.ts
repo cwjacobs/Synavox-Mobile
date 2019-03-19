@@ -39,7 +39,7 @@ export function onDrawerButtonTap(args: EventData) {
     sideDrawer.showDrawer();
 }
 
-export function getLanguageDirectory(): string {
-    return languageDir;
+export function getLanguageSetting(): string {
+    return viewModel.get("language");
 }
 

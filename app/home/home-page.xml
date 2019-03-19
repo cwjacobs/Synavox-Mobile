@@ -22,7 +22,11 @@
 				</GridLayout>
 			</ListView.itemTemplate>
 		</ListView>
-		<Button style="margin-top: 30px;" text="Pause" onTap="onPauseTap" />
+		<GridLayout class="button-row" rows="*" columns="*,*,*">
+			<Button class="button btn-primary" text="English" row="0" col="0" onTap="onEnglishTap" />
+			<Button class="button test-button fa" text="Stop &#xf29e;" onTap="onStopTap" row="0" col="1" />
+			<Button class="button btn-primary" text="Spanish" row="0" col="2" onTap="onSpanishTap" />
+		</GridLayout>
 	</StackLayout>
 	<!-- </GridLayout> -->
 </Page>

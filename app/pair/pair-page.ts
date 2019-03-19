@@ -2,12 +2,14 @@ import { RadSideDrawer } from "nativescript-ui-sidedrawer";
 import * as app from "tns-core-modules/application";
 import { EventData } from "tns-core-modules/data/observable";
 import { NavigatedData, Page } from "tns-core-modules/ui/page";
-import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
+import { ListView, ItemEventData } from "tns-core-modules/ui/list-view/list-view";
 
 import { PairViewModel } from "./pair-view-model";
 import { AudioPlayer } from "~/audio-player/audio-player";
 import { MedicineBinding } from "../data-models/medicine-binding";
 import { TestData } from "../data-models/test-data"
+import { getLanguagePath } from "../helper-functions/helper-functions"
+import { getCurrentLanguage, getCurrentBindings } from "../home/home-page"
 
 let medicineBindings: MedicineBinding[] = null;
 
@@ -22,10 +24,9 @@ export function onNavigatingTo(args: NavigatedData) {
 }
 
 export function onLoaded(args: EventData) {
-    let testData = new TestData();
-    medicineBindings = testData.getStaticTestData();
-    viewModel.set("myMedicineList", medicineBindings);
+    medicineBindings = getCurrentBindings(); //home-page
 
+    viewModel.set("myMedicineList", medicineBindings);
     viewModel.set("medicineName", "Atorvastatin");
 
     viewModel.doStartTagListener();
@@ -36,7 +37,7 @@ export function onDrawerButtonTap(args: EventData) {
     sideDrawer.showDrawer();
 };
 
-export function onPauseTap(args: EventData) {
+export function onStopTap(args: EventData) {
     let audioPlayer: AudioPlayer = new AudioPlayer();
     AudioPlayer.pausePlay();
 };
@@ -44,38 +45,60 @@ export function onPauseTap(args: EventData) {
 export function onItemTap(args: ItemEventData) {
     let medicineName = medicineBindings[args.index].medicineName;
     viewModel.set("medicineName", medicineName);
+
+    let audioPath = medicineBindings[args.index].audioPath;
+    AudioPlayer.useAudio(audioPath);
+    AudioPlayer.togglePlay();
 };
 
 export function onSaveTap(args: ItemEventData) {
-    let newBinding: MedicineBinding = new MedicineBinding();
-    newBinding.tagId = viewModel.get("tagId");
-    newBinding.medicineName = viewModel.get("medicineName");
+    let binding: MedicineBinding = new MedicineBinding();
+    binding.tagId = viewModel.get("tagId");
+    binding.medicineName = viewModel.get("medicineName");
     // alert(newBinding.tagId + " : " + newBinding.medicineName);
 
-    let index: number = findIndex(newBinding.medicineName);
+    let index: number = findIndex(binding.medicineName);
     // alert("index: " + index);
 
     if (index != -1) {
-        newBinding.audioPath = medicineBindings[index].audioPath;
-        medicineBindings[index] = newBinding;
+        binding.audioPath = medicineBindings[index].audioPath;
+        medicineBindings[index] = binding;
     }
     else {
-        let audioName: string = (newBinding.medicineName + ".mp3").toLowerCase();
-        newBinding.audioPath = "~/audio/" + audioName;
-        medicineBindings.push({
-            tagId: newBinding.tagId,
-            medicineName: newBinding.medicineName,
-            audioPath: newBinding.audioPath
+        let audioRootPath: string = "~/audio/";
+        let audioName: string = (binding.medicineName + ".mp3").toLowerCase();
+
+        let language: string = getCurrentLanguage();
+        if (language === "English") {
+            audioRootPath += "en/"
+        }
+        else {
+            audioRootPath += "sp/"
+        }
+
+        binding.audioPath = audioRootPath + audioName;
+        // medicineBindings.push({
+        //     tagId: binding.tagId,
+        //     medicineName: binding.medicineName,
+        //     audioPath: binding.audioPath
+        // });
+        const listView: ListView = page.getViewById<ListView>("medicineList");
+        page.bindingContext.myMedicineList.push({
+            tagId: binding.tagId,
+            medicineName: binding.medicineName,
+            audioPath: binding.audioPath           
         });
+        listView.refresh();
     }
-    viewModel.set("myMedicines", medicineBindings);
     
+    viewModel.set("myMedicines", medicineBindings);
+
     // let medicineName = viewModel.get("medicineName");
     // medicineBindings[args.index].medicineName;
 };
 
 export function onCancelTap(args: ItemEventData) {
-    viewModel.set("medicineName", "");
+    viewModel.set("medicineName", "Atorvastatin");
 };
 
 
