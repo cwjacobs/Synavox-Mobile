@@ -7,11 +7,11 @@ import { ListView, ItemEventData } from "tns-core-modules/ui/list-view/list-view
 import { PairViewModel } from "./pair-view-model";
 import { AudioPlayer } from "~/audio-player/audio-player";
 import { MedicineBinding } from "../data-models/medicine-binding";
-import { TestData } from "../data-models/test-data"
-import { getLanguagePath } from "../helper-functions/helper-functions"
-import { getCurrentLanguage, getCurrentBindings } from "../home/home-page"
 
-let medicineBindings: MedicineBinding[] = null;
+import * as Test from "../data-models/test-data";
+import * as Utility from "../utility-functions/utility-functions";
+
+let medicineList: MedicineBinding[] = null;
 
 let page: Page = null;
 let viewModel: PairViewModel = null;
@@ -24,9 +24,8 @@ export function onNavigatingTo(args: NavigatedData) {
 }
 
 export function onLoaded(args: EventData) {
-    medicineBindings = getCurrentBindings(); //home-page
-
-    viewModel.set("myMedicineList", medicineBindings);
+    medicineList = Test.Dataset.getCurrentTestData();
+    viewModel.set("myMedicineList", medicineList);
     viewModel.set("medicineName", "Atorvastatin");
 
     viewModel.doStartTagListener();
@@ -43,10 +42,10 @@ export function onStopTap(args: EventData) {
 };
 
 export function onItemTap(args: ItemEventData) {
-    let medicineName = medicineBindings[args.index].medicineName;
+    let medicineName = medicineList[args.index].medicineName;
     viewModel.set("medicineName", medicineName);
 
-    let audioPath = medicineBindings[args.index].audioPath;
+    let audioPath = Utility.Language.getAudioPath(medicineName);
     AudioPlayer.useAudio(audioPath);
     AudioPlayer.togglePlay();
 };
@@ -61,40 +60,33 @@ export function onSaveTap(args: ItemEventData) {
     // alert("index: " + index);
 
     if (index != -1) {
-        binding.audioPath = medicineBindings[index].audioPath;
-        medicineBindings[index] = binding;
+        binding.audioPath = Utility.Language.getAudioPath(binding.medicineName);
+        medicineList[index] = binding; // use the util functions to add data to array
     }
     else {
-        let audioRootPath: string = "~/audio/";
-        let audioName: string = (binding.medicineName + ".mp3").toLowerCase();
+        // let audioRootPath: string = "~/audio/";
+        // let audioName: string = (binding.medicineName + ".mp3").toLowerCase();
 
-        let language: string = getCurrentLanguage();
-        if (language === "English") {
-            audioRootPath += "en/"
-        }
-        else {
-            audioRootPath += "sp/"
-        }
+        // let language: string = getCurrentLanguage();
+        // if (language === "English") {
+        //     audioRootPath += "en/"
+        // }
+        // else {
+        //     audioRootPath += "sp/"
+        // }
 
-        binding.audioPath = audioRootPath + audioName;
-        // medicineBindings.push({
-        //     tagId: binding.tagId,
-        //     medicineName: binding.medicineName,
-        //     audioPath: binding.audioPath
-        // });
-        const listView: ListView = page.getViewById<ListView>("medicineList");
+        binding.audioPath = Utility.Language.getAudioPath(binding.medicineName);
+        
         page.bindingContext.myMedicineList.push({
             tagId: binding.tagId,
             medicineName: binding.medicineName,
             audioPath: binding.audioPath           
         });
-        listView.refresh();
     }
-    
-    viewModel.set("myMedicines", medicineBindings);
+    const listView: ListView = page.getViewById<ListView>("medicineList");
+    listView.refresh();
 
-    // let medicineName = viewModel.get("medicineName");
-    // medicineBindings[args.index].medicineName;
+    viewModel.set("myMedicines", medicineList);
 };
 
 export function onCancelTap(args: ItemEventData) {
@@ -105,7 +97,7 @@ export function onCancelTap(args: ItemEventData) {
 function findIndex(medicineName: string): number {
     let i: number = 0;
     let index: number = -1;
-    medicineBindings.forEach(value => {
+    medicineList.forEach(value => {
         if (value.medicineName === medicineName) {
             index = i;
         }
