@@ -6,7 +6,7 @@ export namespace Language {
 
     const defaultLanguage: string = "english";
     
-    let currentLanguage: string;
+    let currentLanguage: string = null;
     let lanugageDirectoryRoot: string = "~/audio/";
 
     export function getDefaultLanguage(): string {

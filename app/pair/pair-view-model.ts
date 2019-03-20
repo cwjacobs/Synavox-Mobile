@@ -47,8 +47,9 @@ export class PairViewModel extends Observable {
 
                         let self = this;
                         this.nfc.setOnTagDiscoveredListener((data: NfcTagData) => {
-                            let fTagId = formatTagId(data.id);
                             let audioPath: string;
+                            
+                            let fTagId = this.formatTagId(data.id);
                             this.medicineList.forEach(value => {
                                 if (value.tagId === fTagId) {
                                     audioPath = Utility.Language.getAudioPath(value.medicineName);
@@ -59,7 +60,7 @@ export class PairViewModel extends Observable {
                                 alert("New tag, would you like to bind it now?");
                             }
                             else {
-                                playAudio(audioPath);
+                                this.playAudio(audioPath);
                             }
 
                             self.set("tagId", fTagId);
@@ -152,13 +153,19 @@ export class PairViewModel extends Observable {
             console.log(err);
         });
     }
+
+    private formatTagId(data: number[]): string {
+        let formatedId: string = "";
+        data.forEach((value) => { formatedId += value })
+        return formatedId;
+    }
+
+    private playAudio(audioPath: string): void {
+        AudioPlayer.useAudio(audioPath);
+        AudioPlayer.togglePlay();
+    }
 }
 
-function formatTagId(data: number[]): string {
-    let formatedId: string = "";
-    data.forEach((value) => { formatedId += value })
-    return formatedId;
-}
 
 // function findAudio(fTagId: string): string {
 //     let audioPath: string = "not-found";
@@ -173,7 +180,7 @@ function formatTagId(data: number[]): string {
 //     return audioPath;
 // }
 
-function playAudio(audioPath: string): void {
-    AudioPlayer.useAudio(audioPath);
-    AudioPlayer.togglePlay();
-}
+// function playAudio(audioPath: string): void {
+//     AudioPlayer.useAudio(audioPath);
+//     AudioPlayer.togglePlay();
+// }

@@ -4,10 +4,12 @@ import { EventData } from "tns-core-modules/data/observable";
 import { NavigatedData, Page } from "tns-core-modules/ui/page";
 
 import { SettingsViewModel } from "./settings-view-model";
+import * as Test from "../data-models/test-data";
+import * as Utility from "../utility-functions/utility-functions";
 
 let page: Page = null;
 let languageDir: string = "en";
-let language: string = "English";
+let primaryLanguage: string = null;
 let viewModel: SettingsViewModel = null;
 
 export function onNavigatingTo(args: NavigatedData) {
@@ -18,28 +20,23 @@ export function onNavigatingTo(args: NavigatedData) {
 }
 
 export function onLoaded(args: NavigatedData) {
+    primaryLanguage = Utility.Language.getCurrentLanguage();
+    // currentLanguage = "english" ? "English" : "Spanish";
+    viewModel.set("primaryLanguage", primaryLanguage);
 }
 
 export function onEnglishTap(args: NavigatedData) {
-    alert("English");
-    languageDir = "en";
-    language = "English";
-    viewModel.set("language", language);
+    Utility.Language.setCurrentLanguage("english");
+    viewModel.set("primaryLanguage", "English");
 }
 
 export function onSpanishTap(args: NavigatedData) {
-    alert("Spanish");
-    languageDir = "sp";
-    language = "Spanish";
-    viewModel.set("language", language);
+    Utility.Language.setCurrentLanguage("spanish");
+    viewModel.set("primaryLanguage", "Spanish");
 }
 
 export function onDrawerButtonTap(args: EventData) {
     const sideDrawer = <RadSideDrawer>app.getRootView();
     sideDrawer.showDrawer();
-}
-
-export function getLanguageSetting(): string {
-    return viewModel.get("language");
 }
 

@@ -1,4 +1,4 @@
-<Page navigatingTo="onNavigatingTo" xmlns="http://schemas.nativescript.org/tns.xsd">
+<Page navigatingTo="onNavigatingTo" loaded="onLoaded" xmlns="http://schemas.nativescript.org/tns.xsd">
 	<ActionBar class="action-bar">
 		<!-- 
         Use the NavigationButton as a side-drawer button in Android
@@ -11,18 +11,21 @@
         because its function is to always navigate back in the application.
         -->
 		<ActionItem icon="res://navigation/menu" android:visibility="collapsed" tap="onDrawerButtonTap" ios.position="left"></ActionItem>
-		<Label class="action-bar-title" text="Settings"></Label>
+		<Label class="action-bar-title fa" text="Settings"></Label>
 	</ActionBar>
 	<GridLayout class="page-content">
 		<StackLayout>
 			<image src="~/images/settings.jpg" width="100%" height="auto" />
 			<Label class="title fa" text="Language &#xf1ab;"></Label>
-			<StackLayout title="{{ language }}" orientation="horizontal">
-				<button text="English" onTap="onEnglishTap" />
-				<button text="Spanish" onTap="onSpanishTap" />
-			</StackLayout>
-			<Label class="page-icon fa" text="&#xf013;"></Label>
-			<Label class="page-placeholder" text="Page content goes here" />
+			<Label class="subtitle" text="{{ primaryLanguage, 'Primary: ' + primaryLanguage }}"></Label>
+			<GridLayout class="settings-content button-row" rows="*" columns="*,*">
+				<Button class="button btn-primary" text="English" row="0" col="0" onTap="onEnglishTap" />
+				<!-- <Label class="indicator fa" text="&#xf060;" row="0" col="1" /> -->
+				<Button class="button test-button" text="Spanish" row="0" col="1" onTap="onSpanishTap" />
+				<!-- <Label class="indicator fa" text="&#xf060;" row="0" col="3" /> -->
+			</GridLayout>
+			<!-- <Label class="page-icon fa" text="&#xf013;"></Label>
+			<Label class="page-placeholder" text="Page content goes here" /> -->
 		</StackLayout>
 	</GridLayout>
 </Page>

@@ -51,14 +51,3 @@ export function onEnglishTap(args: EventData) {
 export function onSpanishTap(args: EventData) {
     Utility.Language.setCurrentLanguage("spanish");
 };
-
-// function findAudio(fTagId: string): string {
-//     let audioPath: string = "not-found";
-//     let testData: TestData = new TestData();
-//     medicineBindingList.medicineBindingList.forEach(value => {
-//         if (value.tagId === fTagId) {
-//             audioPath = value.audioPath;
-//         }
-//     })
-//     return audioPath;
-// }
