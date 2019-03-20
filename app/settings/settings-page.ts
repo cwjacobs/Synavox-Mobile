@@ -9,7 +9,7 @@ import * as Utility from "../utility-functions/utility-functions";
 
 let page: Page = null;
 let languageDir: string = "en";
-let primaryLanguage: string = null;
+let activeLanguage: string = null;
 let viewModel: SettingsViewModel = null;
 
 export function onNavigatingTo(args: NavigatedData) {
@@ -20,19 +20,19 @@ export function onNavigatingTo(args: NavigatedData) {
 }
 
 export function onLoaded(args: NavigatedData) {
-    primaryLanguage = Utility.Language.getCurrentLanguage();
-    // currentLanguage = "english" ? "English" : "Spanish";
-    viewModel.set("primaryLanguage", primaryLanguage);
+    activeLanguage = Utility.Language.getCurrentLanguage();
+    let languageText = (activeLanguage === "english") ? "English" : "Spanish";
+    viewModel.set("activeLanguage", languageText);
 }
 
 export function onEnglishTap(args: NavigatedData) {
     Utility.Language.setCurrentLanguage("english");
-    viewModel.set("primaryLanguage", "English");
+    viewModel.set("activeLanguage", "English");
 }
 
 export function onSpanishTap(args: NavigatedData) {
     Utility.Language.setCurrentLanguage("spanish");
-    viewModel.set("primaryLanguage", "Spanish");
+    viewModel.set("activeLanguage", "Spanish");
 }
 
 export function onDrawerButtonTap(args: EventData) {
