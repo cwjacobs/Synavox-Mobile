@@ -19,26 +19,54 @@ export function onNavigatingTo(args: NavigatedData) {
 }
 
 export function onLoaded(args: NavigatedData) {
-    activeLanguage = Utility.Language.getActiveLanguage();
-    let languageText = (activeLanguage === "english") ? "English" : "Spanish";
-
     let isEnglishEnabled = Utility.Language.getIsEnglishEnabled();
     viewModel.set("isEnglishEnabled", isEnglishEnabled);
 
     let isSpanishEnabled = Utility.Language.getIsSpanishEnabled();
     viewModel.set("isSpanishEnabled", isSpanishEnabled);
 
-    viewModel.set("activeLanguage", languageText);
+    if (isEnglishEnabled) {
+        viewModel.set("isSpButtonEnabled", true);
+    }
+
+    if (isSpanishEnabled) {
+        viewModel.set("isEnButtonEnabled", true);
+    }
+
+    setActiveLanguageLabel();
 }
 
 export function onEnglishTap(args: NavigatedData) {
+    let isSpButtonEnabled: boolean;
     let isEnglishEnabled = Utility.Language.toggleEnglishEnabled();
+    if (!isEnglishEnabled) { // Don't allow both languages to be disabled
+        isSpButtonEnabled = false;
+        viewModel.set("isSpButtonEnabled", isSpButtonEnabled);
+        Utility.Language.setCurrentLanguage("spanish");
+    }
+    else {
+        isSpButtonEnabled = true;
+        viewModel.set("isSpButtonEnabled", isSpButtonEnabled);
+    }
     viewModel.set("isEnglishEnabled", isEnglishEnabled);
+    setActiveLanguageLabel();
+
 }
 
 export function onSpanishTap(args: NavigatedData) {
+    let isEnButtonEnabled: boolean;
     let isSpanishEnabled = Utility.Language.toggleSpanishEnabled();
+    if (!isSpanishEnabled) { // Don't allow both languages to be disabled
+        isEnButtonEnabled = false;
+        viewModel.set("isEnButtonEnabled", isEnButtonEnabled);
+        Utility.Language.setCurrentLanguage("english");
+    }
+    else {
+        isEnButtonEnabled = true;
+        viewModel.set("isEnButtonEnabled", isEnButtonEnabled);
+    }
     viewModel.set("isSpanishEnabled", isSpanishEnabled);
+    setActiveLanguageLabel();
 }
 
 export function onDrawerButtonTap(args: EventData) {
@@ -46,3 +74,8 @@ export function onDrawerButtonTap(args: EventData) {
     sideDrawer.showDrawer();
 }
 
+function setActiveLanguageLabel() {
+    activeLanguage = Utility.Language.getActiveLanguage();
+    let languageText = (activeLanguage === "english") ? "English" : "Spanish";
+    viewModel.set("activeLanguage", languageText);
+}

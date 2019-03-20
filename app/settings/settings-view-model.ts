@@ -8,6 +8,9 @@ export class SettingsViewModel extends Observable {
     public primaryLanguage: string;
     public isEnglishEnabled: boolean;
     public isSpanishEnabled: boolean;
+    public isEnButtonEnabled: boolean;
+    public isSpButtonEnabled: boolean;
+    
     
     constructor(page: Page) {
         super();
