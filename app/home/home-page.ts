@@ -5,13 +5,16 @@ import { NavigatedData, Page } from "tns-core-modules/ui/page";
 
 import { ItemEventData, ListView } from "tns-core-modules/ui/list-view";
 import { HomeViewModel } from "./home-view-model";
-import { TestData } from "../data-models/test-data"
-import { MedicineBinding } from "../data-models/medicine-binding";
 import { AudioPlayer } from '../audio-player/audio-player';
 
+import * as Test from "../data-models/test-data";
+import * as Utility from "../utility-functions/utility-functions";
+import { MedicineBinding } from "~/data-models/medicine-binding";
+
+let language: string = null;
 let viewModel: HomeViewModel = null;
 let audioPlayer: AudioPlayer = null;
-let medicineBindings: MedicineBinding[] = null;
+let medicineList: MedicineBinding[] = null;
 
 export function onNavigatingTo(args: NavigatedData) {
     const page = <Page>args.object;
@@ -25,32 +28,26 @@ export function onDrawerButtonTap(args: EventData) {
 }
 
 export function onLoaded(args: EventData) {
-    let testData = new TestData();
     audioPlayer = new AudioPlayer();
-
-    medicineBindings = testData.getStaticTestData();
-    viewModel.set("myMedicineList", medicineBindings);
+    medicineList = Test.Dataset.getCurrentTestData();
+    viewModel.set("myMedicineList", medicineList);
 }
 
 export function onItemTap(args: ItemEventData) {
-    let audioPath = medicineBindings[args.index].audioPath;
+    let audioPath = Utility.Language.getAudioPath(medicineList[args.index].medicineName);
     AudioPlayer.useAudio(audioPath);
     AudioPlayer.togglePlay();
 }
 
-export function onPauseTap(args: EventData) {
+export function onStopTap(args: EventData) {
     let audioPlayer: AudioPlayer = new AudioPlayer();
     AudioPlayer.pausePlay();
 };
 
-function findAudio(fTagId: string): string {
-    let audioPath: string = "not-found";
-    let testData: TestData = new TestData();
-    let medicineBindings: MedicineBinding[] = testData.getStaticTestData();
-    medicineBindings.forEach(value => {
-        if (value.tagId === fTagId) {
-            audioPath = value.audioPath;
-        }
-    })
-    return audioPath;
-}
+export function onEnglishTap(args: EventData) {
+    Utility.Language.setCurrentLanguage("english");
+};
+
+export function onSpanishTap(args: EventData) {
+    Utility.Language.setCurrentLanguage("spanish");
+};

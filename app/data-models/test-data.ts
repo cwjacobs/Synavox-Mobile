@@ -1,28 +1,80 @@
 import { MedicineBinding } from "./medicine-binding";
 
-export class TestData {
+import * as Utility from "../utility-functions/utility-functions";
 
-    private testData: MedicineBinding[] = null;
+export namespace Dataset {
 
-    private static staticTestData: MedicineBinding[] = [
-        { tagId: "-9955102114", medicineName: "Oxycodone", audioPath: "~/audio/mom.mp3" },
-        // { tagId: "-674590-106", medicineName: "Atorvastatin", audioPath: "~/audio/atorvastatin.mp3"  },
-        { tagId: "-99-8170-106", medicineName: "Lisinopril", audioPath: "~/audio/lisinopril.mp3" },
-        { tagId: "77-475-106", medicineName: "Rosuvastatin", audioPath: "~/audio/rosuvastatin.mp3" },
-        { tagId: "-31881-106", medicineName: "Levothyroxine", audioPath: "~/audio/levothyroxine.mp3" }];
+    interface TestdataMap {
+        [key: string]: MedicineBinding[];
+    }
 
-    constructor() {
+    let testData: MedicineBinding[] = null;
+
+    let enTestData: MedicineBinding[] = [
+        { tagId: "-9955102114", medicineName: "Oxycodone", audioPath: "~/audio/en/opioid.mp3" },
+        { tagId: "-99-8170-106", medicineName: "Lisinopril", audioPath: "~/audio/en/lisinopril.mp3" },
+        { tagId: "77-475-106", medicineName: "Rosuvastatin", audioPath: "~/audio/en/rosuvastatin.mp3" },
+        { tagId: "-31881-106", medicineName: "Levothyroxine", audioPath: "~/audio/en/levothyroxine.mp3" },
+        // { tagId: "-674590-106", medicineName: "Atorvastatin", audioPath: "~/audio/en/atorvastatin.mp3"  },
+    ];
+
+    let spTestData: MedicineBinding[] = [
+        { tagId: "-9955102114", medicineName: "Oxycodone", audioPath: "~/audio/sp/opioid.mp3" },
+        { tagId: "-99-8170-106", medicineName: "Lisinopril", audioPath: "~/audio/sp/lisinopril.mp3" },
+        { tagId: "77-475-106", medicineName: "Rosuvastatin", audioPath: "~/audio/sp/rosuvastatin.mp3" },
+        { tagId: "-31881-106", medicineName: "Levothyroxine", audioPath: "~/audio/sp/levothyroxine.mp3" },
+        // { tagId: "-674590-106", medicineName: "Atorvastatin", audioPath: "~/audio/sp/atorvastatin.mp3"  },
+    ];
+
+    // Sets current testdata to default and returns it
+    //
+    export function addMedicineBinding(medicineBinding: MedicineBinding) {
+        testData.push(medicineBinding);
     };
 
-    public addMedicineBinding(tagMedicinePair: MedicineBinding) {
-        this.testData.push(tagMedicinePair);
+    // Returns testdata, if testData === null, sets testData to default and returns it
+    //
+    export function getCurrentTestData(): MedicineBinding[] {
+        if (testData == null) {
+            testData = getDefaultTestData();
+        }
+        return testData;
     };
 
-    public getTestData(): MedicineBinding[] {
-        return this.testData;
+    // Returns default language test data
+    //
+    function getDefaultTestData(): MedicineBinding[] {
+
+        // let testdataMap: TestdataMap[] = [ // These maps don't work, need to debug it
+        //     { "english": enTestData },
+        //     { "spanish": spTestData },
+        // ];
+
+        let defaultTestData: MedicineBinding[];
+        let defaultLanguage: string = Utility.Language.getDefaultLanguage();
+
+        if (defaultLanguage === "english") {
+            defaultTestData = getEnTestData();
+        }
+        else {
+            defaultTestData = getSpTestData();
+        }
+
+        return defaultTestData;
+        // return testdataMap[defaultLanguage];
     };
 
-    public getStaticTestData(): MedicineBinding[] {
-        return TestData.staticTestData;
+    // Sets testData and returns English language dataset
+    //
+    export function getEnTestData(): MedicineBinding[] {
+        testData = enTestData;
+        return testData;
+    };
+
+    // Sets testData and returns Spanish language dataset
+    //
+    export function getSpTestData(): MedicineBinding[] {
+        testData = spTestData;
+        return testData;
     };
 }

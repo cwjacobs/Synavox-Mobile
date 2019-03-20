@@ -5,8 +5,11 @@ import { Nfc, NfcTagData, NfcNdefData } from "nativescript-nfc";
 import { Page } from "tns-core-modules/ui/page/page";
 
 import { MedicineBinding } from "../data-models/medicine-binding";
-import { TestData } from "../data-models/test-data";
 import { AudioPlayer } from "~/audio-player/audio-player";
+
+import * as Test from "../data-models/test-data";
+import * as Utility from "../utility-functions/utility-functions";
+
 
 export class PairViewModel extends Observable {
     private nfc: Nfc = null;
@@ -14,6 +17,7 @@ export class PairViewModel extends Observable {
     private tagId: string = "";
     private medicineName: string = "";
     private audioPlayer: AudioPlayer = new AudioPlayer();
+    private medicineList: MedicineBinding[] = null;
 
     public lastNdefDiscovered: string = "Press a button...";
 
@@ -21,6 +25,7 @@ export class PairViewModel extends Observable {
         super();
         this.page = page;
         this.nfc = new Nfc();
+        this.medicineList = Test.Dataset.getCurrentTestData();
 
         SelectedPageService.getInstance().updateSelectedPage("Pair");
     }
@@ -42,13 +47,20 @@ export class PairViewModel extends Observable {
 
                         let self = this;
                         this.nfc.setOnTagDiscoveredListener((data: NfcTagData) => {
-                            let fTagId = formatTagId(data.id);
-                            let audioPath = findAudio(fTagId);
-                            if (audioPath === "not-found") {
+                            let audioPath: string;
+                            
+                            let fTagId = this.formatTagId(data.id);
+                            this.medicineList.forEach(value => {
+                                if (value.tagId === fTagId) {
+                                    audioPath = Utility.Language.getAudioPath(value.medicineName);
+                                }
+                            })
+
+                            if (audioPath == null) {
                                 alert("New tag, would you like to bind it now?");
                             }
                             else {
-                                playAudio(audioPath);
+                                this.playAudio(audioPath);
                             }
 
                             self.set("tagId", fTagId);
@@ -141,27 +153,34 @@ export class PairViewModel extends Observable {
             console.log(err);
         });
     }
+
+    private formatTagId(data: number[]): string {
+        let formatedId: string = "";
+        data.forEach((value) => { formatedId += value })
+        return formatedId;
+    }
+
+    private playAudio(audioPath: string): void {
+        AudioPlayer.useAudio(audioPath);
+        AudioPlayer.togglePlay();
+    }
 }
 
-function formatTagId(data: number[]): string {
-    let formatedId: string = "";
-    data.forEach((value) => { formatedId += value })
-    return formatedId;
-}
 
-function findAudio(fTagId: string): string {
-    let audioPath: string = "not-found";
-    let testData: TestData = new TestData();
-    let medicineBindings: MedicineBinding[] = testData.getStaticTestData();
-    medicineBindings.forEach(value => {
-        if (value.tagId === fTagId) {
-            audioPath = value.audioPath;
-        }
-    })
-    return audioPath;
-}
+// function findAudio(fTagId: string): string {
+//     let audioPath: string = "not-found";
+//     let testData: TestData = new TestData();
 
-function playAudio(audioPath: string): void {
-    AudioPlayer.useAudio(audioPath);
-    AudioPlayer.togglePlay();
-}
+//     let medicineBindings: MedicineBinding[] = getCurrentBindings();
+//     medicineBindings.forEach(value => {
+//         if (value.tagId === fTagId) {
+//             audioPath = value.audioPath;
+//         }
+//     })
+//     return audioPath;
+// }
+
+// function playAudio(audioPath: string): void {
+//     AudioPlayer.useAudio(audioPath);
+//     AudioPlayer.togglePlay();
+// }
