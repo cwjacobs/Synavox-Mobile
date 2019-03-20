@@ -22,7 +22,7 @@ http://docs.telerik.com/devtools/nativescript-ui/Controls/NativeScript/SideDrawe
 						<Label row="0" col="1" text="Home" class="p-r-10" />
 					</GridLayout>
 					<GridLayout columns="auto, *" class="{{ 'sidedrawer-list-item' + (selectedPage === 'Pair' ? ' selected': '') }}" route="pair/pair-page" title="Pair" tap="onNavigationItemTap">
-						<Label row="0" col="0" text="&#xf09e;" class="fa" />
+						<Label row="0" col="0" text="&#xf02b;" class="fa" />
 						<Label row="0" col="1" text="Pair" class="p-r-10" />
 					</GridLayout>
 					<GridLayout columns="auto, *" class="{{ 'sidedrawer-list-item' + (selectedPage === 'Browse' ? ' selected': '') }}" route="browse/browse-page" title="Browse" tap="onNavigationItemTap">
