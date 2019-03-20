@@ -3,7 +3,6 @@ import * as app from "tns-core-modules/application";
 import { EventData } from "tns-core-modules/data/observable";
 import { NavigatedData, Page } from "tns-core-modules/ui/page";
 
-import { TestData } from "../data-models/test-data"
 import { MedicineBinding } from "../data-models/medicine-binding";
 
 import { SearchViewModel } from "./search-view-model";
@@ -23,8 +22,8 @@ export function onDrawerButtonTap(args: EventData) {
 }
 
 export function onLoaded(args: EventData) {
-    let testData = new TestData();
-    viewModel.set("myMedicineList", testData.getStaticTestData());
+    // let testData = new TestData();
+    // viewModel.set("myMedicineList", testData.getStaticTestData());
 }
 
 export function onSelect(args: EventData) {

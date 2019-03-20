@@ -5,6 +5,7 @@ import { SelectedPageService } from "../shared/selected-page-service";
 
 export class HomeViewModel extends Observable {
     public medicineName: string = "";
+    public isDualLanguageEnabled: boolean;
     public myMedicineList: MedicineBinding[] = null;
 
     constructor() {

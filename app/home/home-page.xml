@@ -23,9 +23,9 @@
 			</ListView.itemTemplate>
 		</ListView>
 		<GridLayout class="button-row" rows="*" columns="*,*,*">
-			<Button class="button my-button btn-primary" text="English" row="0" col="0" onTap="onEnglishTap" />
-			<Button class="button my-button my-button-control" text="Stop &#xf28d;" onTap="onStopTap" row="0" col="1" />
-			<Button class="button my-button my-button-spanish" text="Spanish" row="0" col="2" onTap="onSpanishTap" />
+			<Button class="button my-button my-button-control" text="Stop &#xf28d;" onTap="onStopTap" row="0" col="0" />
+			<Button class="button my-button btn-primary" text="English" row="0" col="1" onTap="onEnglishTap" visibility="{{ isDualLanguageEnabled ? 'visible' : 'collapsed' }}"/>
+			<Button class="button my-button my-button-spanish" text="Spanish" row="0" col="2" onTap="onSpanishTap" visibility="{{ isDualLanguageEnabled ? 'visible' : 'collapsed' }}" />
 		</GridLayout>
 	</StackLayout>
 	<!-- </GridLayout>f29e  btn-primary -->

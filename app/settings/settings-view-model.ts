@@ -6,6 +6,8 @@ import { SelectedPageService } from "../shared/selected-page-service";
 export class SettingsViewModel extends Observable {
     private page: Page = null;
     public primaryLanguage: string;
+    public isEnglishEnabled: boolean;
+    public isSpanishEnabled: boolean;
     
     constructor(page: Page) {
         super();

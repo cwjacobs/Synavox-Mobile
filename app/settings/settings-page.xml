@@ -16,13 +16,14 @@
 	<GridLayout class="page-content">
 		<StackLayout>
 			<image src="~/images/settings.jpg" width="100%" height="auto" />
-			<Label class="title settings-content fa" text="Set Active Language &#xf1ab;"></Label>
+			<Label class="title settings-content fa" text="Language Options &#xf1ab;"></Label>
 			<Label class="subtitle settings-content" text="{{ activeLanguage, 'Active: ' + activeLanguage }}"></Label>
-			<GridLayout class="button-row" rows="*" columns="*,*">
+			<Label class="subtitle settings-content" text="Installed Languages:"></Label>
+			<GridLayout class="button-row" rows="*,*" columns="*,*">
 				<Button class="button my-button btn-primary" text="English" row="0" col="0" onTap="onEnglishTap" />
-				<!-- <Label class="indicator fa" text="&#xf060;" row="0" col="1" /> -->
-				<Button class="button my-button my-button-spanish" text="Spanish" row="0" col="1" onTap="onSpanishTap" />
-				<!-- <Label class="indicator fa" text="&#xf060;" row="0" col="3" /> -->
+				<Label class="indicator fa" text="&#xf046;" row="0" col="1" visibility= "{{ isEnglishEnabled ? 'visible' : 'collapsed' }}"/>
+				<Button class="button my-button my-button-spanish" text="Spanish" row="1" col="0" onTap="onSpanishTap" />
+				<Label class="indicator fa" text="&#xf046;"  row="1" col="2" visibility= "{{ isSpanishEnabled ? 'visible' : 'collapsed' }}" />
 			</GridLayout>
 			<!-- <Label class="page-icon fa" text="&#xf013;"></Label>
 			<Label class="page-placeholder" text="Page content goes here" /> -->

@@ -11,7 +11,6 @@ import * as Test from "../data-models/test-data";
 import * as Utility from "../utility-functions/utility-functions";
 import { MedicineBinding } from "~/data-models/medicine-binding";
 
-let language: string = null;
 let viewModel: HomeViewModel = null;
 let audioPlayer: AudioPlayer = null;
 let medicineList: MedicineBinding[] = null;
@@ -31,6 +30,12 @@ export function onLoaded(args: EventData) {
     audioPlayer = new AudioPlayer();
     medicineList = Test.Dataset.getCurrentTestData();
     viewModel.set("myMedicineList", medicineList);
+
+    // Utility.Language.setIsEnglishEnabled(true);
+    // Utility.Language.setIsSpanishEnabled(false);
+   
+    let isDualLanguageEnabled = Utility.Language.getIsDualLanguageEnabled();
+    viewModel.set("isDualLanguageEnabled", isDualLanguageEnabled);
 }
 
 export function onItemTap(args: ItemEventData) {
