@@ -23,9 +23,9 @@ export class PairViewModel extends Observable {
 
     constructor(page: Page) {
         super();
-        this.page = page;
+        //this.page = page;
         this.nfc = new Nfc();
-        this.medicineList = Test.Dataset.getCurrentTestData();
+        //this.medicineList = Test.Dataset.getCurrentTestData();
 
         SelectedPageService.getInstance().updateSelectedPage("Pair");
     }
@@ -166,21 +166,3 @@ export class PairViewModel extends Observable {
     }
 }
 
-
-// function findAudio(fTagId: string): string {
-//     let audioPath: string = "not-found";
-//     let testData: TestData = new TestData();
-
-//     let medicineBindings: MedicineBinding[] = getCurrentBindings();
-//     medicineBindings.forEach(value => {
-//         if (value.tagId === fTagId) {
-//             audioPath = value.audioPath;
-//         }
-//     })
-//     return audioPath;
-// }
-
-// function playAudio(audioPath: string): void {
-//     AudioPlayer.useAudio(audioPath);
-//     AudioPlayer.togglePlay();
-// }
