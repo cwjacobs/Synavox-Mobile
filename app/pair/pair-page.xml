@@ -13,8 +13,8 @@
 			<Label class="page-icon fa" id="page-icon" text="&#xf09e;"></Label>
 			<StackLayout>
 				<image src="~/images/pair.jpg" width="100%" height="auto" />
-				<Label class="tagDisplay" text="{{ tagId, 'Synavox Mobile Tag Id: ' + tagId}}" />
-				<TextField class="tagDisplay" text="{{ medicineName }}" hint="Enter Medicine Name"/>
+				<Label class="tagDisplay" text="{{ tagId, 'Synavox Mobile Tag Id: ' + tagId}}" visibility="{{ isTagDiscovered ? 'visible' : 'collapsed' }}"/>
+				<TextField class="medNameDisplay" text="{{ medicineName }}" hint="Enter Medicine Name"/>
 				<ListView class="list" id="medicineList" items="{{ myMedicineList }}" itemTap="onItemTap">
 					<ListView.itemTemplate>
 						<GridLayout rows="*" columns="*,*">

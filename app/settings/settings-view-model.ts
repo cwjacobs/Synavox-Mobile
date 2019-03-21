@@ -4,17 +4,13 @@ import { Page } from "tns-core-modules/ui/page/page";
 import { SelectedPageService } from "../shared/selected-page-service";
 
 export class SettingsViewModel extends Observable {
-    private page: Page = null;
-    public primaryLanguage: string;
-    public isEnglishEnabled: boolean;
-    public isSpanishEnabled: boolean;
-    public isEnButtonEnabled: boolean;
-    public isSpButtonEnabled: boolean;
+    // private isEnglishEnabled: boolean;
+    // private isSpanishEnabled: boolean;
+    // private isEnButtonEnabled: boolean;
+    // private isSpButtonEnabled: boolean;
     
-    
-    constructor(page: Page) {
+    constructor() {
         super();
-        this.page = page;
 
         SelectedPageService.getInstance().updateSelectedPage("Settings");
     }

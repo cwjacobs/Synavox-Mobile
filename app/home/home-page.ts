@@ -15,6 +15,8 @@ let viewModel: HomeViewModel = null;
 let audioPlayer: AudioPlayer = null;
 let medicineList: MedicineBinding[] = null;
 
+let tagListernerSet: boolean = false;
+
 export function onNavigatingTo(args: NavigatedData) {
     const page = <Page>args.object;
     viewModel = new HomeViewModel();
@@ -28,14 +30,16 @@ export function onDrawerButtonTap(args: EventData) {
 
 export function onLoaded(args: EventData) {
     audioPlayer = new AudioPlayer();
+
     medicineList = Test.Dataset.getCurrentTestData();
     viewModel.set("myMedicineList", medicineList);
-
-    // Utility.Language.setIsEnglishEnabled(true);
-    // Utility.Language.setIsSpanishEnabled(false);
    
     let isDualLanguageEnabled = Utility.Language.getIsDualLanguageEnabled();
     viewModel.set("isDualLanguageEnabled", isDualLanguageEnabled);
+
+    if (!tagListernerSet) {
+        tagListernerSet = Utility.Rfid.doStartTagListener();
+    }
 }
 
 export function onItemTap(args: ItemEventData) {

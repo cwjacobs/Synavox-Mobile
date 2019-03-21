@@ -18,8 +18,7 @@ let viewModel: PairViewModel = null;
 
 export function onNavigatingTo(args: NavigatedData) {
     page = <Page>args.object;
-    viewModel = new PairViewModel(page);
-
+    viewModel = new PairViewModel();
     page.bindingContext = viewModel;
 }
 
@@ -27,8 +26,6 @@ export function onLoaded(args: EventData) {
     medicineList = Test.Dataset.getCurrentTestData();
     viewModel.set("myMedicineList", medicineList);
     viewModel.set("medicineName", "Atorvastatin");
-
-    viewModel.doStartTagListener();
 };
 
 export function onDrawerButtonTap(args: EventData) {
@@ -42,6 +39,10 @@ export function onStopTap(args: EventData) {
 };
 
 export function onItemTap(args: ItemEventData) {
+    let tagId = medicineList[args.index].tagId;
+    viewModel.set("tagId", tagId);
+    viewModel.set("isTagDiscovered", true);
+
     let medicineName = medicineList[args.index].medicineName;
     viewModel.set("medicineName", medicineName);
 
@@ -56,32 +57,28 @@ export function onSaveTap(args: ItemEventData) {
     binding.medicineName = viewModel.get("medicineName");
     // alert(newBinding.tagId + " : " + newBinding.medicineName);
 
-    let index: number = findIndex(binding.medicineName);
+    let index: number = findMedicineNameIndex(binding.medicineName);
     // alert("index: " + index);
 
-    if (index != -1) {
+    if (index != -1) { // Medicine Name found, replace current binding
         binding.audioPath = Utility.Language.getAudioPath(binding.medicineName);
         medicineList[index] = binding; // use the util functions to add data to array
     }
-    else {
-        // let audioRootPath: string = "~/audio/";
-        // let audioName: string = (binding.medicineName + ".mp3").toLowerCase();
+    else { // Medicine Name not found
+        index = findTagIdIndex(binding.tagId);
+        if (index != -1) { // Tag Id found, replace current binding
+            binding.audioPath = Utility.Language.getAudioPath(binding.medicineName);
+            medicineList[index] = binding; // use the util functions to add data to array
+        }
+        else { // Neither Medicine Name nor Tag Id found, add new binding
+            binding.audioPath = Utility.Language.getAudioPath(binding.medicineName);
 
-        // let language: string = getCurrentLanguage();
-        // if (language === "English") {
-        //     audioRootPath += "en/"
-        // }
-        // else {
-        //     audioRootPath += "sp/"
-        // }
-
-        binding.audioPath = Utility.Language.getAudioPath(binding.medicineName);
-        
-        page.bindingContext.myMedicineList.push({
-            tagId: binding.tagId,
-            medicineName: binding.medicineName,
-            audioPath: binding.audioPath           
-        });
+            page.bindingContext.myMedicineList.push({
+                tagId: binding.tagId,
+                medicineName: binding.medicineName,
+                audioPath: binding.audioPath
+            });
+        }
     }
     const listView: ListView = page.getViewById<ListView>("medicineList");
     listView.refresh();
@@ -93,12 +90,44 @@ export function onCancelTap(args: ItemEventData) {
     viewModel.set("medicineName", "Atorvastatin");
 };
 
+export function pairPageSetTagId(tagId: string) {
+    if (viewModel != null) {
+        viewModel.set("tagId", tagId);
+        viewModel.set("isTagDiscovered", true);
 
-function findIndex(medicineName: string): number {
+        let index: number = findTagIdIndex(tagId);
+        if (index != -1) { // Tag binding exists, display medicine name
+            viewModel.set("medicineName", medicineList[index].medicineName);
+        }
+        else { // New tag binding
+            viewModel.set("medicineName", "");
+            alert("New tag scanned, enter medicine name and press save...")
+        }
+    }
+    else {
+        alert("New tag, use Pair page to assign medicine name and audio");
+    }
+}
+
+function findMedicineNameIndex(medicineName: string): number {
     let i: number = 0;
     let index: number = -1;
     medicineList.forEach(value => {
         if (value.medicineName === medicineName) {
+            index = i;
+        }
+        else {
+            i = i + 1;
+        }
+    })
+    return index;
+}
+
+function findTagIdIndex(tagId: string): number {
+    let i: number = 0;
+    let index: number = -1;
+    medicineList.forEach(value => {
+        if (value.tagId === tagId) {
             index = i;
         }
         else {

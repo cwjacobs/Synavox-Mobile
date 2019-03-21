@@ -13,7 +13,7 @@ let viewModel: SettingsViewModel = null;
 
 export function onNavigatingTo(args: NavigatedData) {
     page = <Page>args.object;
-    viewModel = new SettingsViewModel(page);
+    viewModel = new SettingsViewModel();
 
     page.bindingContext = viewModel;
 }
