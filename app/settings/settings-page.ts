@@ -42,7 +42,7 @@ export function onEnglishTap(args: NavigatedData) {
     if (!isEnglishEnabled) { // Don't allow both languages to be disabled
         isSpButtonEnabled = false;
         viewModel.set("isSpButtonEnabled", isSpButtonEnabled);
-        Utility.Language.setCurrentLanguage("spanish");
+        Utility.Language.setActiveLanguage("spanish");
     }
     else {
         isSpButtonEnabled = true;
@@ -59,7 +59,7 @@ export function onSpanishTap(args: NavigatedData) {
     if (!isSpanishEnabled) { // Don't allow both languages to be disabled
         isEnButtonEnabled = false;
         viewModel.set("isEnButtonEnabled", isEnButtonEnabled);
-        Utility.Language.setCurrentLanguage("english");
+        Utility.Language.setActiveLanguage("english");
     }
     else {
         isEnButtonEnabled = true;

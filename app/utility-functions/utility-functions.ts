@@ -22,7 +22,7 @@ export namespace Language {
         return activeLanguage;
     }
 
-    export function setCurrentLanguage(language: string): void {
+    export function setActiveLanguage(language: string): void {
         activeLanguage = language.toLowerCase();
     }
 
@@ -30,15 +30,11 @@ export namespace Language {
         return isEnglishEnabled;
     }
 
-    // export function setIsEnglishEnabled(isEnabled: boolean) {
-    //     isEnglishEnabled = isEnabled;
-    // }
-
     export function toggleEnglishEnabled(): boolean {
         isEnglishEnabled = !isEnglishEnabled;
 
-        if(!isEnglishEnabled) {
-            setCurrentLanguage("spanish");
+        if (!isEnglishEnabled) { // Must have at least one enabled & active language
+            setActiveLanguage("spanish");
         }
         return isEnglishEnabled;
     }
@@ -47,18 +43,15 @@ export namespace Language {
         return isSpanishEnabled;
     }
 
-    // export function setIsSpanishEnabled(isEnabled: boolean) {
-    //     isSpanishEnabled = isEnabled;
-    // }
-
     export function toggleSpanishEnabled(): boolean {
         isSpanishEnabled = !isSpanishEnabled;
 
-        if (!isSpanishEnabled) {
-            setCurrentLanguage("english");
+        if (!isSpanishEnabled) { // Must have at least one enabled & active language
+            setActiveLanguage("english");
         }
         return isSpanishEnabled;
     }
+
     export function getIsDualLanguageEnabled(): boolean {
         return isEnglishEnabled && isSpanishEnabled;
     }

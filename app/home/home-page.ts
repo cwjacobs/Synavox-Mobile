@@ -50,9 +50,9 @@ export function onStopTap(args: EventData) {
 };
 
 export function onEnglishTap(args: EventData) {
-    Utility.Language.setCurrentLanguage("english");
+    Utility.Language.setActiveLanguage("english");
 };
 
 export function onSpanishTap(args: EventData) {
-    Utility.Language.setCurrentLanguage("spanish");
+    Utility.Language.setActiveLanguage("spanish");
 };
