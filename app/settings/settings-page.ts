@@ -11,6 +11,15 @@ let page: Page = null;
 let activeLanguage: string = null;
 let viewModel: SettingsViewModel = null;
 
+let i18NPageTitle: string = null;
+let i18NLanguageOptionsTitle: string = null;
+let i18NStopButtonText: string = null;
+let i18NEnglishButtonText: string = null;
+let i18NActiveLanguageText: string = null;
+let i18NSpanishButtonText: string = null;
+let i18NInstalledLanguagesText: string = null;
+let i18NEnableLanguageInstructionsText: string = null;
+
 export function onNavigatingTo(args: NavigatedData) {
     page = <Page>args.object;
     viewModel = new SettingsViewModel();
@@ -34,6 +43,7 @@ export function onLoaded(args: NavigatedData) {
     }
 
     setActiveLanguageLabel();
+    setI18N();
 }
 
 export function onEnglishTap(args: NavigatedData) {
@@ -49,7 +59,8 @@ export function onEnglishTap(args: NavigatedData) {
         viewModel.set("isSpButtonEnabled", isSpButtonEnabled);
     }
     viewModel.set("isEnglishEnabled", isEnglishEnabled);
-    setActiveLanguageLabel();
+    setI18N();
+    //setActiveLanguageLabel();
 
 }
 
@@ -66,7 +77,8 @@ export function onSpanishTap(args: NavigatedData) {
         viewModel.set("isEnButtonEnabled", isEnButtonEnabled);
     }
     viewModel.set("isSpanishEnabled", isSpanishEnabled);
-    setActiveLanguageLabel();
+    setI18N();
+    //setActiveLanguageLabel();
 }
 
 export function onDrawerButtonTap(args: EventData) {
@@ -76,7 +88,7 @@ export function onDrawerButtonTap(args: EventData) {
 
 function setActiveLanguageLabel() {
     activeLanguage = Utility.Language.getActiveLanguage();
-    let languageText = (activeLanguage === "english") ? "English" : "Spanish";
+    let languageText = (activeLanguage === "english") ? "Active: English" : "Activo: Español";
     viewModel.set("activeLanguage", languageText);
 }
 
@@ -84,4 +96,39 @@ export function getNfcButtonColor(): string {
     let buttonColor: string = "red";
     // viewModel.set("activeLanguage", buttonColor);
     return buttonColor;
+}
+
+function setI18N(): void {
+    let activeLanguage: string = Utility.Language.getActiveLanguage();
+
+    if (activeLanguage === "english") {
+        i18NPageTitle = "Settings";
+        i18NLanguageOptionsTitle = "Language Options";
+        i18NActiveLanguageText = "Active: English";
+        i18NInstalledLanguagesText = "Installed Languages:";
+        i18NStopButtonText = "Stop";
+        i18NEnglishButtonText = "English";
+        i18NSpanishButtonText = "Spanish";
+        i18NEnableLanguageInstructionsText = "Press language button to enable or disable it";
+    }
+    else {
+        i18NPageTitle = "Configuración";
+        i18NLanguageOptionsTitle = "Opciones de idioma";
+        i18NActiveLanguageText = "Activo: Español";
+        i18NInstalledLanguagesText = "Idiomas Instalados:";
+        i18NStopButtonText = "Parada";
+        i18NEnglishButtonText = "Inglés";
+        i18NSpanishButtonText = "Español";
+        i18NEnableLanguageInstructionsText = "Pulse el botón de idioma para activarlo o desactivarlo";
+
+    }
+
+    viewModel.set("i18NPageTitle", i18NPageTitle);
+    viewModel.set("i18NLanguageOptionsTitle", i18NLanguageOptionsTitle);
+    viewModel.set("i18NActiveLanguageText", i18NActiveLanguageText);
+    viewModel.set("i18NStopButtonText", i18NStopButtonText);
+    viewModel.set("i18NInstalledLanguagesText", i18NInstalledLanguagesText);
+    viewModel.set("i18NEnglishButtonText", i18NEnglishButtonText);
+    viewModel.set("i18NSpanishButtonText", i18NSpanishButtonText);
+    viewModel.set("i18NEnableLanguageInstructionsText", i18NEnableLanguageInstructionsText);
 }

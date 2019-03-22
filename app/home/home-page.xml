@@ -6,14 +6,14 @@
         -->
 		<NavigationButton ios:visibility="collapsed" icon="res://menu" tap="onDrawerButtonTap"></NavigationButton>
 		<ActionItem icon="res://navigation/menu" android:visibility="collapsed" tap="onDrawerButtonTap" ios.position="left"></ActionItem>
-		<Label class="action-bar-title" text="Home Pharmacist"></Label>
+		<Label class="action-bar-title" text="{{ i18NPageTitle }}"></Label>
 	</ActionBar>
 	<!-- <GridLayout class="page-content"> -->
 	<Label class="page-icon fa" text="&#xf129;"></Label>
 	<!-- <Label class="page-placeholder" text="Page content goes here"></Label> -->
 	<StackLayout>
 		<image src="~/images/home.jpg" width="100%" height="auto"></image>
-		<Label class="list title" text="My Medicines"></Label>
+		<Label class="list title" text="{{ i18NMedicineListTitle }}"></Label>
 		<ListView class="list" items="{{ myMedicineList }}" itemTap="onItemTap">
 			<ListView.itemTemplate>
 				<GridLayout row="*" col="*,*">
@@ -23,9 +23,9 @@
 			</ListView.itemTemplate>
 		</ListView>
 		<GridLayout class="button-row" rows="*" columns="*,*,*">
-			<Button class="button my-button my-button-control" text="Stop &#xf28d;" onTap="onStopTap" row="0" col="0" />
-			<Button class="button my-button my-button-english" text="English" row="0" col="1" onTap="onEnglishTap" visibility="{{ isDualLanguageEnabled ? 'visible' : 'collapsed' }}"/>
-			<Button class="button my-button my-button-spanish" text="Spanish" row="0" col="2" onTap="onSpanishTap" visibility="{{ isDualLanguageEnabled ? 'visible' : 'collapsed' }}" />
+			<Button class="button my-button my-button-control fa" text="{{ i18NStopButtonText, i18NStopButtonText + ' &#xf28d;' }} " onTap="onStopTap" row="0" col="0" />
+			<Button class="button my-button my-button-english" text="{{ i18NEnglishButtonText }}" row="0" col="1" onTap="onEnglishTap" visibility="{{ isDualLanguageEnabled ? 'visible' : 'collapsed' }}"/>
+			<Button class="button my-button my-button-spanish" text="{{ i18NSpanishButtonText }}" row="0" col="2" onTap="onSpanishTap" visibility="{{ isDualLanguageEnabled ? 'visible' : 'collapsed' }}" />
 		</GridLayout>
 	</StackLayout>
 	<!-- </GridLayout>f29e  btn-primary -->

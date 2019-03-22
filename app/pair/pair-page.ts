@@ -25,7 +25,7 @@ export function onNavigatingTo(args: NavigatedData) {
 export function onLoaded(args: EventData) {
     medicineList = Test.Dataset.getCurrentTestData();
     viewModel.set("myMedicineList", medicineList);
-    viewModel.set("medicineName", "Atorvastatin");
+    // viewModel.set("medicineName", "Atorvastatin");
 };
 
 export function onDrawerButtonTap(args: EventData) {
@@ -39,11 +39,13 @@ export function onStopTap(args: EventData) {
 };
 
 export function onItemTap(args: ItemEventData) {
-    let tagId = medicineList[args.index].tagId;
-    viewModel.set("tagId", tagId);
-    viewModel.set("isTagDiscovered", true);
-
-    let medicineName = medicineList[args.index].medicineName;
+    let medicineName = viewModel.get("medicineName");
+    if (medicineName.length != 0) { // Current medicine name already bound, allow name selection from list but don't change tagId
+        let tagId = medicineList[args.index].tagId;
+        viewModel.set("tagId", tagId);
+        viewModel.set("isTagDiscovered", true);
+    }
+    medicineName = medicineList[args.index].medicineName;
     viewModel.set("medicineName", medicineName);
 
     let audioPath = Utility.Language.getAudioPath(medicineName);

@@ -32,9 +32,10 @@ export namespace Rfid {
                         nfc.setOnTagDiscoveredListener((data: NfcTagData) => {
                             tagId = formatTagId(data.id);
 
-                            if(!playAudio(tagId)) {
+                            let audioPlayed: boolean = playAudio(tagId);
+                            //if (!audioPlayed) {
                                 pairPageSetTagId(tagId); // call pair-page function to set view model element if currently on the pair page (look for better way to determine that...)
-                            }
+                            //}
 
                         }).then(() => {
                             // alert("OnTagDiscovered Listener set");
