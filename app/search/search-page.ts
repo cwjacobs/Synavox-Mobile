@@ -6,9 +6,9 @@ import { NavigatedData, Page } from "tns-core-modules/ui/page";
 import { MedicineBinding } from "../data-models/medicine-binding";
 
 import { SearchViewModel } from "./search-view-model";
+import * as Test from "../data-models/test-data";
 
 let viewModel: SearchViewModel = null;
-
 
 export function onNavigatingTo(args: NavigatedData) {
     const page = <Page>args.object;
@@ -22,8 +22,7 @@ export function onDrawerButtonTap(args: EventData) {
 }
 
 export function onLoaded(args: EventData) {
-    // let testData = new TestData();
-    // viewModel.set("myMedicineList", testData.getStaticTestData());
+    viewModel.set("myMedicineList", Test.Dataset.getCurrentTestData());
 }
 
 export function onSelect(args: EventData) {

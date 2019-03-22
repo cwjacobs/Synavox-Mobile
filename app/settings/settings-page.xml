@@ -25,7 +25,7 @@
 				<Button class="button my-button my-button-spanish" style="{{ isSpButtonEnabled ? 'background-color: orangered' : 'background-color: gray' }}" isEnabled="{{ isSpButtonEnabled }}" text="Spanish" row="1" col="0" onTap="onSpanishTap" />
 				<Label class="indicator fa" text="&#xf046;" row="1" col="2" visibility= "{{ isSpanishEnabled ? 'visible' : 'collapsed' }}" />
 			</GridLayout>
-			<!-- <Label class="page-icon fa" text="&#xf013;"></Label><Label class="page-placeholder" text="Page content goes here" /> -->
+			<Label class="fa footer" text="&#xf0eb; Press language button to enable or disable it" />
 		</StackLayout>
 	</GridLayout>
 </Page>
