@@ -138,7 +138,8 @@ export namespace Rfid {
         let index: number = findTagIdIndex(tagId);
         if (index != -1) {
             isBindingExists = true;
-            let audioPath: string = medicineList[index].audioPath;
+            
+            let audioPath: string = Language.getAudioPath(medicineList[index].medicineName);
             AudioPlayer.useAudio(audioPath);
             AudioPlayer.togglePlay();
         }

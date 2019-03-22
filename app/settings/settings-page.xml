@@ -26,6 +26,11 @@
 				<Label class="indicator fa" text="&#xf046;" row="1" col="2" visibility= "{{ isSpanishEnabled ? 'visible' : 'collapsed' }}" />
 			</GridLayout>
 			<Label class="fa footer" text="&#xf0eb; Press language button to enable or disable it" />
+			<Label class="subtitle settings-content" text="NFC:"></Label>
+			<GridLayout class="button-row" rows="*,*" columns="*,*">
+				<Button class="button my-button-control fa" text="&#xf02b; NFC (RFID)" row="0" col="0" onTap="onRfidTap" />
+				<Label class="indicator fa" text="&#xf046;" row="0" col="1"/>
+			</GridLayout>
 		</StackLayout>
 	</GridLayout>
 </Page>

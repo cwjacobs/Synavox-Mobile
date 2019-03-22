@@ -79,3 +79,9 @@ function setActiveLanguageLabel() {
     let languageText = (activeLanguage === "english") ? "English" : "Spanish";
     viewModel.set("activeLanguage", languageText);
 }
+
+export function getNfcButtonColor(): string {
+    let buttonColor: string = "red";
+    // viewModel.set("activeLanguage", buttonColor);
+    return buttonColor;
+}
