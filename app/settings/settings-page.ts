@@ -113,14 +113,13 @@ function setI18N(): void {
     }
     else {
         i18NPageTitle = "Configuración";
-        i18NLanguageOptionsTitle = "Opciones de idioma";
+        i18NLanguageOptionsTitle = "Opciones de Idioma";
         i18NActiveLanguageText = "Activo: Español";
         i18NInstalledLanguagesText = "Idiomas Instalados:";
         i18NStopButtonText = "Parada";
         i18NEnglishButtonText = "Inglés";
         i18NSpanishButtonText = "Español";
         i18NEnableLanguageInstructionsText = "Pulse el botón de idioma para activarlo o desactivarlo";
-
     }
 
     viewModel.set("i18NPageTitle", i18NPageTitle);

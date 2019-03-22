@@ -28,7 +28,7 @@
 			<Label class="fa footer" textWrap="true" text="{{ i18NEnableLanguageInstructionsText , '&#xf0eb; ' + i18NEnableLanguageInstructionsText }}" />
 			<Label class="subtitle settings-content" text="NFC:"></Label>
 			<GridLayout class="button-row" rows="*,*" columns="*,*">
-				<Button class="button my-button-control fa" text="&#xf02b; NFC (RFID)" row="0" col="0" onTap="onRfidTap" />
+				<Button class="button my-button-control fa" text="&#xf02b;  NFC (RFID)" row="0" col="0" onTap="onRfidTap" />
 				<Label class="indicator fa" text="&#xf046;" row="0" col="1"/>
 			</GridLayout>
 		</StackLayout>

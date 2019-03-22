@@ -16,6 +16,13 @@ let medicineList: MedicineBinding[] = null;
 let page: Page = null;
 let viewModel: PairViewModel = null;
 
+let tagId: string = "";
+let i18NPageTitle: string = null;
+let i18NStopButtonText: string = null;
+let i18NSaveButtonText: string = null;
+let i18NCancelButtonText: string = null;
+let i18NMedicineNameHint: string = null;
+
 export function onNavigatingTo(args: NavigatedData) {
     page = <Page>args.object;
     viewModel = new PairViewModel();
@@ -25,7 +32,10 @@ export function onNavigatingTo(args: NavigatedData) {
 export function onLoaded(args: EventData) {
     medicineList = Test.Dataset.getCurrentTestData();
     viewModel.set("myMedicineList", medicineList);
-    // viewModel.set("medicineName", "Atorvastatin");
+
+    setI18N();
+    viewModel.set("tagId", tagId);
+    viewModel.set("medicineName", "");
 };
 
 export function onDrawerButtonTap(args: EventData) {
@@ -41,7 +51,7 @@ export function onStopTap(args: EventData) {
 export function onItemTap(args: ItemEventData) {
     let medicineName = viewModel.get("medicineName");
     if (medicineName.length != 0) { // Current medicine name already bound, allow name selection from list but don't change tagId
-        let tagId = medicineList[args.index].tagId;
+        tagId = medicineList[args.index].tagId;
         viewModel.set("tagId", tagId);
         viewModel.set("isTagDiscovered", true);
     }
@@ -137,4 +147,29 @@ function findTagIdIndex(tagId: string): number {
         }
     })
     return index;
+}
+
+function setI18N(): void {
+    let activeLanguage: string = Utility.Language.getActiveLanguage();
+
+    if (activeLanguage === "english") {
+        i18NPageTitle = "Pair";
+        i18NMedicineNameHint = "Enter Medicine Name";
+        i18NStopButtonText = "Stop";
+        i18NSaveButtonText = "Save";
+        i18NCancelButtonText = "Cancel";
+    }
+    else {
+        i18NPageTitle = "Partido";
+        i18NMedicineNameHint = "Ingrese el nombre del medicamento";
+        i18NStopButtonText = "Parada";
+        i18NSaveButtonText = "Salvar";
+        i18NCancelButtonText = "Cancelar";
+    }
+
+    viewModel.set("i18NPageTitle", i18NPageTitle);
+    viewModel.set("i18NMedicineNameHint", i18NMedicineNameHint);
+    viewModel.set("i18NStopButtonText", i18NStopButtonText);
+    viewModel.set("i18NSaveButtonText", i18NSaveButtonText);
+    viewModel.set("i18NCancelButtonText", i18NCancelButtonText);
 }
