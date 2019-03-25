@@ -11,19 +11,19 @@ export namespace Dataset {
     let testData: MedicineBinding[] = null;
 
     let enTestData: MedicineBinding[] = [
-        { tagId: "-9955102114", medicineName: "Oxycodone", audioPath: "~/audio/en/opioid.mp3" },
-        { tagId: "-99-8170-106", medicineName: "Lisinopril", audioPath: "~/audio/en/lisinopril.mp3" },
-        { tagId: "77-475-106", medicineName: "Rosuvastatin", audioPath: "~/audio/en/rosuvastatin.mp3" },
-        { tagId: "-31881-106", medicineName: "Levothyroxine", audioPath: "~/audio/en/levothyroxine.mp3" },
-        // { tagId: "-674590-106", medicineName: "Atorvastatin", audioPath: "~/audio/en/atorvastatin.mp3"  },
+        { tagId: "-99,55,102,114", medicineName: "Oxycodone", audioPath: "~/audio/en/opioid.mp3" },
+        { tagId: "-99,-81,70,-106", medicineName: "Lisinopril", audioPath: "~/audio/en/lisinopril.mp3" },
+        { tagId: "77,-4,75,-106", medicineName: "Rosuvastatin", audioPath: "~/audio/en/rosuvastatin.mp3" },
+        { tagId: "-3,18,81,-106", medicineName: "Levothyroxine", audioPath: "~/audio/en/levothyroxine.mp3" },
+        // { tagId: "-67,45,90,-106", medicineName: "Atorvastatin", audioPath: "~/audio/en/atorvastatin.mp3"  },
     ];
 
     let spTestData: MedicineBinding[] = [
-        { tagId: "-9955102114", medicineName: "Oxycodone", audioPath: "~/audio/sp/opioid.mp3" },
-        { tagId: "-99-8170-106", medicineName: "Lisinopril", audioPath: "~/audio/sp/lisinopril.mp3" },
-        { tagId: "77-475-106", medicineName: "Rosuvastatin", audioPath: "~/audio/sp/rosuvastatin.mp3" },
-        { tagId: "-31881-106", medicineName: "Levothyroxine", audioPath: "~/audio/sp/levothyroxine.mp3" },
-        // { tagId: "-674590-106", medicineName: "Atorvastatin", audioPath: "~/audio/sp/atorvastatin.mp3"  },
+        { tagId: "-99,55,102,114", medicineName: "Oxycodone", audioPath: "~/audio/sp/opioid.mp3" },
+        { tagId: "-99,-81,70,-106", medicineName: "Lisinopril", audioPath: "~/audio/sp/lisinopril.mp3" },
+        { tagId: "77,-4,75,-106", medicineName: "Rosuvastatin", audioPath: "~/audio/sp/rosuvastatin.mp3" },
+        { tagId: "-3,18,81,-106", medicineName: "Levothyroxine", audioPath: "~/audio/sp/levothyroxine.mp3" },
+        // { tagId: "-67,45,90,-106", medicineName: "Atorvastatin", audioPath: "~/audio/sp/atorvastatin.mp3"  },
     ];
 
     // Sets current testdata to default and returns it

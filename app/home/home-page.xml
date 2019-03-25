@@ -1,4 +1,4 @@
-<Page class="page" navigatingTo="onNavigatingTo" loaded="onLoaded" xmlns="http://schemas.nativescript.org/tns.xsd">
+<Page class="page" navigatingTo="onNavigatingTo" loaded="onLoaded" navigatingFrom="onNavigatingFrom" xmlns="http://schemas.nativescript.org/tns.xsd">
 	<ActionBar class="action-bar">
 		<!-- 
         Use the NavigationButton as a side-drawer button in Android

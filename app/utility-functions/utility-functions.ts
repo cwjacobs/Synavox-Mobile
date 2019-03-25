@@ -243,4 +243,12 @@ export namespace Language {
     }
 }
 
+export namespace Helpers {
+    export function formatTagId(data: number[] ): string {
+        return data.toString();
 
+        // let formatedId: string = "";
+        // data.forEach((value) => { formatedId += value })
+        // return formatedId;
+    }
+}

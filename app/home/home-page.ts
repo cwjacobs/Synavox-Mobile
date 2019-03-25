@@ -1,9 +1,9 @@
 import { RadSideDrawer } from "nativescript-ui-sidedrawer";
 import * as app from "tns-core-modules/application";
-import { EventData, Observable } from "tns-core-modules/data/observable";
+
 import { NavigatedData, Page } from "tns-core-modules/ui/page";
 
-import { ItemEventData, ListView } from "tns-core-modules/ui/list-view";
+import { ItemEventData } from "tns-core-modules/ui/list-view";
 import { HomeViewModel } from "./home-view-model";
 import { AudioPlayer } from '../audio-player/audio-player';
 
@@ -21,9 +21,12 @@ let i18NStopButtonText: string = null;
 let i18NEnglishButtonText: string = null;
 let i18NSpanishButtonText: string = null;
 
-let activeLanguage: string;
 
-let tagListernerSet: boolean = false;
+import { EventData } from "tns-core-modules/data/observable"; // working with this in nfc-observable branch
+import { NfcTagData, Nfc } from "nativescript-nfc";
+import { AppRootViewModel } from "~/app-root/app-root-view-model";
+
+let nfc: Nfc = null;
 
 export function onNavigatingTo(args: NavigatedData) {
     const page = <Page>args.object;
@@ -31,27 +34,39 @@ export function onNavigatingTo(args: NavigatedData) {
     page.bindingContext = viewModel;
 }
 
-export function onDrawerButtonTap(args: EventData) {
+export function onDrawerButtonTap() {
     const sideDrawer = <RadSideDrawer>app.getRootView();
     sideDrawer.showDrawer();
 }
 
-export function onLoaded(args: EventData) {
+export function onLoaded() {
+    if (nfc === null) {
+        nfc = new Nfc();
+    }
+    // Start the rfid (nfc) tag listener
+    nfc.setOnTagDiscoveredListener((args: NfcTagData) => onTagDiscoveredListener(args));
+
     if (audioPlayer === null) {
         audioPlayer = new AudioPlayer();
     }
 
     setI18N();
-    
+
     medicineList = Test.Dataset.getCurrentTestData();
     viewModel.set("myMedicineList", medicineList);
 
     let isDualLanguageEnabled = Utility.Language.getIsDualLanguageEnabled();
     viewModel.set("isDualLanguageEnabled", isDualLanguageEnabled);
+}
 
-    if (!tagListernerSet) {
-        tagListernerSet = Utility.Rfid.doStartTagListener();
-    }
+function onTagDiscoveredListener(nfcTagData: NfcTagData) {
+    // alert("Tag Id: " + nfcTagData.id.toString());
+    alert("Tag Id: " + Utility.Helpers.formatTagId(nfcTagData.id));
+}
+
+export function onNavigatingFrom() {
+    // Remove this page's listener
+    nfc.setOnTagDiscoveredListener(null);
 }
 
 export function onItemTap(args: ItemEventData) {
@@ -60,17 +75,16 @@ export function onItemTap(args: ItemEventData) {
     AudioPlayer.togglePlay();
 }
 
-export function onStopTap(args: EventData) {
-    let audioPlayer: AudioPlayer = new AudioPlayer();
+export function onStopTap() {
     AudioPlayer.pausePlay();
 };
 
-export function onEnglishTap(args: EventData) {
+export function onEnglishTap() {
     Utility.Language.setActiveLanguage("english");
     setI18N();
 };
 
-export function onSpanishTap(args: EventData) {
+export function onSpanishTap() {
     Utility.Language.setActiveLanguage("spanish");
     setI18N();
 };
@@ -103,3 +117,10 @@ function setI18N(): void {
     viewModel.set("i18NEnglishButtonText", i18NEnglishButtonText);
     viewModel.set("i18NSpanishButtonText", i18NSpanishButtonText);
 }
+
+// function formatTagId(data: number[]): string {
+//     let formatedId: string = "";
+//     data.forEach((value) => { formatedId += value })
+//     return formatedId;
+// }
+

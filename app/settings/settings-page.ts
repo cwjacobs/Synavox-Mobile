@@ -6,11 +6,13 @@ import { NavigatedData, Page } from "tns-core-modules/ui/page";
 import { SettingsViewModel } from "./settings-view-model";
 import * as Test from "../data-models/test-data";
 import * as Utility from "../utility-functions/utility-functions";
+import { Nfc, NfcTagData } from "nativescript-nfc";
 
 let page: Page = null;
 let activeLanguage: string = null;
 let viewModel: SettingsViewModel = null;
 
+let nfc: Nfc = null;
 let i18NPageTitle: string = null;
 let i18NLanguageOptionsTitle: string = null;
 let i18NStopButtonText: string = null;
@@ -20,6 +22,7 @@ let i18NSpanishButtonText: string = null;
 let i18NInstalledLanguagesText: string = null;
 let i18NEnableLanguageInstructionsText: string = null;
 
+
 export function onNavigatingTo(args: NavigatedData) {
     page = <Page>args.object;
     viewModel = new SettingsViewModel();
@@ -28,6 +31,12 @@ export function onNavigatingTo(args: NavigatedData) {
 }
 
 export function onLoaded(args: NavigatedData) {
+    if (nfc === null) {
+        nfc = new Nfc();
+    }
+    // Start the rfid (nfc) tag listener
+    nfc.setOnTagDiscoveredListener((args: NfcTagData) => onTagDiscoveredListener(args));
+
     let isEnglishEnabled = Utility.Language.getIsEnglishEnabled();
     viewModel.set("isEnglishEnabled", isEnglishEnabled);
 
@@ -44,6 +53,15 @@ export function onLoaded(args: NavigatedData) {
 
     setActiveLanguageLabel();
     setI18N();
+}
+
+function onTagDiscoveredListener(nfcTagData: NfcTagData) {
+    alert("Settings onTagDiscoveredListener");
+}
+
+export function onNavigatingFrom() {
+    alert("onNavigatingFrom Settings");
+    nfc.setOnTagDiscoveredListener(null);
 }
 
 export function onEnglishTap(args: NavigatedData) {

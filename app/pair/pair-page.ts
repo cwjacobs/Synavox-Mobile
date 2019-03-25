@@ -10,18 +10,21 @@ import { MedicineBinding } from "../data-models/medicine-binding";
 
 import * as Test from "../data-models/test-data";
 import * as Utility from "../utility-functions/utility-functions";
+import { Nfc, NfcTagData } from "nativescript-nfc";
 
 let medicineList: MedicineBinding[] = null;
 
 let page: Page = null;
 let viewModel: PairViewModel = null;
 
-let tagId: string = "";
+let nfc: Nfc = null;
+let tagId: string = null;
 let i18NPageTitle: string = null;
 let i18NStopButtonText: string = null;
 let i18NSaveButtonText: string = null;
 let i18NCancelButtonText: string = null;
 let i18NMedicineNameHint: string = null;
+
 
 export function onNavigatingTo(args: NavigatedData) {
     page = <Page>args.object;
@@ -30,13 +33,36 @@ export function onNavigatingTo(args: NavigatedData) {
 }
 
 export function onLoaded(args: EventData) {
+    if (nfc === null) {
+        nfc = new Nfc();
+    }
+
+    // Most recent Rfid Tag Id read by scanner
+    viewModel.set("tagId", tagId);
+
+    // Most recent name selected by list selection or keyboard input
+    viewModel.set("medicineName", "");
+
+    // Current list of paired medications
     medicineList = Test.Dataset.getCurrentTestData();
     viewModel.set("myMedicineList", medicineList);
 
     setI18N();
-    viewModel.set("tagId", tagId);
-    viewModel.set("medicineName", "");
+
+    // Start the rfid (nfc) tag listener
+    nfc.setOnTagDiscoveredListener((args: NfcTagData) => onTagDiscoveredListener(args));
 };
+
+function onTagDiscoveredListener(nfcTagData: NfcTagData) {
+    // alert("Pair onTagDiscoveredHandler");
+    tagId = Utility.Helpers.formatTagId(nfcTagData.id);
+    viewModel.set("tagId", tagId);
+}
+
+export function onNavigatingFrom() {
+    // Remove this page's listener
+    nfc.setOnTagDiscoveredListener(null);
+}
 
 export function onDrawerButtonTap(args: EventData) {
     const sideDrawer = <RadSideDrawer>app.getRootView();
@@ -49,12 +75,18 @@ export function onStopTap(args: EventData) {
 };
 
 export function onItemTap(args: ItemEventData) {
-    let medicineName = viewModel.get("medicineName");
+    /*
+    
+    
+    
+    */
+    let medicineName = viewModel.get("medicineName"); // Medicine name already displayed, may be blank.
     if (medicineName.length != 0) { // Current medicine name already bound, allow name selection from list but don't change tagId
         tagId = medicineList[args.index].tagId;
         viewModel.set("tagId", tagId);
         viewModel.set("isTagDiscovered", true);
     }
+
     medicineName = medicineList[args.index].medicineName;
     viewModel.set("medicineName", medicineName);
 
