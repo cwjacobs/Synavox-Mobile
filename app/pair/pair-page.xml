@@ -9,28 +9,23 @@
 		<Label class="action-bar-title" text="{{ i18NPageTitle }}"></Label>
 	</ActionBar>
 	<StackLayout>
-		<GridLayout class="page-content">
+		<GridLayout>
 			<!-- <Label class="page-icon fa" id="page-icon" text="&#xf09e;"></Label> -->
 			<StackLayout>
-				<image src="~/images/pair.jpg" width="100%" height="auto" />
-				<StackLayout orientation="horizontal">
-					<Label class="pairing-TagId" text="Synavox Mobile Tag Id:" />
-					<Label class="pairing-TagId" text="{{ tagId }}" />
-					<!-- <Label class="tagDisplay" text="{{ tagId, 'Synavox Mobile Tag Id: ' + tagId}}" visibility="{{ isTagDiscovered ? 'visible' : 'collapsed' }}"/> -->
+				<image src="~/images/pair.jpg" class="image-container" />
+				<StackLayout class="list-container">
+					<StackLayout class="pairing-TagId" orientation="horizontal" visibility="{{ isPairingInProgress ? 'visible' : 'collapsed' }}">
+						<Label text="Tag Id: " />
+						<Label text="{{ tagId }}" />
+					</StackLayout>
+					<TextField class="pairing-MedicineName" text="{{ medicineName }}" hint="{{ i18NMedicineNameHint }}" visibility="{{ isPairingInProgress ? 'visible' : 'collapsed' }}" />
 				</StackLayout>
-				<TextField class="pairing-MedicineName" text="{{ medicineName }}" hint="{{ i18NMedicineNameHint }}" />
-				<!-- <TextField class="medNameDisplay" text="{{ medicineName }}" hint="{{ i18NMedicineNameHint }}" visibility="{{ isTagDiscovered ? 'visible' : 'collapsed' }}" /> -->
-				<ListView class="list" id="medicineList" items="{{ myMedicineList }}" itemTap="onItemTap">
+				<ListView class="list-container" id="medicineList" items="{{ myMedicineList }}" itemTap="onItemTap">
 					<ListView.itemTemplate>
-						<GridLayout rows="*" columns="*,*">
-							<StackLayout row="0" col="0">
-								<Label class="list-MedicineName" text="{{ medicineName }}" />
-								<Label class="list-TagId" text="{{ tagId }}" />
-								<!-- <Label style="padding: 10px" text="{{ medicineName }}" row="0" col="0"/> -->
-							</StackLayout>
-							<StackLayout class="list-TagIcon" row="0" col="1" rowSpan="2">
-								<Label class="fa" style="text-align: right; margin-right: 10px;" text="&#xf02b;" />
-							</StackLayout>
+						<GridLayout rows="*" columns="*,*,*,auto">
+							<Label class="list-MedicineName" text="{{ medicineName }}" row="0" col="0" colSpan="2" />
+							<Label class="list-TagId" text="{{ tagId }}" row="0" col="2" />
+							<Label class="list-TagIcon fa" text="&#xf02b;" row="0" col="3" />
 						</GridLayout>
 					</ListView.itemTemplate>
 				</ListView>

@@ -25,6 +25,7 @@ let i18NSaveButtonText: string = null;
 let i18NCancelButtonText: string = null;
 let i18NMedicineNameHint: string = null;
 
+let isPairingInProgress: boolean;
 
 export function onNavigatingTo(args: NavigatedData) {
     page = <Page>args.object;
@@ -36,6 +37,8 @@ export function onLoaded(args: EventData) {
     if (nfc === null) {
         nfc = new Nfc();
     }
+    // Initialize Binding State Machine
+    isPairingInProgress = false;
 
     // Most recent Rfid Tag Id read by scanner
     viewModel.set("tagId", tagId);
@@ -54,9 +57,13 @@ export function onLoaded(args: EventData) {
 };
 
 function onTagDiscoveredListener(nfcTagData: NfcTagData) {
-    // alert("Pair onTagDiscoveredHandler");
+    // alert("Pair onTagDiscoveredListener");
+    isPairingInProgress = true;
+    viewModel.set("isPairingInProgress", isPairingInProgress);
+
     tagId = Utility.Helpers.formatTagId(nfcTagData.id);
     viewModel.set("tagId", tagId);
+    viewModel.set("medicineName", "");
 }
 
 export function onNavigatingFrom() {
@@ -75,20 +82,13 @@ export function onStopTap(args: EventData) {
 };
 
 export function onItemTap(args: ItemEventData) {
-    /*
-    
-    
-    
-    */
-    let medicineName = viewModel.get("medicineName"); // Medicine name already displayed, may be blank.
-    if (medicineName.length != 0) { // Current medicine name already bound, allow name selection from list but don't change tagId
-        tagId = medicineList[args.index].tagId;
-        viewModel.set("tagId", tagId);
-        viewModel.set("isTagDiscovered", true);
-    }
-
+    let medicineName: string;
     medicineName = medicineList[args.index].medicineName;
     viewModel.set("medicineName", medicineName);
+
+    if (!isPairingInProgress) {
+        viewModel.set("tagId", medicineList[args.index].tagId);
+    }
 
     let audioPath = Utility.Language.getAudioPath(medicineName);
     AudioPlayer.useAudio(audioPath);
@@ -131,7 +131,9 @@ export function onSaveTap(args: ItemEventData) {
 };
 
 export function onCancelTap(args: ItemEventData) {
-    viewModel.set("medicineName", "Atorvastatin");
+    isPairingInProgress = false;
+    viewModel.set("medicineName", " ");
+    viewModel.set("isPairingInProgress", isPairingInProgress);
 };
 
 export function pairPageSetTagId(tagId: string) {
