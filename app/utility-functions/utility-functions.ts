@@ -3,6 +3,8 @@ import { Nfc, NfcTagData, NfcNdefData } from "nativescript-nfc";
 import { AudioPlayer } from "~/audio-player/audio-player";
 import { pairPageSetTagId } from "~/pair/pair-page";
 
+import * as fs from 'tns-core-modules/file-system';
+
 import * as Test from "../data-models/test-data";
 import { MedicineBinding } from "~/data-models/medicine-binding";
 
@@ -34,7 +36,7 @@ export namespace Rfid {
 
                             let audioPlayed: boolean = playAudio(tagId);
                             //if (!audioPlayed) {
-                                pairPageSetTagId(tagId); // call pair-page function to set view model element if currently on the pair page (look for better way to determine that...)
+                            pairPageSetTagId(tagId); // call pair-page function to set view model element if currently on the pair page (look for better way to determine that...)
                             //}
 
                         }).then(() => {
@@ -139,7 +141,7 @@ export namespace Rfid {
         let index: number = findTagIdIndex(tagId);
         if (index != -1) {
             isBindingExists = true;
-            
+
             let audioPath: string = Language.getAudioPath(medicineList[index].medicineName);
             AudioPlayer.useAudio(audioPath);
             AudioPlayer.togglePlay();
@@ -163,7 +165,6 @@ export namespace Rfid {
         })
         return index;
     }
-
 }
 
 export namespace Language {
@@ -228,23 +229,38 @@ export namespace Language {
         //     { "english": "en" },
         //     { "spanish": "sp" },
         // ];
+        // let languageDirectory: string = languageMap[language];
 
         let languageDirectory: string;
-        let language: string = getActiveLanguage();
-        // let languageDirectory: string = languageMap[language];
-        if (language === "english") {
+        let activeLanguage: string = getActiveLanguage();
+        if (activeLanguage === "english") {
             languageDirectory = "en/";
         }
         else {
             languageDirectory = "sp/";
         }
-        let languagePath = lanugageDirectoryRoot + languageDirectory + medicineName.toLowerCase() + ".mp3";
-        return languagePath;
+
+        let audioPath = lanugageDirectoryRoot + languageDirectory + medicineName.toLowerCase() + ".mp3";
+
+        //let file: fs.File = new fs.File();
+        //let fileExists: boolean = fs.File.exists(audioPath);
+        //fileExists= true; // Until I figure out how to use or get a better fs object
+
+        // if (!fileExists) {
+            // alert("No corresponding audio: " + audioPath + " using default...");
+            // audioPath = getDefaultAudio(languageDirectory);
+        // }
+        return audioPath;
+    }
+
+    function getDefaultAudio(languageDirectory: string): string {
+        let defaultAudioPath: string = lanugageDirectoryRoot + languageDirectory + "/default.mp3";
+        return defaultAudioPath;
     }
 }
 
 export namespace Helpers {
-    export function formatTagId(data: number[] ): string {
+    export function formatTagId(data: number[]): string {
         return data.toString();
 
         // let formatedId: string = "";
@@ -252,3 +268,5 @@ export namespace Helpers {
         // return formatedId;
     }
 }
+
+

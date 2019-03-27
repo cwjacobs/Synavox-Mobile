@@ -25,7 +25,33 @@ let i18NSaveButtonText: string = null;
 let i18NCancelButtonText: string = null;
 let i18NMedicineNameHint: string = null;
 
-let isPairingInProgress: boolean;
+let isTagIdLocked: boolean;
+
+/***
+ * Pairing VM states:
+ * 
+ *  New tag scanned (pairing in progress)
+ *      -- Display and lock new tagId (isTagIdLocked = true)
+ *      -- Clear medicine name
+ *      -- Allow medicine name to be entered or selected from list
+ *
+ *  Existing tag scanned (pairing in progress)
+ *      -- Display tagId
+ *      -- Display associated medicine name
+ *      -- Play associated audio
+ *
+ *  Existing tag scanned (pairing not in progress)
+ *      -- Display tagId
+ *      -- Display associated medicine name
+ *      -- Play associated audio
+ *
+ *  -) Tag Id is blank
+ *  -) Tag Id has a tag value
+ *  -) Medicine Name is blank
+ *  -) Medicine Name has a value
+ *  -) Tag has been read by rfid
+ *  -) Displaying list of medicines
+ ***/
 
 export function onNavigatingTo(args: NavigatedData) {
     page = <Page>args.object;
@@ -37,8 +63,6 @@ export function onLoaded(args: EventData) {
     if (nfc === null) {
         nfc = new Nfc();
     }
-    // Initialize Binding State Machine
-    isPairingInProgress = false;
 
     // Most recent Rfid Tag Id read by scanner
     viewModel.set("tagId", tagId);
@@ -57,13 +81,24 @@ export function onLoaded(args: EventData) {
 };
 
 function onTagDiscoveredListener(nfcTagData: NfcTagData) {
-    // alert("Pair onTagDiscoveredListener");
-    isPairingInProgress = true;
-    viewModel.set("isPairingInProgress", isPairingInProgress);
-
+    isTagIdLocked = false;
     tagId = Utility.Helpers.formatTagId(nfcTagData.id);
     viewModel.set("tagId", tagId);
-    viewModel.set("medicineName", "");
+
+    // See if medicine with this tag already exists in the myMedicineList
+    let index: number = findTagIdIndex(tagId);
+    if (index != -1) { // existing tag found, display associated medicine name
+        let medicineName: string = medicineList[index].medicineName;
+        viewModel.set("medicineName", medicineName);
+        
+        let audioPath = Utility.Language.getAudioPath(medicineName);
+        AudioPlayer.useAudio(audioPath);
+        AudioPlayer.togglePlay();
+    }
+    else { // New tag, lock tagId display
+        isTagIdLocked = true;
+        viewModel.set("medicineName", "");
+    }
 }
 
 export function onNavigatingFrom() {
@@ -82,11 +117,10 @@ export function onStopTap(args: EventData) {
 };
 
 export function onItemTap(args: ItemEventData) {
-    let medicineName: string;
-    medicineName = medicineList[args.index].medicineName;
+    let medicineName: string = medicineList[args.index].medicineName;
     viewModel.set("medicineName", medicineName);
 
-    if (!isPairingInProgress) {
+    if (!isTagIdLocked) {
         viewModel.set("tagId", medicineList[args.index].tagId);
     }
 
@@ -96,25 +130,35 @@ export function onItemTap(args: ItemEventData) {
 };
 
 export function onSaveTap(args: ItemEventData) {
+    //if (isPairingInProgress) {
     let binding: MedicineBinding = new MedicineBinding();
+
     binding.tagId = viewModel.get("tagId");
+    if (binding.tagId.length === 0) {
+        alert("No valid tag id...");
+        return;
+    }
+
     binding.medicineName = viewModel.get("medicineName");
-    // alert(newBinding.tagId + " : " + newBinding.medicineName);
+    if (binding.medicineName.length === 0) {
+        alert("No medicine name...");
+        return;
+    }
 
     let index: number = findMedicineNameIndex(binding.medicineName);
-    // alert("index: " + index);
 
-    if (index != -1) { // Medicine Name found, replace current binding
+    if (index != -1) { // Replace current binding
         binding.audioPath = Utility.Language.getAudioPath(binding.medicineName);
-        medicineList[index] = binding; // use the util functions to add data to array
+        medicineList[index] = binding;
+        alert("medicine replaced in list")
     }
-    else { // Medicine Name not found
+    else {
         index = findTagIdIndex(binding.tagId);
-        if (index != -1) { // Tag Id found, replace current binding
+        if (index != -1) { // Replace current binding
             binding.audioPath = Utility.Language.getAudioPath(binding.medicineName);
             medicineList[index] = binding; // use the util functions to add data to array
         }
-        else { // Neither Medicine Name nor Tag Id found, add new binding
+        else { // Add new binding
             binding.audioPath = Utility.Language.getAudioPath(binding.medicineName);
 
             page.bindingContext.myMedicineList.push({
@@ -128,12 +172,12 @@ export function onSaveTap(args: ItemEventData) {
     listView.refresh();
 
     viewModel.set("myMedicines", medicineList);
-};
+}
 
 export function onCancelTap(args: ItemEventData) {
-    isPairingInProgress = false;
-    viewModel.set("medicineName", " ");
-    viewModel.set("isPairingInProgress", isPairingInProgress);
+    isTagIdLocked = false;
+    viewModel.set("tagId", "");
+    viewModel.set("medicineName", "");
 };
 
 export function pairPageSetTagId(tagId: string) {

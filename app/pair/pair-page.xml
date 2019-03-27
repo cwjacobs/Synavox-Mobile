@@ -14,11 +14,13 @@
 			<StackLayout>
 				<image src="~/images/pair.jpg" class="image-container" />
 				<StackLayout class="list-container">
-					<StackLayout class="pairing-TagId" orientation="horizontal" visibility="{{ isPairingInProgress ? 'visible' : 'collapsed' }}">
+					<StackLayout class="pairing-TagId" orientation="horizontal">
+					<!-- <StackLayout class="pairing-TagId" orientation="horizontal" visibility="{{ isPairingInProgress ? 'visible' : 'collapsed' }}"> -->
 						<Label text="Tag Id: " />
 						<Label text="{{ tagId }}" />
 					</StackLayout>
-					<TextField class="pairing-MedicineName" text="{{ medicineName }}" hint="{{ i18NMedicineNameHint }}" visibility="{{ isPairingInProgress ? 'visible' : 'collapsed' }}" />
+					<TextField class="pairing-MedicineName" text="{{ medicineName }}" hint="{{ i18NMedicineNameHint }}" />
+					<!-- <TextField class="pairing-MedicineName" text="{{ medicineName }}" hint="{{ i18NMedicineNameHint }}" visibility="{{ isPairingInProgress ? 'visible' : 'collapsed' }}" /> -->
 				</StackLayout>
 				<ListView class="list-container" id="medicineList" items="{{ myMedicineList }}" itemTap="onItemTap">
 					<ListView.itemTemplate>
