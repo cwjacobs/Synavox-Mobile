@@ -30,8 +30,8 @@ let i18NCancelButtonText: string = null;
 let i18NDeleteButtonText: string = null;
 
 // Audio controls and buttons
-let enableAudio: string = null;
 let isAudioActive: boolean = false;
+let isAudioEnabled: boolean = false;
 let i18NStopButtonText: string = null;
 let i18NPlayButtonText: string = null;
 let i18NPauseButtonText: string = null;
@@ -67,7 +67,10 @@ export function onLoaded(args: EventData) {
     if (nfc === null) {
         nfc = new Nfc();
     }
-
+    
+    isAudioEnabled = false;
+    viewModel.set("isAudioEnabled", isAudioEnabled);
+  
     // Initialize blank
     viewModel.set("currentTagId", "");
     viewModel.set("currentMedicineName", "");
@@ -220,6 +223,8 @@ export function onPauseTap(args: ItemEventData) {
 };
 
 export function onAudioEnableTap(args: ItemEventData) {
+    isAudioEnabled = !isAudioEnabled;
+    viewModel.set("isAudioEnabled", isAudioEnabled);
 };
 
 function findMedicineNameIndex(medicineName: string): number {
@@ -283,5 +288,4 @@ function setCurrentLanguage(): void {
     viewModel.set("i18NStopButtonText", i18NStopButtonText);
     viewModel.set("i18NPlayButtonText", i18NPlayButtonText);
     viewModel.set("i18NPauseButtonText", i18NPauseButtonText);
-    viewModel.set("enableAudio", enableAudio);
 }
