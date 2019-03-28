@@ -31,15 +31,16 @@
 						</GridLayout>
 					</ListView.itemTemplate>
 				</ListView>
-				<GridLayout class="button-row" rows="*" columns="*,*,*">
-					<Button class="button delete-button fa" text="{{ i18NDeleteButtonText, i18NDeleteButtonText + '  &#xf014;' }} " onTap="onDeleteTap" row="0" col="0" />
-					<Button class="button save-button" text="{{ i18NSaveButtonText }}" row="0" col="1" onTap="onSaveTap" />
-					<Button class="button cancel-button" text="{{ i18NCancelButtonText }}" row="0" col="2" onTap="onCancelTap" />
+				<GridLayout class="pair-button-row" rows="*" columns="*,*,*">
+					<Button class="button delete-button fa" text="{{ i18NDeleteButtonText, i18NDeleteButtonText + ' &#xf014;' }} " onTap="onDeleteTap" row="0" col="0" />
+					<Button class="button save-button fa" text="{{ i18NSaveButtonText, i18NSaveButtonText + ' &#xf0c7;' }}" row="0" col="1" onTap="onSaveTap" />
+					<Button class="button cancel-button fa" text="{{ i18NCancelButtonText, i18NCancelButtonText + ' &#xf05e;' }}" row="0" col="2" onTap="onCancelTap" />
 				</GridLayout>
-				<GridLayout class="button-row" rows="*" columns="*,*,*">
-					<Button class="button test-button fa" text="{{ i18NStopButtonText, i18NStopButtonText + '  &#xf28d;' }} " onTap="onStopTap" row="0" col="0" />
-					<!-- <Button class="button btn-primary" text="{{ i18NSaveButtonText }}" row="0" col="1" onTap="onSaveTap" />
-					<Button class="button cancel-button" text="{{ i18NCancelButtonText }}" row="0" col="2" onTap="onCancelTap" /> -->
+				<GridLayout class="audio-button-row" rows="*" columns="*,*,*,*">
+					<Button class="audio-button stop-button fa" text="{{ i18NStopButtonText, i18NStopButtonText + '  &#xf04d;' }} " onTap="onStopTap" row="0" col="3" />
+					<Button class="audio-button play-button fa" text="{{ i18NPlayButtonText, i18NPlayButtonText + '  &#xf04b;' }} " onTap="onPlayTap" row="0" col="1" />
+					<Button class="audio-button pause-button fa" text="{{ i18NPauseButtonText, i18NPauseButtonText + '&#xf04c;' }} " onTap="onPauseTap" row="0" col="2" />
+					<Button class="audio-button enable-button fa" text="&#xf29e;  &#xf046;" onTap="onAudioEnableTap" row="0" col="0" />
 				</GridLayout>
 			</StackLayout>
 		</GridLayout>

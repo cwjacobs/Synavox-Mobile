@@ -20,12 +20,22 @@ let viewModel: PairViewModel = null;
 let nfc: Nfc = null;
 let isTagIdLocked: boolean;
 
+// Page text
 let i18NPageTitle: string = null;
-let i18NStopButtonText: string = null;
+let i18NMedicineNameHint: string = null;
+
+// Page control buttons
 let i18NSaveButtonText: string = null;
 let i18NCancelButtonText: string = null;
-let i18NMedicineNameHint: string = null;
 let i18NDeleteButtonText: string = null;
+
+// Audio controls and buttons
+let enableAudio: string = null;
+let isAudioActive: boolean = false;
+let i18NStopButtonText: string = null;
+let i18NPlayButtonText: string = null;
+let i18NPauseButtonText: string = null;
+
 
 /***
  * Pairing VM states:
@@ -45,12 +55,6 @@ let i18NDeleteButtonText: string = null;
  *      -- Display associated medicine name
  *      -- Play associated audio
  *
- *  -) Tag Id is blank
- *  -) Tag Id has a tag value
- *  -) Medicine Name is blank
- *  -) Medicine Name has a value
- *  -) Tag has been read by rfid
- *  -) Displaying list of medicines
  ***/
 
 export function onNavigatingTo(args: NavigatedData) {
@@ -127,6 +131,34 @@ export function onItemTap(args: ItemEventData) {
     AudioPlayer.togglePlay();
 };
 
+export function onDeleteTap(args: ItemEventData) {
+    let binding: MedicineBinding = new MedicineBinding();
+
+    binding.tagId = viewModel.get("currentTagId");
+    if (binding.tagId.length === 0) {
+        alert("No valid tag id...");
+        return;
+    }
+
+    binding.medicineName = viewModel.get("currentMedicineName");
+    if (binding.medicineName.length === 0) {
+        alert("No medicine name...");
+        return;
+    }
+
+    let index: number = findMedicineNameIndex(binding.medicineName);
+
+    if (index != -1) { // Delete current binding
+        medicineList.splice(index, 1);
+        alert("medicine deleted from list")
+    }
+
+    const listView: ListView = page.getViewById<ListView>("medicineList");
+    listView.refresh();
+
+    viewModel.set("myMedicines", medicineList);
+};
+
 export function onSaveTap(args: ItemEventData) {
     let binding: MedicineBinding = new MedicineBinding();
 
@@ -177,32 +209,17 @@ export function onCancelTap(args: ItemEventData) {
     viewModel.set("currentMedicineName", "");
 };
 
-export function onDeleteTap(args: ItemEventData) {
-    let binding: MedicineBinding = new MedicineBinding();
+export function onPlayTap(args: ItemEventData) {
+    isAudioActive = true;
+    // play audio
+};
 
-    binding.tagId = viewModel.get("currentTagId");
-    if (binding.tagId.length === 0) {
-        alert("No valid tag id...");
-        return;
-    }
+export function onPauseTap(args: ItemEventData) {
+    isAudioActive = false;
+    // pause audio
+};
 
-    binding.medicineName = viewModel.get("currentMedicineName");
-    if (binding.medicineName.length === 0) {
-        alert("No medicine name...");
-        return;
-    }
-
-    let index: number = findMedicineNameIndex(binding.medicineName);
-
-    if (index != -1) { // Delete current binding
-        medicineList.splice(index, 1);
-        alert("medicine deleted from list")
-    }
-
-    const listView: ListView = page.getViewById<ListView>("medicineList");
-    listView.refresh();
-
-    viewModel.set("myMedicines", medicineList);
+export function onAudioEnableTap(args: ItemEventData) {
 };
 
 function findMedicineNameIndex(medicineName: string): number {
@@ -240,23 +257,31 @@ function setCurrentLanguage(): void {
         i18NPageTitle = "Pair";
         i18NMedicineNameHint = "Enter Medicine Name";
         i18NDeleteButtonText = "Delete";
-        i18NStopButtonText = "Stop";
         i18NSaveButtonText = "Save";
         i18NCancelButtonText = "Cancel";
+        i18NStopButtonText = "";
+        i18NPlayButtonText = "";
+        i18NPauseButtonText = "";
+
     }
     else {
         i18NPageTitle = "Partido";
         i18NMedicineNameHint = "Ingrese el nombre del medicamento";
         i18NDeleteButtonText = "Eliminar";
-        i18NStopButtonText = "Parada";
         i18NSaveButtonText = "Salvar";
         i18NCancelButtonText = "Cancelar";
+        i18NStopButtonText = "";
+        i18NPlayButtonText = "";
+        i18NPauseButtonText = "";
     }
 
     viewModel.set("i18NPageTitle", i18NPageTitle);
     viewModel.set("i18NMedicineNameHint", i18NMedicineNameHint);
-    viewModel.set("i18NStopButtonText", i18NStopButtonText);
     viewModel.set("i18NSaveButtonText", i18NSaveButtonText);
     viewModel.set("i18NCancelButtonText", i18NCancelButtonText);
     viewModel.set("i18NDeleteButtonText", i18NDeleteButtonText);
+    viewModel.set("i18NStopButtonText", i18NStopButtonText);
+    viewModel.set("i18NPlayButtonText", i18NPlayButtonText);
+    viewModel.set("i18NPauseButtonText", i18NPauseButtonText);
+    viewModel.set("enableAudio", enableAudio);
 }
