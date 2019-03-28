@@ -18,14 +18,14 @@ let page: Page = null;
 let viewModel: PairViewModel = null;
 
 let nfc: Nfc = null;
-let tagId: string = null;
+let isTagIdLocked: boolean;
+
 let i18NPageTitle: string = null;
 let i18NStopButtonText: string = null;
 let i18NSaveButtonText: string = null;
 let i18NCancelButtonText: string = null;
 let i18NMedicineNameHint: string = null;
-
-let isTagIdLocked: boolean;
+let i18NDeleteButtonText: string = null;
 
 /***
  * Pairing VM states:
@@ -64,17 +64,15 @@ export function onLoaded(args: EventData) {
         nfc = new Nfc();
     }
 
-    // Most recent Rfid Tag Id read by scanner
-    viewModel.set("tagId", tagId);
-
-    // Most recent name selected by list selection or keyboard input
-    viewModel.set("medicineName", "");
+    // Initialize blank
+    viewModel.set("currentTagId", "");
+    viewModel.set("currentMedicineName", "");
 
     // Current list of paired medications
     medicineList = Test.Dataset.getCurrentTestData();
     viewModel.set("myMedicineList", medicineList);
 
-    setI18N();
+    setCurrentLanguage();
 
     // Start the rfid (nfc) tag listener
     nfc.setOnTagDiscoveredListener((args: NfcTagData) => onTagDiscoveredListener(args));
@@ -82,22 +80,22 @@ export function onLoaded(args: EventData) {
 
 function onTagDiscoveredListener(nfcTagData: NfcTagData) {
     isTagIdLocked = false;
-    tagId = Utility.Helpers.formatTagId(nfcTagData.id);
-    viewModel.set("tagId", tagId);
+    let tagId: string = Utility.Helpers.formatTagId(nfcTagData.id);
+    viewModel.set("currentTagId", tagId);
 
     // See if medicine with this tag already exists in the myMedicineList
     let index: number = findTagIdIndex(tagId);
     if (index != -1) { // existing tag found, display associated medicine name
         let medicineName: string = medicineList[index].medicineName;
-        viewModel.set("medicineName", medicineName);
-        
+        viewModel.set("currentMedicineName", medicineName);
+
         let audioPath = Utility.Language.getAudioPath(medicineName);
         AudioPlayer.useAudio(audioPath);
         AudioPlayer.togglePlay();
     }
     else { // New tag, lock tagId display
         isTagIdLocked = true;
-        viewModel.set("medicineName", "");
+        viewModel.set("currentMedicineName", "");
     }
 }
 
@@ -118,10 +116,10 @@ export function onStopTap(args: EventData) {
 
 export function onItemTap(args: ItemEventData) {
     let medicineName: string = medicineList[args.index].medicineName;
-    viewModel.set("medicineName", medicineName);
+    viewModel.set("currentMedicineName", medicineName);
 
     if (!isTagIdLocked) {
-        viewModel.set("tagId", medicineList[args.index].tagId);
+        viewModel.set("currentTagId", medicineList[args.index].tagId);
     }
 
     let audioPath = Utility.Language.getAudioPath(medicineName);
@@ -130,16 +128,15 @@ export function onItemTap(args: ItemEventData) {
 };
 
 export function onSaveTap(args: ItemEventData) {
-    //if (isPairingInProgress) {
     let binding: MedicineBinding = new MedicineBinding();
 
-    binding.tagId = viewModel.get("tagId");
+    binding.tagId = viewModel.get("currentTagId");
     if (binding.tagId.length === 0) {
         alert("No valid tag id...");
         return;
     }
 
-    binding.medicineName = viewModel.get("medicineName");
+    binding.medicineName = viewModel.get("currentMedicineName");
     if (binding.medicineName.length === 0) {
         alert("No medicine name...");
         return;
@@ -176,28 +173,37 @@ export function onSaveTap(args: ItemEventData) {
 
 export function onCancelTap(args: ItemEventData) {
     isTagIdLocked = false;
-    viewModel.set("tagId", "");
-    viewModel.set("medicineName", "");
+    viewModel.set("currentTagId", "");
+    viewModel.set("currentMedicineName", "");
 };
 
-export function pairPageSetTagId(tagId: string) {
-    if (viewModel != null) {
-        viewModel.set("tagId", tagId);
-        viewModel.set("isTagDiscovered", true);
+export function onDeleteTap(args: ItemEventData) {
+    let binding: MedicineBinding = new MedicineBinding();
 
-        let index: number = findTagIdIndex(tagId);
-        if (index != -1) { // Tag binding exists, display medicine name
-            viewModel.set("medicineName", medicineList[index].medicineName);
-        }
-        else { // New tag binding
-            viewModel.set("medicineName", "");
-            alert("New tag scanned, enter medicine name and press save...")
-        }
+    binding.tagId = viewModel.get("currentTagId");
+    if (binding.tagId.length === 0) {
+        alert("No valid tag id...");
+        return;
     }
-    else {
-        alert("New tag, use Pair page to assign medicine name and audio");
+
+    binding.medicineName = viewModel.get("currentMedicineName");
+    if (binding.medicineName.length === 0) {
+        alert("No medicine name...");
+        return;
     }
-}
+
+    let index: number = findMedicineNameIndex(binding.medicineName);
+
+    if (index != -1) { // Delete current binding
+        medicineList.splice(index, 1);
+        alert("medicine deleted from list")
+    }
+
+    const listView: ListView = page.getViewById<ListView>("medicineList");
+    listView.refresh();
+
+    viewModel.set("myMedicines", medicineList);
+};
 
 function findMedicineNameIndex(medicineName: string): number {
     let i: number = 0;
@@ -227,12 +233,13 @@ function findTagIdIndex(tagId: string): number {
     return index;
 }
 
-function setI18N(): void {
+function setCurrentLanguage(): void {
     let activeLanguage: string = Utility.Language.getActiveLanguage();
 
     if (activeLanguage === "english") {
         i18NPageTitle = "Pair";
         i18NMedicineNameHint = "Enter Medicine Name";
+        i18NDeleteButtonText = "Delete";
         i18NStopButtonText = "Stop";
         i18NSaveButtonText = "Save";
         i18NCancelButtonText = "Cancel";
@@ -240,6 +247,7 @@ function setI18N(): void {
     else {
         i18NPageTitle = "Partido";
         i18NMedicineNameHint = "Ingrese el nombre del medicamento";
+        i18NDeleteButtonText = "Eliminar";
         i18NStopButtonText = "Parada";
         i18NSaveButtonText = "Salvar";
         i18NCancelButtonText = "Cancelar";
@@ -250,4 +258,5 @@ function setI18N(): void {
     viewModel.set("i18NStopButtonText", i18NStopButtonText);
     viewModel.set("i18NSaveButtonText", i18NSaveButtonText);
     viewModel.set("i18NCancelButtonText", i18NCancelButtonText);
+    viewModel.set("i18NDeleteButtonText", i18NDeleteButtonText);
 }

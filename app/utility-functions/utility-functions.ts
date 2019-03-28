@@ -1,7 +1,11 @@
-
+/***
+ * 
+ * The entire rfid namespace can be deleted,
+ * I'm just keeping for the references on how to use the other nfc functions
+ * 
+ * ***/
 import { Nfc, NfcTagData, NfcNdefData } from "nativescript-nfc";
 import { AudioPlayer } from "~/audio-player/audio-player";
-import { pairPageSetTagId } from "~/pair/pair-page";
 
 import * as fs from 'tns-core-modules/file-system';
 
@@ -35,9 +39,6 @@ export namespace Rfid {
                             tagId = formatTagId(data.id);
 
                             let audioPlayed: boolean = playAudio(tagId);
-                            //if (!audioPlayed) {
-                            pairPageSetTagId(tagId); // call pair-page function to set view model element if currently on the pair page (look for better way to determine that...)
-                            //}
 
                         }).then(() => {
                             // alert("OnTagDiscovered Listener set");

@@ -15,11 +15,11 @@
 				<image src="~/images/pair.jpg" class="image-container" />
 				<StackLayout class="list-container">
 					<StackLayout class="pairing-TagId" orientation="horizontal">
-					<!-- <StackLayout class="pairing-TagId" orientation="horizontal" visibility="{{ isPairingInProgress ? 'visible' : 'collapsed' }}"> -->
+						<!-- <StackLayout class="pairing-TagId" orientation="horizontal" visibility="{{ isPairingInProgress ? 'visible' : 'collapsed' }}"> -->
 						<Label text="Tag Id: " />
-						<Label text="{{ tagId }}" />
+						<Label text="{{ currentTagId }}" />
 					</StackLayout>
-					<TextField class="pairing-MedicineName" text="{{ medicineName }}" hint="{{ i18NMedicineNameHint }}" />
+					<TextField class="pairing-MedicineName" text="{{ currentMedicineName }}" hint="{{ i18NMedicineNameHint }}" />
 					<!-- <TextField class="pairing-MedicineName" text="{{ medicineName }}" hint="{{ i18NMedicineNameHint }}" visibility="{{ isPairingInProgress ? 'visible' : 'collapsed' }}" /> -->
 				</StackLayout>
 				<ListView class="list-container" id="medicineList" items="{{ myMedicineList }}" itemTap="onItemTap">
@@ -32,9 +32,14 @@
 					</ListView.itemTemplate>
 				</ListView>
 				<GridLayout class="button-row" rows="*" columns="*,*,*">
-					<Button class="button test-button fa" text="{{ i18NStopButtonText, i18NStopButtonText + '  &#xf28d;' }} " onTap="onStopTap" row="0" col="0" />
-					<Button class="button btn-primary" text="{{ i18NSaveButtonText }}" row="0" col="1" onTap="onSaveTap" />
+					<Button class="button delete-button fa" text="{{ i18NDeleteButtonText, i18NDeleteButtonText + '  &#xf014;' }} " onTap="onDeleteTap" row="0" col="0" />
+					<Button class="button save-button" text="{{ i18NSaveButtonText }}" row="0" col="1" onTap="onSaveTap" />
 					<Button class="button cancel-button" text="{{ i18NCancelButtonText }}" row="0" col="2" onTap="onCancelTap" />
+				</GridLayout>
+				<GridLayout class="button-row" rows="*" columns="*,*,*">
+					<Button class="button test-button fa" text="{{ i18NStopButtonText, i18NStopButtonText + '  &#xf28d;' }} " onTap="onStopTap" row="0" col="0" />
+					<!-- <Button class="button btn-primary" text="{{ i18NSaveButtonText }}" row="0" col="1" onTap="onSaveTap" />
+					<Button class="button cancel-button" text="{{ i18NCancelButtonText }}" row="0" col="2" onTap="onCancelTap" /> -->
 				</GridLayout>
 			</StackLayout>
 		</GridLayout>
