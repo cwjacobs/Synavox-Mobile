@@ -19,6 +19,7 @@ let viewModel: PairViewModel = null;
 
 let nfc: Nfc = null;
 let isTagIdLocked: boolean;
+let audioPlayer: AudioPlayer = null;
 
 // Page text
 let i18NPageTitle: string = null;
@@ -67,10 +68,15 @@ export function onLoaded(args: EventData) {
     if (nfc === null) {
         nfc = new Nfc();
     }
-    
+
+    if (audioPlayer === null) {
+        audioPlayer = new AudioPlayer();
+    }
+
+    isAudioActive = false;
     isAudioEnabled = false;
     viewModel.set("isAudioEnabled", isAudioEnabled);
-  
+
     // Initialize blank
     viewModel.set("currentTagId", "");
     viewModel.set("currentMedicineName", "");
@@ -98,7 +104,9 @@ function onTagDiscoveredListener(nfcTagData: NfcTagData) {
 
         let audioPath = Utility.Language.getAudioPath(medicineName);
         AudioPlayer.useAudio(audioPath);
-        AudioPlayer.togglePlay();
+        if (isAudioEnabled) {
+            AudioPlayer.play();
+        }
     }
     else { // New tag, lock tagId display
         isTagIdLocked = true;
@@ -116,11 +124,6 @@ export function onDrawerButtonTap(args: EventData) {
     sideDrawer.showDrawer();
 };
 
-export function onStopTap(args: EventData) {
-    let audioPlayer: AudioPlayer = new AudioPlayer();
-    AudioPlayer.pausePlay();
-};
-
 export function onItemTap(args: ItemEventData) {
     let medicineName: string = medicineList[args.index].medicineName;
     viewModel.set("currentMedicineName", medicineName);
@@ -131,7 +134,9 @@ export function onItemTap(args: ItemEventData) {
 
     let audioPath = Utility.Language.getAudioPath(medicineName);
     AudioPlayer.useAudio(audioPath);
-    AudioPlayer.togglePlay();
+    if (isAudioEnabled) {
+        AudioPlayer.play();
+    }
 };
 
 export function onDeleteTap(args: ItemEventData) {
@@ -213,18 +218,42 @@ export function onCancelTap(args: ItemEventData) {
 };
 
 export function onPlayTap(args: ItemEventData) {
-    isAudioActive = true;
-    // play audio
+    let tagId: string = viewModel.get("currentTagId");
+    if (tagId.length === 0) {
+        alert("No valid tag id...");
+        return;
+    }
+
+    let medicineName: string = viewModel.get("currentMedicineName");
+    if (medicineName.length === 0) {
+        alert("No medicine name...");
+        return;
+    }
+    
+    AudioPlayer.togglePlay();
+    isAudioActive = !isAudioActive;
 };
 
-export function onPauseTap(args: ItemEventData) {
+export function onStopTap(args: EventData) {
+    AudioPlayer.pause();
     isAudioActive = false;
-    // pause audio
+
+    // Forces audio to restart on next play
+    let medicineName = viewModel.get("currentMedicineName");
+    let audioPath = Utility.Language.getAudioPath(medicineName);
+    AudioPlayer.useAudio(audioPath);
 };
 
 export function onAudioEnableTap(args: ItemEventData) {
     isAudioEnabled = !isAudioEnabled;
     viewModel.set("isAudioEnabled", isAudioEnabled);
+
+    AudioPlayer.pause();
+    isAudioActive = false;
+
+    let medicineName = viewModel.get("currentMedicineName");
+    let audioPath = Utility.Language.getAudioPath(medicineName);
+    AudioPlayer.useAudio(audioPath);
 };
 
 function findMedicineNameIndex(medicineName: string): number {

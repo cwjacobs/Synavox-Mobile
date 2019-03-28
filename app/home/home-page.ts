@@ -12,7 +12,6 @@ import * as Utility from "../utility-functions/utility-functions";
 import { MedicineBinding } from "~/data-models/medicine-binding";
 
 let viewModel: HomeViewModel = null;
-let audioPlayer: AudioPlayer = null;
 let medicineList: MedicineBinding[] = null;
 
 let i18NPageTitle: string = null;
@@ -27,6 +26,7 @@ import { NfcTagData, Nfc } from "nativescript-nfc";
 import { AppRootViewModel } from "~/app-root/app-root-view-model";
 
 let nfc: Nfc = null;
+let audioPlayer: AudioPlayer = null;
 
 export function onNavigatingTo(args: NavigatedData) {
     const page = <Page>args.object;
@@ -43,9 +43,6 @@ export function onLoaded() {
     if (nfc === null) {
         nfc = new Nfc();
     }
-    // Start the rfid (nfc) tag listener
-    nfc.setOnTagDiscoveredListener((args: NfcTagData) => onTagDiscoveredListener(args));
-
     if (audioPlayer === null) {
         audioPlayer = new AudioPlayer();
     }
@@ -57,6 +54,9 @@ export function onLoaded() {
 
     let isDualLanguageEnabled = Utility.Language.getIsDualLanguageEnabled();
     viewModel.set("isDualLanguageEnabled", isDualLanguageEnabled);
+
+    // Start the rfid (nfc) tag listener
+    nfc.setOnTagDiscoveredListener((args: NfcTagData) => onTagDiscoveredListener(args));
 }
 
 function onTagDiscoveredListener(nfcTagData: NfcTagData) {
@@ -76,7 +76,7 @@ export function onItemTap(args: ItemEventData) {
 }
 
 export function onStopTap() {
-    AudioPlayer.pausePlay();
+    AudioPlayer.pause();
 };
 
 export function onEnglishTap() {

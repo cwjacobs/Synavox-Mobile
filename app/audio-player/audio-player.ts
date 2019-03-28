@@ -20,12 +20,17 @@ export class AudioPlayer {
                 AudioPlayer._player.getAudioTrackDuration().then(duration => {
                     // iOS: duration is in seconds
                     // Android: duration is in milliseconds
-                    console.log(`audio duration:`, duration);
+                    // console.log(`audio duration:`, duration);
+                    // alert("Audio duration: " + duration);
                 });
             });
     }
 
-    public static pausePlay() {
+    public static play() {
+        AudioPlayer._player.play();
+    }
+
+    public static pause() {
         AudioPlayer._player.pause();
     }
 
