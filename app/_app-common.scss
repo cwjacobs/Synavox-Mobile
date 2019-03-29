@@ -28,3 +28,26 @@ ActionBar .action-bar-title {
     horizontal-align: center;
 }
 
+.alert {
+    color: white;
+    background-color: #7700ff;
+}
+
+.primary {
+    color: white;
+    background-color: #398881;
+}
+
+.secondary {
+    color: white;
+    background-color: #3A53FF;
+}
+
+.audio-button {
+    margin: 30px;
+    border-width: 1px;
+    border-radius: 5;
+    border-color: #3A53FF;
+    border-style: solid;
+    background-color: whitesmoke;
+}

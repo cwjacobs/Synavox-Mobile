@@ -32,9 +32,9 @@
 					</ListView.itemTemplate>
 				</ListView>
 				<GridLayout class="pair-button-row" rows="*" columns="*,*,*">
-					<Button class="my-button delete-button fa" text="{{ i18NDeleteButtonText, i18NDeleteButtonText + ' &#xf014;' }} " onTap="onDeleteTap" row="0" col="0" />
-					<Button class="my-button save-button fa" text="{{ i18NSaveButtonText, i18NSaveButtonText + ' &#xf0c7;' }}" row="0" col="1" onTap="onSaveTap" />
-					<Button class="my-button cancel-button fa" text="{{ i18NCancelButtonText, i18NCancelButtonText + ' &#xf05e;' }}" row="0" col="2" onTap="onCancelTap" />
+					<Button class="my-button alert fa" text="{{ i18NDeleteButtonText, i18NDeleteButtonText + ' &#xf014;' }} " onTap="onDeleteTap" row="0" col="0" />
+					<Button class="my-button primary fa" text="{{ i18NSaveButtonText, i18NSaveButtonText + ' &#xf0c7;' }}" row="0" col="1" onTap="onSaveTap" />
+					<Button class="my-button secondary fa" text="{{ i18NCancelButtonText, i18NCancelButtonText + ' &#xf05e;' }}" row="0" col="2" onTap="onCancelTap" />
 				</GridLayout>
 				<GridLayout class="audio-button-row" rows="*" columns="*,*,*">
 					<Button class="my-button audio-button enable-button fa" text="&#xf29e;" visibility="{{ isAudioEnabled ? 'collapsed' : 'visible' }}" onTap="onAudioEnableTap" row="0" col="0" />
