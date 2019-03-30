@@ -126,7 +126,7 @@ function setI18N(): void {
         i18NInstalledLanguagesText = "Installed Languages:";
         i18NStopButtonText = "Stop";
         i18NEnglishButtonText = "English";
-        i18NSpanishButtonText = "Spanish";
+        i18NSpanishButtonText = "Español";
         i18NEnableLanguageInstructionsText = "Press language button to enable or disable it";
     }
     else {
@@ -135,7 +135,7 @@ function setI18N(): void {
         i18NActiveLanguageText = "Activo: Español";
         i18NInstalledLanguagesText = "Idiomas Instalados:";
         i18NStopButtonText = "Parada";
-        i18NEnglishButtonText = "Inglés";
+        i18NEnglishButtonText = "English";
         i18NSpanishButtonText = "Español";
         i18NEnableLanguageInstructionsText = "Pulse el botón de idioma para activarlo o desactivarlo";
     }

@@ -20,15 +20,15 @@
 			<Label class="subtitle settings-content" text="{{ i18NActiveLanguageText }}"></Label>
 			<Label class="subtitle settings-content" text="{{ i18NInstalledLanguagesText }}"></Label>
 			<GridLayout class="button-row" rows="*,*" columns="*,*">
-				<Button class="button my-button" style="{{ isEnButtonEnabled ? 'background-color: #3A53FF' : 'background-color: gray' }}" isEnabled="{{ isEnButtonEnabled }}" text="{{ i18NEnglishButtonText }}" row="0" col="0" onTap="onEnglishTap" />
-				<Label class="indicator fa" text="&#xf046;" row="0" col="1" visibility= "{{ isEnglishEnabled ? 'visible' : 'collapsed' }}"/>
-				<Button class="button my-button my-button-spanish" style="{{ isSpButtonEnabled ? 'background-color: orangered' : 'background-color: gray' }}" isEnabled="{{ isSpButtonEnabled }}" text="{{ i18NSpanishButtonText }}" row="1" col="0" onTap="onSpanishTap" />
-				<Label class="indicator fa" text="&#xf046;" row="1" col="2" visibility= "{{ isSpanishEnabled ? 'visible' : 'collapsed' }}" />
+				<Button class="my-button" style="{{ isEnButtonEnabled ? 'background-color: #3A53FF' : 'background-color: #3A53FF' }}" isEnabled="{{ isEnButtonEnabled }}" text="{{ i18NEnglishButtonText }}" row="0" col="0" onTap="onEnglishTap" />
+				<Label class="indicator fa" text="&#xf046; Enabled" row="0" col="1" visibility= "{{ isEnglishEnabled ? 'visible' : 'collapsed' }}"/>
+				<Button class="my-button" style="{{ isSpButtonEnabled ? 'background-color: #398881' : 'background-color: #398881' }}" isEnabled="{{ isSpButtonEnabled }}" text="{{ i18NSpanishButtonText }}" row="1" col="0" onTap="onSpanishTap" />
+				<Label class="indicator fa" text="&#xf046; Habilitado" row="1" col="2" visibility= "{{ isSpanishEnabled ? 'visible' : 'collapsed' }}" />
 			</GridLayout>
 			<Label class="fa footer" textWrap="true" text="{{ i18NEnableLanguageInstructionsText , '&#xf0eb; ' + i18NEnableLanguageInstructionsText }}" />
 			<Label class="subtitle settings-content" text="NFC:"></Label>
 			<GridLayout class="button-row" rows="*,*" columns="*,*">
-				<Button class="button my-button-control fa" text="&#xf02b;  NFC (RFID)" row="0" col="0" onTap="onRfidTap" />
+				<Button class="button alert fa" text="&#xf02b;  NFC (RFID)" row="0" col="0" onTap="onRfidTap" />
 				<Label class="indicator fa" text="&#xf046;" row="0" col="1"/>
 			</GridLayout>
 		</StackLayout>

@@ -1,4 +1,4 @@
-<Page class="page" navigatingTo="onNavigatingTo" xmlns="http://schemas.nativescript.org/tns.xsd">
+<Page class="page" navigatingTo="onNavigatingTo" loaded="onLoaded" xmlns="http://schemas.nativescript.org/tns.xsd">
 	<ActionBar class="action-bar">
 		<!-- 
         Use the NavigationButton as a side-drawer button in Android
@@ -15,9 +15,18 @@
 	</ActionBar>
 	<StackLayout>
 		<image src="~/images/browse.jpg" width="100%" height="auto"></image>
-		<GridLayout class="page-content">
-			<Label class="page-icon fa" text="&#xf1ea;"></Label>
-			<Label class="page-placeholder" text="Page content goes here"></Label>
-		</GridLayout>
+		<Label class="list title" text="{{ i18NMedicineListTitle }}"></Label>
+		<!-- <GridLayout class="page-content"> -->
+		<ListView class="list" items="{{ myMedicineList }}" itemTap="onItemTap">
+			<ListView.itemTemplate>
+				<GridLayout rows="auto" cols="auto,auto">
+					<!-- <Label class="row-text" text="{{ medicineName }}"  row="0" col="0" colSpan="3" /> -->
+					<Label class="alert" text="My" row="0" col="0" />
+					<Label class="primary" text="Web" row="0" col="1" />
+					<!-- <Label class="secondary" text="Your" row="0" col="2" /> -->
+				</GridLayout>
+			</ListView.itemTemplate>
+		</ListView>
+		<!-- </GridLayout> -->
 	</StackLayout>
 </Page>

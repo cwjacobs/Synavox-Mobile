@@ -35,12 +35,12 @@ ActionBar .action-bar-title {
 
 .primary {
     color: white;
-    background-color: #398881;
+    background-color: #3A53FF;
 }
 
 .secondary {
     color: white;
-    background-color: #3A53FF;
+    background-color: #398881;
 }
 
 .audio-button {
@@ -50,4 +50,9 @@ ActionBar .action-bar-title {
     border-color: #3A53FF;
     border-style: solid;
     background-color: whitesmoke;
+}
+
+.enableAudio-button {
+    color: black;
+    font-size: 18;
 }

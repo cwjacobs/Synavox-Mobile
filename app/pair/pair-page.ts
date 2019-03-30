@@ -33,9 +33,6 @@ let i18NDeleteButtonText: string = null;
 // Audio controls and buttons
 let isAudioActive: boolean = false;
 let isAudioEnabled: boolean = false;
-let i18NStopButtonText: string = null;
-let i18NPlayButtonText: string = null;
-let i18NPauseButtonText: string = null;
 
 
 /***
@@ -64,6 +61,11 @@ export function onNavigatingTo(args: NavigatedData) {
     page.bindingContext = viewModel;
 }
 
+export function onDrawerButtonTap(args: EventData) {
+    const sideDrawer = <RadSideDrawer>app.getRootView();
+    sideDrawer.showDrawer();
+};
+
 export function onLoaded(args: EventData) {
     if (nfc === null) {
         nfc = new Nfc();
@@ -77,7 +79,7 @@ export function onLoaded(args: EventData) {
     isAudioEnabled = false;
     viewModel.set("isAudioEnabled", isAudioEnabled);
 
-    // Initialize blank
+    // Initialize "Curent" values blank
     viewModel.set("currentTagId", "");
     viewModel.set("currentMedicineName", "");
 
@@ -85,7 +87,8 @@ export function onLoaded(args: EventData) {
     medicineList = Test.Dataset.getCurrentTestData();
     viewModel.set("myMedicineList", medicineList);
 
-    setCurrentLanguage();
+    // Set text to active language
+    setActiveLanguageText();
 
     // Start the rfid (nfc) tag listener
     nfc.setOnTagDiscoveredListener((args: NfcTagData) => onTagDiscoveredListener(args));
@@ -118,11 +121,6 @@ export function onNavigatingFrom() {
     // Remove this page's listener
     nfc.setOnTagDiscoveredListener(null);
 }
-
-export function onDrawerButtonTap(args: EventData) {
-    const sideDrawer = <RadSideDrawer>app.getRootView();
-    sideDrawer.showDrawer();
-};
 
 export function onItemTap(args: ItemEventData) {
     let medicineName: string = medicineList[args.index].medicineName;
@@ -217,6 +215,7 @@ export function onCancelTap(args: ItemEventData) {
     viewModel.set("currentMedicineName", "");
 };
 
+// Audio control functions
 export function onPlayTap(args: ItemEventData) {
     let tagId: string = viewModel.get("currentTagId");
     if (tagId.length === 0) {
@@ -229,7 +228,7 @@ export function onPlayTap(args: ItemEventData) {
         alert("No medicine name...");
         return;
     }
-    
+
     AudioPlayer.togglePlay();
     isAudioActive = !isAudioActive;
 };
@@ -284,7 +283,7 @@ function findTagIdIndex(tagId: string): number {
     return index;
 }
 
-function setCurrentLanguage(): void {
+function setActiveLanguageText(): void {
     let activeLanguage: string = Utility.Language.getActiveLanguage();
 
     if (activeLanguage === "english") {
@@ -293,9 +292,6 @@ function setCurrentLanguage(): void {
         i18NDeleteButtonText = "Delete";
         i18NSaveButtonText = "Save";
         i18NCancelButtonText = "Cancel";
-        i18NStopButtonText = "";
-        i18NPlayButtonText = "";
-        i18NPauseButtonText = "";
 
     }
     else {
@@ -304,9 +300,6 @@ function setCurrentLanguage(): void {
         i18NDeleteButtonText = "Eliminar";
         i18NSaveButtonText = "Salvar";
         i18NCancelButtonText = "Cancelar";
-        i18NStopButtonText = "";
-        i18NPlayButtonText = "";
-        i18NPauseButtonText = "";
     }
 
     viewModel.set("i18NPageTitle", i18NPageTitle);
@@ -314,7 +307,4 @@ function setCurrentLanguage(): void {
     viewModel.set("i18NSaveButtonText", i18NSaveButtonText);
     viewModel.set("i18NCancelButtonText", i18NCancelButtonText);
     viewModel.set("i18NDeleteButtonText", i18NDeleteButtonText);
-    viewModel.set("i18NStopButtonText", i18NStopButtonText);
-    viewModel.set("i18NPlayButtonText", i18NPlayButtonText);
-    viewModel.set("i18NPauseButtonText", i18NPauseButtonText);
 }
