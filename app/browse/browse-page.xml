@@ -16,7 +16,6 @@
 	<StackLayout>
 		<image src="~/images/browse.jpg" width="100%" height="auto"></image>
 		<Label class="list title" text="{{ i18NMedicineListTitle }}"></Label>
-		<!-- <GridLayout class="page-content"> -->
 		<ListView class="list" items="{{ myMedicineList }}" itemTap="onItemTap">
 			<ListView.itemTemplate>
 				<GridLayout rows="auto" cols="auto,auto">
@@ -27,6 +26,5 @@
 				</GridLayout>
 			</ListView.itemTemplate>
 		</ListView>
-		<!-- </GridLayout> -->
 	</StackLayout>
 </Page>

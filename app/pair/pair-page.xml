@@ -1,4 +1,4 @@
-<Page class="page" loaded="onLoaded" navigatingTo="onNavigatingTo" navigatingFrom="onNavigatingFrom" xmlns="http://schemas.nativescript.org/tns.xsd">
+<Page class="page" navigatingTo="onNavigatingTo" loaded="onLoaded" navigatingFrom="onNavigatingFrom" xmlns="http://schemas.nativescript.org/tns.xsd">
 	<ActionBar class="action-bar">
 		<!-- 
         Use the NavigationButton as a side-drawer button in Android
@@ -9,40 +9,33 @@
 		<Label class="action-bar-title" text="{{ i18NPageTitle }}"></Label>
 	</ActionBar>
 	<StackLayout>
-		<GridLayout>
-			<!-- <Label class="page-icon fa" id="page-icon" text="&#xf09e;"></Label> -->
-			<StackLayout>
-				<image src="~/images/pair.jpg" class="image-container" />
-				<StackLayout class="list-container">
-					<StackLayout class="pairing-TagId" orientation="horizontal">
-						<!-- <StackLayout class="pairing-TagId" orientation="horizontal" visibility="{{ isPairingInProgress ? 'visible' : 'collapsed' }}"> -->
-						<Label text="Tag Id: " />
-						<Label text="{{ currentTagId }}" />
-					</StackLayout>
-					<TextField class="pairing-MedicineName" text="{{ currentMedicineName }}" hint="{{ i18NMedicineNameHint }}" />
-					<!-- <TextField class="pairing-MedicineName" text="{{ medicineName }}" hint="{{ i18NMedicineNameHint }}" visibility="{{ isPairingInProgress ? 'visible' : 'collapsed' }}" /> -->
-				</StackLayout>
-				<ListView class="list-container" id="medicineList" items="{{ myMedicineList }}" itemTap="onItemTap">
-					<ListView.itemTemplate>
-						<GridLayout rows="*" columns="*,*,*,auto">
-							<Label class="list-MedicineName" text="{{ medicineName }}" row="0" col="0" colSpan="2" />
-							<Label class="list-TagId" text="{{ tagId }}" row="0" col="2" />
-							<Label class="list-TagIcon fa" text="&#xf02b;" row="0" col="3" />
-						</GridLayout>
-					</ListView.itemTemplate>
-				</ListView>
-				<GridLayout class="pair-button-row" rows="*" columns="*,*,auto">
-					<Button class="my-button alert fa" text="{{ i18NDeleteButtonText, i18NDeleteButtonText + ' &#xf014;' }} " onTap="onDeleteTap" row="0" col="0" />
-					<Button class="my-button primary fa" text="{{ i18NSaveButtonText, i18NSaveButtonText + ' &#xf0c7;' }}" row="0" col="1" onTap="onSaveTap" />
-					<Button class="my-button secondary fa" text="{{ i18NCancelButtonText, i18NCancelButtonText + ' &#xf05e;' }}" row="0" col="2" onTap="onCancelTap" />
-				</GridLayout>
-				<GridLayout class="audio-button-row" rows="*" columns="*,*,*">
-					<Button class="my-button audio-button enableAudio-button fa" text="&#xf29e;" visibility="{{ isAudioEnabled ? 'collapsed' : 'visible' }}" onTap="onAudioEnableTap" row="0" col="0" />
-					<Button class="my-button audio-button enableAudio-button fa" text="&#xf29e;  &#xf046;" visibility="{{ isAudioEnabled ? 'visible' : 'collapsed' }}" onTap="onAudioEnableTap" row="0" col="0" />
-					<Button class="my-button audio-button fa" text="&#xf04b; &#xf04c;" isEnabled="{{ isAudioEnabled }}" onTap="onPlayTap" row="0" col="1" />
-					<Button class="my-button audio-button fa" text="&#xf04d;" isEnabled="{{ isAudioEnabled }}" onTap="onStopTap" row="0" col="2" />
-				</GridLayout>
+		<image src="~/images/pair.jpg" class="image-container" />
+		<StackLayout class="list-container">
+			<StackLayout class="pairing-TagId" orientation="horizontal">
+				<Label text="Tag Id: " />
+				<Label text="{{ currentTagId }}" />
 			</StackLayout>
+			<TextField class="pairing-MedicineName" text="{{ currentMedicineName }}" hint="{{ i18NMedicineNameHint }}" />
+		</StackLayout>
+		<ListView class="list-container" id="medicineList" items="{{ myMedicineList }}" itemTap="onItemTap">
+			<ListView.itemTemplate>
+				<GridLayout rows="*" columns="*,*,*,auto">
+					<Label class="list-MedicineName" text="{{ medicineName }}" row="0" col="0" colSpan="2" />
+					<Label class="list-TagId" text="{{ tagId }}" row="0" col="2" />
+					<Label class="list-TagIcon fa" text="&#xf02b;" row="0" col="3" />
+				</GridLayout>
+			</ListView.itemTemplate>
+		</ListView>
+		<GridLayout class="pair-button-row" rows="*" columns="*,*,auto">
+			<Button class="my-button alert fa" text="{{ i18NDeleteButtonText, i18NDeleteButtonText + ' &#xf014;' }} " onTap="onDeleteTap" row="0" col="0" />
+			<Button class="my-button primary fa" text="{{ i18NSaveButtonText, i18NSaveButtonText + ' &#xf0c7;' }}" row="0" col="1" onTap="onSaveTap" />
+			<Button class="my-button secondary fa" text="{{ i18NCancelButtonText, i18NCancelButtonText + ' &#xf05e;' }}" row="0" col="2" onTap="onCancelTap" />
+		</GridLayout>
+		<GridLayout class="audio-button-row" rows="*" columns="*,*,*">
+			<Button class="my-button audio-button enableAudio-button fa" text="&#xf29e;" visibility="{{ isAudioEnabled ? 'collapsed' : 'visible' }}" onTap="onAudioEnableTap" row="0" col="0" />
+			<Button class="my-button audio-button enableAudio-button fa" text="&#xf29e;  &#xf046;" visibility="{{ isAudioEnabled ? 'visible' : 'collapsed' }}" onTap="onAudioEnableTap" row="0" col="0" />
+			<Button class="my-button audio-button fa" text="&#xf04b; &#xf04c;" isEnabled="{{ isAudioEnabled }}" onTap="onPlayTap" row="0" col="1" />
+			<Button class="my-button audio-button fa" text="&#xf04d;" isEnabled="{{ isAudioEnabled }}" onTap="onStopTap" row="0" col="2" />
 		</GridLayout>
 	</StackLayout>
 </Page>
