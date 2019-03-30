@@ -16,13 +16,16 @@
 	<StackLayout>
 		<image src="~/images/browse.jpg" width="100%" height="auto"></image>
 		<Label class="list title" text="{{ i18NMedicineListTitle }}"></Label>
-		<ListView class="list" items="{{ myMedicineList }}" itemTap="onItemTap">
+		<WebView text="WebView" loaded="onWebViewLoaded" id="myWebView" src="{{ webViewSrc }}" />
+		<Label text="{{ result }}" />
+		<ListView class="list-container" items="{{ myMedicineList }}" itemTap="onItemTap">
 			<ListView.itemTemplate>
-				<GridLayout rows="auto" cols="auto,auto">
-					<!-- <Label class="row-text" text="{{ medicineName }}"  row="0" col="0" colSpan="3" /> -->
-					<Label class="alert" text="My" row="0" col="0" />
-					<Label class="primary" text="Web" row="0" col="1" />
-					<!-- <Label class="secondary" text="Your" row="0" col="2" /> -->
+				<GridLayout rows="auto,auto" columns="*,*,*,auto">
+					<Label class="row-text" text="{{ medicineName }}" row="0" col="0" colSpan="4" />
+					<Button class="my-button alert" text="Drugs.com" row="1" col="0" colSpan="1" tap="onTap" />
+					<Button class="my-button primary" text="WebMD" row="1" col="1" colSpan="1" />
+					<Button class="my-button secondary" text="Button 3" row="1" col="2" colSpan="1" />
+					<Button class="my-button warning" text="Btn 4" row="1" col="3" colSpan="1" />
 				</GridLayout>
 			</ListView.itemTemplate>
 		</ListView>
