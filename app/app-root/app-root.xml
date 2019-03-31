@@ -25,6 +25,10 @@ http://docs.telerik.com/devtools/nativescript-ui/Controls/NativeScript/SideDrawe
 						<Label row="0" col="0" text="&#xf02b;" class="fa" />
 						<Label row="0" col="1" text="Pair" class="p-r-10" />
 					</GridLayout>
+					<GridLayout columns="auto, *" class="{{ 'sidedrawer-list-item' + (selectedPage === 'Share' ? ' selected': '') }}" route="share/share-page" title="Share" tap="onNavigationItemTap">
+						<Label row="0" col="0" text="&#xf064;" class="fa" />
+						<Label row="0" col="1" text="Share" class="p-r-10" />
+					</GridLayout>
 					<GridLayout columns="auto, *" class="{{ 'sidedrawer-list-item' + (selectedPage === 'Browse' ? ' selected': '') }}" route="browse/browse-page" title="Browse" tap="onNavigationItemTap">
 						<Label row="0" col="0" text="&#xf1ea;" class="fa" />
 						<Label row="0" col="1" text="Browse" class="p-r-10" />
