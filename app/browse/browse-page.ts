@@ -18,6 +18,8 @@ let page: Page = null;
 let viewModel: BrowseViewModel = null;
 let medicineList: MedicineBinding[] = null;
 
+let webViewSrcModel = null;
+
 let i18NPageTitle: string = null;
 let i18NMedicineListTitle: string = null;
 
@@ -41,26 +43,43 @@ export function onLoaded(args: EventData) {
 }
 
 export function onTap(args: ItemEventData) {
-    alert("onWebViewLoaded");
+    // alert("onTap");
 
-    viewModel.set("webViewSrc", "https://www.drugs.com/lisinopril.html");
+    let button: any = args.object;
+    // alert(button.text);
+    // alert("id = " + button.id);
+
+    let column: number = button.id.substring(0, 1);
+    let medicineName: string = button.id.substring(1);
+    // alert("column = " + column);
+    // alert("medicineName = " + medicineName);
+
+    webViewSrcModel = Test.Dataset.getWebViewSrcArray();
+    let wvsMedicineNameIndex: number = findMedicineNameIndex(medicineName);
+    let wvsMedicineName: string = webViewSrcModel[wvsMedicineNameIndex].medicineName;
+    // alert("wvsMedicineName = " + wvsMedicineName);
+    let wvsMedicineSrc: string = webViewSrcModel[wvsMedicineNameIndex].srcLinks[column].webViewSrc;
+    // alert("wvsMedicineSrc = " + wvsMedicineSrc);
+
+
+    viewModel.set("webViewSrc", wvsMedicineSrc);
     submit(args);
 };
 
 export function onItemTap(args: ItemEventData) {
-    alert("onWebViewLoaded");
+    // alert("onItemTap");
 
     viewModel.set("webViewSrc", "https://www.drugs.com/lisinopril.html");
-    submit(args);
+    //submit(args);
 };
 
 export function onWebViewLoaded(webargs) {
-    alert("onWebViewLoaded");
+    // alert("onWebViewLoaded");
 
     const page: Page = <Page>webargs.object.page;
     const vm = page.bindingContext;
     const webview: WebView = <WebView>webargs.object;
-    vm.set("result", "WebView is still loading...");
+    // vm.set("result", "WebView is still loading...");
     vm.set("enabled", false);
 
     webview.on(WebView.loadFinishedEvent, (args: LoadEventData) => {
@@ -73,12 +92,14 @@ export function onWebViewLoaded(webargs) {
 
         vm.set("result", message);
         console.log(`WebView message - ${message}`);
+
+        // alert(message);
     });
 };
 
 // changing WebView source
 export function submit(args) {
-    alert("submit");
+    // alert("submit");
 
     // const page: Page = <Page>args.object.page;
     // const vm = page.bindingContext;
@@ -97,6 +118,7 @@ export function submit(args) {
             });
     }
 }
+
 function setActiveLanguageText(): void {
     let activeLanguage: string = Utility.Language.getActiveLanguage();
 
@@ -112,3 +134,18 @@ function setActiveLanguageText(): void {
     viewModel.set("i18NPageTitle", i18NPageTitle);
     viewModel.set("i18NMedicineListTitle", i18NMedicineListTitle);
 };
+
+function findMedicineNameIndex(medicineName: string): number {
+    let i: number = 0;
+    let index: number = -1;
+    webViewSrcModel.forEach(value => {
+        if (value.medicineName === medicineName) {
+            index = i;
+        }
+        else {
+            i = i + 1;
+        }
+    })
+    return index;
+}
+

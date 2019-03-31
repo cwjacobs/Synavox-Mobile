@@ -14,18 +14,20 @@
 		<Label class="action-bar-title" text="Browse"></Label>
 	</ActionBar>
 	<StackLayout>
-		<image src="~/images/browse.jpg" width="100%" height="auto"></image>
-		<Label class="list title" text="{{ i18NMedicineListTitle }}"></Label>
 		<WebView text="WebView" loaded="onWebViewLoaded" id="myWebView" src="{{ webViewSrc }}" />
+		<image src="~/images/browse.jpg" width="100%" height="auto"></image>
 		<Label text="{{ result }}" />
+		<Label class="list title" text="{{ i18NMedicineListTitle }}"></Label>
+		<!-- <WebView text="WebView" loaded="onWebViewLoaded" id="myWebView" src="{{ webViewSrc }}" /> -->
+		<!-- <Label text="{{ result }}" /> -->
 		<ListView class="list-container" items="{{ myMedicineList }}" itemTap="onItemTap">
 			<ListView.itemTemplate>
 				<GridLayout rows="auto,auto" columns="*,*,*,auto">
 					<Label class="row-text" text="{{ medicineName }}" row="0" col="0" colSpan="4" />
-					<Button class="my-button alert" text="Drugs.com" row="1" col="0" colSpan="1" tap="onTap" />
-					<Button class="my-button primary" text="WebMD" row="1" col="1" colSpan="1" />
-					<Button class="my-button secondary" text="Button 3" row="1" col="2" colSpan="1" />
-					<Button class="my-button warning" text="Btn 4" row="1" col="3" colSpan="1" />
+					<Button class="my-button alert" id="{{ medicineName, '0' + medicineName }}" text="Drugs.com" row="1" col="0" colSpan="1" tap="onTap" />
+					<Button class="my-button primary" id="{{ medicineName, '1' + medicineName }}" text="WebMD" row="1" col="1" colSpan="1" tap="onTap" />
+					<Button class="my-button secondary" id="{{ medicineName, '2' + medicineName }}" text="Alt" row="1" col="2" colSpan="1" tap="onTap" />
+					<Button class="my-button warning" id="{{ medicineName, '3' + medicineName }}" text="Msg Brd" row="1" col="3" colSpan="1" tap="onTap" />
 				</GridLayout>
 			</ListView.itemTemplate>
 		</ListView>
