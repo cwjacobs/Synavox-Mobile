@@ -13,6 +13,7 @@
 			<image src="~/images/share.jpg" width="100%" height="auto" />
 			<Label class="title" text="Share My Medicines"></Label>
 			<StackLayout>
+				<Button text="Get Contact" tap="onGetContacts" />
 			</StackLayout>
 			<Label class="page-icon fa" onTap="onSearchTapped" text="&#xf002;"></Label>
 			<!-- <Label class="page-placeholder" text="Page content goes here" /> -->
