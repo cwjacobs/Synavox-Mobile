@@ -6,6 +6,9 @@ import { GridLayout } from "tns-core-modules/ui/layouts/grid-layout";
 
 import { AppRootViewModel } from "./app-root-view-model";
 
+export function onNavigatingTo(args: EventData): void {
+}
+
 export function onLoaded(args: EventData): void {
     const drawerComponent = <RadSideDrawer>args.object;
     drawerComponent.bindingContext = new AppRootViewModel();
@@ -16,6 +19,9 @@ export function onNavigationItemTap(args: EventData): void {
     const componentRoute = component.get("route");
     const componentTitle = component.get("title");
     const bindingContext = <AppRootViewModel>component.bindingContext;
+    
+    console.log("componentRoute = " + componentRoute);
+    console.log("componentTitle = " + componentTitle);
 
     bindingContext.selectedPage = componentTitle;
 

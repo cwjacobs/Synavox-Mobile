@@ -27,7 +27,7 @@
 					<Button class="my-button alert" id="{{ medicineName, '0' + medicineName }}" text="Drugs.com" row="1" col="0" colSpan="1" tap="onTap" />
 					<Button class="my-button primary" id="{{ medicineName, '1' + medicineName }}" text="WebMD" row="1" col="1" colSpan="1" tap="onTap" />
 					<Button class="my-button secondary" id="{{ medicineName, '2' + medicineName }}" text="Alt" row="1" col="2" colSpan="1" tap="onTap" />
-					<Button class="my-button warning" id="{{ medicineName, '3' + medicineName }}" text="Msg Brd" row="1" col="3" colSpan="1" tap="onTap" />
+					<Button class="my-button warning" id="{{ medicineName, '3' + medicineName }}" text="Msg Board" row="1" col="3" colSpan="1" tap="onTap" />
 				</GridLayout>
 			</ListView.itemTemplate>
 		</ListView>

@@ -16,6 +16,9 @@ export function onNavigatingTo(args: NavigatedData) {
     page.bindingContext = viewModel;
 }
 
+export function onNavigatingFrom(args: NavigatedData) {
+}
+
 export function onDrawerButtonTap(args: EventData) {
     const sideDrawer = <RadSideDrawer>app.getRootView();
     sideDrawer.showDrawer();
