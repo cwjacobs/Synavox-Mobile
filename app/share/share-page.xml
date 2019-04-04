@@ -12,12 +12,18 @@
 		<StackLayout>
 			<image src="~/images/share.jpg" width="100%" height="auto" />
 			<Label class="title" text="Share My Medicines"></Label>
-			<StackLayout>
-				<Button text="Get Contact" tap="onGetContactLite_main" />
-					<ListPicker items="{{ contact_list }}" selectedIndex="{{ index }}" loaded="onListPickerLoaded" class="p-15 picker" row="1"/>
-				</StackLayout>
-				<Label class="page-icon fa" onTap="onSearchTapped" text="&#xf002;"></Label>
-				<!-- <Label class="page-placeholder" text="Page content goes here" /> -->
+			<StackLayout class="list-container" orientation="horizontal">
+				<Label class="sharing-label" text="Share with: " />
+				<TextField class="sharing-name" hint="Enter name from contacts" returnKeyType="search" text="{{ currentName }}" />
 			</StackLayout>
-		</GridLayout>
-	</Page>
+			<Button text="Find" tap="onFindTap" />
+			<!-- <StackLayout class="list-container" orientation="horizontal"><Label class="sharing-label" text="Alt: " /><TextField class="sharing-name" hint="Enter date" text='{{testDate, testDate | dateConverter(dateFormat)}}' secure="false" keyboardType="datetime" returnKeyType="done" returnPress="onReturnPress" autocorrect="false" maxLength="10" class="input input-border"/></StackLayout> -->
+			<ListPicker items="{{ contact_list }}" selectedIndex="{{ index }}" loaded="onListPickerLoaded" class="p-15 picker" row="1"/>
+			<!-- <StackLayout>
+				<Button text="Get Contacts" tap="onGetContactLite_main" />
+			</StackLayout>
+			<Label class="page-icon fa" onTap="onSearchTapped" text="&#xf002;"></Label> -->
+			<!-- <Label class="page-placeholder" text="Page content goes here" /> -->
+		</StackLayout>
+	</GridLayout>
+</Page>

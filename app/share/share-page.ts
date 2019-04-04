@@ -15,6 +15,7 @@ import { Contact, GetContactResult } from "nativescript-contacts-lite";
 import * as Contacts from "nativescript-contacts-lite";
 import { ContactList } from "~/data-models/contact";
 
+let names: string[] = [];
 let viewModel: ShareViewModel = null;
 
 export function onNavigatingTo(args: NavigatedData) {
@@ -31,59 +32,44 @@ export function onDrawerButtonTap(args: EventData) {
     sideDrawer.showDrawer();
 }
 
-export function onLoaded(args: EventData) {
-}
+function getContacts() {
+    let contact_list: Contact[];
+    let displayNames = ['display_name'];
+    let desiredFields = ['display_name', 'phone', 'email', 'organization'];
 
-export function onGetContact_sample(args: EventData) {
-    //     var app = require("application");
-    //     var contacts = require("nativescript-contacts");
-
-    //     const contact = new Contact();
-    //     Permissions.requestPermissions([android.Manifest.permission.GET_ACCOUNTS, android.Manifest.permission.READ_CONTACTS, android.Manifest.permission.WRITE_CONTACTS], "I need these permissions because I'm cool")
-    //         .then(() => {
-    //             contact.save();
-    //         });
-    //     contacts.getContact().then(function (args) {
-    //         /// Returns args:
-    //         /// args.data: Generic cross platform JSON object
-    //         /// args.reponse: "selected" or "cancelled" depending on wheter the user selected a contact. 
-
-    //         if (args.response === "selected") {
-    //             var contact = args.data; //See data structure below
-
-    //             // lets say you wanted to grab first name and last name
-    //             console.log(contact.name.given + " " + contact.name.family);
-
-    //             //lets say you want to get the phone numbers
-    //             contact.phoneNumbers.forEach(function (phone) {
-    //                 console.log(phone.value);
-    //             });
-
-    //             //lets say you want to get the addresses
-    //             contact.postalAddresses.forEach(function (address) {
-    //                 console.log(address.location.street);
-    //             });
-    //         }
-    //     });
-}
-
-export function onGetContact(args: EventData) {
     Permissions.requestPermissions([android.Manifest.permission.GET_ACCOUNTS,
     android.Manifest.permission.READ_CONTACTS,],
         "Permission to access your contacts is requested")
         .then(() => {
-            Contacts.getContact()
-                .then((args: GetContactResult) => {
-                    /// Returns args:
-                    /// args.reponse: "fetch"
-                    /// args.data: Generic cross platform JSON object, null if no contacts were found.
-                    logContact(args);
-                    storeContact(args.data);
+            Contacts.getContacts(displayNames).then((result) => {
+                contact_list = result;
+                contact_list.forEach((contact) => { names.push(contact.display_name); });
+                names.sort();
 
-                }, function (err) {
-                    console.log("Error: " + err);
-                })
+                let index: number = (contact_list.length / 2);
+                viewModel.set("index", index);
+                viewModel.set("contact_list", names);
+
+            }, (e) => { console.dir(e); });
         });
+}
+
+export function onLoaded(args: EventData) {
+    getContacts();
+}
+
+function containsCurrentNameFragment(element: string, index, array) {
+    let currentName: string = viewModel.get("currentName");
+    return (element.includes(currentName));
+}
+
+export function onFindTap(args: EventData) {
+    // let currentName: string = viewModel.get("currentName");
+    let filteredNames: string[] = names.filter(containsCurrentNameFragment);
+    
+    let index: number = (filteredNames.length / 2);
+    viewModel.set("index", index);
+    viewModel.set("contact_list", filteredNames);
 }
 
 export function onGetContactLite_main(args: EventData) {
@@ -96,13 +82,14 @@ export function onGetContactLite_main(args: EventData) {
         "Permission to access your contacts is requested")
         .then(() => {
             Contacts.getContacts(displayNames).then((result) => {
-                console.log(`Found ${result.length} contacts.`);
+                // console.log(`Found ${result.length} contacts.`);
                 // console.dir(result);
 
                 contact_list = result;
 
-                let names: string[] = [];
+                //let names: string[] = [];
                 contact_list.forEach((contact) => { names.push(contact.display_name); });
+                names.sort();
                 // viewModel.set("contact_list", names);
 
 
@@ -123,20 +110,28 @@ export function onGetContactLite_main(args: EventData) {
 }
 
 export function onGetContactLite_worker(args: EventData) {
-    let contact_list: ContactList;
-    let desiredFields = ['display_name', 'phone', 'email', 'organization'];
+    // let contact_list: ContactList;
+    // let desiredFields = ['display_name', 'phone', 'email', 'organization'];
 
-    Permissions.requestPermissions([android.Manifest.permission.GET_ACCOUNTS,
-    android.Manifest.permission.READ_CONTACTS,],
-        "Permission to access your contacts is requested")
-        .then(() => {
-            Contacts.getContactsWorker(desiredFields).then((result) => {
-                console.log(`Found ${result.length} contacts.`);
-                console.dir(result);
-                contact_list = result;
-                console.dir(result);
-            }, (e) => { console.dir(e); });
-        });
+    // Permissions.requestPermissions([android.Manifest.permission.GET_ACCOUNTS,
+    // android.Manifest.permission.READ_CONTACTS,],
+    //     "Permission to access your contacts is requested")
+    //     .then(() => {
+    //         Contacts.getContactsWorker(desiredFields).then((result) => {
+    //             console.log(`Found ${result.length} contacts.`);
+    //             console.dir(result);
+    //             contact_list = result;
+    //             console.dir(result);
+    //         }, (e) => { console.dir(e); });
+    //     });
+}
+
+export function onFocus(args: EventData) {
+    alert("onFocus");
+}
+
+export function onBlur(args: EventData) {
+    alert("onBlur");
 }
 
 export function onSearchTapped(args: EventData) {
