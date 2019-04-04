@@ -88,19 +88,28 @@ export function onGetContact(args: EventData) {
 
 export function onGetContactLite_main(args: EventData) {
     let contact_list: Contact[];
+    let displayNames = ['display_name'];
     let desiredFields = ['display_name', 'phone', 'email', 'organization'];
 
     Permissions.requestPermissions([android.Manifest.permission.GET_ACCOUNTS,
     android.Manifest.permission.READ_CONTACTS,],
         "Permission to access your contacts is requested")
         .then(() => {
-            Contacts.getContacts(desiredFields).then((result) => {
+            Contacts.getContacts(displayNames).then((result) => {
                 console.log(`Found ${result.length} contacts.`);
                 // console.dir(result);
 
                 contact_list = result;
-                viewModel.set("contact_list", contact_list);
-                
+
+                let names: string[] = [];
+                contact_list.forEach((contact) => { names.push(contact.display_name); });
+                // viewModel.set("contact_list", names);
+
+
+                let index: number = (contact_list.length / 2);
+                viewModel.set("index", index);
+                viewModel.set("contact_list", names);
+
                 console.log("contact_id: " + contact_list[0].contact_id);
                 console.log("display_name: " + contact_list[0].display_name);
                 console.log("email: " + contact_list[0].email[0].address);
