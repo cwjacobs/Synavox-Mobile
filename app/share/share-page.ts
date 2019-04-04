@@ -14,12 +14,15 @@ import * as Test from "../data-models/test-data";
 import { Contact, GetContactResult } from "nativescript-contacts-lite";
 import * as Contacts from "nativescript-contacts-lite";
 import { ContactList } from "~/data-models/contact";
+import { TextField } from "tns-core-modules/ui/text-field/text-field";
 
+let page: Page = null;
 let names: string[] = [];
+let contactFilter: string = null;
 let viewModel: ShareViewModel = null;
 
 export function onNavigatingTo(args: NavigatedData) {
-    const page = <Page>args.object;
+    page = <Page>args.object;
     viewModel = new ShareViewModel();
     page.bindingContext = viewModel;
 }
@@ -43,7 +46,11 @@ function getContacts() {
         .then(() => {
             Contacts.getContacts(displayNames).then((result) => {
                 contact_list = result;
-                contact_list.forEach((contact) => { names.push(contact.display_name); });
+                contact_list.forEach((contact) => {
+                    if (names.indexOf(contact.display_name) === -1) {
+                        names.push(contact.display_name);
+                    }
+                });
                 names.sort();
 
                 let index: number = (contact_list.length / 2);
@@ -56,20 +63,29 @@ function getContacts() {
 
 export function onLoaded(args: EventData) {
     getContacts();
+
+    // registering for the TextField text change listener
+    const contactsFilterView: TextField = <TextField>page.getViewById("contactsFilterView");
+    contactsFilterView.updateTextTrigger = "textChanged";
+    contactsFilterView.on("textChange", () => {
+        updateContactFilter();
+    });
 }
 
-function containsCurrentNameFragment(element: string, index, array) {
-    let currentName: string = viewModel.get("currentName");
-    return (element.includes(currentName));
+function containsNameFilter(element: string, index, array): boolean {
+    return (element.includes(contactFilter));
 }
 
-export function onFindTap(args: EventData) {
-    // let currentName: string = viewModel.get("currentName");
-    let filteredNames: string[] = names.filter(containsCurrentNameFragment);
-    
-    let index: number = (filteredNames.length / 2);
-    viewModel.set("index", index);
-    viewModel.set("contact_list", filteredNames);
+function updateContactFilter() {
+    setTimeout(() => {
+        contactFilter = viewModel.get("contactFilter");
+        let filteredNames: string[] = names.filter(containsNameFilter);
+        viewModel.set("contact_list", filteredNames);
+
+        let index: number = filteredNames.indexOf(contactFilter);
+        viewModel.set("index", index);
+    }, 300);
+    // Delay allows the contactFilter field to be updated on the UI before updating the filter
 }
 
 export function onGetContactLite_main(args: EventData) {
@@ -124,18 +140,6 @@ export function onGetContactLite_worker(args: EventData) {
     //             console.dir(result);
     //         }, (e) => { console.dir(e); });
     //     });
-}
-
-export function onFocus(args: EventData) {
-    alert("onFocus");
-}
-
-export function onBlur(args: EventData) {
-    alert("onBlur");
-}
-
-export function onSearchTapped(args: EventData) {
-    alert("onSearchTapped");
 }
 
 function storeContact(contact: Contact): void {
