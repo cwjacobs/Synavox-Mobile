@@ -6,32 +6,37 @@
         -->
 		<NavigationButton ios:visibility="collapsed" icon="res://menu" tap="onDrawerButtonTap"></NavigationButton>
 		<ActionItem icon="res://navigation/menu" android:visibility="collapsed" tap="onDrawerButtonTap" ios.position="left"></ActionItem>
-		<Label class="action-bar-title" text="Share"></Label>
+		<Label class="action-bar-title" text="{{ i18NPageTitle }}"></Label>
 	</ActionBar>
 	<GridLayout class="page-content">
 		<StackLayout>
 			<image src="~/images/share.jpg" width="100%" height="auto" />
-			<Label class="title" text="Share My Home Pharmacist"></Label>
+			<Label class="title" text="{{ i18NContentTitle }}"></Label>
 			<StackLayout class="list-container" orientation="horizontal">
-				<Label class="sharing-label" text="Share with: " />
-				<TextField class="sharing-name" id="contactsFilterView" hint="Enter name from contacts" returnKeyType="search" text="{{ contactFilter }}" />
+				<Label class="sharing-label" text="{{ i18NContactFilterLabel }}" />i18NContactFilterLabel								
+				<TextField class="sharing-name" id="contactsFilterView" hint="{{ i18NContactFilterHint }}" returnKeyType="search" text="{{ contactFilter }}" wrapText="true" />
 			</StackLayout>
-			<StackLayout class="list-container" visibility="{{ isDisplayList ? 'visible' : 'collapsed' }}">
+			<StackLayout class="list-container" id="list-display" visibility="{{ isDisplayList ? 'visible' : 'collapsed' }}">
 				<ListPicker Class="row-text" id="listPicker" items="{{ displayNames }}" selectedIndex="{{ index }}" tap="onContactTap" />
 			</StackLayout>
-			<GridLayout class="list-container row-text" visibility="{{ isDisplayContact ? 'visible' : 'collapsed' }}" rows="auto,auto,auto" columns="70,*">
-				<Label row="0" col="0" text="Name:" visibility="{{ isNameDefined ? 'visible' : 'collapsed' }}" />
-				<Label row="0" col="1" text="{{ selectedContactName }}" visibility="{{ isNameDefined ? 'visible' : 'collapsed' }}" />
-				<!-- <Label row="0" col="1" text="{{ selectedContactName, 'Name: ' + selectedContactName }}" visibility="{{ isNameDefined ? 'visible' : 'collapsed' }}" /> -->
-				
-				<Label row="1" col="0" text="Email:" visibility="{{ isEmailDefined ? 'visible' : 'collapsed' }}" />
-				<Label row="1" col="1" text="{{ selectedContactEmail }}" visibility="{{ isEmailDefined ? 'visible' : 'collapsed' }}" />
-				<!-- <Label row="1" col="1" text="{{ selectedContactEmail, 'Email: ' + selectedContactEmail }}" visibility="{{ isEmailDefined ? 'visible' : 'collapsed' }}" /> -->
-				
-				<Label row="2" col="0" text="Phone:" visibility="{{ isPhoneDefined ? 'visible' : 'collapsed' }}" />
-				<Label row="2" col="1" text="{{ selectedContactPhone }}" visibility="{{ isPhoneDefined ? 'visible' : 'collapsed' }}" />
-				<!-- <Label row="2" col="1" text="{{ selectedContactPhone, 'Phone: ' + selectedContactPhone }}" visibility="{{ isPhoneDefined ? 'visible' : 'collapsed' }}" /> -->
-			</GridLayout>
+			<StackLayout visibility="{{ isDisplayContact ? 'visible' : 'collapsed' }}">
+				<GridLayout class="list-container row-text" id="contact-display" rows="auto,auto,auto" columns="100,*">
+					<Label row="0" col="0" text="{{ i18NContactNameLabel }}" visibility="{{ isNameDefined ? 'visible' : 'collapsed' }}" />
+					<Label row="0" col="1" text="{{ selectedContactName }}" visibility="{{ isNameDefined ? 'visible' : 'collapsed' }}" />
+					<Label row="1" col="0" text="{{ i18NContactEmailLabel }}" visibility="{{ isEmailDefined ? 'visible' : 'collapsed' }}" />
+					<Label row="1" col="1" text="{{ selectedContactEmail }}" visibility="{{ isEmailDefined ? 'visible' : 'collapsed' }}" />
+					<Label row="2" col="0" text="{{ i18NContactPhoneLabel }}" visibility="{{ isPhoneDefined ? 'visible' : 'collapsed' }}" />
+					<Label row="2" col="1" text="{{ selectedContactPhone }}" visibility="{{ isPhoneDefined ? 'visible' : 'collapsed' }}" />
+				</GridLayout>
+				<GridLayout class="share-button-row" rows="*" columns="*,*">
+					<Button class="button my-button primary fa" text="{{ i18NShareButtonText, i18NShareButtonText + ' &#xf014;' }} " row="0" col="0" onTap="onShareTap" />
+					<Button class="button my-button secondary fa" text="{{ i18NCancelButtonText, i18NCancelButtonText + ' &#xf014;' }}" row="0" col="1" onTap="onCancelTap" />
+				</GridLayout>
+				<!-- <GridLayout class="share-button-row" rows="*" columns="*,*">
+					<Button class="my-button alert fa" text="{{ i18NShareButtonText, i18NShareButtonText + ' &#xf014;' }} " onTap="onShare" row="0" col="0" />
+					<Button class="my-button primary fa" text="{{ i18NCancelButtonText, i18NCancelButtonText + ' &#xf0c7;' }}" row="0" col="1" onTap="onCancelTap" />
+				</GridLayout> -->
+			</StackLayout>
 		</StackLayout>
 	</GridLayout>
 </Page>

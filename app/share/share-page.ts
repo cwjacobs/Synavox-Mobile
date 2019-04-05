@@ -11,6 +11,7 @@ import * as Test from "../data-models/test-data";
 
 import { Contact, GetContactResult } from "nativescript-contacts-lite";
 import * as Contacts from "nativescript-contacts-lite";
+import * as Utility from "../utility-functions/utility-functions";
 
 import { TextField } from "tns-core-modules/ui/text-field/text-field";
 import { ListPicker } from "tns-core-modules/ui/list-picker";
@@ -28,6 +29,20 @@ let isPhoneDefined: boolean = false;
 
 let contactFilter: string = null;
 let viewModel: ShareViewModel = null;
+
+// Page text
+let i18NPageTitle: string = null;
+let i18NContentTitle: string = null;
+let i18NContactFilterHint: string = null;
+let i18NContactFilterLabel: string = null;
+let i18NContactNameLabel: string = null;
+let i18NContactEmailLabel: string = null;
+let i18NContactPhoneLabel: string = null;
+
+// Page control buttons
+let i18NShareButtonText: string = null;
+let i18NCancelButtonText: string = null;
+// let i18NDeleteButtonText: string = null;
 
 /**
  * initial state - Filter is blank, list is displayed, contact is not displayed
@@ -84,6 +99,9 @@ function getContacts() {
 
 export function onLoaded(args: EventData) {
     getContacts();
+
+    // Set text to active language
+    setActiveLanguageText();
 
     isDisplayList = true;
     isDisplayContact = false;
@@ -164,11 +182,15 @@ export function onContactTap(args: EventData) {
     let displayName: string = items[index];
 
     displayContact(displayName);
-
-    // Clear contact filter
-    // contactFilter = "";
-    // viewModel.set("contactFilter", contactFilter);
 }
+
+export function onShareTap(args: EventData) {
+    alert("onShareTap");
+};
+
+export function onCancelTap(args: EventData) {
+    alert("onCancelTap");
+};
 
 function containsNameFilter(element: string, index, array): boolean {
     return (element.includes(contactFilter));
@@ -273,3 +295,45 @@ function logContact(args: GetContactResult) {
     console.log("email.value: " + email.value);
 }
 
+function setActiveLanguageText(): void {
+    let activeLanguage: string = Utility.Language.getActiveLanguage();
+
+    if (activeLanguage === "english") {
+        i18NPageTitle = "Share";
+        i18NContentTitle = "Share My Home Pharmacist";
+        i18NContactFilterLabel = "Share with: ";
+        i18NContactFilterHint = "Enter name from contacts";
+
+        i18NContactNameLabel = "Name: ";
+        i18NContactEmailLabel = "Email: ";
+        i18NContactPhoneLabel = "Phone: ";
+
+        i18NShareButtonText = "Share";
+        i18NCancelButtonText = "Cancel";
+    }
+    else {
+        i18NPageTitle = "Compartir";
+        i18NContentTitle = "Compartir mi Farmacéutico de Casa";
+        i18NContactFilterLabel = "Comparta con: ";
+        i18NContactFilterHint = "Escriba el nombre de los contactos";
+
+        i18NContactNameLabel = "Nombre";
+        i18NContactEmailLabel = "Correo electrónico";
+        i18NContactPhoneLabel = "Teléfono";
+
+        i18NShareButtonText = "Compartir";
+        i18NCancelButtonText = "Cancelar";
+    }
+
+    viewModel.set("i18NPageTitle", i18NPageTitle);
+    viewModel.set("i18NContentTitle", i18NContentTitle);
+    viewModel.set("i18NContactFilterLabel", i18NContactFilterLabel);
+    viewModel.set("i18NContactFilterHint", i18NContactFilterHint);
+
+    viewModel.set("i18NContactNameLabel", i18NContactNameLabel);
+    viewModel.set("i18NContactEmailLabel", i18NContactEmailLabel);
+    viewModel.set("i18NContactPhoneLabel", i18NContactPhoneLabel);
+
+    viewModel.set("i18NShareButtonText", i18NShareButtonText);
+    viewModel.set("i18NCancelButtonText", i18NCancelButtonText);
+}
