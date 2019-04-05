@@ -3,8 +3,6 @@ import * as app from "tns-core-modules/application";
 import { EventData } from "tns-core-modules/data/observable";
 import { NavigatedData, Page } from "tns-core-modules/ui/page";
 
-//import { Contact } from "nativescript-contacts";
-
 import { MedicineBinding } from "../data-models/medicine-binding";
 
 import { ShareViewModel } from "./share-view-model";
@@ -13,15 +11,37 @@ import * as Test from "../data-models/test-data";
 
 import { Contact, GetContactResult } from "nativescript-contacts-lite";
 import * as Contacts from "nativescript-contacts-lite";
+
 import { TextField } from "tns-core-modules/ui/text-field/text-field";
+import { ListPicker } from "tns-core-modules/ui/list-picker";
 
 let page: Page = null;
 let displayNames: string[] = [];
 let contactList: Contact[] = [];
-let isContactSelected: boolean = false;
+
+let isDisplayList: boolean = false;
+let isDisplayContact: boolean = false;
+
+let isNameDefined: boolean = false;
+let isEmailDefined: boolean = false;
+let isPhoneDefined: boolean = false;
 
 let contactFilter: string = null;
 let viewModel: ShareViewModel = null;
+
+/**
+ * initial state - Filter is blank, list is displayed, contact is not displayed
+ * Contact selected from list - Filter is blank, list is not displayed, contact is displayed
+ * filter entry selected - Filter is blank, list is not displayed, contact is not displayed, keyboard is displayed
+ * 
+ * 
+ * @param args 
+ * 
+ * 
+ * 
+ * 
+ */
+
 
 export function onNavigatingTo(args: NavigatedData) {
     page = <Page>args.object;
@@ -63,9 +83,12 @@ function getContacts() {
 }
 
 export function onLoaded(args: EventData) {
-    isContactSelected = false;
-    viewModel.set("isContactSelected", isContactSelected);
     getContacts();
+
+    isDisplayList = true;
+    isDisplayContact = false;
+    viewModel.set("isDisplayList", isDisplayList);
+    viewModel.set("isDisplayContact", isDisplayContact);
 
     // registering for the TextField text change listener
     const contactsFilterView: TextField = <TextField>page.getViewById("contactsFilterView");
@@ -75,6 +98,7 @@ export function onLoaded(args: EventData) {
     });
 }
 
+// This is a terrible function. TBD: figure out how to do this right
 function getContactIndexFromDisplayName(displayName: string): number {
     let i: number = 0;
     let j: number = -1;
@@ -95,20 +119,37 @@ function displayContact(displayName: string): Contact {
     if (index != -1) {
         let selectedContact: Contact = contactList[index];
 
-        isContactSelected = true;
-        viewModel.set("isContactSelected", isContactSelected);
+        isDisplayList = false;
+        isDisplayContact = true;
+        viewModel.set("isDisplayList", isDisplayList);
+        viewModel.set("isDisplayContact", isDisplayContact);
 
-        if (selectedContact.display_name.length > 0) {
+        if (selectedContact.display_name) {
+            isNameDefined = true;
             viewModel.set("selectedContactName", selectedContact.display_name);
         }
+        else {
+            isNameDefined = false;
+        }
+        viewModel.set("isNameDefined", isNameDefined);
 
         if (selectedContact.email) {
+            isEmailDefined = true;
             viewModel.set("selectedContactEmail", selectedContact.email[0].address);
         }
+        else {
+            isEmailDefined = false;
+        }
+        viewModel.set("isEmailDefined", isEmailDefined);
 
-        if (selectedContact.phonel) {
+        if (selectedContact.phone) {
+            isPhoneDefined = true;
             viewModel.set("selectedContactPhone", selectedContact.phone[0].number);
         }
+        else {
+            isPhoneDefined = false;
+        }
+        viewModel.set("isPhoneDefined", isPhoneDefined);
     }
     else {
         alert("displayName not found in contactList!");
@@ -116,9 +157,17 @@ function displayContact(displayName: string): Contact {
 }
 
 export function onContactTap(args: EventData) {
-    let index: number = viewModel.get("index");
-    let displayName: string = displayNames[index];
+    let listPicker: ListPicker = page.getViewById("listPicker");
+    let index: number = listPicker.selectedIndex;
+
+    let items: string[] = listPicker.items;
+    let displayName: string = items[index];
+
     displayContact(displayName);
+
+    // Clear contact filter
+    // contactFilter = "";
+    // viewModel.set("contactFilter", contactFilter);
 }
 
 function containsNameFilter(element: string, index, array): boolean {
@@ -126,15 +175,15 @@ function containsNameFilter(element: string, index, array): boolean {
 }
 
 function updateContactFilter() {
-    if (isContactSelected) {
-        isContactSelected = false;
-        viewModel.set("isContactSelected", isContactSelected);
-    }
+    isDisplayList = true;
+    isDisplayContact = false;
+    viewModel.set("isDisplayList", isDisplayList);
+    viewModel.set("isDisplayContact", isDisplayContact);
 
     setTimeout(() => {
         contactFilter = viewModel.get("contactFilter");
         let filteredNames: string[] = displayNames.filter(containsNameFilter);
-        viewModel.set("contact_list", filteredNames);
+        viewModel.set("displayNames", filteredNames);
 
         let index: number = filteredNames.indexOf(contactFilter);
         viewModel.set("index", index);

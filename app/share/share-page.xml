@@ -16,14 +16,22 @@
 				<Label class="sharing-label" text="Share with: " />
 				<TextField class="sharing-name" id="contactsFilterView" hint="Enter name from contacts" returnKeyType="search" text="{{ contactFilter }}" />
 			</StackLayout>
-			<StackLayout class="list-container" visibility="{{ isContactSelected ? 'collapsed' : 'visible' }}">
-				<ListPicker items="{{ displayNames }}" Class="row-text" selectedIndex="{{ index }}" tap="onContactTap" />
+			<StackLayout class="list-container" visibility="{{ isDisplayList ? 'visible' : 'collapsed' }}">
+				<ListPicker Class="row-text" id="listPicker" items="{{ displayNames }}" selectedIndex="{{ index }}" tap="onContactTap" />
 			</StackLayout>
-			<StackLayout class="list-container" visibility="{{ isContactSelected ? 'visible' : 'collapsed' }}">
-				<Label text="{{ selectedContactName, 'Name: ' + selectedContactName }}" />
-				<Label text="{{ selectedContactEmail, 'Email: ' + selectedContactEmail }}" />
-				<Label text="{{ selectedContactPhone, 'Phone: ' + selectedContactPhone }}" />
-			</StackLayout>
+			<GridLayout class="list-container row-text" visibility="{{ isDisplayContact ? 'visible' : 'collapsed' }}" rows="auto,auto,auto" columns="70,*">
+				<Label row="0" col="0" text="Name:" visibility="{{ isNameDefined ? 'visible' : 'collapsed' }}" />
+				<Label row="0" col="1" text="{{ selectedContactName }}" visibility="{{ isNameDefined ? 'visible' : 'collapsed' }}" />
+				<!-- <Label row="0" col="1" text="{{ selectedContactName, 'Name: ' + selectedContactName }}" visibility="{{ isNameDefined ? 'visible' : 'collapsed' }}" /> -->
+				
+				<Label row="1" col="0" text="Email:" visibility="{{ isEmailDefined ? 'visible' : 'collapsed' }}" />
+				<Label row="1" col="1" text="{{ selectedContactEmail }}" visibility="{{ isEmailDefined ? 'visible' : 'collapsed' }}" />
+				<!-- <Label row="1" col="1" text="{{ selectedContactEmail, 'Email: ' + selectedContactEmail }}" visibility="{{ isEmailDefined ? 'visible' : 'collapsed' }}" /> -->
+				
+				<Label row="2" col="0" text="Phone:" visibility="{{ isPhoneDefined ? 'visible' : 'collapsed' }}" />
+				<Label row="2" col="1" text="{{ selectedContactPhone }}" visibility="{{ isPhoneDefined ? 'visible' : 'collapsed' }}" />
+				<!-- <Label row="2" col="1" text="{{ selectedContactPhone, 'Phone: ' + selectedContactPhone }}" visibility="{{ isPhoneDefined ? 'visible' : 'collapsed' }}" /> -->
+			</GridLayout>
 		</StackLayout>
 	</GridLayout>
 </Page>
