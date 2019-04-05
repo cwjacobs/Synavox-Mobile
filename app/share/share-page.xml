@@ -16,8 +16,13 @@
 				<Label class="sharing-label" text="Share with: " />
 				<TextField class="sharing-name" id="contactsFilterView" hint="Enter name from contacts" returnKeyType="search" text="{{ contactFilter }}" />
 			</StackLayout>
-			<StackLayout class="list-container">
-				<ListPicker items="{{ contact_list }}" Class="row-text" selectedIndex="{{ index }}" loaded="onListPickerLoaded" />
+			<StackLayout class="list-container" visibility="{{ isContactSelected ? 'collapsed' : 'visible' }}">
+				<ListPicker items="{{ displayNames }}" Class="row-text" selectedIndex="{{ index }}" tap="onContactTap" />
+			</StackLayout>
+			<StackLayout class="list-container" visibility="{{ isContactSelected ? 'visible' : 'collapsed' }}">
+				<Label text="{{ selectedContactName, 'Name: ' + selectedContactName }}" />
+				<Label text="{{ selectedContactEmail, 'Email: ' + selectedContactEmail }}" />
+				<Label text="{{ selectedContactPhone, 'Phone: ' + selectedContactPhone }}" />
 			</StackLayout>
 		</StackLayout>
 	</GridLayout>

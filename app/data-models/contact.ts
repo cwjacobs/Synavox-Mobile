@@ -37,12 +37,3 @@ export class Contact {
   };
 }
 
-export class ContactList {
-  constructor(public index?: number, public contact_list?: Contact[]) {
-  };
-
-  add(contact: Contact) {
-    this.contact_list.push();
-  };
-
-}
