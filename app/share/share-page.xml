@@ -13,8 +13,8 @@
 			<image src="~/images/share.jpg" width="100%" height="auto" />
 			<Label class="title" text="{{ i18NContentTitle }}"></Label>
 			<StackLayout class="list-container" orientation="horizontal">
-				<Label class="sharing-label" text="{{ i18NContactFilterLabel }}" />i18NContactFilterLabel								
-				<TextField class="sharing-name" id="contactsFilterView" hint="{{ i18NContactFilterHint }}" returnKeyType="search" text="{{ contactFilter }}" wrapText="true" />
+				<Label class="sharing-label" text="{{ i18NContactFilterLabel }}" />								
+				<TextField class="sharing-name" id="contactsFilterView" hint="{{ i18NContactFilterHint }}" returnKeyType="search" text="{{ contactFilter }}" textWrap="true" />
 			</StackLayout>
 			<StackLayout class="list-container" id="list-display" visibility="{{ isDisplayList ? 'visible' : 'collapsed' }}">
 				<ListPicker Class="row-text" id="listPicker" items="{{ displayNames }}" selectedIndex="{{ index }}" tap="onContactTap" />

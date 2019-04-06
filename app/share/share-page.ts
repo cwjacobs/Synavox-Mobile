@@ -315,7 +315,7 @@ function setActiveLanguageText(): void {
         i18NPageTitle = "Compartir";
         i18NContentTitle = "Compartir mi Farmacéutico de Casa";
         i18NContactFilterLabel = "Comparta con: ";
-        i18NContactFilterHint = "Escriba el nombre de los contactos";
+        i18NContactFilterHint = "El nombre de los contactos";
 
         i18NContactNameLabel = "Nombre";
         i18NContactEmailLabel = "Correo electrónico";
