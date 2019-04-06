@@ -15,6 +15,7 @@ import * as Utility from "../utility-functions/utility-functions";
 
 import { TextField } from "tns-core-modules/ui/text-field/text-field";
 import { ListPicker } from "tns-core-modules/ui/list-picker";
+import { Button } from "tns-core-modules/ui/button";
 
 let page: Page = null;
 let displayNames: string[] = [];
@@ -26,6 +27,7 @@ let isDisplayContact: boolean = false;
 let isNameDefined: boolean = false;
 let isEmailDefined: boolean = false;
 let isPhoneDefined: boolean = false;
+let isShareComplete: boolean = false;
 
 let contactFilter: string = null;
 let viewModel: ShareViewModel = null;
@@ -182,14 +184,57 @@ export function onContactTap(args: EventData) {
     let displayName: string = items[index];
 
     displayContact(displayName);
+
+    isShareComplete = false;
+    viewModel.set("isShareComplete", isShareComplete);
 }
 
+const alertColor: string = "#7700ff";
+const primary: string = "#3A53FF";
+const secondary: string = "#398881";
+const warning: string = "#B9B90C";
+
 export function onShareTap(args: EventData) {
-    alert("onShareTap");
+    let shareButton: Button = page.getViewById("share-button");
+    shareButton.backgroundColor = "#7700ff";
+
+    isShareComplete = false;
+    viewModel.set("isShareComplete", isShareComplete);
+
+    flashShareButton(0);
+    console.log("back from flashShareButton");
 };
 
+function flashShareButton(counter) {
+    if (counter < 10) {
+        setTimeout(function () {
+            counter++;
+
+            let shareButton: Button = page.getViewById("share-button");
+            if (isOdd(counter)) {
+                shareButton.backgroundColor = alertColor;
+            }
+            else {
+                shareButton.backgroundColor = warning;
+            }
+            flashShareButton(counter);
+        }, 1000);
+    }
+    else {
+        if (counter === 10) {
+            isShareComplete = true;
+            viewModel.set("isShareComplete", isShareComplete);
+            
+            let shareButton: Button = page.getViewById("share-button");
+            shareButton.backgroundColor = primary;
+        }
+    }
+}
+
+function isOdd(num) { return num % 2; }
+
 export function onCancelTap(args: EventData) {
-    alert("onCancelTap");
+    //alert("onCancelTap");
 };
 
 function containsNameFilter(element: string, index, array): boolean {

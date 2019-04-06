@@ -34,7 +34,6 @@ let i18NDeleteButtonText: string = null;
 let isAudioActive: boolean = false;
 let isAudioEnabled: boolean = false;
 
-
 /***
  * Pairing VM states:
  * 
