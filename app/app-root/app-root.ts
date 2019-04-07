@@ -19,9 +19,6 @@ export function onNavigationItemTap(args: EventData): void {
     const componentRoute = component.get("route");
     const componentTitle = component.get("title");
     const bindingContext = <AppRootViewModel>component.bindingContext;
-    
-    console.log("componentRoute = " + componentRoute);
-    console.log("componentTitle = " + componentTitle);
 
     bindingContext.selectedPage = componentTitle;
 

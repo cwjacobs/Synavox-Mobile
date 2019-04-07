@@ -28,11 +28,12 @@
 					<Label row="2" col="0" text="{{ i18NContactPhoneLabel }}" visibility="{{ isPhoneDefined ? 'visible' : 'collapsed' }}" />
 					<Label row="2" col="1" text="{{ selectedContactPhone }}" visibility="{{ isPhoneDefined ? 'visible' : 'collapsed' }}" />
 				</GridLayout>
-				<GridLayout class="share-button-row" rows="*" columns="*,*">
+				<GridLayout class="share-button-row" rows="auto, auto" columns="*,*">
 					<Button class="button my-button primary fa" id="share-button" text="{{ i18NShareButtonText, i18NShareButtonText + ' &#xf064;' }} " row="0" col="0" onTap="onShareTap" />
 					<Button class="button my-button secondary fa" text="{{ i18NCancelButtonText, i18NCancelButtonText + ' &#xf05e;' }}" row="0" col="1" onTap="onCancelTap" />
+					<Label class="notification" id="share-complete-label" textWrap="true" text="{{ i18NShareCompleteNotification }}" visibility="{{ isShareComplete ? 'visible' : 'collapsed' }}" row="1" col="0" colSpan="2" />
 				</GridLayout>
-				<Label class="notification" id="share-complete-label" text="Share Complete" visibility="{{ isShareComplete ? 'visible' : 'collapsed' }}" />
+				<!-- <Label class="notification" id="share-complete-label" text="Share Complete" visibility="{{ isShareComplete ? 'visible' : 'collapsed' }}" /> -->
 			</StackLayout>
 		</StackLayout>
 	</GridLayout>

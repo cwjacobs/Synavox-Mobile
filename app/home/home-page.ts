@@ -147,7 +147,7 @@ function setActiveLanguageText(): void {
         i18NSpanishButtonText = "Español";
     }
     else {
-        i18NPageTitle = "Casa Farmacéutico";
+        i18NPageTitle = "Farmacéutico de Casa";
         i18NMedicineListTitle = "Mis Medicamentos";
         i18NEnglishButtonText = "English";
         i18NSpanishButtonText = "Español";

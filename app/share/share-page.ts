@@ -16,6 +16,7 @@ import * as Utility from "../utility-functions/utility-functions";
 import { TextField } from "tns-core-modules/ui/text-field/text-field";
 import { ListPicker } from "tns-core-modules/ui/list-picker";
 import { Button } from "tns-core-modules/ui/button";
+import { AudioPlayer } from "~/audio-player/audio-player";
 
 let page: Page = null;
 let displayNames: string[] = [];
@@ -40,6 +41,7 @@ let i18NContactFilterLabel: string = null;
 let i18NContactNameLabel: string = null;
 let i18NContactEmailLabel: string = null;
 let i18NContactPhoneLabel: string = null;
+let i18NShareCompleteNotification: string = null;
 
 // Page control buttons
 let i18NShareButtonText: string = null;
@@ -193,21 +195,42 @@ const alertColor: string = "#7700ff";
 const primary: string = "#3A53FF";
 const secondary: string = "#398881";
 const warning: string = "#B9B90C";
+let shareText: string = null;
 
 export function onShareTap(args: EventData) {
     let shareButton: Button = page.getViewById("share-button");
+    shareText = shareButton.text;
+
+    let sharingText: string = get18NSharingText(shareText);
+
+    i18NShareButtonText = sharingText;
+    viewModel.set("i18NShareButtonText", i18NShareButtonText);
+
     shareButton.backgroundColor = "#7700ff";
 
     isShareComplete = false;
     viewModel.set("isShareComplete", isShareComplete);
 
-    flashShareButton(0);
-    console.log("back from flashShareButton");
+    shareLibrary(0);
+    console.log("back from shareLibrary");
 };
 
-function flashShareButton(counter) {
-    if (counter < 10) {
-        setTimeout(function () {
+function get18NSharingText(baseText: string): string {
+    let i18NText: string;
+    if (Utility.Language.getActiveLanguage() === "english") {
+        i18NText = baseText.replace("Share", "Sharing...");
+    }
+    else {
+        i18NText = baseText.replace("Compartir", "Compartir...");
+    }
+    return i18NText;
+}
+
+let shareTimeout: any;
+const interations: number = 6;
+function shareLibrary(counter) {
+    if (counter < interations) {
+        shareTimeout = setTimeout(function () {
             counter++;
 
             let shareButton: Button = page.getViewById("share-button");
@@ -217,16 +240,32 @@ function flashShareButton(counter) {
             else {
                 shareButton.backgroundColor = warning;
             }
-            flashShareButton(counter);
+            shareLibrary(counter);
         }, 1000);
     }
     else {
-        if (counter === 10) {
+        if (counter === interations) {
+            let name: string = viewModel.get("selectedContactName");
+            if (Utility.Language.getActiveLanguage() === "english") {
+                i18NShareButtonText = "Share";
+                i18NShareCompleteNotification = "Sharing with " + name + " completed successfully"
+            }
+            else {
+                i18NShareButtonText = "Compartir";
+                i18NShareCompleteNotification = "Compartir con " + name + " Completado con éxito"
+            }
             isShareComplete = true;
             viewModel.set("isShareComplete", isShareComplete);
-            
+
+            viewModel.set("i18NShareButtonText", i18NShareButtonText);
+            viewModel.set("i18NShareCompleteNotification", i18NShareCompleteNotification);
+
             let shareButton: Button = page.getViewById("share-button");
             shareButton.backgroundColor = primary;
+
+            let audioPath: string = "~/audio/sounds/success.wav";
+            AudioPlayer.useAudio(audioPath);
+            AudioPlayer.play();
         }
     }
 }
@@ -234,8 +273,10 @@ function flashShareButton(counter) {
 function isOdd(num) { return num % 2; }
 
 export function onCancelTap(args: EventData) {
-    //alert("onCancelTap");
-};
+    alert("onCancelTap");
+    // clearTimeout(shareTimeout);
+        // This works, but need to clean up ui when cancel is invoked...
+}
 
 function containsNameFilter(element: string, index, array): boolean {
     return (element.includes(contactFilter));
