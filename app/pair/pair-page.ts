@@ -154,7 +154,7 @@ export function onDeleteTap(args: ItemEventData) {
         return;
     }
 
-    let confirmMsg: string = "Are you sure you want to delete the " + binding.medicineName + " pairing?";
+    let confirmMsg: string = getI18NConfirmMsg(binding.medicineName);
     confirm(confirmMsg).then((isConfirmed) => {
         if (isConfirmed) {
             let index: number = findMedicineNameIndex(binding.medicineName);
@@ -313,4 +313,15 @@ function setActiveLanguageText(): void {
     viewModel.set("i18NSaveButtonText", i18NSaveButtonText);
     viewModel.set("i18NCancelButtonText", i18NCancelButtonText);
     viewModel.set("i18NDeleteButtonText", i18NDeleteButtonText);
+}
+
+function getI18NConfirmMsg(medicineName: string): string {
+    let confirmMsg: string;
+    if (Utility.Language.getActiveLanguage() === "english") {
+        confirmMsg = "Are you sure you want to delete the " + medicineName + " pairing?";
+    }
+    else {
+        confirmMsg = "¿Está seguro de que desea eliminar el emparejamiento " + medicineName + " ?";
+    }
+    return confirmMsg;
 }
