@@ -191,7 +191,7 @@ export function onSaveTap(args: ItemEventData) {
     if (index != -1) { // Replace current binding
         binding.audioPath = Utility.Language.getAudioPath(binding.medicineName);
         medicineList[index] = binding;
-        alert("medicine replaced in list")
+        alert(getI18NMedReplacedMsg(binding.medicineName));
     }
     else {
         index = findTagIdIndex(binding.tagId);
@@ -313,6 +313,17 @@ function setActiveLanguageText(): void {
     viewModel.set("i18NSaveButtonText", i18NSaveButtonText);
     viewModel.set("i18NCancelButtonText", i18NCancelButtonText);
     viewModel.set("i18NDeleteButtonText", i18NDeleteButtonText);
+}
+
+function getI18NMedReplacedMsg(medicineName: string): string {
+    let confirmMsg: string;
+    if (Utility.Language.getActiveLanguage() === "english") {
+        confirmMsg = "Pairing of " + medicineName + " has been updated";
+    }
+    else {
+        confirmMsg = "El emparejamiento de " + medicineName + " se ha actualizado";
+    }
+    return confirmMsg;
 }
 
 function getI18NConfirmMsg(medicineName: string): string {
