@@ -12,6 +12,9 @@ import * as Test from "../data-models/test-data";
 import * as Utility from "../utility-functions/utility-functions";
 import { Nfc, NfcTagData } from "nativescript-nfc";
 
+// For Dialogs Branch
+import { confirm } from "tns-core-modules/ui/dialogs";
+
 let medicineList: MedicineBinding[] = null;
 
 let page: Page = null;
@@ -151,17 +154,21 @@ export function onDeleteTap(args: ItemEventData) {
         return;
     }
 
-    let index: number = findMedicineNameIndex(binding.medicineName);
+    let confirmMsg: string = "Are you sure you want to delete the " + binding.medicineName + " pairing?";
+    confirm(confirmMsg).then((isConfirmed) => {
+        if (isConfirmed) {
+            let index: number = findMedicineNameIndex(binding.medicineName);
 
-    if (index != -1) { // Delete current binding
-        medicineList.splice(index, 1);
-        alert("medicine deleted from list")
-    }
+            if (index != -1) { // Delete current binding
+                medicineList.splice(index, 1);
+            }
 
-    const listView: ListView = page.getViewById<ListView>("medicineList");
-    listView.refresh();
+            const listView: ListView = page.getViewById<ListView>("medicineList");
+            listView.refresh();
 
-    viewModel.set("myMedicines", medicineList);
+            viewModel.set("myMedicines", medicineList);
+        }
+    });
 };
 
 export function onSaveTap(args: ItemEventData) {

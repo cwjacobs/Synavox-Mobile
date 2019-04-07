@@ -15,7 +15,7 @@
 				<Label text="Tag Id: " />
 				<Label text="{{ currentTagId }}" />
 			</StackLayout>
-			<TextField class="pairing-MedicineName" text="{{ currentMedicineName }}" hint="{{ i18NMedicineNameHint }}" />
+			<TextField class="pairing-MedicineName" text="{{ currentMedicineName }}" hint="{{ i18NMedicineNameHint }}" returnKeyType="done" />
 		</StackLayout>
 		<ListView class="list-container" id="medicineList" items="{{ myMedicineList }}" itemTap="onItemTap">
 			<ListView.itemTemplate>
