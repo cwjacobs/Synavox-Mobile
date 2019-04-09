@@ -263,7 +263,7 @@ function shareLibrary(counter) {
             let shareButton: Button = page.getViewById("share-button");
             shareButton.backgroundColor = primary;
 
-            let audioPath: string = "~/audio/sounds/success.wav";
+            let audioPath: string = "~/audio/sounds/success.mp3";
             AudioPlayer.useAudio(audioPath);
             AudioPlayer.play();
         }
