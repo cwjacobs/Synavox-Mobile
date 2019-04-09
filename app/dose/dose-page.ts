@@ -293,7 +293,7 @@ function setActiveLanguageText(): void {
     let activeLanguage: string = Utility.Language.getActiveLanguage();
 
     if (activeLanguage === "english") {
-        i18NPageTitle = "Pair";
+        i18NPageTitle = "Dose";
         i18NMedicineNameHint = "Enter Medicine Name";
         i18NDeleteButtonText = "Delete";
         i18NSaveButtonText = "Save";
@@ -301,7 +301,7 @@ function setActiveLanguageText(): void {
 
     }
     else {
-        i18NPageTitle = "Partido";
+        i18NPageTitle = "Dosis";
         i18NMedicineNameHint = "Ingrese el nombre del medicamento";
         i18NDeleteButtonText = "Eliminar";
         i18NSaveButtonText = "Salvar";

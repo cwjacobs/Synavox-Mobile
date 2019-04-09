@@ -27,6 +27,7 @@ let isAudioEnabled: boolean = false;
 import { EventData } from "tns-core-modules/data/observable"; // working with this in nfc-observable branch
 import { NfcTagData, Nfc } from "nativescript-nfc";
 import { AppRootViewModel } from "~/app-root/app-root-view-model";
+import { appRootI18N } from "~/app-root/app-root";
 
 let nfc: Nfc = null;
 let audioPlayer: AudioPlayer = null;
@@ -157,6 +158,8 @@ function setActiveLanguageText(): void {
     viewModel.set("i18NMedicineListTitle", i18NMedicineListTitle);
     viewModel.set("i18NEnglishButtonText", i18NEnglishButtonText);
     viewModel.set("i18NSpanishButtonText", i18NSpanishButtonText);
+
+    appRootI18N(activeLanguage);
 };
 
 function findMedicineNameIndex(medicineName: string): number {

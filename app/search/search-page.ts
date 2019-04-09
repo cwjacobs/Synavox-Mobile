@@ -7,8 +7,12 @@ import { MedicineBinding } from "../data-models/medicine-binding";
 
 import { SearchViewModel } from "./search-view-model";
 import * as Test from "../data-models/test-data";
+import * as Utility from "../utility-functions/utility-functions";
 
 let viewModel: SearchViewModel = null;
+
+let i18NPageTitle: string = null;
+let i18NMedicineListTitle: string = null;
 
 export function onNavigatingTo(args: NavigatedData) {
     const page = <Page>args.object;
@@ -26,6 +30,7 @@ export function onDrawerButtonTap(args: EventData) {
 
 export function onLoaded(args: EventData) {
     viewModel.set("myMedicineList", Test.Dataset.getCurrentTestData());
+    setActiveLanguageText();
 }
 
 export function onSelect(args: EventData) {
@@ -35,5 +40,21 @@ export function onSelect(args: EventData) {
 export function onSearchTapped(args: EventData) {
     alert("onSearchTapped");
 }
+
+function setActiveLanguageText(): void {
+    let activeLanguage: string = Utility.Language.getActiveLanguage();
+
+    if (activeLanguage === "english") {
+        i18NPageTitle = "Search";
+        i18NMedicineListTitle = "My Medicines";
+    }
+    else {
+        i18NPageTitle = "Búsqueda";
+        i18NMedicineListTitle = "Mis Medicamentos";
+    }
+
+    viewModel.set("i18NPageTitle", i18NPageTitle);
+    viewModel.set("i18NMedicineListTitle", i18NMedicineListTitle);
+};
 
 

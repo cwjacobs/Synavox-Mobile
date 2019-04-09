@@ -123,11 +123,11 @@ function setActiveLanguageText(): void {
     let activeLanguage: string = Utility.Language.getActiveLanguage();
 
     if (activeLanguage === "english") {
-        i18NPageTitle = "Home Pharmacist";
+        i18NPageTitle = "Browse";
         i18NMedicineListTitle = "My Medicines";
     }
     else {
-        i18NPageTitle = "Casa Farmacéutico";
+        i18NPageTitle = "Navega";
         i18NMedicineListTitle = "Mis Medicamentos";
     }
 

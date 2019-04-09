@@ -9,7 +9,7 @@
 		<Label class="action-bar-title" text="{{ i18NPageTitle }}"></Label>
 	</ActionBar>
 	<StackLayout>
-		<image src="~/images/pair.jpg" class="image-container" />
+		<image src="~/images/dose.jpg" class="image-container" />
 		<StackLayout class="list-container">
 			<StackLayout class="pairing-TagId" orientation="horizontal">
 				<Label text="Tag Id: " />

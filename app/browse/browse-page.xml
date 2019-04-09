@@ -11,7 +11,7 @@
         because its function is to always navigate back in the application.
         -->
 		<ActionItem icon="res://navigation/menu" android:visibility="collapsed" tap="onDrawerButtonTap" ios.position="left"></ActionItem>
-		<Label class="action-bar-title" text="Browse"></Label>
+		<Label class="action-bar-title" text="{{ i18NPageTitle }}"></Label>
 	</ActionBar>
 	<StackLayout>
 		<WebView text="WebView" loaded="onWebViewLoaded" id="myWebView" src="{{ webViewSrc }}" />
