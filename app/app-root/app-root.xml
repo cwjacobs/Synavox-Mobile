@@ -12,14 +12,18 @@ http://docs.telerik.com/devtools/nativescript-ui/Controls/NativeScript/SideDrawe
 			<StackLayout class="sidedrawer-header">
 				<!-- <Image src="~/images/logo.png" width="20%" height="20%" horizontalAlignment="left" /> -->
 				<Label class="sidedrawer-header-image fa" text="&#xf2bd;" />
-				<Label class="sidedrawer-header-brand" text="User Name" />
-				<Label class="footnote" text="username@mail.com" />
+				<Label class="sidedrawer-header-brand" text="Craig Jacobs" />
+				<Label class="footnote" text="cjacobs@nobleiq.com" />
 			</StackLayout>
 			<ScrollView row="1">
 				<StackLayout class="sidedrawer-content">
 					<GridLayout columns="auto, *" class="{{ 'sidedrawer-list-item' + (selectedPage === 'Home' ? ' selected': '') }}" route="home/home-page" title="Home" tap="onNavigationItemTap">
 						<Label row="0" col="0" text="&#xf129;" class="fa" />
 						<Label row="0" col="1" text="Home" class="p-r-10" />
+					</GridLayout>
+					<GridLayout columns="auto, *" class="{{ 'sidedrawer-list-item' + (selectedPage === 'Dose' ? ' selected': '') }}" route="dose/dose-page" title="Dose" tap="onNavigationItemTap">
+						<Label row="0" col="0" text="&#xf21e;" class="fa" />
+						<Label row="0" col="1" text="Dose" class="p-r-10" />
 					</GridLayout>
 					<GridLayout columns="auto, *" class="{{ 'sidedrawer-list-item' + (selectedPage === 'Pair' ? ' selected': '') }}" route="pair/pair-page" title="Pair" tap="onNavigationItemTap">
 						<Label row="0" col="0" text="&#xf02b;" class="fa" />
