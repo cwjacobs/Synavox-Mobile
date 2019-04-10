@@ -22,7 +22,7 @@
 				<GridLayout rows="*" columns="*,*,*,auto">
 					<Label class="list-MedicineName" text="{{ medicineName }}" row="0" col="0" colSpan="2" />
 					<Label class="list-TagId" text="{{ tagId }}" row="0" col="2" />
-					<Label class="list-TagIcon fa" text="&#xf02b;" row="0" col="3" />
+					<Label class="list-TagIcon fa fas fa-tablets" text="&#xf490;" row="0" col="3" />
 				</GridLayout>
 			</ListView.itemTemplate>
 		</ListView>

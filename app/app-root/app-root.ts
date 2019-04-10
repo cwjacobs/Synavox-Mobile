@@ -59,7 +59,7 @@ export function appRootI18N(activeLanguage: string): void {
         i18Settings = "Settings";
     }
     else {
-        i18NHome = "Casa";
+        i18NHome = "Pantalla de Inicio";
         i18NDose = "Dosis";
         i18NPair = "Partido";
         i18NShare = "Compartir";
