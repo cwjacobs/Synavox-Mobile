@@ -19,7 +19,7 @@
 			</parallax:Anchored>
 			<parallax:Content class="body-template">
 				<ScrollView>
-					<ListView class="list" items="{{ myMedicineList }}" itemTap="onItemTap" height="130">
+					<ListView class="list" items="{{ myMedicineList }}" itemTap="onItemTap" height="600">
 						<ListView.itemTemplate>
 							<GridLayout row="auto" col="*,*">
 								<Label class="row-text" text="{{ medicineName }}" row="0" col="0"/>
