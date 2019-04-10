@@ -8,18 +8,17 @@
 		<ActionItem icon="res://navigation/menu" android:visibility="collapsed" tap="onDrawerButtonTap" ios.position="left"></ActionItem>
 		<Label class="action-bar-title" text="{{ i18NPageTitle }}"></Label>
 	</ActionBar>
-	<Label class="page-icon fa" text="&#xf129;"></Label>
 	<StackLayout>
 		<parallax:ParallaxView controlsToFade="headerLabel" height="75%">
 			<parallax:Header class="header-template" dropShadow="true">
 				<!-- <image src="~/images/home.jpg" width="100%" height="100%"></image> -->
 			</parallax:Header>
 			<parallax:Anchored class="anchor">
-				<Label class="list title" text="{{ i18NMedicineListTitle }}"></Label>
+				<Label class="list-container title" text="{{ i18NMedicineListTitle }}"></Label>
 			</parallax:Anchored>
 			<parallax:Content class="body-template">
 				<ScrollView>
-					<ListView class="list" items="{{ myMedicineList }}" itemTap="onItemTap" height="300">
+					<ListView class="list-container" items="{{ myMedicineList }}" itemTap="onItemTap" height="300">
 						<ListView.itemTemplate>
 							<GridLayout row="auto" col="*,*">
 								<Label class="row-text" text="{{ medicineName }}" row="0" col="0"/>
@@ -30,18 +29,16 @@
 				</ScrollView>
 			</parallax:Content>
 		</parallax:ParallaxView>
-		<GridLayout class="list button-row" rows="auto" columns="*,*">
+		<GridLayout class="list-container button-row" rows="auto" columns="*,*">
 			<Button class="button my-button primary" text="{{ i18NEnglishButtonText }}" row="0" col="0" onTap="onEnglishTap" visibility="{{ isDualLanguageEnabled ? 'visible' : 'collapsed' }}"/>
 			<Button class="button my-button secondary" text="{{ i18NSpanishButtonText }}" row="0" col="1" onTap="onSpanishTap" visibility="{{ isDualLanguageEnabled ? 'visible' : 'collapsed' }}" />
 		</GridLayout>
 		<StackLayout class="hr-light"></StackLayout>
-		<GridLayout class="list audio-button-row" rows="70" columns="*,*,*">
+		<GridLayout class="list-container" rows="70" columns="*,*,*">
 			<Button class="my-button audio-button enableAudio-button fa" text="&#xf29e;" visibility="{{ isAudioEnabled ? 'collapsed' : 'visible' }}" onTap="onAudioEnableTap" row="0" col="0" />
 			<Button class="my-button audio-button enableAudio-button fa" text="&#xf29e;  &#xf046;" visibility="{{ isAudioEnabled ? 'visible' : 'collapsed' }}" onTap="onAudioEnableTap" row="0" col="0" />
 			<Button class="my-button audio-button fa" text="&#xf04b; &#xf04c;" isEnabled="{{ isAudioEnabled }}" onTap="onPlayTap" row="0" col="1" />
 			<Button class="my-button audio-button fa" text="&#xf04d;" isEnabled="{{ isAudioEnabled }}" onTap="onStopTap" row="0" col="2" />
 		</GridLayout>
-		<!-- </parallax:Content> -->
-		<!-- </parallax:ParallaxView> -->
 	</StackLayout>
 </Page>
