@@ -15,12 +15,8 @@ export namespace Dataset {
         { tagId: "-99,-81,70,-106", medicineName: "Lisinopril", audioPath: "~/audio/en/lisinopril.mp3" },
         { tagId: "77,-4,75,-106", medicineName: "Rosuvastatin", audioPath: "~/audio/en/rosuvastatin.mp3" },
         { tagId: "-3,18,81,-106", medicineName: "Levothyroxine", audioPath: "~/audio/en/levothyroxine.mp3" },
-        { tagId: "-67,45,90,-106", medicineName: "Atorvastatin", audioPath: "~/audio/en/atorvastatin.mp3" },
-        { tagId: "-99,55,102,114", medicineName: "c", audioPath: "~/audio/en/opioid.mp3" },
-        { tagId: "-99,-81,70,-106", medicineName: "d", audioPath: "~/audio/en/lisinopril.mp3" },
-        { tagId: "77,-4,75,-106", medicineName: "e", audioPath: "~/audio/en/rosuvastatin.mp3" },
-        { tagId: "-3,18,81,-106", medicineName: "f", audioPath: "~/audio/en/levothyroxine.mp3" },
-        // { tagId: "-67,45,90,-106", medicineName: "Atorvastatin", audioPath: "~/audio/en/atorvastatin.mp3"  },
+        // { tagId: "-67,45,90,-106", medicineName: "Atorvastatin", audioPath: "~/audio/en/atorvastatin.mp3" },
+        { tagId: "-67,45,90,-106", medicineName: "Metformin", audioPath: "~/audio/en/metformin.mp3"  },
     ];
 
     let spTestData: MedicineBinding[] = [
@@ -29,6 +25,7 @@ export namespace Dataset {
         { tagId: "77,-4,75,-106", medicineName: "Rosuvastatin", audioPath: "~/audio/sp/rosuvastatin.mp3" },
         { tagId: "-3,18,81,-106", medicineName: "Levothyroxine", audioPath: "~/audio/sp/levothyroxine.mp3" },
         // { tagId: "-67,45,90,-106", medicineName: "Atorvastatin", audioPath: "~/audio/sp/atorvastatin.mp3"  },
+        { tagId: "-67,45,90,-106", medicineName: "Metformin", audioPath: "~/audio/sp/metformin.mp3" },
     ];
 
     let webViewSrcArray = [
