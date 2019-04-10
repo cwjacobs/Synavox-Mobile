@@ -60,7 +60,7 @@ export function onLoaded() {
     viewModel.set("myMedicineList", medicineList);
 
     let isDualLanguageEnabled = Utility.Language.getIsDualLanguageEnabled();
-    viewModel.set("isDualLanguageEnabled", isDualLanguageEnabled);
+    viewModel.set("isDualLanguageEnabled", true);
 
     // Set text to active language
     setActiveLanguageText();
