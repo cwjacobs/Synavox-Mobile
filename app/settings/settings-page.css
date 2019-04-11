@@ -1,0 +1,70 @@
+.title {
+    color: #3A53FF;
+    font-size: 22;
+    margin-top: 100px;
+    text-align: center;
+}
+
+.subtitle {
+    color: black;
+    font-size: 20;
+    margin-top: 40px;
+    text-align: left;
+}
+
+.footer {
+    color: black;
+    font-size: 16;
+    color: #3A53FF;
+    margin-top: 10px;
+    margin-left: 40px;
+    margin-bottom: 40px;
+    text-align: left;
+}
+
+.button-row {
+    width: auto;
+    height: 20%;
+    margin-top: 20px;
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.settings-content {
+    margin-left: 60px;
+    margin-right: 60px;
+}
+
+.indicator {
+    vertical-align: middle;
+    color: black;
+    font-size: 20;
+}
+
+.my-button {
+    border-radius: 5;
+    color: white;
+    font-family: FontAwesome;
+    font-size: 14;
+    vertical-align: middle;
+    /* width: 100%; */
+    margin: 20px;
+}
+
+.my-button:active {
+    background-color: lightslategray;
+    color: white;
+}
+
+.my-button-english {
+    background-color: dodgerblue;
+}
+
+.my-button-spanish {
+    background-color: orangered;
+}
+
+.my-button-control {
+    color: rgba(26, 24, 24, 0.787);
+    background-color: lightgreen;
+}

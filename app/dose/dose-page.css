@@ -1,0 +1,82 @@
+.title {
+    font-size: 22;
+    margin-top: 60px;
+    text-align: center;
+}
+
+.image-container {
+    width: 100%;
+    height: auto;
+}
+
+.list-container {
+    margin: 30px;
+    margin-bottom: 10px;
+}
+
+.pairing-TagId {
+    color: black;
+    font-size: 18;
+    margin-top: 30px;
+    margin-bottom: 5px;
+}
+
+.pairing-MedicineName {
+    color: #3A53FF;
+    font-size: 18;
+    margin-top: 5px;
+    margin-bottom: 30px;
+}
+
+.list-MedicineName {
+    font-size: 18;
+    /* padding: 40 px; */
+    color: #3A53FF;
+}
+
+.list-TagId {
+    font-size: 14;
+    /* padding: 40 px; */
+    color: black;
+    /* vertical-align: middle; */
+    text-align: left;
+}
+
+.list-TagIcon {
+    font-size: 14;
+    color: gray;
+    /* vertical-align: middle; */
+    text-align: right;
+    margin-right: 10px
+}
+
+.pair-button-row {
+    width: auto;
+    height: 10%;
+    margin-top: 70px;
+}
+
+.audio-button-row {
+    width: auto;
+    height: 10%;
+    margin-top: 60px;
+}
+
+
+.my-button {
+    border-radius: 5;
+    font-family: FontAwesome;
+    vertical-align: middle;
+    margin: 20px;
+}
+
+.my-button:active {
+    background-color: lightslategray;
+    color:white;
+}
+
+.enableAudio-button {
+    color: black;
+    font-size: 18;
+    /* background-color: white; */
+}

@@ -1,0 +1,57 @@
+
+.title {
+    font-size: 22;
+    margin-top:60px;
+    text-align: center;    
+}
+.searchPageContent{
+    margin: 60px;
+    margin-top:60px;
+}
+
+.item {
+    padding: 40px;
+}
+
+/* Parallax */
+#headerLabel2
+{
+    font-size: 45;
+    horizontal-align: center;
+    margin-top:-25;
+    color:#B2EBF2;
+}
+
+#headerLabel{
+    font-size: 45;
+    horizontal-align: center;
+    padding-top:75;
+    color:#B2EBF2;
+}
+
+.header-template{
+    background-color:#212121;
+    background-image:url('~/images/search.jpg');
+    background-size: cover;
+    height: 200;
+}
+
+.body-template TextView{
+    font-size:20;
+    padding:5 15;
+    border:none;
+}
+
+.anchor{
+    height: 55;
+    width:100%;
+    background-color:#616161;
+}
+
+#titleLabel{
+    font-weight:bold;
+    font-size:25;
+    padding:5 15;
+    color:#fff;
+ 
+}

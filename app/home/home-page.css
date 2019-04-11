@@ -1,0 +1,104 @@
+.list-container {
+    margin: 30px;
+}
+
+.item {
+    padding: 40 px;
+}
+
+.title {
+    font-size: 22;
+    margin-top:60px;
+    text-align: center;    
+}
+
+.row-text {
+    color: black;
+    font-size: 18;
+    text-align: left;
+    margin-left: 30px;
+    vertical-align: middle;
+}
+
+.row-icon {
+    color: gray;
+    font-size: 18;
+    text-align: right;
+    margin-right: 30px;
+    vertical-align: middle;
+}
+
+.button-row {
+    width: auto;
+    height: 10%;
+    /* margin-top: 100px; */
+    /* margin-left: 30px; */
+    /* margin-right: 80px; */
+    margin: 30px;
+    /* margin-top: -50px; */
+}
+
+.my-button {
+    border-radius: 5;
+    font-family: FontAwesome;
+    vertical-align: middle;
+    margin: 20px;
+}
+
+.my-button:active {
+    background-color: lightslategray;
+    color:white;
+}
+
+.my-button-control {
+    color: rgba(26, 24, 24, 0.787);
+    background-color: lightgreen;
+}
+
+.footer {
+    text-align: center;
+    height: "10px";
+}
+
+/* Parallax */
+#headerLabel2
+{
+    font-size: 45;
+    horizontal-align: center;
+    margin-top:-25;
+    color:#B2EBF2;
+}
+
+#headerLabel{
+    font-size: 45;
+    horizontal-align: center;
+    padding-top:75;
+    color:#B2EBF2;
+}
+
+.header-template{
+    background-color:red;
+    background-image:url('~/images/home.jpg');
+    height: 205;
+    background-size: cover;
+    /* background-position: center top; */
+    background-repeat: no-repeat;
+}
+
+.body-template TextView{
+    margin: 30px;
+}
+
+.anchor{
+    height: 55;
+    width:100%;
+    background-color:white;
+    /* background-color:#616161; */
+}
+
+#titleLabel{
+    font-weight:bold;
+    font-size:25;
+    padding:5 15;
+    color:#fff;
+}

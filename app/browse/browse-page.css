@@ -1,0 +1,45 @@
+.list {
+    margin: 30px;
+}
+
+.list-container {
+    margin: 30px;
+    margin-bottom: 10px;
+}
+
+.title {
+    font-size: 22;
+    margin-top:60px;
+    text-align: center;    
+}
+
+.row-text {
+    color: black;
+    font-size: 18;
+    text-align: left;
+    margin-left: 30px;
+    /* vertical-align: middle; */
+}
+
+.button-row {
+    width: auto;
+    height: 10%;
+    margin-top: 100px;
+    margin-left: 30px;
+    margin-right: 80px;
+}
+
+.my-button {
+    border-radius: 5;
+    font-family: FontAwesome;
+    font-size: 12;
+    vertical-align: middle;
+    margin: 20px;
+    width: 20%;
+    height: auto;
+}
+
+.my-button:active {
+    background-color: lightslategray;
+    color:white;
+}
