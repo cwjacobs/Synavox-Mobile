@@ -27,6 +27,7 @@
 						</ListView.itemTemplate>
 					</ListView>
 				</ScrollView>
+				<image src="~/images/logo.png" width="100%" height="100%"></image>
 			</parallax:Content>
 		</parallax:ParallaxView>
 		<GridLayout class="list-container button-row" rows="auto" columns="*,*">
