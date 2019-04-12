@@ -11,7 +11,6 @@
 	<StackLayout>
 		<parallax:ParallaxView controlsToFade="headerLabel" height="75%">
 			<parallax:Header class="header-template" dropShadow="true">
-				<!-- <image src="~/images/pair.jpg" class="image-container" /> -->
 			</parallax:Header>
 			<parallax:Anchored class="anchor" height="100">
 				<StackLayout class="list-container">
@@ -34,7 +33,10 @@
 						</ListView.itemTemplate>
 					</ListView>
 				</ScrollView>
-				<image src="~/images/logo.png" width="100%" height="100%"></image>
+				<StackLayout class="logo">
+					<image src="~/images/logo.png"></image>
+					<!-- <label style="margin-bottom: 300px" /> -->
+				</StackLayout>
 			</parallax:Content>
 		</parallax:ParallaxView>
 		<GridLayout class="list-container pair-button-row" rows="auto" columns="*,*,auto">

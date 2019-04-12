@@ -22,6 +22,8 @@ let webViewSrcModel = null;
 
 let i18NPageTitle: string = null;
 let i18NMedicineListTitle: string = null;
+let i18NEditButtonText: string = null;
+let i18NSaveButtonText: string = null;
 
 export function onNavigatingTo(args: NavigatedData) {
     page = <Page>args.object;
@@ -125,14 +127,21 @@ function setActiveLanguageText(): void {
     if (activeLanguage === "english") {
         i18NPageTitle = "Browse";
         i18NMedicineListTitle = "My Medicines";
+        i18NEditButtonText = "Edit";
+        i18NSaveButtonText = "Save";
+
     }
     else {
         i18NPageTitle = "Navega";
         i18NMedicineListTitle = "Mis Medicamentos";
-    }
+        i18NEditButtonText = "Editar";
+        i18NSaveButtonText = "Salvar";
+}
 
     viewModel.set("i18NPageTitle", i18NPageTitle);
     viewModel.set("i18NMedicineListTitle", i18NMedicineListTitle);
+    viewModel.set("i18NEditButtonText", i18NEditButtonText);
+    viewModel.set("i18NSaveButtonText", i18NSaveButtonText);
 };
 
 function findMedicineNameIndex(medicineName: string): number {
