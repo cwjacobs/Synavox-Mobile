@@ -134,6 +134,27 @@ export namespace Dataset {
                 },
             ]
         },
+        {
+            medicineName: "Metformin",
+            srcLinks: [
+                {
+                    webHost: "drugs.com",
+                    webViewSrc: "https://www.drugs.com/search.php?searchterm=Metformin",
+                },
+                {
+                    webHost: "webmd",
+                    webViewSrc: "https://www.webmd.com/diabetes/qa/what-is-metformin",
+                },
+                {
+                    webHost: "DiabetesDaily",
+                    webViewSrc: "https://www.diabetesdaily.com/blog/2014/01/managing-my-type-2-diabetes-without-medications/",
+                },
+                {
+                    webHost: "healthboards",
+                    webViewSrc: "https://www.healthboards.com/boards/polycystic-ovary-syndrome-pcos/692412-how-soon-after-you-take-metformin-can-you-feel-sick.html",
+                },
+            ]
+        },
     ];
 
 

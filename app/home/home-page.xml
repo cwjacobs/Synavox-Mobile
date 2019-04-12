@@ -17,7 +17,7 @@
 				<Label class="list-container title" text="{{ i18NMedicineListTitle }}"></Label>
 			</parallax:Anchored>
 			<parallax:Content class="body-template">
-				<ScrollView>
+				<!-- <ScrollView> -->
 					<ListView class="list-container" items="{{ myMedicineList }}" itemTap="onItemTap" height="300">
 						<ListView.itemTemplate>
 							<GridLayout row="auto" col="*,*">
@@ -26,9 +26,9 @@
 							</GridLayout>
 						</ListView.itemTemplate>
 					</ListView>
-				</ScrollView>
+				<!-- </ScrollView> -->
 				<StackLayout class="logo">
-					<image src="~/images/logo.png"></image>
+					<image src="~/images/logo.png" style="margin-top: 620px"></image>
 				</StackLayout>
 			</parallax:Content>
 		</parallax:ParallaxView>
