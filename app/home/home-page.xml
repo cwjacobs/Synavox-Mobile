@@ -9,27 +9,29 @@
 		<Label class="action-bar-title" text="{{ i18NPageTitle }}"></Label>
 	</ActionBar>
 	<StackLayout>
-		<parallax:ParallaxView controlsToFade="headerLabel" height="75%">
+		<parallax:ParallaxView height="75%">
 			<parallax:Header class="header-template" dropShadow="true">
 				<!-- <image src="~/images/home.jpg" width="100%" height="100%"></image> -->
 			</parallax:Header>
 			<parallax:Anchored class="anchor">
 				<Label class="list-container title" text="{{ i18NMedicineListTitle }}"></Label>
 			</parallax:Anchored>
-			<parallax:Content class="body-template">
-				<!-- <ScrollView> -->
-					<ListView class="list-container" items="{{ myMedicineList }}" itemTap="onItemTap" height="300">
+			<parallax:Content class="body-template" height="480vh">
+				<DockLayout width="auto" height="550vh" background="white">
+					<ListView class="list-container" items="{{ myMedicineList }}" itemTap="onItemTap" height="245vh" dock="top">
 						<ListView.itemTemplate>
-							<GridLayout row="auto" col="*,*">
+							<GridLayout row="auto" col="auto,*">
 								<Label class="row-text" text="{{ medicineName }}" row="0" col="0"/>
 								<Label class="fa row-icon" text="&#xf028;" row="0" col="1"/>
 							</GridLayout>
 						</ListView.itemTemplate>
 					</ListView>
-				<!-- </ScrollView> -->
-				<StackLayout class="logo">
-					<image src="~/images/logo.png" style="margin-top: 620px"></image>
-				</StackLayout>
+					<Label text= "left" height="290vh" color="white" background="white" dock="left" />
+					<Label text= "right" height="290vh" color="white" background="white" dock="right" />
+					<StackLayout dock="bottom">
+						<image src="~/images/logo.png" />
+					</StackLayout>
+				</DockLayout>
 			</parallax:Content>
 		</parallax:ParallaxView>
 		<GridLayout class="list-container button-row" rows="auto" columns="*,*">

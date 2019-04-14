@@ -16,7 +16,7 @@ export namespace Dataset {
         { tagId: "77,-4,75,-106", medicineName: "Rosuvastatin", audioPath: "~/audio/en/rosuvastatin.mp3" },
         { tagId: "-3,18,81,-106", medicineName: "Levothyroxine", audioPath: "~/audio/en/levothyroxine.mp3" },
         // { tagId: "-67,45,90,-106", medicineName: "Atorvastatin", audioPath: "~/audio/en/atorvastatin.mp3" },
-        { tagId: "-67,45,90,-106", medicineName: "Metformin", audioPath: "~/audio/en/metformin.mp3"  },
+        { tagId: "-67,45,90,-106", medicineName: "Metformin", audioPath: "~/audio/en/metformin.mp3" },
     ];
 
     let spTestData: MedicineBinding[] = [

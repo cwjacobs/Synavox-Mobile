@@ -57,8 +57,11 @@
 }
 
 .logo {
-    width: 100%;
-    height: 100%;
+    /* width: 100%;
+    height: 100%; */
+    /* margin-top: 10%; */
+    /* margin-top: 620px; */
+    vertical-align: bottom;
  }
 
 
@@ -85,10 +88,12 @@
     background-size: cover;
     /* background-position: center top; */
     background-repeat: no-repeat;
+    /* height: 50% */
 }
 
 .body-template TextView{
     margin: 30px;
+    height: 
 }
 
 .anchor{
