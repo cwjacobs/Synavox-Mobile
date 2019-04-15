@@ -15,10 +15,10 @@
 	</ActionBar>
 	<StackLayout>
 		<GridLayout class="list-container button-row" rows="auto" columns="*,*">
-			<Button class="button my-button primary fa" text="{{ i18NBackButtonText, '&#xf060;  ' + i18NBackButtonText, +  }}" row="0" col="0" onTap="onBackTap" />
+			<Button class="button my-button primary fa" text="{{ i18NBackButtonText, '&#xf060;  ' + i18NBackButtonText, +  }}" row="0" col="0" onTap="onGoBackTap" />
 			<Button class="button my-button secondary fa" text="{{ i18NSaveButtonText, i18NSaveButtonText + '  &#xf097;' }}" row="0" col="1" onTap="onSaveTap" />
 		</GridLayout>
-		<WebView text="WebView" loaded="onWebViewLoaded" id="myWebView" src="{{ webViewSrc }}" />
+		<WebView id="myWebView" text="WebView" loaded="onWebViewLoaded" src="{{ webViewSrc }}" />
 		<parallax:ParallaxView height="100%">
 			<parallax:Header class="header-template" dropShadow="true">
 				<!-- <image src="~/images/browse.jpg" width="100%" height="auto"></image> -->
@@ -29,14 +29,14 @@
 			</parallax:Anchored>
 			<parallax:Content class="body-template" height="660" background="white">
 				<!-- <DockLayout width="auto" height="auto" background="green"> -->
-					<ListView class="list-container" items="{{ myMedicineList }}" itemTap="onItemTap" height="auto" background="white" dock="top">
+					<ListView class="list-container" items="{{ myMedicineList }}" height="auto" background="white" dock="top">
 						<ListView.itemTemplate style="horizontal-align: center;">
 							<GridLayout rows="auto,auto" columns="85%,90%,80%,90%">
 								<Label class="row-text" text="{{ medicineName }}" row="0" col="0" colSpan="4" />
-								<Button class="my-button alert left" id="{{ medicineName, '0' + medicineName }}" text="Drugs.com" row="1" col="0" colSpan="1" tap="onTap" />
-								<Button class="my-button primary center" id="{{ medicineName, '1' + medicineName }}" text="WebMD" row="1" col="1" colSpan="1" tap="onTap" />
-								<Button class="my-button secondary center" id="{{ medicineName, '2' + medicineName }}" text="Alt" row="1" col="2" colSpan="1" tap="onTap" />
-								<Button class="my-button warning right" id="{{ medicineName, '3' + medicineName }}" text="Msg Board" row="1" col="3" colSpan="1" tap="onTap" />
+								<Button class="my-button alert left" id="{{ medicineName, '0' + medicineName }}" text="Drugs.com" row="1" col="0" colSpan="1" tap="onItemTap" />
+								<Button class="my-button primary center" id="{{ medicineName, '1' + medicineName }}" text="WebMD" row="1" col="1" colSpan="1" tap="onItemTap" />
+								<Button class="my-button secondary center" id="{{ medicineName, '2' + medicineName }}" text="Alt" row="1" col="2" colSpan="1" tap="onItemTap" />
+								<Button class="my-button warning right" id="{{ medicineName, '3' + medicineName }}" text="Msg Board" row="1" col="3" colSpan="1" tap="onItemTap" />
 							</GridLayout>
 						</ListView.itemTemplate>
 					</ListView>

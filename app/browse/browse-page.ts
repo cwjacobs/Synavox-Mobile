@@ -13,10 +13,16 @@ import { MedicineBinding } from "~/data-models/medicine-binding";
 import * as Test from "../data-models/test-data";
 import * as Utility from "../utility-functions/utility-functions";
 import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
+import { topmost } from "tns-core-modules/ui/frame/frame";
+import { AppRootViewModel } from "~/app-root/app-root-view-model";
 
 let page: Page = null;
 let viewModel: BrowseViewModel = null;
 let medicineList: MedicineBinding[] = null;
+
+// For Browse Branch
+let appRootContext: AppRootViewModel = null;
+
 
 let webViewSrcModel = null;
 
@@ -37,6 +43,9 @@ export function onDrawerButtonTap(args: EventData) {
 }
 
 export function onLoaded(args: EventData) {
+    if (appRootContext == null) {
+        appRootContext = new AppRootViewModel();;
+    }
     medicineList = Test.Dataset.getCurrentTestData();
     viewModel.set("myMedicineList", medicineList);
 
@@ -44,34 +53,19 @@ export function onLoaded(args: EventData) {
     setActiveLanguageText();
 }
 
-export function onTap(args: ItemEventData) {
-    // alert("onTap");
-
+export function onItemTap(args: ItemEventData) {
     let button: any = args.object;
-    // alert(button.text);
-    // alert("id = " + button.id);
 
     let column: number = button.id.substring(0, 1);
     let medicineName: string = button.id.substring(1);
-    // alert("column = " + column);
-    // alert("medicineName = " + medicineName);
 
     webViewSrcModel = Test.Dataset.getWebViewSrcArray();
     let wvsMedicineNameIndex: number = findMedicineNameIndex(medicineName);
     let wvsMedicineName: string = webViewSrcModel[wvsMedicineNameIndex].medicineName;
-    // alert("wvsMedicineName = " + wvsMedicineName);
     let wvsMedicineSrc: string = webViewSrcModel[wvsMedicineNameIndex].srcLinks[column].webViewSrc;
-    // alert("wvsMedicineSrc = " + wvsMedicineSrc);
 
     viewModel.set("webViewSrc", wvsMedicineSrc);
     submit(args);
-};
-
-export function onItemTap(args: ItemEventData) {
-    // alert("onItemTap");
-
-    viewModel.set("webViewSrc", "https://www.drugs.com/lisinopril.html");
-    //submit(args);
 };
 
 export function onWebViewLoaded(webargs) {
@@ -80,7 +74,7 @@ export function onWebViewLoaded(webargs) {
     const page: Page = <Page>webargs.object.page;
     const vm = page.bindingContext;
     const webview: WebView = <WebView>webargs.object;
-    // vm.set("result", "WebView is still loading...");
+    vm.set("result", "WebView is still loading...");
     vm.set("enabled", false);
 
     webview.on(WebView.loadFinishedEvent, (args: LoadEventData) => {
@@ -120,14 +114,23 @@ export function submit(args) {
     }
 }
 
-export function goBack(args) {
-    const page = args.object.page;
-    const vm = page.bindingContext;
-    const webview = page.getViewById("myWebView");
-    if (webview.canGoBack) {
-        webview.goBack();
-        vm.set("enabled", true);
-    }
+export function onGoBackTap() {
+    const componentRoute = "browse/browse-page";
+    const componentTitle = "Browse";
+
+    appRootContext.selectedPage = componentTitle;
+
+    topmost().navigate({
+        moduleName: componentRoute,
+        transition: {
+            name: "fade"
+        }
+    });
+}
+
+export function onSaveTap() {
+    alert("Saved...");
+    // TBD: hook the actual current website and save as button property
 }
 
 function setActiveLanguageText(): void {
