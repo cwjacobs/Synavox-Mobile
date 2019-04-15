@@ -21,12 +21,20 @@
     background-color: #3A53FF;
 }
 
+.bottom-gradient {
+    background: linear-gradient(to bottom, orangered, green, lightblue);
+}
+
+.degree-gradient {
+    background: linear-gradient(45deg,  #3A53FF, white);
+}
+
 .top-button-row {
     width: auto;
-    height: 9%;
+    height: 56vh;
     margin: 0px;
-    margin-bottom: -10px;
-    background-color: transparent;
+    /* margin-bottom: -10px; */
+    background-color: white;
     /* background-color: #3A53FF; */
     vertical-align: middle;
 }

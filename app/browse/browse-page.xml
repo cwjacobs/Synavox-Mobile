@@ -20,14 +20,14 @@
 		</GridLayout>
 		<WebView id="myWebView" text="WebView" loaded="onWebViewLoaded" src="{{ webViewSrc }}" />
 		<parallax:ParallaxView height="100%">
-			<parallax:Header class="header-template" dropShadow="true">
+			<parallax:Header class="header-template">
 				<!-- <image src="~/images/browse.jpg" width="100%" height="auto"></image> -->
 				<!-- <Label text="{{ result }}" /> -->
 			</parallax:Header>
 			<parallax:Anchored class="anchor">
 				<Label class="list-container title" text="{{ i18NMedicineListTitle }}"></Label>
 			</parallax:Anchored>
-			<parallax:Content class="body-template" height="660" background="white">
+			<parallax:Content class="body-template" height="660vh" background="white">
 				<!-- <DockLayout width="auto" height="auto" background="green"> -->
 					<ListView class="list-container" items="{{ myMedicineList }}" height="auto" background="white" dock="top">
 						<ListView.itemTemplate style="horizontal-align: center;">
