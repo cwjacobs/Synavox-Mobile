@@ -22,7 +22,7 @@ let webViewSrcModel = null;
 
 let i18NPageTitle: string = null;
 let i18NMedicineListTitle: string = null;
-let i18NEditButtonText: string = null;
+let i18NBackButtonText: string = null;
 let i18NSaveButtonText: string = null;
 
 export function onNavigatingTo(args: NavigatedData) {
@@ -62,7 +62,6 @@ export function onTap(args: ItemEventData) {
     // alert("wvsMedicineName = " + wvsMedicineName);
     let wvsMedicineSrc: string = webViewSrcModel[wvsMedicineNameIndex].srcLinks[column].webViewSrc;
     // alert("wvsMedicineSrc = " + wvsMedicineSrc);
-
 
     viewModel.set("webViewSrc", wvsMedicineSrc);
     submit(args);
@@ -121,26 +120,36 @@ export function submit(args) {
     }
 }
 
+export function goBack(args) {
+    const page = args.object.page;
+    const vm = page.bindingContext;
+    const webview = page.getViewById("myWebView");
+    if (webview.canGoBack) {
+        webview.goBack();
+        vm.set("enabled", true);
+    }
+}
+
 function setActiveLanguageText(): void {
     let activeLanguage: string = Utility.Language.getActiveLanguage();
 
     if (activeLanguage === "english") {
         i18NPageTitle = "Browse";
         i18NMedicineListTitle = "My Medicines";
-        i18NEditButtonText = "Edit";
+        i18NBackButtonText = "Back";
         i18NSaveButtonText = "Save";
 
     }
     else {
         i18NPageTitle = "Navega";
         i18NMedicineListTitle = "Mis Medicamentos";
-        i18NEditButtonText = "Editar";
+        i18NBackButtonText = "Atrás";
         i18NSaveButtonText = "Salvar";
 }
 
     viewModel.set("i18NPageTitle", i18NPageTitle);
     viewModel.set("i18NMedicineListTitle", i18NMedicineListTitle);
-    viewModel.set("i18NEditButtonText", i18NEditButtonText);
+    viewModel.set("i18NBackButtonText", i18NBackButtonText);
     viewModel.set("i18NSaveButtonText", i18NSaveButtonText);
 };
 

@@ -14,8 +14,12 @@
 		<Label class="action-bar-title" text="{{ i18NPageTitle }}"></Label>
 	</ActionBar>
 	<StackLayout>
+		<GridLayout class="list-container button-row" rows="auto" columns="*,*">
+			<Button class="button my-button primary fa" text="{{ i18NBackButtonText, '&#xf060;  ' + i18NBackButtonText, +  }}" row="0" col="0" onTap="onBackTap" />
+			<Button class="button my-button secondary fa" text="{{ i18NSaveButtonText, i18NSaveButtonText + '  &#xf097;' }}" row="0" col="1" onTap="onSaveTap" />
+		</GridLayout>
 		<WebView text="WebView" loaded="onWebViewLoaded" id="myWebView" src="{{ webViewSrc }}" />
-		<parallax:ParallaxView controlsToFade="headerLabel" height="85%">
+		<parallax:ParallaxView height="100%">
 			<parallax:Header class="header-template" dropShadow="true">
 				<!-- <image src="~/images/browse.jpg" width="100%" height="auto"></image> -->
 				<!-- <Label text="{{ result }}" /> -->
@@ -23,9 +27,9 @@
 			<parallax:Anchored class="anchor">
 				<Label class="list-container title" text="{{ i18NMedicineListTitle }}"></Label>
 			</parallax:Anchored>
-			<parallax:Content class="body-template">
-				<ScrollView>
-					<ListView class="list-container" items="{{ myMedicineList }}" itemTap="onItemTap" height="500">
+			<parallax:Content class="body-template" height="660" background="white">
+				<!-- <DockLayout width="auto" height="auto" background="green"> -->
+					<ListView class="list-container" items="{{ myMedicineList }}" itemTap="onItemTap" height="auto" background="white" dock="top">
 						<ListView.itemTemplate style="horizontal-align: center;">
 							<GridLayout rows="auto,auto" columns="85%,90%,80%,90%">
 								<Label class="row-text" text="{{ medicineName }}" row="0" col="0" colSpan="4" />
@@ -36,17 +40,12 @@
 							</GridLayout>
 						</ListView.itemTemplate>
 					</ListView>
-				</ScrollView>
-				<StackLayout class="logo">
-					<image src="~/images/logo.png"></image>
-					<!-- <label style="margin-bottom: 100px" /> -->
-				</StackLayout>
+					<StackLayout class="logo" dock="bottom" background="white" height="auto">
+						<image src="~/images/logo.png" width="75%"></image>
+					</StackLayout>
+				<!-- </DockLayout> -->
 			</parallax:Content>
 		</parallax:ParallaxView>
-		<!-- <StackLayout class="hr-light"></StackLayout> -->
-		<GridLayout class="list-container button-row" rows="auto" columns="*,*">
-			<Button class="button my-button primary" text="{{ i18NEditButtonText }}" row="0" col="0" onTap="onEditTap" />
-			<Button class="button my-button secondary" text="{{ i18NSaveButtonText }}" row="0" col="1" onTap="onSaveTap" />
-		</GridLayout>
+		<StackLayout class="hr-light"></StackLayout>
 	</StackLayout>
 </Page>
