@@ -14,9 +14,9 @@
 		<Label class="action-bar-title" text="{{ i18NPageTitle }}"></Label>
 	</ActionBar>
 	<StackLayout>
-		<GridLayout class="list-container button-row" rows="auto" columns="*,*">
-			<Button class="button my-button primary fa" text="{{ i18NBackButtonText, '&#xf060;  ' + i18NBackButtonText, +  }}" row="0" col="0" onTap="onGoBackTap" />
-			<Button class="button my-button secondary fa" text="{{ i18NSaveButtonText, i18NSaveButtonText + '  &#xf097;' }}" row="0" col="1" onTap="onSaveTap" />
+		<GridLayout class="list-container top-button-row" rows="auto" columns="auto,*,*,auto" visibility="{{ isUserBrowsing ? 'visible' : 'collapsed' }}">
+			<Button class="my-button primary fa" text="{{ i18NBackButtonText, '&#xf060;  ' + i18NBackButtonText, +  }}" row="0" col="0" onTap="onGoBackTap" />
+			<Button class="my-button primary fa" text="{{ i18NSaveButtonText, i18NSaveButtonText + '  &#xf097;' }}" row="0" col="3" onTap="onSaveTap" />
 		</GridLayout>
 		<WebView id="myWebView" text="WebView" loaded="onWebViewLoaded" src="{{ webViewSrc }}" />
 		<parallax:ParallaxView height="100%">

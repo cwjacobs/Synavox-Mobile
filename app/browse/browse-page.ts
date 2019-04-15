@@ -20,9 +20,11 @@ let page: Page = null;
 let viewModel: BrowseViewModel = null;
 let medicineList: MedicineBinding[] = null;
 
-// For Browse Branch
+// for browse branch
 let appRootContext: AppRootViewModel = null;
 
+// for dose branch
+let isUserBrowsing: boolean;
 
 let webViewSrcModel = null;
 
@@ -44,8 +46,12 @@ export function onDrawerButtonTap(args: EventData) {
 
 export function onLoaded(args: EventData) {
     if (appRootContext == null) {
-        appRootContext = new AppRootViewModel();;
+        appRootContext = new AppRootViewModel();
     }
+
+    isUserBrowsing = false;
+    viewModel.set("isUserBrowsing", isUserBrowsing);
+
     medicineList = Test.Dataset.getCurrentTestData();
     viewModel.set("myMedicineList", medicineList);
 
@@ -66,6 +72,9 @@ export function onItemTap(args: ItemEventData) {
 
     viewModel.set("webViewSrc", wvsMedicineSrc);
     submit(args);
+
+    isUserBrowsing = true;
+    viewModel.set("isUserBrowsing", isUserBrowsing);
 };
 
 export function onWebViewLoaded(webargs) {
