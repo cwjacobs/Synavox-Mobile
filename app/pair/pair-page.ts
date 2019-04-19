@@ -189,23 +189,18 @@ export function onSaveTap(args: ItemEventData) {
     let index: number = findMedicineNameIndex(binding.medicineName);
 
     if (index != -1) { // Replace current binding
-        binding.audioPath = Utility.Language.getAudioPath(binding.medicineName);
         medicineList[index] = binding;
         alert(getI18NMedReplacedMsg(binding.medicineName));
     }
     else {
         index = findTagIdIndex(binding.tagId);
         if (index != -1) { // Replace current binding
-            binding.audioPath = Utility.Language.getAudioPath(binding.medicineName);
             medicineList[index] = binding; // use the util functions to add data to array
         }
         else { // Add new binding
-            binding.audioPath = Utility.Language.getAudioPath(binding.medicineName);
-
             page.bindingContext.myMedicineList.push({
                 tagId: binding.tagId,
                 medicineName: binding.medicineName,
-                audioPath: binding.audioPath
             });
         }
     }

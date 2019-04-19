@@ -16,7 +16,7 @@
 			<parallax:Anchored class="anchor">
 				<Label class="list-container title" text="{{ i18NMedicineListTitle }}"></Label>
 			</parallax:Anchored>
-			<parallax:Content class="body-template" height="480vh">
+			<parallax:Content class="body-template" height="480C">
 				<DockLayout width="auto" height="550vh" background="white">
 					<ListView class="list-container" items="{{ myMedicineList }}" itemTap="onItemTap" height="245vh" dock="top">
 						<ListView.itemTemplate>
