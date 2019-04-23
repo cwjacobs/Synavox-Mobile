@@ -80,6 +80,15 @@
     margin: 20px;
 }
 
+.my-button-small {
+    border-radius: 5;
+    font-size: 10;
+    font-family: FontAwesome;
+    vertical-align: middle;
+    margin: 5px;
+    padding: 0px;
+}
+
 .my-button:active {
     background-color: lightslategray;
     color: white;

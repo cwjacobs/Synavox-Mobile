@@ -10,22 +10,22 @@ export namespace Dataset {
     let testData: MedicineBinding[] = null;
     
     let enTestData: MedicineBinding[] = [
-        { tagId: "-99,55,102,114", medicineName: "Oxycodone", dailyRequiredDoses: 20, dailyDoses: 3, dailyInstructions: "Take as needed for pain" },
-        { tagId: "-99,-81,70,-106", medicineName: "Lisinopril", dailyRequiredDoses: 1, dailyDoses: 0, dailyInstructions: "Take once daily" },
-        { tagId: "77,-4,75,-106", medicineName: "Rosuvastatin", dailyRequiredDoses: 2, dailyDoses: 1, dailyInstructions: "Take twice daily" },
-        { tagId: "-3,18,81,-106", medicineName: "Levothyroxine", dailyRequiredDoses: 1, dailyDoses: 1, dailyInstructions: "Take once daily" },
-        // { tagId: "-67,45,90,-106", medicineName: "Atorvastatin", dailyRequiredDoses: 1, dailyDoses: 0, dailyInstructions: "Take once daily, preferably in the morning, without grapefruit juice" },
-        { tagId: "-67,45,90,-106", medicineName: "Metformin", dailyRequiredDoses: 3, dailyDoses: 1, dailyInstructions: "Take three times daily" },
+        { tagId: "-99,55,102,114", medicineName: "Oxycodone", dailyRequiredDoses: 20, dailyDoses: 3 },
+        { tagId: "-99,-81,70,-106", medicineName: "Lisinopril", dailyRequiredDoses: 1, dailyDoses: 0 },
+        { tagId: "77,-4,75,-106", medicineName: "Rosuvastatin", dailyRequiredDoses: 2, dailyDoses: 1 },
+        { tagId: "-3,18,81,-106", medicineName: "Levothyroxine", dailyRequiredDoses: 1, dailyDoses: 1 },
+        // { tagId: "-67,45,90,-106", medicineName: "Atorvastatin", dailyRequiredDoses: 1, dailyDoses: 0 },
+        { tagId: "-67,45,90,-106", medicineName: "Metformin", dailyRequiredDoses: 3, dailyDoses: 1 },
     ];
 
-    let spTestData: MedicineBinding[] = [
-        { tagId: "-99,55,102,114", medicineName: "Oxycodone", dailyRequiredDoses: 20, dailyDoses: 4, dailyInstructions: "Tome según sea necesario para el dolor" },
-        { tagId: "-99,-81,70,-106", medicineName: "Lisinopril", dailyRequiredDoses: 1, dailyDoses: 1, dailyInstructions: "Tome una vez al día" },
-        { tagId: "77,-4,75,-106", medicineName: "Rosuvastatin", dailyRequiredDoses: 2, dailyDoses: 2, dailyInstructions: "Tome dos veces al día" },
-        { tagId: "-3,18,81,-106", medicineName: "Levothyroxine", dailyRequiredDoses: 1, dailyDoses: 0, dailyInstructions: "Tome una vez al día" },
-        // {tagId: "-67,45,90,-106", medicineName: "Atorvastatin", dailyRequiredDoses: 1, dailyDoses: 0, dailyInstructions: "Tome una vez al día" },
-        { tagId: "-67,45,90,-106", medicineName: "Metformin", dailyRequiredDoses: 3, dailyDoses: 2, dailyInstructions: "Tome tres veces al día" },
-    ];
+    // let spTestData: MedicineBinding[] = [
+    //     { tagId: "-99,55,102,114", medicineName: "Oxycodone", dailyRequiredDoses: 20, dailyDoses: 4 },
+    //     { tagId: "-99,-81,70,-106", medicineName: "Lisinopril", dailyRequiredDoses: 1, dailyDoses: 1 },
+    //     { tagId: "77,-4,75,-106", medicineName: "Rosuvastatin", dailyRequiredDoses: 2, dailyDoses: 2 },
+    //     { tagId: "-3,18,81,-106", medicineName: "Levothyroxine", dailyRequiredDoses: 1, dailyDoses: 0 },
+    //     // {tagId: "-67,45,90,-106", medicineName: "Atorvastatin", dailyRequiredDoses: 1, dailyDoses: 0 },
+    //     { tagId: "-67,45,90,-106", medicineName: "Metformin", dailyRequiredDoses: 3, dailyDoses: 2 },
+    // ];
 
     // Sets current testdata to default and returns it
     export function addMedicineBinding(medicineBinding: MedicineBinding) {
@@ -42,34 +42,7 @@ export namespace Dataset {
 
     // Returns default language test data
     function getDefaultTestData(): MedicineBinding[] {
-
-        // let testdataMap: TestdataMap[] = [ // These maps don't work, need to debug it
-        //     { "english": enTestData },
-        //     { "spanish": spTestData },
-        // ];
-
-        let defaultTestData: MedicineBinding[];
-        let defaultLanguage: string = Utility.Language.getDefaultLanguage();
-
-        if (defaultLanguage === "english") {
-            defaultTestData = getEnTestData();
-        }
-        else {
-            defaultTestData = getSpTestData();
-        }
-
-        return defaultTestData;
-        // return testdataMap[defaultLanguage];
-    };
-
-    // Sets testData and returns English language dataset
-    export function getEnTestData(): MedicineBinding[] {
         return enTestData;
-    };
-
-    // Sets testData and returns Spanish language dataset
-    export function getSpTestData(): MedicineBinding[] {
-        return spTestData;
     };
 
     /** Browse Branch **/

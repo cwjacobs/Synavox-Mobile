@@ -52,7 +52,7 @@ let primaryOff: string = "#c1c8f8";
 let secondaryOn: string = "#398881";
 let secondaryOff: string = "#a4cac7";
 
-let index_old: number = 0;
+let dailyDoses_old: number = 0;
 let dailyRequiredDoses_old: number = 0;
 
 /***
@@ -211,7 +211,6 @@ export function onSaveTotalDosesPerDayTap() {
 
     medicineList = Test.Dataset.getCurrentTestData();
     let index: number = findMedicineNameIndex(currentMedicineNameView.text, medicineList);
-    medicineList[index].dailyInstructions = viewModel.get("i18nDailyInstructions");
 
     displayCurrentDoses();
     displayCurrentListDoses();
@@ -277,7 +276,7 @@ export function onEditDosesTakenTodayTap(args: EventData) {
                 doseIndicator.color = primaryOn;
             }
             else {
-                doseIndicator.color = primaryOn;
+                doseIndicator.color = primaryOff;
             }
         }
     }
@@ -290,7 +289,16 @@ export function onSaveDosesTakenTodayTap() {
     let editTotalDosesPerDayButton: Button = page.getViewById("edit-total-required-doses");
     editTotalDosesPerDayButton.backgroundColor = secondaryOn;
 
+    let currentMedicineNameView: any = page.getViewById("current-medicine-name");
+    currentMedicineNameView.color = primaryOn;
+
+    medicineList = Test.Dataset.getCurrentTestData();
+    let index: number = findMedicineNameIndex(currentMedicineNameView.text, medicineList);
+
     displayCurrentDoses();
+    displayCurrentListDoses();
+
+    i18nDisplayAdustedDosesPerDay(medicineList[index].dailyRequiredDoses);
 
     setActiveLanguageText();
 }
@@ -302,76 +310,124 @@ export function onCancelDosesTakenTodayTap() {
     let editTotalDosesPerDayButton: Button = page.getViewById("edit-total-required-doses");
     editTotalDosesPerDayButton.backgroundColor = secondaryOn;
 
+    let currentMedicineNameView: any = page.getViewById("current-medicine-name");
+    currentMedicineNameView.color = primaryOn;
+
+    let medicineName: string = currentMedicineNameView.text;
+    medicineList = Test.Dataset.getCurrentTestData();
+
+    let index: number = findMedicineNameIndex(medicineName, medicineList);
+    medicineList[index].dailyDoses = dailyDoses_old;
+
     displayCurrentDoses();
+    displayCurrentListDoses();
+
+    i18nDisplayAdustedDosesPerDay(dailyRequiredDoses_old);
 
     setActiveLanguageText();
 }
 
 function toggleIndicator(indicator: any): number {
     let adjustTotal: number = 0;
-    if (isEditingTotalDosesPerDay || isEditingDosesTakenToday) {
-        if (indicator.color.toString() === secondaryOn) {
-            adjustTotal = -1;
+
+    if (isEditingDosesTakenToday) {
+        if (indicator.color.toString().toLowerCase() === primaryOff.toLowerCase()) {
+            adjustTotal = 1;
         }
         else {
+            adjustTotal = -1;
+        }
+    }
+    else if (isEditingTotalDosesPerDay) {
+        if (indicator.color.toString().toLowerCase() === secondaryOff.toLowerCase()) {
             adjustTotal = 1;
+        }
+        else {
+            adjustTotal = -1;
         }
     }
     return adjustTotal;
 }
 
+function adustDailyDoseTaken(indicator: any): void {
+    let medicineName: string = viewModel.get("currentMedicineName");
+    medicineList = Test.Dataset.getCurrentTestData();
+    let index: number = findMedicineNameIndex(medicineName, medicineList);
+    let dailyDoses: number = medicineList[index].dailyDoses;
+
+    let adjustedDoses: number = toggleIndicator(indicator);
+    dailyDoses += adjustedDoses;
+
+    if (adjustedDoses === 1) {
+        indicator.color = primaryOn;
+    }
+    else {
+        indicator.color = primaryOff;
+    }
+
+    // Data store behind list is being updated, but we won't display it until save is pressed
+    medicineList[index].dailyDoses = dailyDoses;
+    i18nDisplayAdustedDosesToday(dailyDoses);
+}
+
 function adustDailyDoseRequirement(indicator: any) {
-    if (isEditingDosesTakenToday || isEditingTotalDosesPerDay) {
-        let medicineName: string = viewModel.get("currentMedicineName");
-        medicineList = Test.Dataset.getCurrentTestData();
-        let index: number = findMedicineNameIndex(medicineName, medicineList);
-        let dailyRequiredDoses: number = medicineList[index].dailyRequiredDoses;
+    let medicineName: string = viewModel.get("currentMedicineName");
+    medicineList = Test.Dataset.getCurrentTestData();
+    let index: number = findMedicineNameIndex(medicineName, medicineList);
+    let dailyRequiredDoses: number = medicineList[index].dailyRequiredDoses;
 
-        // alert("(1) getCurrentTestData() - Daily Required Doses: " + dailyRequiredDoses);
+    if ((dailyRequiredDoses >= 1) && (dailyRequiredDoses <= 5)) {
+        let adjustedDoses: number = toggleIndicator(indicator);
+        dailyRequiredDoses += adjustedDoses;
 
-        if ((dailyRequiredDoses >= 1) && (dailyRequiredDoses <= 5)) {
-            let adjustedDoses: number = toggleIndicator(indicator);
-            dailyRequiredDoses += adjustedDoses;
-
-            if (adjustedDoses === 1) {
-                indicator.color = secondaryOn;
-            }
-            else {
-                indicator.color = secondaryOff;
-            }
-
-            // Data store behind list is being updated, but we won't display it until save is pressed
-            medicineList[index].dailyRequiredDoses = dailyRequiredDoses;
-            i18nDisplayAdustedDosesPerDay(dailyRequiredDoses);
+        if (adjustedDoses === 1) {
+            indicator.color = secondaryOn;
+        }
+        else {
+            indicator.color = secondaryOff;
         }
 
-        // alert("(2) getCurrentTestData() - Daily Required Doses: " + Test.Dataset.getCurrentTestData()[index].dailyRequiredDoses);
+        // Data store behind list is being updated, but we won't display it until save is pressed
+        medicineList[index].dailyRequiredDoses = dailyRequiredDoses;
+        i18nDisplayAdustedDosesPerDay(dailyRequiredDoses);
+    }
+}
+
+function adjustDoses(indicator: any): void {
+    if (isEditingDosesTakenToday) {
+        adustDailyDoseTaken(indicator);
+    }
+    else if (isEditingTotalDosesPerDay) {
+        adustDailyDoseRequirement(indicator);
+    }
+    else {
+        alert("we are not editing...");
     }
 }
 
 export function current1(args: ItemEventData) {
     let indicator: any = page.getViewById("current1");
-    adustDailyDoseRequirement(indicator);
+    adjustDoses(indicator);
 }
 
 export function current2(args: ItemEventData) {
     let indicator: any = page.getViewById("current2");
-    adustDailyDoseRequirement(indicator);
+    adjustDoses(indicator);
 }
 
 export function current3(args: ItemEventData) {
     let indicator: any = page.getViewById("current3");
-    adustDailyDoseRequirement(indicator);
+    adjustDoses(indicator);
 }
 
 export function current4(args: ItemEventData) {
     let indicator: any = page.getViewById("current4");
-    adustDailyDoseRequirement(indicator);
+    adjustDoses(indicator);
 }
 
 export function current5(args: ItemEventData) {
     let indicator: any = page.getViewById("current5");
-    adustDailyDoseRequirement(indicator);
+    adjustDoses(indicator);
 }
 
 function displayCurrentListDoses() {
@@ -540,14 +596,14 @@ function setActiveLanguageText(): void {
     if (activeLanguage === "english") {
         i18nDose = "Dose";
         i18NPageTitle = "Dose";
-        i18NMedicineNameHint = "Select medicine below";
+        i18NMedicineNameHint = "Select medicine";
         i18NEditTotalDosesPerDayButtonText = "Edit Total Doses per Day";
         i18NEditDosesTakenTodayButtonText = "Edit Doses Taken Today";
     }
     else {
         i18nDose = "Dosis";
         i18NPageTitle = "Dosis";
-        i18NMedicineNameHint = "Ingrese el nombre del medicamento";
+        i18NMedicineNameHint = "Seleccione la medicina";
         i18NEditTotalDosesPerDayButtonText = "Editar dosis totales por día";
         i18NEditDosesTakenTodayButtonText = "Editar dosis tomadas hoy";
     }
@@ -560,6 +616,42 @@ function setActiveLanguageText(): void {
 
     viewModel.set("i18NEditTotalDosesPerDayButtonText", i18NEditTotalDosesPerDayButtonText);
     viewModel.set("i18NEditDosesTakenTodayButtonText", i18NEditDosesTakenTodayButtonText);
+}
+
+function i18nDisplayAdustedDosesToday(dosesPerDay: number): void {
+
+    let dosesPerDayInstructionList: string[];
+
+    let enDosesPerDayInstructionList: string[] = [
+        "Take as needed",
+        "Took one dose today",
+        "Took two doses today",
+        "Took three doses today",
+        "Took four doses today",
+        "Took Five doses today",
+    ];
+
+    let spDosesPerDayInstructionList: string[] = [
+        "Tome según sea necesario",
+        "Tomó una dosis hoy",
+        "Tomó dos dosis hoy",
+        "Tomó tres dosis hoy",
+        "Tomó cuatro dosis hoy",
+        "Tomó cinco dosis hoy",
+    ];
+
+    if (Utility.Language.getActiveLanguage() === "english") {
+        dosesPerDayInstructionList = enDosesPerDayInstructionList;
+    }
+    else {
+        dosesPerDayInstructionList = spDosesPerDayInstructionList;
+    }
+
+    if (dosesPerDay > 5) {
+        dosesPerDay = 0; // Does greater than 5 per day are "take as needed" - 1st array element
+    }
+    let dosesPerDayInstructions = dosesPerDayInstructionList[dosesPerDay];
+    viewModel.set("i18nDailyInstructions", dosesPerDayInstructions);
 }
 
 function i18nDisplayAdustedDosesPerDay(dosesPerDay: number): void {
@@ -589,6 +681,10 @@ function i18nDisplayAdustedDosesPerDay(dosesPerDay: number): void {
     }
     else {
         dosesPerDayInstructionList = spDosesPerDayInstructionList;
+    }
+
+    if (dosesPerDay > 5) {
+        dosesPerDay = 0; // Does greater than 5 per day are "take as needed" - 1st array element
     }
     let dosesPerDayInstructions = dosesPerDayInstructionList[dosesPerDay];
     viewModel.set("i18nDailyInstructions", dosesPerDayInstructions);
