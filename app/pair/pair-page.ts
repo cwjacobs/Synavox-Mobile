@@ -25,13 +25,13 @@ let isTagIdLocked: boolean;
 let audioPlayer: AudioPlayer = null;
 
 // Page text
-let i18NPageTitle: string = null;
-let i18NMedicineNameHint: string = null;
+let i18nPageTitle: string = null;
+let i18nMedicineNameHint: string = null;
 
 // Page control buttons
-let i18NSaveButtonText: string = null;
-let i18NCancelButtonText: string = null;
-let i18NDeleteButtonText: string = null;
+let i18nSaveButtonText: string = null;
+let i18nCancelButtonText: string = null;
+let i18nDeleteButtonText: string = null;
 
 // Audio controls and buttons
 let isAudioActive: boolean = false;
@@ -288,26 +288,26 @@ function setActiveLanguageText(): void {
     let activeLanguage: string = Utility.Language.getActiveLanguage();
 
     if (activeLanguage === "english") {
-        i18NPageTitle = "Pair";
-        i18NMedicineNameHint = "Enter Medicine Name";
-        i18NDeleteButtonText = "Delete";
-        i18NSaveButtonText = "Save";
-        i18NCancelButtonText = "Cancel";
+        i18nPageTitle = "Pair";
+        i18nMedicineNameHint = "Enter Medicine Name";
+        i18nDeleteButtonText = "Delete";
+        i18nSaveButtonText = "Save";
+        i18nCancelButtonText = "Cancel";
 
     }
     else {
-        i18NPageTitle = "Partido";
-        i18NMedicineNameHint = "Ingrese el nombre del medicamento";
-        i18NDeleteButtonText = "Eliminar";
-        i18NSaveButtonText = "Salvar";
-        i18NCancelButtonText = "Cancelar";
+        i18nPageTitle = "Partido";
+        i18nMedicineNameHint = "Ingrese el nombre del medicamento";
+        i18nDeleteButtonText = "Eliminar";
+        i18nSaveButtonText = "Salvar";
+        i18nCancelButtonText = "Cancelar";
     }
 
-    viewModel.set("i18NPageTitle", i18NPageTitle);
-    viewModel.set("i18NMedicineNameHint", i18NMedicineNameHint);
-    viewModel.set("i18NSaveButtonText", i18NSaveButtonText);
-    viewModel.set("i18NCancelButtonText", i18NCancelButtonText);
-    viewModel.set("i18NDeleteButtonText", i18NDeleteButtonText);
+    viewModel.set("i18nPageTitle", i18nPageTitle);
+    viewModel.set("i18nMedicineNameHint", i18nMedicineNameHint);
+    viewModel.set("i18nSaveButtonText", i18nSaveButtonText);
+    viewModel.set("i18nCancelButtonText", i18nCancelButtonText);
+    viewModel.set("i18nDeleteButtonText", i18nDeleteButtonText);
 }
 
 function getI18NMedReplacedMsg(medicineName: string): string {

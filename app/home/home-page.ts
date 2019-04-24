@@ -11,23 +11,27 @@ import * as Test from "../data-models/test-data";
 import * as Utility from "../utility-functions/utility-functions";
 import { MedicineBinding } from "~/data-models/medicine-binding";
 
-let page: Page = null;
-let viewModel: HomeViewModel = null;
-let medicineList: MedicineBinding[] = null;
-
-let i18NPageTitle: string = null;
-let i18NMedicineListTitle: string = null;
-let i18NEnglishButtonText: string = null;
-let i18NSpanishButtonText: string = null;
-
-// Audio controls and buttons
-let isAudioActive: boolean = false;
-let isAudioEnabled: boolean = false;
-
 import { EventData } from "tns-core-modules/data/observable"; // working with this in nfc-observable branch
 import { NfcTagData, Nfc } from "nativescript-nfc";
 import { AppRootViewModel } from "~/app-root/app-root-view-model";
 import { appRootI18N } from "~/app-root/app-root";
+import { I18N } from "~/i18n/i18n";
+
+
+let page: Page = null;
+let viewModel: HomeViewModel = null;
+let medicineList: MedicineBinding[] = null;
+
+let i18n = I18N.instance;
+
+let i18nPageTitle: string = null;
+let i18nMedicineListTitle: string = null;
+let i18nEnglishButtonText: string = null;
+let i18nSpanishButtonText: string = null;
+
+// Audio controls and buttons
+let isAudioActive: boolean = false;
+let isAudioEnabled: boolean = false;
 
 let nfc: Nfc = null;
 let audioPlayer: AudioPlayer = null;
@@ -104,11 +108,13 @@ export function onItemTap(args: ItemEventData) {
 }
 
 export function onEnglishTap() {
+    i18n.activeLanguage = "English";
     Utility.Language.setActiveLanguage("english");
     setActiveLanguageText();
 };
 
 export function onSpanishTap() {
+    i18n.activeLanguage = "Spanish";
     Utility.Language.setActiveLanguage("spanish");
     setActiveLanguageText();
 };
@@ -142,22 +148,22 @@ function setActiveLanguageText(): void {
     let activeLanguage: string = Utility.Language.getActiveLanguage();
 
     if (activeLanguage === "english") {
-        i18NPageTitle = "Home Pharmacist";
-        i18NMedicineListTitle = "My Medicines";
-        i18NEnglishButtonText = "English";
-        i18NSpanishButtonText = "Español";
+        i18nPageTitle = "Home Pharmacist";
+        i18nMedicineListTitle = "My Medicines";
+        i18nEnglishButtonText = "English";
+        i18nSpanishButtonText = "Español";
     }
     else {
-        i18NPageTitle = "Farmacéutico de Casa";
-        i18NMedicineListTitle = "Mis Medicamentos";
-        i18NEnglishButtonText = "English";
-        i18NSpanishButtonText = "Español";
+        i18nPageTitle = "Farmacéutico de Casa";
+        i18nMedicineListTitle = "Mis Medicamentos";
+        i18nEnglishButtonText = "English";
+        i18nSpanishButtonText = "Español";
     }
 
-    viewModel.set("i18NPageTitle", i18NPageTitle);
-    viewModel.set("i18NMedicineListTitle", i18NMedicineListTitle);
-    viewModel.set("i18NEnglishButtonText", i18NEnglishButtonText);
-    viewModel.set("i18NSpanishButtonText", i18NSpanishButtonText);
+    viewModel.set("i18nPageTitle", i18nPageTitle);
+    viewModel.set("i18nMedicineListTitle", i18nMedicineListTitle);
+    viewModel.set("i18nEnglishButtonText", i18nEnglishButtonText);
+    viewModel.set("i18nSpanishButtonText", i18nSpanishButtonText);
 
     appRootI18N(activeLanguage);
 };

@@ -6,7 +6,7 @@
         -->
 		<NavigationButton ios:visibility="collapsed" icon="res://menu" tap="onDrawerButtonTap"></NavigationButton>
 		<ActionItem icon="res://navigation/menu" android:visibility="collapsed" tap="onDrawerButtonTap" ios.position="left"></ActionItem>
-		<Label class="action-bar-title" text="{{ i18NPageTitle }}"></Label>
+		<Label class="action-bar-title" text="{{ i18nPageTitle }}"></Label>
 	</ActionBar>
 	<StackLayout>
 		<parallax:ParallaxView height="75%">
@@ -14,7 +14,7 @@
 				<!-- <image src="~/images/home.jpg" width="100%" height="100%"></image> -->
 			</parallax:Header>
 			<parallax:Anchored class="anchor">
-				<Label class="list-container title" text="{{ i18NMedicineListTitle }}"></Label>
+				<Label class="list-container title" text="{{ i18nMedicineListTitle }}"></Label>
 			</parallax:Anchored>
 			<parallax:Content class="body-template" height="480C">
 				<DockLayout width="auto" height="550vh" background="white">
@@ -35,8 +35,8 @@
 			</parallax:Content>
 		</parallax:ParallaxView>
 		<GridLayout class="list-container button-row" rows="auto" columns="*,*">
-			<Button class="button my-button primary" text="{{ i18NEnglishButtonText }}" row="0" col="0" onTap="onEnglishTap" visibility="{{ isDualLanguageEnabled ? 'visible' : 'collapsed' }}"/>
-			<Button class="button my-button secondary" text="{{ i18NSpanishButtonText }}" row="0" col="1" onTap="onSpanishTap" visibility="{{ isDualLanguageEnabled ? 'visible' : 'collapsed' }}" />
+			<Button class="button my-button primary" text="{{ i18nEnglishButtonText }}" row="0" col="0" onTap="onEnglishTap" visibility="{{ isDualLanguageEnabled ? 'visible' : 'collapsed' }}"/>
+			<Button class="button my-button secondary" text="{{ i18nSpanishButtonText }}" row="0" col="1" onTap="onSpanishTap" visibility="{{ isDualLanguageEnabled ? 'visible' : 'collapsed' }}" />
 		</GridLayout>
 		<StackLayout class="hr-light"></StackLayout>
 		<GridLayout class="list-container" rows="70" columns="*,*,*">

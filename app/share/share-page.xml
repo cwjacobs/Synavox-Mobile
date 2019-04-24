@@ -6,32 +6,32 @@
         -->
 		<NavigationButton ios:visibility="collapsed" icon="res://menu" tap="onDrawerButtonTap"></NavigationButton>
 		<ActionItem icon="res://navigation/menu" android:visibility="collapsed" tap="onDrawerButtonTap" ios.position="left"></ActionItem>
-		<Label class="action-bar-title" text="{{ i18NPageTitle }}"></Label>
+		<Label class="action-bar-title" text="{{ i18nPageTitle }}"></Label>
 	</ActionBar>
 	<GridLayout class="page-content">
 		<StackLayout>
 			<image src="~/images/share.jpg" width="100%" height="auto" />
-			<Label class="title" text="{{ i18NContentTitle }}"></Label>
+			<Label class="title" text="{{ i18nContentTitle }}"></Label>
 			<StackLayout class="list-container" orientation="horizontal">
-				<Label class="sharing-label" text="{{ i18NContactFilterLabel }}" />
-				<TextField class="sharing-name" id="contactsFilterView" hint="{{ i18NContactFilterHint }}" returnKeyType="search" text="{{ contactFilter }}" textWrap="true" />
+				<Label class="sharing-label" text="{{ i18nContactFilterLabel }}" />
+				<TextField class="sharing-name" id="contactsFilterView" hint="{{ i18nContactFilterHint }}" returnKeyType="search" text="{{ contactFilter }}" textWrap="true" />
 			</StackLayout>
 			<StackLayout class="list-container" id="list-display" visibility="{{ isDisplayList ? 'visible' : 'collapsed' }}">
 				<ListPicker Class="row-text" id="listPicker" items="{{ displayNames }}" selectedIndex="{{ index }}" tap="onContactTap" />
 			</StackLayout>
 			<StackLayout visibility="{{ isDisplayContact ? 'visible' : 'collapsed' }}">
 				<GridLayout class="list-container row-text" id="contact-display" rows="auto,auto,auto" columns="100,*">
-					<Label row="0" col="0" text="{{ i18NContactNameLabel }}" visibility="{{ isNameDefined ? 'visible' : 'collapsed' }}" />
+					<Label row="0" col="0" text="{{ i18nContactNameLabel }}" visibility="{{ isNameDefined ? 'visible' : 'collapsed' }}" />
 					<Label row="0" col="1" text="{{ selectedContactName }}" visibility="{{ isNameDefined ? 'visible' : 'collapsed' }}" />
-					<Label row="1" col="0" text="{{ i18NContactEmailLabel }}" visibility="{{ isEmailDefined ? 'visible' : 'collapsed' }}" />
+					<Label row="1" col="0" text="{{ i18nContactEmailLabel }}" visibility="{{ isEmailDefined ? 'visible' : 'collapsed' }}" />
 					<Label row="1" col="1" text="{{ selectedContactEmail }}" visibility="{{ isEmailDefined ? 'visible' : 'collapsed' }}" />
-					<Label row="2" col="0" text="{{ i18NContactPhoneLabel }}" visibility="{{ isPhoneDefined ? 'visible' : 'collapsed' }}" />
+					<Label row="2" col="0" text="{{ i18nContactPhoneLabel }}" visibility="{{ isPhoneDefined ? 'visible' : 'collapsed' }}" />
 					<Label row="2" col="1" text="{{ selectedContactPhone }}" visibility="{{ isPhoneDefined ? 'visible' : 'collapsed' }}" />
 				</GridLayout>
 				<GridLayout class="share-button-row" rows="auto, auto" columns="*,*">
-					<Button class="button my-button primary fa" id="share-button" text="{{ i18NShareButtonText, i18NShareButtonText + ' &#xf064;' }} " row="0" col="0" onTap="onShareTap" />
-					<Button class="button my-button secondary fa" text="{{ i18NCancelButtonText, i18NCancelButtonText + ' &#xf05e;' }}" row="0" col="1" onTap="onCancelTap" />
-					<Label class="notification" id="share-complete-label" textWrap="true" text="{{ i18NShareCompleteNotification }}" visibility="{{ isShareComplete ? 'visible' : 'collapsed' }}" row="1" col="0" colSpan="2" />
+					<Button class="button my-button primary fa" id="share-button" text="{{ i18nShareButtonText, i18nShareButtonText + ' &#xf064;' }} " row="0" col="0" onTap="onShareTap" />
+					<Button class="button my-button secondary fa" text="{{ i18nCancelButtonText, i18nCancelButtonText + ' &#xf05e;' }}" row="0" col="1" onTap="onCancelTap" />
+					<Label class="notification" id="share-complete-label" textWrap="true" text="{{ i18nShareCompleteNotification }}" visibility="{{ isShareComplete ? 'visible' : 'collapsed' }}" row="1" col="0" colSpan="2" />
 				</GridLayout>
 				<!-- <Label class="notification" id="share-complete-label" text="Share Complete" visibility="{{ isShareComplete ? 'visible' : 'collapsed' }}" /> -->
 			</StackLayout>

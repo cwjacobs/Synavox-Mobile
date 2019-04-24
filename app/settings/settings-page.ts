@@ -13,14 +13,14 @@ let activeLanguage: string = null;
 let viewModel: SettingsViewModel = null;
 
 let nfc: Nfc = null;
-let i18NPageTitle: string = null;
-let i18NLanguageOptionsTitle: string = null;
-let i18NStopButtonText: string = null;
-let i18NEnglishButtonText: string = null;
-let i18NActiveLanguageText: string = null;
-let i18NSpanishButtonText: string = null;
-let i18NInstalledLanguagesText: string = null;
-let i18NEnableLanguageInstructionsText: string = null;
+let i18nPageTitle: string = null;
+let i18nLanguageOptionsTitle: string = null;
+let i18nStopButtonText: string = null;
+let i18nEnglishButtonText: string = null;
+let i18nActiveLanguageText: string = null;
+let i18nSpanishButtonText: string = null;
+let i18nInstalledLanguagesText: string = null;
+let i18nEnableLanguageInstructionsText: string = null;
 
 
 export function onNavigatingTo(args: NavigatedData) {
@@ -120,32 +120,32 @@ function setI18N(): void {
     let activeLanguage: string = Utility.Language.getActiveLanguage();
 
     if (activeLanguage === "english") {
-        i18NPageTitle = "Settings";
-        i18NLanguageOptionsTitle = "Language Options";
-        i18NActiveLanguageText = "Active: English";
-        i18NInstalledLanguagesText = "Installed Languages:";
-        i18NStopButtonText = "Stop";
-        i18NEnglishButtonText = "English";
-        i18NSpanishButtonText = "Español";
-        i18NEnableLanguageInstructionsText = "Press language button to enable or disable it";
+        i18nPageTitle = "Settings";
+        i18nLanguageOptionsTitle = "Language Options";
+        i18nActiveLanguageText = "Active: English";
+        i18nInstalledLanguagesText = "Installed Languages:";
+        i18nStopButtonText = "Stop";
+        i18nEnglishButtonText = "English";
+        i18nSpanishButtonText = "Español";
+        i18nEnableLanguageInstructionsText = "Press language button to enable or disable it";
     }
     else {
-        i18NPageTitle = "Configuración";
-        i18NLanguageOptionsTitle = "Opciones de Idioma";
-        i18NActiveLanguageText = "Activo: Español";
-        i18NInstalledLanguagesText = "Idiomas Instalados:";
-        i18NStopButtonText = "Parada";
-        i18NEnglishButtonText = "English";
-        i18NSpanishButtonText = "Español";
-        i18NEnableLanguageInstructionsText = "Pulse el botón de idioma para activarlo o desactivarlo";
+        i18nPageTitle = "Configuración";
+        i18nLanguageOptionsTitle = "Opciones de Idioma";
+        i18nActiveLanguageText = "Activo: Español";
+        i18nInstalledLanguagesText = "Idiomas Instalados:";
+        i18nStopButtonText = "Parada";
+        i18nEnglishButtonText = "English";
+        i18nSpanishButtonText = "Español";
+        i18nEnableLanguageInstructionsText = "Pulse el botón de idioma para activarlo o desactivarlo";
     }
 
-    viewModel.set("i18NPageTitle", i18NPageTitle);
-    viewModel.set("i18NLanguageOptionsTitle", i18NLanguageOptionsTitle);
-    viewModel.set("i18NActiveLanguageText", i18NActiveLanguageText);
-    viewModel.set("i18NStopButtonText", i18NStopButtonText);
-    viewModel.set("i18NInstalledLanguagesText", i18NInstalledLanguagesText);
-    viewModel.set("i18NEnglishButtonText", i18NEnglishButtonText);
-    viewModel.set("i18NSpanishButtonText", i18NSpanishButtonText);
-    viewModel.set("i18NEnableLanguageInstructionsText", i18NEnableLanguageInstructionsText);
+    viewModel.set("i18nPageTitle", i18nPageTitle);
+    viewModel.set("i18nLanguageOptionsTitle", i18nLanguageOptionsTitle);
+    viewModel.set("i18nActiveLanguageText", i18nActiveLanguageText);
+    viewModel.set("i18nStopButtonText", i18nStopButtonText);
+    viewModel.set("i18nInstalledLanguagesText", i18nInstalledLanguagesText);
+    viewModel.set("i18nEnglishButtonText", i18nEnglishButtonText);
+    viewModel.set("i18nSpanishButtonText", i18nSpanishButtonText);
+    viewModel.set("i18nEnableLanguageInstructionsText", i18nEnableLanguageInstructionsText);
 }

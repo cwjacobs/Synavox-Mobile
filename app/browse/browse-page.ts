@@ -28,10 +28,10 @@ let isUserBrowsing: boolean;
 
 let webViewSrcModel = null;
 
-let i18NPageTitle: string = null;
-let i18NMedicineListTitle: string = null;
-let i18NBackButtonText: string = null;
-let i18NSaveButtonText: string = null;
+let i18nPageTitle: string = null;
+let i18nMedicineListTitle: string = null;
+let i18nBackButtonText: string = null;
+let i18nSaveButtonText: string = null;
 
 export function onNavigatingTo(args: NavigatedData) {
     page = <Page>args.object;
@@ -146,23 +146,23 @@ function setActiveLanguageText(): void {
     let activeLanguage: string = Utility.Language.getActiveLanguage();
 
     if (activeLanguage === "english") {
-        i18NPageTitle = "Browse";
-        i18NMedicineListTitle = "My Medicines";
-        i18NBackButtonText = "Back";
-        i18NSaveButtonText = "Save";
+        i18nPageTitle = "Browse";
+        i18nMedicineListTitle = "My Medicines";
+        i18nBackButtonText = "Back";
+        i18nSaveButtonText = "Save";
 
     }
     else {
-        i18NPageTitle = "Navega";
-        i18NMedicineListTitle = "Mis Medicamentos";
-        i18NBackButtonText = "Atrás";
-        i18NSaveButtonText = "Salvar";
+        i18nPageTitle = "Navega";
+        i18nMedicineListTitle = "Mis Medicamentos";
+        i18nBackButtonText = "Atrás";
+        i18nSaveButtonText = "Salvar";
 }
 
-    viewModel.set("i18NPageTitle", i18NPageTitle);
-    viewModel.set("i18NMedicineListTitle", i18NMedicineListTitle);
-    viewModel.set("i18NBackButtonText", i18NBackButtonText);
-    viewModel.set("i18NSaveButtonText", i18NSaveButtonText);
+    viewModel.set("i18nPageTitle", i18nPageTitle);
+    viewModel.set("i18nMedicineListTitle", i18nMedicineListTitle);
+    viewModel.set("i18nBackButtonText", i18nBackButtonText);
+    viewModel.set("i18nSaveButtonText", i18nSaveButtonText);
 };
 
 function findMedicineNameIndex(medicineName: string): number {

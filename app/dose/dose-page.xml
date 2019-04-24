@@ -6,7 +6,7 @@
         -->
 		<NavigationButton ios:visibility="collapsed" icon="res://menu" tap="onDrawerButtonTap"></NavigationButton>
 		<ActionItem icon="res://navigation/menu" android:visibility="collapsed" tap="onDrawerButtonTap" ios.position="left"></ActionItem>
-		<Label class="action-bar-title" text="{{ i18NPageTitle }}"></Label>
+		<Label class="action-bar-title" text="{{ i18nPageTitle }}"></Label>
 	</ActionBar>
 	<StackLayout>
 		<parallax:ParallaxView height="75%" background="white">
@@ -49,13 +49,13 @@
 		</parallax:ParallaxView>
 		<GridLayout class="list-container button-row" rows="auto" columns="*,*">
 			<!-- Edit Doses Required Daily -->
-			<Button class="button my-button secondary" id="edit-total-required-doses" text="{{ i18NEditTotalDosesPerDayButtonText }}" visibility="{{ isEditingTotalDosesPerDay ? 'collapsed' : 'visible' }}" row="0" col="0" onTap="onEditTotalDosesPerDayTap" />
+			<Button class="button my-button secondary" id="edit-total-required-doses" text="{{ i18nEditTotalDosesPerDayButtonText }}" visibility="{{ isEditingTotalDosesPerDay ? 'collapsed' : 'visible' }}" row="0" col="0" onTap="onEditTotalDosesPerDayTap" />
 			<GridLayout rows="auto" columns="auto,*" visibility="{{ isEditingTotalDosesPerDay ? 'visible' : 'collapsed' }}" row="0" col="0">
 				<Button class="button my-button-small secondary" text="{{ i18nSaveButtonText }}" row="0" col="0" onTap="onSaveTotalDosesPerDayTap" />
 				<Button class="button my-button-small alert" text="{{ i18nCancelButtonText }}" row="0" col="1" onTap="onCancelTotalDosesPerDayTap" />
 			</GridLayout>
 			<!-- Edit Doses Taken Today -->
-			<Button class="button my-button primary" id="edit-doses-taken-today" text="{{ i18NEditDosesTakenTodayButtonText }}" visibility="{{ isEditingDosesTakenToday ? 'collapsed' : 'visible' }}" row="0" col="1" onTap="onEditDosesTakenTodayTap" />
+			<Button class="button my-button primary" id="edit-doses-taken-today" text="{{ i18nEditDosesTakenTodayButtonText }}" visibility="{{ isEditingDosesTakenToday ? 'collapsed' : 'visible' }}" row="0" col="1" onTap="onEditDosesTakenTodayTap" />
 			<GridLayout rows="auto" columns="auto,*" visibility="{{ isEditingDosesTakenToday ? 'visible' : 'collapsed' }}" row="0" col="1">
 				<Button class="button my-button-small primary" text="{{ i18nSaveButtonText }}" row="0" col="0" onTap="onSaveDosesTakenTodayTap" />
 				<Button class="button my-button-small alert" text="{{ i18nCancelButtonText }}" row="0" col="1" onTap="onCancelDosesTakenTodayTap" />

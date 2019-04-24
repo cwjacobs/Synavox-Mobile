@@ -6,7 +6,7 @@
         -->
 		<NavigationButton ios:visibility="collapsed" icon="res://menu" tap="onDrawerButtonTap"></NavigationButton>
 		<ActionItem icon="res://navigation/menu" android:visibility="collapsed" tap="onDrawerButtonTap" ios.position="left"></ActionItem>
-		<Label class="action-bar-title" text="{{ i18NPageTitle }}"></Label>
+		<Label class="action-bar-title" text="{{ i18nPageTitle }}"></Label>
 	</ActionBar>
 	<GridLayout class="page-content">
 		<parallax:ParallaxView controlsToFade="headerLabel,headerLabel2">
@@ -19,7 +19,7 @@
 				<Label id="titleLabel" text="Filtered Search"></Label>
 			</parallax:Anchored>
 			<parallax:Content class="body-template">
-				<Label class="title" text="{{ i18NMedicineListTitle }}"></Label>
+				<Label class="title" text="{{ i18nMedicineListTitle }}"></Label>
 				<StackLayout class="searchPageContent">
 					<FS:FilterSelect class="item" items="{{ myMedicineList }}" hint="Press Select to choose medicine" modal_title="My Medicines" search_param="medicineName" primary_key="tagId" change="{{ onSelect }}" />
 				</StackLayout>

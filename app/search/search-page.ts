@@ -11,8 +11,8 @@ import * as Utility from "../utility-functions/utility-functions";
 
 let viewModel: SearchViewModel = null;
 
-let i18NPageTitle: string = null;
-let i18NMedicineListTitle: string = null;
+let i18nPageTitle: string = null;
+let i18nMedicineListTitle: string = null;
 
 export function onNavigatingTo(args: NavigatedData) {
     const page = <Page>args.object;
@@ -45,16 +45,16 @@ function setActiveLanguageText(): void {
     let activeLanguage: string = Utility.Language.getActiveLanguage();
 
     if (activeLanguage === "english") {
-        i18NPageTitle = "Search";
-        i18NMedicineListTitle = "My Medicines";
+        i18nPageTitle = "Search";
+        i18nMedicineListTitle = "My Medicines";
     }
     else {
-        i18NPageTitle = "Búsqueda";
-        i18NMedicineListTitle = "Mis Medicamentos";
+        i18nPageTitle = "Búsqueda";
+        i18nMedicineListTitle = "Mis Medicamentos";
     }
 
-    viewModel.set("i18NPageTitle", i18NPageTitle);
-    viewModel.set("i18NMedicineListTitle", i18NMedicineListTitle);
+    viewModel.set("i18nPageTitle", i18nPageTitle);
+    viewModel.set("i18nMedicineListTitle", i18nMedicineListTitle);
 };
 
 

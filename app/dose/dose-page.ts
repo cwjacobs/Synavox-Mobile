@@ -18,6 +18,8 @@ import { confirm } from "tns-core-modules/ui/dialogs";
 import { MedicineBinding } from "~/data-models/medicine-binding";
 import { Button } from "tns-core-modules/ui/button/button";
 
+import { I18N } from "~/i18n/i18n";
+
 let medicineList: MedicineBinding[] = null;
 
 let page: Page = null;
@@ -26,15 +28,15 @@ let viewModel: DoseViewModel = null;
 let nfc: Nfc = null;
 let audioPlayer: AudioPlayer = null;
 
-// Page text
-let i18NPageTitle: string = null;
-let i18NMedicineNameHint: string = null;
+// Page texkCVPixelFormatComponentRange_FullRange
+let i18n = I18N.instance;
+let i18nPageTitle: string = null;
 let i18nDose: string = null;
 let i18nDailyInstructions: string = null;
 
 // Page control buttons
-let i18NEditDosesTakenTodayButtonText: string = null;
-let i18NEditTotalDosesPerDayButtonText: string = null;
+let i18nEditDosesTakenTodayButtonText: string = null;
+let i18nEditTotalDosesPerDayButtonText: string = null;
 
 // Editing buttons
 let isEditingAvailable: boolean = false;
@@ -215,7 +217,7 @@ export function onSaveTotalDosesPerDayTap() {
     displayCurrentDoses();
     displayCurrentListDoses();
 
-    i18nDisplayAdustedDosesPerDay(medicineList[index].dailyRequiredDoses);
+    displayDosesPerDay(medicineList[index].dailyRequiredDoses);
 
     setActiveLanguageText();
 }
@@ -239,7 +241,7 @@ export function onCancelTotalDosesPerDayTap() {
     displayCurrentDoses();
     displayCurrentListDoses();
 
-    i18nDisplayAdustedDosesPerDay(dailyRequiredDoses_old);
+    displayDosesPerDay(dailyRequiredDoses_old);
 
     setActiveLanguageText();
 }
@@ -298,7 +300,7 @@ export function onSaveDosesTakenTodayTap() {
     displayCurrentDoses();
     displayCurrentListDoses();
 
-    i18nDisplayAdustedDosesPerDay(medicineList[index].dailyRequiredDoses);
+    displayDosesPerDay(medicineList[index].dailyRequiredDoses);
 
     setActiveLanguageText();
 }
@@ -322,7 +324,7 @@ export function onCancelDosesTakenTodayTap() {
     displayCurrentDoses();
     displayCurrentListDoses();
 
-    i18nDisplayAdustedDosesPerDay(dailyRequiredDoses_old);
+    displayDosesPerDay(dailyRequiredDoses_old);
 
     setActiveLanguageText();
 }
@@ -367,7 +369,7 @@ function adustDailyDoseTaken(indicator: any): void {
 
     // Data store behind list is being updated, but we won't display it until save is pressed
     medicineList[index].dailyDoses = dailyDoses;
-    i18nDisplayAdustedDosesToday(dailyDoses);
+    displayDosesTaken(dailyDoses);
 }
 
 function adustDailyDoseRequirement(indicator: any) {
@@ -389,7 +391,7 @@ function adustDailyDoseRequirement(indicator: any) {
 
         // Data store behind list is being updated, but we won't display it until save is pressed
         medicineList[index].dailyRequiredDoses = dailyRequiredDoses;
-        i18nDisplayAdustedDosesPerDay(dailyRequiredDoses);
+        displayDosesPerDay(dailyRequiredDoses);
     }
 }
 
@@ -519,7 +521,7 @@ export function onItemTap(args: ItemEventData) {
     displayCurrentDoses();
 
     // Display dose instructions
-    i18nDisplayAdustedDosesPerDay(medicineList[args.index].dailyRequiredDoses);
+    displayDosesPerDay(medicineList[args.index].dailyRequiredDoses);
 
     let audioPath = Utility.Language.getAudioPath(medicineName);
     AudioPlayer.useAudio(audioPath);
@@ -591,146 +593,35 @@ function findMedicineNameIndex(medicineName: string, medicineBindingList: Medici
 }
 
 function setActiveLanguageText(): void {
-    let activeLanguage: string = Utility.Language.getActiveLanguage();
+    viewModel.set("i18nPageTitle", i18n.dose);
 
-    if (activeLanguage === "english") {
-        i18nDose = "Dose";
-        i18NPageTitle = "Dose";
-        i18NMedicineNameHint = "Select medicine";
-        i18NEditTotalDosesPerDayButtonText = "Edit Total Doses per Day";
-        i18NEditDosesTakenTodayButtonText = "Edit Doses Taken Today";
-    }
-    else {
-        i18nDose = "Dosis";
-        i18NPageTitle = "Dosis";
-        i18NMedicineNameHint = "Seleccione la medicina";
-        i18NEditTotalDosesPerDayButtonText = "Editar dosis totales por día";
-        i18NEditDosesTakenTodayButtonText = "Editar dosis tomadas hoy";
-    }
+    viewModel.set("i18nDose", i18n.dose);
 
-    viewModel.set("i18NPageTitle", i18NPageTitle);
-    viewModel.set("i18NMedicineNameHint", i18NMedicineNameHint);
-
-    viewModel.set("i18nDose", i18nDose);
-    // viewModel.set("i18nDailyInstructions", i18nDailyInstructions);
-
-    viewModel.set("i18NEditTotalDosesPerDayButtonText", i18NEditTotalDosesPerDayButtonText);
-    viewModel.set("i18NEditDosesTakenTodayButtonText", i18NEditDosesTakenTodayButtonText);
+    viewModel.set("i18nEditTotalDosesPerDayButtonText", i18n.changeDosesPerDay);
+    
+    viewModel.set("i18nEditDosesTakenTodayButtonText", i18n.changeDosesTaken);
 }
 
-function i18nDisplayAdustedDosesToday(dosesPerDay: number): void {
-
-    let dosesPerDayInstructionList: string[];
-
-    let enDosesPerDayInstructionList: string[] = [
-        "Take as needed",
-        "Took one dose today",
-        "Took two doses today",
-        "Took three doses today",
-        "Took four doses today",
-        "Took Five doses today",
-    ];
-
-    let spDosesPerDayInstructionList: string[] = [
-        "Tome según sea necesario",
-        "Tomó una dosis hoy",
-        "Tomó dos dosis hoy",
-        "Tomó tres dosis hoy",
-        "Tomó cuatro dosis hoy",
-        "Tomó cinco dosis hoy",
-    ];
-
-    if (Utility.Language.getActiveLanguage() === "english") {
-        dosesPerDayInstructionList = enDosesPerDayInstructionList;
-    }
-    else {
-        dosesPerDayInstructionList = spDosesPerDayInstructionList;
-    }
-
-    if (dosesPerDay > 5) {
-        dosesPerDay = 0; // Does greater than 5 per day are "take as needed" - 1st array element
-    }
-    let dosesPerDayInstructions = dosesPerDayInstructionList[dosesPerDay];
-    viewModel.set("i18nDailyInstructions", dosesPerDayInstructions);
+function displayDosesTaken(dosesTaken: number): void {
+    let dosesTakenText = i18n.dosesTaken(dosesTaken);
+    viewModel.set("i18nDailyInstructions", dosesTakenText);
 }
 
-function i18nDisplayAdustedDosesPerDay(dosesPerDay: number): void {
-
-    let dosesPerDayInstructionList: string[];
-
-    let enDosesPerDayInstructionList: string[] = [
-        "Take as needed",
-        "Take once daily",
-        "Take twice daily",
-        "Take three times daily",
-        "Take four times daily",
-        "Take five times daily",
-    ];
-
-    let spDosesPerDayInstructionList: string[] = [
-        "Tome según sea necesario",
-        "Tome una vez al día",
-        "Tome dos veces al día",
-        "Tome tres veces al día",
-        "Tome cuatro veces al día",
-        "Tome cinco veces al día",
-    ];
-
-    if (Utility.Language.getActiveLanguage() === "english") {
-        dosesPerDayInstructionList = enDosesPerDayInstructionList;
-    }
-    else {
-        dosesPerDayInstructionList = spDosesPerDayInstructionList;
-    }
-
-    if (dosesPerDay > 5) {
-        dosesPerDay = 0; // Does greater than 5 per day are "take as needed" - 1st array element
-    }
-    let dosesPerDayInstructions = dosesPerDayInstructionList[dosesPerDay];
-    viewModel.set("i18nDailyInstructions", dosesPerDayInstructions);
+function displayDosesPerDay(dosesPerDay: number): void {
+    let dosesPerDayText = i18n.dosesPerDay(dosesPerDay);
+    viewModel.set("i18nDailyInstructions", dosesPerDayText);
 }
 
 function getI18nSaveButtonText(): string {
-    let text: string;
-    if (Utility.Language.getActiveLanguage() === "english") {
-        text = "Save";
-    }
-    else {
-        text = "Salvar";
-    }
-    return text;
+    return i18n.save;
 }
 
 function getI18nCancelButtonText(): string {
-    let text: string;
-    if (Utility.Language.getActiveLanguage() === "english") {
-        text = "Cancel";
-    }
-    else {
-        text = "Cancelar";
-    }
-    return text;
-}
-
-function getI18NMedReplacedMsg(medicineName: string): string {
-    let confirmMsg: string;
-    if (Utility.Language.getActiveLanguage() === "english") {
-        confirmMsg = "Pairing of " + medicineName + " has been updated";
-    }
-    else {
-        confirmMsg = "El emparejamiento de " + medicineName + " se ha actualizado";
-    }
-    return confirmMsg;
+    return i18n.cancel;
 }
 
 function getI18NConfirmMsg(medicineName: string): string {
-    let confirmMsg: string;
-    if (Utility.Language.getActiveLanguage() === "english") {
-        confirmMsg = "Please confirm one dose of " + medicineName;
-    }
-    else {
-        confirmMsg = "Por favor, confirme una dosis de " + medicineName;
-    }
+    let confirmMsg: string = i18n.doseTakenConfirmMsg(medicineName);
     return confirmMsg;
 }
 

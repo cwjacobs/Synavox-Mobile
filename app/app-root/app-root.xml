@@ -19,32 +19,32 @@ http://docs.telerik.com/devtools/nativescript-ui/Controls/NativeScript/SideDrawe
 				<StackLayout class="sidedrawer-content">
 					<GridLayout columns="auto, *" class="{{ 'sidedrawer-list-item' + (selectedPage === 'Home' ? ' selected': '') }}" route="home/home-page" title="Home" tap="onNavigationItemTap">
 						<Label row="0" col="0" text="&#xf129;" class="fa" />
-						<Label row="0" col="1" text="{{ i18NHome }}" class="p-r-10" />
+						<Label row="0" col="1" text="{{ i18nHome }}" class="p-r-10" />
 					</GridLayout>
 					<GridLayout columns="auto, *" class="{{ 'sidedrawer-list-item' + (selectedPage === 'Dose' ? ' selected': '') }}" route="dose/dose-page" title="Dose" tap="onNavigationItemTap">
 						<Label row="0" col="0" text="&#xf490;" class="fa fas fa-tablets" />
-						<Label row="0" col="1" text="{{ i18NDose }}" class="p-r-10" />
+						<Label row="0" col="1" text="{{ i18nDose }}" class="p-r-10" />
 					</GridLayout>
 					<GridLayout columns="auto, *" class="{{ 'sidedrawer-list-item' + (selectedPage === 'Pair' ? ' selected': '') }}" route="pair/pair-page" title="Pair" tap="onNavigationItemTap">
 						<Label row="0" col="0" text="&#xf02b;" class="fa" />
-						<Label row="0" col="1" text="{{ i18NPair }}" class="p-r-10" />
+						<Label row="0" col="1" text="{{ i18nPair }}" class="p-r-10" />
 					</GridLayout>
 					<GridLayout columns="auto, *" class="{{ 'sidedrawer-list-item' + (selectedPage === 'Share' ? ' selected': '') }}" route="share/share-page" title="Share" tap="onNavigationItemTap">
 						<Label row="0" col="0" text="&#xf064;" class="fa" />
-						<Label row="0" col="1" text="{{ i18NShare }}" class="p-r-10" />
+						<Label row="0" col="1" text="{{ i18nShare }}" class="p-r-10" />
 					</GridLayout>
 					<GridLayout columns="auto, *" class="{{ 'sidedrawer-list-item' + (selectedPage === 'Browse' ? ' selected': '') }}" route="browse/browse-page" title="Browse" tap="onNavigationItemTap">
 						<Label row="0" col="0" text="&#xf1ea;" class="fa" />
-						<Label row="0" col="1" text="{{ i18NBrowse }}" class="p-r-10" />
+						<Label row="0" col="1" text="{{ i18nBrowse }}" class="p-r-10" />
 					</GridLayout>
 					<GridLayout columns="auto, *" class="{{ 'sidedrawer-list-item' + (selectedPage === 'Search' ? ' selected': '') }}" route="search/search-page" title="Search" tap="onNavigationItemTap">
 						<Label row="0" col="0" text="&#xf002;" class="fa" />
-						<Label row="0" col="1" text="{{ i18NSearch }}" class="p-r-10" />
+						<Label row="0" col="1" text="{{ i18nSearch }}" class="p-r-10" />
 					</GridLayout>
 					<StackLayout class="hr-light"></StackLayout>
 					<GridLayout columns="auto, *" class="{{ 'sidedrawer-list-item' + (selectedPage === 'Settings' ? ' selected': '') }}" route="settings/settings-page" title="Settings" tap="onNavigationItemTap">
 						<Label row="0" col="0" text="&#xf013;" class="fa" />
-						<Label row="0" col="1" text="{{ i18Settings }}" class="p-r-10" />
+						<Label row="0" col="1" text="{{ i18nSettings }}" class="p-r-10" />
 					</GridLayout>
 				</StackLayout>
 			</ScrollView>

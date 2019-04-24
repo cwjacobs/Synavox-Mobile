@@ -6,7 +6,7 @@
         -->
 		<NavigationButton ios:visibility="collapsed" icon="res://menu" tap="onDrawerButtonTap"></NavigationButton>
 		<ActionItem icon="res://navigation/menu" android:visibility="collapsed" tap="onDrawerButtonTap" ios.position="left"></ActionItem>
-		<Label class="action-bar-title" text="{{ i18NPageTitle }}"></Label>
+		<Label class="action-bar-title" text="{{ i18nPageTitle }}"></Label>
 	</ActionBar>
 	<StackLayout>
 		<!-- height="75%" Positions buttons correctly on the bottom of the screen -->
@@ -18,7 +18,7 @@
 						<Label text="Tag Id: " />
 						<Label text="{{ currentTagId }}" />
 					</StackLayout>
-					<TextField class="pairing-MedicineName" text="{{ currentMedicineName }}" hint="{{ i18NMedicineNameHint }}" returnKeyType="done" />
+					<TextField class="pairing-MedicineName" text="{{ currentMedicineName }}" hint="{{ i18nMedicineNameHint }}" returnKeyType="done" />
 				</StackLayout>
 			</parallax:Anchored>
 			<parallax:Content class="body-template" height="550vh" stretchLastChild="false" background="white">
@@ -41,9 +41,9 @@
 			</parallax:Content>
 		</parallax:ParallaxView>
 		<GridLayout class="list-container pair-button-row" rows="auto" columns="*,*,auto">
-			<Button class="my-button alert fa" text="{{ i18NDeleteButtonText, i18NDeleteButtonText + ' &#xf014;' }} " onTap="onDeleteTap" row="0" col="0" />
-			<Button class="my-button primary fa" text="{{ i18NSaveButtonText, i18NSaveButtonText + ' &#xf0c7;' }}" onTap="onSaveTap" row="0" col="1" />
-			<Button class="my-button secondary fa" text="{{ i18NCancelButtonText, i18NCancelButtonText + ' &#xf05e;' }}" onTap="onCancelTap" row="0" col="2" />
+			<Button class="my-button alert fa" text="{{ i18nDeleteButtonText, i18nDeleteButtonText + ' &#xf014;' }} " onTap="onDeleteTap" row="0" col="0" />
+			<Button class="my-button primary fa" text="{{ i18nSaveButtonText, i18nSaveButtonText + ' &#xf0c7;' }}" onTap="onSaveTap" row="0" col="1" />
+			<Button class="my-button secondary fa" text="{{ i18nCancelButtonText, i18nCancelButtonText + ' &#xf05e;' }}" onTap="onCancelTap" row="0" col="2" />
 		</GridLayout>
 		<StackLayout class="hr-light"></StackLayout>
 		<GridLayout class="list-container audio-button-row" rows="70" columns="*,*,*">

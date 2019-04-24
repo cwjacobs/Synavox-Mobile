@@ -9,13 +9,13 @@ import { AppRootViewModel } from "./app-root-view-model";
 let viewModel: AppRootViewModel = null;
 
 // I-18-N
-let i18NHome: string = null;
-let i18NDose: string = null;
-let i18NPair: string = null;
-let i18NShare: string = null;
-let i18NBrowse: string = null;
-let i18NSearch: string = null;
-let i18Settings: string = null;
+let i18nHome: string = null;
+let i18nDose: string = null;
+let i18nPair: string = null;
+let i18nShare: string = null;
+let i18nBrowse: string = null;
+let i18nSearch: string = null;
+let i18nSettings: string = null;
 
 
 export function onNavigatingTo(args: EventData): void {
@@ -50,30 +50,30 @@ export function onNavigationItemTap(args: EventData): void {
 
 export function appRootI18N(activeLanguage: string): void {
     if (activeLanguage === "english") {
-        i18NHome = "Home";
-        i18NDose = "Dose";
-        i18NPair = "Pair";
-        i18NShare = "Share";
-        i18NBrowse = "Browse";
-        i18NSearch = "Search";
-        i18Settings = "Settings";
+        i18nHome = "Home";
+        i18nDose = "Dose";
+        i18nPair = "Pair";
+        i18nShare = "Share";
+        i18nBrowse = "Browse";
+        i18nSearch = "Search";
+        i18nSettings = "Settings";
     }
     else {
-        i18NHome = "Pantalla de Inicio";
-        i18NDose = "Dosis";
-        i18NPair = "Partido";
-        i18NShare = "Compartir";
-        i18NBrowse = "Navega";
-        i18NSearch = "Búsqueda";
-        i18Settings = "Configuración";
+        i18nHome = "Pantalla de Inicio";
+        i18nDose = "Dosis";
+        i18nPair = "Partido";
+        i18nShare = "Compartir";
+        i18nBrowse = "Navega";
+        i18nSearch = "Búsqueda";
+        i18nSettings = "Configuración";
     }
 
-    viewModel.set("i18NHome", i18NHome);
-    viewModel.set("i18NDose", i18NDose);
-    viewModel.set("i18NPair", i18NPair);
-    viewModel.set("i18NShare", i18NShare);
-    viewModel.set("i18NBrowse", i18NBrowse);
-    viewModel.set("i18NSearch", i18NSearch);
-    viewModel.set("i18Settings", i18Settings);
+    viewModel.set("i18nHome", i18nHome);
+    viewModel.set("i18nDose", i18nDose);
+    viewModel.set("i18nPair", i18nPair);
+    viewModel.set("i18nShare", i18nShare);
+    viewModel.set("i18nBrowse", i18nBrowse);
+    viewModel.set("i18nSearch", i18nSearch);
+    viewModel.set("i18nSettings", i18nSettings);
 }
 
