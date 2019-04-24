@@ -165,7 +165,7 @@ function setActiveLanguageText(): void {
     viewModel.set("i18nEnglishButtonText", i18nEnglishButtonText);
     viewModel.set("i18nSpanishButtonText", i18nSpanishButtonText);
 
-    appRootI18N(activeLanguage);
+    appRootI18N();
 };
 
 function findMedicineNameIndex(medicineName: string): number {

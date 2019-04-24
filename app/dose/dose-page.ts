@@ -28,7 +28,7 @@ let viewModel: DoseViewModel = null;
 let nfc: Nfc = null;
 let audioPlayer: AudioPlayer = null;
 
-// Page texkCVPixelFormatComponentRange_FullRange
+// Page Text
 let i18n = I18N.instance;
 let i18nPageTitle: string = null;
 let i18nDose: string = null;

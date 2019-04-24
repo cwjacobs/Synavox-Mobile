@@ -37,6 +37,46 @@ export class I18N {
     }
 
     /**
+     * Page Navigation
+     */
+
+    public get homeNav() {
+        const text: string[] = ["Home", "Pantalla de Inicio"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get doseNav() {
+        const text: string[] = ["Dose", "Dosis"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get pairNav() {
+        const text: string[] = ["Pair", "Partido"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get shareNav() {
+        const text: string[] = ["Share", "Compartir"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get browseNav() {
+        const text: string[] = ["Browse", "Navega"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get searchNav() {
+        const text: string[] = ["Search", "Búsqueda"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get settingsNav() {
+        const text: string[] = ["Settings", "Configuración"];
+        return text[this._activeLanguageIndex];
+    }
+
+
+    /**
      * Shared
      */
 
@@ -49,6 +89,11 @@ export class I18N {
         const text: string[] = ["Cancel", "Cancelar"];
         return text[this._activeLanguageIndex];
     }
+
+
+    /**
+     * Home Page
+     */
 
 
     /**

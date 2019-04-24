@@ -6,17 +6,12 @@ import { GridLayout } from "tns-core-modules/ui/layouts/grid-layout";
 
 import { AppRootViewModel } from "./app-root-view-model";
 
+import { I18N } from "~/i18n/i18n";
+
 let viewModel: AppRootViewModel = null;
 
 // I-18-N
-let i18nHome: string = null;
-let i18nDose: string = null;
-let i18nPair: string = null;
-let i18nShare: string = null;
-let i18nBrowse: string = null;
-let i18nSearch: string = null;
-let i18nSettings: string = null;
-
+let i18n = I18N.instance;
 
 export function onNavigatingTo(args: EventData): void {
 }
@@ -26,7 +21,7 @@ export function onLoaded(args: EventData): void {
     viewModel = new AppRootViewModel();
     drawerComponent.bindingContext = viewModel;
 
-    appRootI18N("english");
+    appRootI18N();
 }
 
 export function onNavigationItemTap(args: EventData): void {
@@ -48,32 +43,13 @@ export function onNavigationItemTap(args: EventData): void {
     drawerComponent.closeDrawer();
 }
 
-export function appRootI18N(activeLanguage: string): void {
-    if (activeLanguage === "english") {
-        i18nHome = "Home";
-        i18nDose = "Dose";
-        i18nPair = "Pair";
-        i18nShare = "Share";
-        i18nBrowse = "Browse";
-        i18nSearch = "Search";
-        i18nSettings = "Settings";
-    }
-    else {
-        i18nHome = "Pantalla de Inicio";
-        i18nDose = "Dosis";
-        i18nPair = "Partido";
-        i18nShare = "Compartir";
-        i18nBrowse = "Navega";
-        i18nSearch = "Búsqueda";
-        i18nSettings = "Configuración";
-    }
-
-    viewModel.set("i18nHome", i18nHome);
-    viewModel.set("i18nDose", i18nDose);
-    viewModel.set("i18nPair", i18nPair);
-    viewModel.set("i18nShare", i18nShare);
-    viewModel.set("i18nBrowse", i18nBrowse);
-    viewModel.set("i18nSearch", i18nSearch);
-    viewModel.set("i18nSettings", i18nSettings);
+export function appRootI18N(): void {
+    viewModel.set("i18nHome", i18n.homeNav);
+    viewModel.set("i18nDose", i18n.doseNav);
+    viewModel.set("i18nPair", i18n.pairNav);
+    viewModel.set("i18nShare", i18n.shareNav);
+    viewModel.set("i18nBrowse", i18n.browseNav);
+    viewModel.set("i18nSearch", i18n.searchNav);
+    viewModel.set("i18nSettings", i18n.settingsNav);
 }
 
