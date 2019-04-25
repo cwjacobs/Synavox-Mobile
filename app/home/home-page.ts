@@ -22,12 +22,8 @@ let page: Page = null;
 let viewModel: HomeViewModel = null;
 let medicineList: MedicineBinding[] = null;
 
-let i18n = I18N.instance;
-
-let i18nPageTitle: string = null;
-let i18nMedicineListTitle: string = null;
-let i18nEnglishButtonText: string = null;
-let i18nSpanishButtonText: string = null;
+// Singleton class providing english and spanish text
+let i18n = null;
 
 // Audio controls and buttons
 let isAudioActive: boolean = false;
@@ -54,6 +50,11 @@ export function onLoaded() {
 
     if (audioPlayer === null) {
         audioPlayer = new AudioPlayer();
+    }
+
+    if (i18n === null) {
+        i18n = I18N.instance; // Also will set active language to the default value (defined in I18N)
+        // Utility.Language.setActiveLanguage("english");
     }
 
     isAudioActive = false;
@@ -84,12 +85,7 @@ function onTagDiscoveredListener(nfcTagData: NfcTagData) {
             AudioPlayer.play();
         }
         else {
-            if (Utility.Language.getActiveLanguage() === "english") {
-                alert("New tag scanned, use 'Pair' screen to associate with a medicine");
-            }
-            else {
-                alert("Nueva etiqueta escaneada, utilice la pantalla 'Pair' para asociarse con un medicamento");
-            }
+            alert(i18n.newTagAlert);
         }
     }
 }
@@ -108,14 +104,12 @@ export function onItemTap(args: ItemEventData) {
 }
 
 export function onEnglishTap() {
-    i18n.activeLanguage = "English";
-    Utility.Language.setActiveLanguage("english");
+    i18n.activeLanguage = "english";
     setActiveLanguageText();
 };
 
 export function onSpanishTap() {
-    i18n.activeLanguage = "Spanish";
-    Utility.Language.setActiveLanguage("spanish");
+    i18n.activeLanguage = "spanish";
     setActiveLanguageText();
 };
 
@@ -145,26 +139,12 @@ export function onAudioEnableTap(args: ItemEventData) {
 };
 
 function setActiveLanguageText(): void {
-    let activeLanguage: string = Utility.Language.getActiveLanguage();
+    viewModel.set("i18nPageTitle", i18n.homePageTitle);
+    viewModel.set("i18nMedicineListTitle", i18n.myMedicines);
+    viewModel.set("i18nEnglishButtonText", i18n.english);
+    viewModel.set("i18nSpanishButtonText", i18n.spanish);
 
-    if (activeLanguage === "english") {
-        i18nPageTitle = "Home Pharmacist";
-        i18nMedicineListTitle = "My Medicines";
-        i18nEnglishButtonText = "English";
-        i18nSpanishButtonText = "Español";
-    }
-    else {
-        i18nPageTitle = "Farmacéutico de Casa";
-        i18nMedicineListTitle = "Mis Medicamentos";
-        i18nEnglishButtonText = "English";
-        i18nSpanishButtonText = "Español";
-    }
-
-    viewModel.set("i18nPageTitle", i18nPageTitle);
-    viewModel.set("i18nMedicineListTitle", i18nMedicineListTitle);
-    viewModel.set("i18nEnglishButtonText", i18nEnglishButtonText);
-    viewModel.set("i18nSpanishButtonText", i18nSpanishButtonText);
-
+    // Call nav page to update nav text
     appRootI18N();
 };
 

@@ -14,6 +14,7 @@ import { Nfc, NfcTagData } from "nativescript-nfc";
 
 // For Dialogs Branch
 import { confirm } from "tns-core-modules/ui/dialogs";
+import { I18N } from "~/i18n/i18n";
 
 let medicineList: MedicineBinding[] = null;
 
@@ -24,14 +25,8 @@ let nfc: Nfc = null;
 let isTagIdLocked: boolean;
 let audioPlayer: AudioPlayer = null;
 
-// Page text
-let i18nPageTitle: string = null;
-let i18nMedicineNameHint: string = null;
-
-// Page control buttons
-let i18nSaveButtonText: string = null;
-let i18nCancelButtonText: string = null;
-let i18nDeleteButtonText: string = null;
+// Page Text
+let i18n = I18N.instance;
 
 // Audio controls and buttons
 let isAudioActive: boolean = false;
@@ -154,7 +149,7 @@ export function onDeleteTap(args: ItemEventData) {
         return;
     }
 
-    let confirmMsg: string = getI18NConfirmMsg(binding.medicineName);
+    let confirmMsg: string = getParingUpdatConfirmMsg(binding.medicineName);
     confirm(confirmMsg).then((isConfirmed) => {
         if (isConfirmed) {
             let index: number = findMedicineNameIndex(binding.medicineName);
@@ -190,7 +185,7 @@ export function onSaveTap(args: ItemEventData) {
 
     if (index != -1) { // Replace current binding
         medicineList[index] = binding;
-        alert(getI18NMedReplacedMsg(binding.medicineName));
+        alert(getPairingUpdatedMsg(binding.medicineName));
     }
     else {
         index = findTagIdIndex(binding.tagId);
@@ -285,49 +280,19 @@ function findTagIdIndex(tagId: string): number {
 }
 
 function setActiveLanguageText(): void {
-    let activeLanguage: string = Utility.Language.getActiveLanguage();
-
-    if (activeLanguage === "english") {
-        i18nPageTitle = "Pair";
-        i18nMedicineNameHint = "Enter Medicine Name";
-        i18nDeleteButtonText = "Delete";
-        i18nSaveButtonText = "Save";
-        i18nCancelButtonText = "Cancel";
-
-    }
-    else {
-        i18nPageTitle = "Partido";
-        i18nMedicineNameHint = "Ingrese el nombre del medicamento";
-        i18nDeleteButtonText = "Eliminar";
-        i18nSaveButtonText = "Salvar";
-        i18nCancelButtonText = "Cancelar";
-    }
-
-    viewModel.set("i18nPageTitle", i18nPageTitle);
-    viewModel.set("i18nMedicineNameHint", i18nMedicineNameHint);
-    viewModel.set("i18nSaveButtonText", i18nSaveButtonText);
-    viewModel.set("i18nCancelButtonText", i18nCancelButtonText);
-    viewModel.set("i18nDeleteButtonText", i18nDeleteButtonText);
+    viewModel.set("i18nPageTitle", i18n.pairPageTitle);
+    viewModel.set("i18nMedicineNameHint", i18n.pairMedicineNameHint);
+    viewModel.set("i18nSaveButtonText", i18n.save);
+    viewModel.set("i18nCancelButtonText", i18n.cancel);
+    viewModel.set("i18nDeleteButtonText", i18n.delete);
 }
 
-function getI18NMedReplacedMsg(medicineName: string): string {
-    let confirmMsg: string;
-    if (Utility.Language.getActiveLanguage() === "english") {
-        confirmMsg = "Pairing of " + medicineName + " has been updated";
-    }
-    else {
-        confirmMsg = "El emparejamiento de " + medicineName + " se ha actualizado";
-    }
+function getPairingUpdatedMsg(medicineName: string): string {
+    let confirmMsg: string = i18n.getParingUpdatedMsg(medicineName);
     return confirmMsg;
 }
 
-function getI18NConfirmMsg(medicineName: string): string {
-    let confirmMsg: string;
-    if (Utility.Language.getActiveLanguage() === "english") {
-        confirmMsg = "Are you sure you want to delete the " + medicineName + " pairing?";
-    }
-    else {
-        confirmMsg = "¿Está seguro de que desea eliminar el emparejamiento " + medicineName + " ?";
-    }
+function getParingUpdatConfirmMsg(medicineName: string): string {
+    let confirmMsg: string = i18n.getParingUpdatConfirmMsg(medicineName);
     return confirmMsg;
 }

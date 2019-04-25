@@ -8,8 +8,12 @@ import { MedicineBinding } from "../data-models/medicine-binding";
 import { SearchViewModel } from "./search-view-model";
 import * as Test from "../data-models/test-data";
 import * as Utility from "../utility-functions/utility-functions";
+import { I18N } from "~/i18n/i18n";
 
 let viewModel: SearchViewModel = null;
+
+// Page Text
+let i18n = I18N.instance;
 
 let i18nPageTitle: string = null;
 let i18nMedicineListTitle: string = null;
@@ -42,9 +46,7 @@ export function onSearchTapped(args: EventData) {
 }
 
 function setActiveLanguageText(): void {
-    let activeLanguage: string = Utility.Language.getActiveLanguage();
-
-    if (activeLanguage === "english") {
+    if (i18n.activeLanguage === "english") {
         i18nPageTitle = "Search";
         i18nMedicineListTitle = "My Medicines";
     }

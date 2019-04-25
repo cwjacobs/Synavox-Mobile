@@ -30,13 +30,6 @@ let audioPlayer: AudioPlayer = null;
 
 // Page Text
 let i18n = I18N.instance;
-let i18nPageTitle: string = null;
-let i18nDose: string = null;
-let i18nDailyInstructions: string = null;
-
-// Page control buttons
-let i18nEditDosesTakenTodayButtonText: string = null;
-let i18nEditTotalDosesPerDayButtonText: string = null;
 
 // Editing buttons
 let isEditingAvailable: boolean = false;
@@ -46,7 +39,6 @@ let isEditingTotalDosesPerDay: boolean = false;
 // Audio controls and buttons
 let isAudioActive: boolean = false;
 let isAudioEnabled: boolean = false;
-
 
 let primaryOn: string = "#3A53FF";
 let primaryOff: string = "#c1c8f8";
@@ -593,9 +585,9 @@ function findMedicineNameIndex(medicineName: string, medicineBindingList: Medici
 }
 
 function setActiveLanguageText(): void {
-    viewModel.set("i18nPageTitle", i18n.dose);
+    viewModel.set("i18nPageTitle", i18n.dosePageTitle);
 
-    viewModel.set("i18nDose", i18n.dose);
+    viewModel.set("i18nDose", i18n.dosePageTitle);
 
     viewModel.set("i18nEditTotalDosesPerDayButtonText", i18n.changeDosesPerDay);
     

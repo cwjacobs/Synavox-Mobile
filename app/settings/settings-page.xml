@@ -11,21 +11,21 @@
         because its function is to always navigate back in the application.
         -->
 		<ActionItem icon="res://navigation/menu" android:visibility="collapsed" tap="onDrawerButtonTap" ios.position="left"></ActionItem>
-		<Label class="action-bar-title fa" text="{{ i18NPageTitle }}"></Label>
+		<Label class="action-bar-title fa" text="{{ i18nPageTitle }}"></Label>
 	</ActionBar>
 	<GridLayout class="page-content">
 		<StackLayout>
 			<image src="~/images/settings.jpg" width="100%" height="auto" />
-			<Label class="title settings-content fa" text="{{ i18NLanguageOptionsTitle, i18NLanguageOptionsTitle + ' &#xf1ab;' }}"></Label>
-			<Label class="subtitle settings-content" text="{{ i18NActiveLanguageText }}"></Label>
-			<Label class="subtitle settings-content" text="{{ i18NInstalledLanguagesText }}"></Label>
+			<Label class="title settings-content fa" text="{{ i18nLanguageOptionsTitle, i18nLanguageOptionsTitle + ' &#xf1ab;' }}"></Label>
+			<Label class="subtitle settings-content" text="{{ i18nActiveLanguageText }}"></Label>
+			<Label class="subtitle settings-content" text="{{ i18nInstalledLanguagesText }}"></Label>
 			<GridLayout class="button-row" rows="*,*" columns="*,*">
-				<Button class="my-button" style="{{ isEnButtonEnabled ? 'background-color: #3A53FF' : 'background-color: #3A53FF' }}" isEnabled="{{ isEnButtonEnabled }}" text="{{ i18NEnglishButtonText }}" row="0" col="0" onTap="onEnglishTap" />
-				<Label class="indicator fa" text="&#xf046; Enabled" row="0" col="1" visibility= "{{ isEnglishEnabled ? 'visible' : 'collapsed' }}"/>
-				<Button class="my-button" style="{{ isSpButtonEnabled ? 'background-color: #398881' : 'background-color: #398881' }}" isEnabled="{{ isSpButtonEnabled }}" text="{{ i18NSpanishButtonText }}" row="1" col="0" onTap="onSpanishTap" />
-				<Label class="indicator fa" text="&#xf046; Habilitado" row="1" col="2" visibility= "{{ isSpanishEnabled ? 'visible' : 'collapsed' }}" />
+				<Button class="my-button" style="{{ isEnButtonEnabled ? 'background-color: #3A53FF' : 'background-color: #91a0ff' }}" isEnabled="{{ isEnButtonEnabled }}" text="{{ i18nEnglishButtonText }}" row="0" col="0" onTap="onEnglishTap" />
+				<Label class="indicator fa" style="{{ isEnglishEnabled ? 'color: #000000' : 'color: #AAAAAA' }}" text="&#xf046; Enabled" row="0" col="1" />
+				<Button class="my-button" style="{{ isSpButtonEnabled ? 'background-color: #398881' : 'background-color: #79c8c1' }}" isEnabled="{{ isSpButtonEnabled }}" text="{{ i18nSpanishButtonText }}" row="1" col="0" onTap="onSpanishTap" />
+				<Label class="indicator fa" style="{{ isSpanishEnabled ? 'color: #000000' : 'color: #AAAAAA' }}" text="&#xf046; Habilitado" row="1" col="2" />
 			</GridLayout>
-			<Label class="fa footer" textWrap="true" text="{{ i18NEnableLanguageInstructionsText , '&#xf0eb; ' + i18NEnableLanguageInstructionsText }}" />
+			<Label class="fa footer" textWrap="true" text="{{ i18nEnableLanguageInstructionsText , '&#xf0eb; ' + i18nEnableLanguageInstructionsText }}" />
 			<Label class="subtitle settings-content" text="NFC:"></Label>
 			<GridLayout class="button-row" rows="*,*" columns="*,*">
 				<Button class="button alert fa" text="&#xf02b;  NFC (RFID)" row="0" col="0" onTap="onRfidTap" />

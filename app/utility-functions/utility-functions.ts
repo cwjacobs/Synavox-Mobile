@@ -11,6 +11,10 @@ import * as fs from 'tns-core-modules/file-system';
 
 import * as Test from "../data-models/test-data";
 import { MedicineBinding } from "~/data-models/medicine-binding";
+import { I18N } from "~/i18n/i18n";
+
+// Page Text
+let i18n = I18N.instance;
 
 export namespace Rfid {
     let nfc: Nfc = null;
@@ -173,27 +177,10 @@ export namespace Language {
         [key: string]: string;
     }
 
-    const defaultLanguage: string = "english";
     const lanugageDirectoryRoot: string = "~/audio/";
 
-    let activeLanguage: string = null;
     let isEnglishEnabled: boolean = true;
     let isSpanishEnabled: boolean = false;
-
-    export function getDefaultLanguage(): string {
-        return defaultLanguage.toLowerCase();
-    }
-
-    export function getActiveLanguage(): string {
-        if (activeLanguage == null) {
-            activeLanguage = getDefaultLanguage();
-        }
-        return activeLanguage;
-    }
-
-    export function setActiveLanguage(language: string): void {
-        activeLanguage = language.toLowerCase();
-    }
 
     export function getIsEnglishEnabled(): boolean {
         return isEnglishEnabled;
@@ -203,7 +190,8 @@ export namespace Language {
         isEnglishEnabled = !isEnglishEnabled;
 
         if (!isEnglishEnabled) { // Must have at least one enabled & active language
-            setActiveLanguage("spanish");
+            i18n.activeLanguage = "spanish";
+
         }
         return isEnglishEnabled;
     }
@@ -216,7 +204,7 @@ export namespace Language {
         isSpanishEnabled = !isSpanishEnabled;
 
         if (!isSpanishEnabled) { // Must have at least one enabled & active language
-            setActiveLanguage("english");
+            i18n.activeLanguage = "english";
         }
         return isSpanishEnabled;
     }
@@ -233,7 +221,7 @@ export namespace Language {
         // let languageDirectory: string = languageMap[language];
 
         let languageDirectory: string;
-        let activeLanguage: string = getActiveLanguage();
+        let activeLanguage: string = i18n.activeLanguage;
         if (activeLanguage === "english") {
             languageDirectory = "en/";
         }

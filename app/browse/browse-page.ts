@@ -15,6 +15,7 @@ import * as Utility from "../utility-functions/utility-functions";
 import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
 import { topmost } from "tns-core-modules/ui/frame/frame";
 import { AppRootViewModel } from "~/app-root/app-root-view-model";
+import { I18N } from "~/i18n/i18n";
 
 let page: Page = null;
 let viewModel: BrowseViewModel = null;
@@ -28,10 +29,13 @@ let isUserBrowsing: boolean;
 
 let webViewSrcModel = null;
 
-let i18nPageTitle: string = null;
-let i18nMedicineListTitle: string = null;
-let i18nBackButtonText: string = null;
-let i18nSaveButtonText: string = null;
+// Page Text
+let i18n = I18N.instance;
+
+// let i18nPageTitle: string = null;
+// let i18nMedicineListTitle: string = null;
+// let i18nBackButtonText: string = null;
+// let i18nSaveButtonText: string = null;
 
 export function onNavigatingTo(args: NavigatedData) {
     page = <Page>args.object;
@@ -143,26 +147,10 @@ export function onSaveTap() {
 }
 
 function setActiveLanguageText(): void {
-    let activeLanguage: string = Utility.Language.getActiveLanguage();
-
-    if (activeLanguage === "english") {
-        i18nPageTitle = "Browse";
-        i18nMedicineListTitle = "My Medicines";
-        i18nBackButtonText = "Back";
-        i18nSaveButtonText = "Save";
-
-    }
-    else {
-        i18nPageTitle = "Navega";
-        i18nMedicineListTitle = "Mis Medicamentos";
-        i18nBackButtonText = "Atrás";
-        i18nSaveButtonText = "Salvar";
-}
-
-    viewModel.set("i18nPageTitle", i18nPageTitle);
-    viewModel.set("i18nMedicineListTitle", i18nMedicineListTitle);
-    viewModel.set("i18nBackButtonText", i18nBackButtonText);
-    viewModel.set("i18nSaveButtonText", i18nSaveButtonText);
+    viewModel.set("i18nPageTitle", i18n.browsePageTitle);
+    viewModel.set("i18nMedicineListTitle", i18n.myMedicines);
+    viewModel.set("i18nBackButtonText", i18n.browseBack);
+    viewModel.set("i18nSaveButtonText", i18n.browseSave);
 };
 
 function findMedicineNameIndex(medicineName: string): number {

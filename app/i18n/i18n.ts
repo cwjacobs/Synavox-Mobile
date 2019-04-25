@@ -1,3 +1,6 @@
+/**
+ * A singleton class providing strings in the currently active language
+ */
 export class I18N {
 
     private static readonly _defaultLanguage: string = "English";
@@ -17,10 +20,7 @@ export class I18N {
     }
 
     public static get instance() {
-        if (!this._instance) {
-            alert("I18N._instance is not defined");
-        }
-        return this._instance;
+        return I18N._instance;
     }
 
     private static get defaultLanguage() {
@@ -36,9 +36,9 @@ export class I18N {
         this._activeLanguageIndex = this.activeLanguage === "english" ? 0 : 1;
     }
 
-    /**
+    /******************************
      * Page Navigation
-     */
+     ******************************/
 
     public get homeNav() {
         const text: string[] = ["Home", "Pantalla de Inicio"];
@@ -76,9 +76,9 @@ export class I18N {
     }
 
 
-    /**
+    /******************************
      * Shared
-     */
+     ******************************/
 
     public get save() {
         const text: string[] = ["Save", "Salvar"];
@@ -90,17 +90,49 @@ export class I18N {
         return text[this._activeLanguageIndex];
     }
 
+    public get delete() {
+        const text: string[] = ["Delete", "Eliminar"];
+        return text[this._activeLanguageIndex];
+    }
 
-    /**
+    public get myMedicines() {
+        const text: string[] = ["My Medicines", "Mis Medicamentos"];
+        return text[this._activeLanguageIndex];
+    }
+
+
+    /******************************
      * Home Page
-     */
+     ******************************/
+
+    public get homePageTitle() {
+        const text: string[] = ["Home Pharmacist", "Farmacéutico de Casa"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get english() {
+        const text: string[] = ["English", "English"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get spanish() {
+        const text: string[] = ["Español", "Español"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get newTagAlert() {
+        const text: string[] = ["New tag scanned, use 'Pair' screen to associate with a medicine",
+            "Nueva etiqueta escaneada, utilice la pantalla 'Pair' para asociarse con un medicamento"];
+        return text[this._activeLanguageIndex];
+    }
 
 
-    /**
+
+    /******************************
      * Dose Page
-     */
+     ******************************/
 
-    public get dose() {
+    public get dosePageTitle() {
         const text: string[] = ["Dose", "Dosis"];
         return text[this._activeLanguageIndex];
     }
@@ -168,6 +200,152 @@ export class I18N {
     public doseTakenConfirmMsg(medicineName: string): string {
         const text: string[] = ["Please confirm one dose of ", "Por favor, confirme una dosis de "];
         return (text[this._activeLanguageIndex] + medicineName);
+    }
+
+
+
+    /******************************
+     * Pair Page
+     ******************************/
+
+    public get pairPageTitle() {
+        const text: string[] = ["Pair", "Partido"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get pairMedicineNameHint() {
+        const text: string[] = ["Enter Medicine Name", "Ingrese el nombre del medicamento"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public getParingUpdatedMsg(medicineName: string): string {
+        let confirmMsg: string;
+        if (this.activeLanguage === "english") {
+            confirmMsg = "Pairing of " + medicineName + " has been updated";
+        }
+        else {
+            confirmMsg = "El emparejamiento de " + medicineName + " se ha actualizado";
+        }
+        return confirmMsg;
+    }
+
+    public getParingUpdatConfirmMsg(medicineName: string): string {
+        let confirmMsg: string;
+        if (this.activeLanguage === "english") {
+            confirmMsg = "Are you sure you want to delete the " + medicineName + " pairing?";
+        }
+        else {
+            confirmMsg = "¿Está seguro de que desea eliminar el emparejamiento " + medicineName + " ?";
+        }
+        return confirmMsg;
+    }
+
+
+    /******************************
+     * Share Page
+     ******************************/
+
+    public get sharePageTitle() {
+        const text: string[] = ["Share", "Compartir"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get sharePageHeading() {
+        const text: string[] = ["Share My Home Pharmacist", "Compartir mi Farmacéutico de Casa"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get shareContactFilterLabel() {
+        const text: string[] = ["Share with: ", "Comparta con: "];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get shareContactFilterHint() {
+        const text: string[] = ["Enter name from contacts", "El nombre de los contactos"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get shareContactNameLabel() {
+        const text: string[] = ["Name: ", "Nombre: "];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get shareContactEmailLabel() {
+        const text: string[] = ["Email: ", "Correo electrónico: "];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get shareContactPhoneLabel() {
+        const text: string[] = ["Phone: ", "Teléfono: "];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get share() {
+        const text: string[] = ["Share: ", "Compartir: "];
+        return text[this._activeLanguageIndex];
+    }
+
+    public getShareCompleteMsg(name: string): string {
+        let confirmMsg: string;
+        if (this.activeLanguage === "english") {
+            confirmMsg = "Sharing with " + name + " completed successfully";
+        }
+        else {
+            confirmMsg = "Compartir con " + name + " completado con éxito";
+        }
+        return confirmMsg;
+    }
+
+
+    /******************************
+     * Browse Page
+     ******************************/
+
+    public get browsePageTitle() {
+        const text: string[] = ["Browse", "Navega"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get browseBack() {
+        const text: string[] = ["Back", "Atrás"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get browseSave() {
+        const text: string[] = ["Save", "Salvar"];
+        return text[this._activeLanguageIndex];
+    }
+
+
+
+    /******************************
+     * Settings Page
+     ******************************/
+
+    public get settingsPageTitle() {
+        const text: string[] = ["Settings", "Configuración"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get languageOptionsSetting() {
+        const text: string[] = ["Language Options", "Opciones de Idioma"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get activeLanguageSetting() {
+        const text: string[] = ["Active: English", "Activo: Español"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get installedLanguageSetting() {
+        const text: string[] = ["Installed Languages:", "Idiomas Instalados:"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get enableLanguageInstructionsSetting() {
+        const text: string[] = ["Press language button to enable or disable it",
+            "Pulse el botón de idioma para activarlo o desactivarlo"];
+        return text[this._activeLanguageIndex];
     }
 
 }

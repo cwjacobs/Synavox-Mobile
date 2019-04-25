@@ -17,6 +17,7 @@ import { TextField } from "tns-core-modules/ui/text-field/text-field";
 import { ListPicker } from "tns-core-modules/ui/list-picker";
 import { Button } from "tns-core-modules/ui/button";
 import { AudioPlayer } from "~/audio-player/audio-player";
+import { I18N } from "~/i18n/i18n";
 
 let page: Page = null;
 let displayNames: string[] = [];
@@ -33,15 +34,8 @@ let isShareComplete: boolean = false;
 let contactFilter: string = null;
 let viewModel: ShareViewModel = null;
 
-// Page text
-let i18nPageTitle: string = null;
-let i18nContentTitle: string = null;
-let i18nContactFilterHint: string = null;
-let i18nContactFilterLabel: string = null;
-let i18nContactNameLabel: string = null;
-let i18nContactEmailLabel: string = null;
-let i18nContactPhoneLabel: string = null;
-let i18nShareCompleteNotification: string = null;
+// Page Text
+let i18n = I18N.instance;
 
 // Page control buttons
 let i18nShareButtonText: string = null;
@@ -217,7 +211,7 @@ export function onShareTap(args: EventData) {
 
 function get18NSharingText(baseText: string): string {
     let i18nText: string;
-    if (Utility.Language.getActiveLanguage() === "english") {
+    if (i18n.activeLanguage === "english") {
         i18nText = baseText.replace("Share", "Sharing...");
     }
     else {
@@ -246,19 +240,12 @@ function shareLibrary(counter) {
     else {
         if (counter === interations) {
             let name: string = viewModel.get("selectedContactName");
-            if (Utility.Language.getActiveLanguage() === "english") {
-                i18nShareButtonText = "Share";
-                i18nShareCompleteNotification = "Sharing with " + name + " completed successfully"
-            }
-            else {
-                i18nShareButtonText = "Compartir";
-                i18nShareCompleteNotification = "Compartir con " + name + " Completado con éxito"
-            }
+
             isShareComplete = true;
             viewModel.set("isShareComplete", isShareComplete);
 
-            viewModel.set("i18nShareButtonText", i18nShareButtonText);
-            viewModel.set("i18nShareCompleteNotification", i18nShareCompleteNotification);
+            viewModel.set("i18nShareButtonText", i18n.share);
+            viewModel.set("i18nShareCompleteNotification", i18n.getShareCompleteMsg(name));
 
             let shareButton: Button = page.getViewById("share-button");
             shareButton.backgroundColor = primary;
@@ -275,7 +262,7 @@ function isOdd(num) { return num % 2; }
 export function onCancelTap(args: EventData) {
     alert("onCancelTap");
     // clearTimeout(shareTimeout);
-        // This works, but need to clean up ui when cancel is invoked...
+    // This works, but need to clean up ui when cancel is invoked...
 }
 
 function containsNameFilter(element: string, index, array): boolean {
@@ -382,44 +369,15 @@ function logContact(args: GetContactResult) {
 }
 
 function setActiveLanguageText(): void {
-    let activeLanguage: string = Utility.Language.getActiveLanguage();
+    viewModel.set("i18nPageTitle", i18n.sharePageTitle);
+    viewModel.set("i18nContentTitle", i18n.sharePageHeading);
+    viewModel.set("i18nContactFilterLabel", i18n.shareContactFilterLabel);
+    viewModel.set("i18nContactFilterHint", i18n.shareContactFilterHint);
 
-    if (activeLanguage === "english") {
-        i18nPageTitle = "Share";
-        i18nContentTitle = "Share My Home Pharmacist";
-        i18nContactFilterLabel = "Share with: ";
-        i18nContactFilterHint = "Enter name from contacts";
+    viewModel.set("i18nContactNameLabel", i18n.shareContactNameLabel);
+    viewModel.set("i18nContactEmailLabel", i18n.shareContactEmailLabel);
+    viewModel.set("i18nContactPhoneLabel", i18n.shareContactPhoneLabel);
 
-        i18nContactNameLabel = "Name: ";
-        i18nContactEmailLabel = "Email: ";
-        i18nContactPhoneLabel = "Phone: ";
-
-        i18nShareButtonText = "Share";
-        i18nCancelButtonText = "Cancel";
-    }
-    else {
-        i18nPageTitle = "Compartir";
-        i18nContentTitle = "Compartir mi Farmacéutico de Casa";
-        i18nContactFilterLabel = "Comparta con: ";
-        i18nContactFilterHint = "El nombre de los contactos";
-
-        i18nContactNameLabel = "Nombre";
-        i18nContactEmailLabel = "Correo electrónico";
-        i18nContactPhoneLabel = "Teléfono";
-
-        i18nShareButtonText = "Compartir";
-        i18nCancelButtonText = "Cancelar";
-    }
-
-    viewModel.set("i18nPageTitle", i18nPageTitle);
-    viewModel.set("i18nContentTitle", i18nContentTitle);
-    viewModel.set("i18nContactFilterLabel", i18nContactFilterLabel);
-    viewModel.set("i18nContactFilterHint", i18nContactFilterHint);
-
-    viewModel.set("i18nContactNameLabel", i18nContactNameLabel);
-    viewModel.set("i18nContactEmailLabel", i18nContactEmailLabel);
-    viewModel.set("i18nContactPhoneLabel", i18nContactPhoneLabel);
-
-    viewModel.set("i18nShareButtonText", i18nShareButtonText);
-    viewModel.set("i18nCancelButtonText", i18nCancelButtonText);
+    viewModel.set("i18nShareButtonText", i18n.share);
+    viewModel.set("i18nCancelButtonText", i18n.cancel);
 }
