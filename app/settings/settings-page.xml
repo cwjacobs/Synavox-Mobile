@@ -20,9 +20,9 @@
 			<Label class="subtitle settings-content" text="{{ i18nActiveLanguageText }}"></Label>
 			<Label class="subtitle settings-content" text="{{ i18nInstalledLanguagesText }}"></Label>
 			<GridLayout class="button-row" rows="*,*" columns="*,*">
-				<Button class="my-button" style="{{ isEnButtonEnabled ? 'background-color: #3A53FF' : 'background-color: #91a0ff' }}" isEnabled="{{ isEnButtonEnabled }}" text="{{ i18nEnglishButtonText }}" row="0" col="0" onTap="onEnglishTap" />
+				<Button class="my-button" style="{{ isEnButtonEnabled ? 'background-color: #3A53FF' : 'background-color: #c1c8f8' }}" isEnabled="{{ isEnButtonEnabled }}" text="{{ i18nEnglishButtonText }}" row="0" col="0" onTap="onEnglishTap" />
 				<Label class="indicator fa" style="{{ isEnglishEnabled ? 'color: #000000' : 'color: #AAAAAA' }}" text="&#xf046; Enabled" row="0" col="1" />
-				<Button class="my-button" style="{{ isSpButtonEnabled ? 'background-color: #398881' : 'background-color: #79c8c1' }}" isEnabled="{{ isSpButtonEnabled }}" text="{{ i18nSpanishButtonText }}" row="1" col="0" onTap="onSpanishTap" />
+				<Button class="my-button" style="{{ isSpButtonEnabled ? 'background-color: #398881' : 'background-color: #a4cac7' }}" isEnabled="{{ isSpButtonEnabled }}" text="{{ i18nSpanishButtonText }}" row="1" col="0" onTap="onSpanishTap" />
 				<Label class="indicator fa" style="{{ isSpanishEnabled ? 'color: #000000' : 'color: #AAAAAA' }}" text="&#xf046; Habilitado" row="1" col="2" />
 			</GridLayout>
 			<Label class="fa footer" textWrap="true" text="{{ i18nEnableLanguageInstructionsText , '&#xf0eb; ' + i18nEnableLanguageInstructionsText }}" />
