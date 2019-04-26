@@ -15,7 +15,7 @@ import { EventData } from "tns-core-modules/data/observable"; // working with th
 import { NfcTagData, Nfc } from "nativescript-nfc";
 import { AppRootViewModel } from "~/app-root/app-root-view-model";
 import { appRootI18N } from "~/app-root/app-root";
-import { I18N } from "~/i18n/i18n";
+import { I18N } from "~/utilities/i18n";
 
 
 let page: Page = null;
@@ -54,7 +54,7 @@ export function onLoaded() {
 
     if (i18n === null) {
         i18n = I18N.instance; // Also will set active language to the default value (defined in I18N)
-        // Utility.Language.setActiveLanguage("english");
+        // i18n.activeLanguage = "english";
     }
 
     isAudioActive = false;
@@ -64,8 +64,7 @@ export function onLoaded() {
     medicineList = Test.Dataset.getCurrentTestData();
     viewModel.set("myMedicineList", medicineList);
 
-    let isDualLanguageEnabled = Utility.Language.getIsDualLanguageEnabled();
-    viewModel.set("isDualLanguageEnabled", isDualLanguageEnabled);
+    viewModel.set("isDualLanguageEnabled", i18n.isDualLanguageEnabled);
 
     // Set text to active language
     setActiveLanguageText();

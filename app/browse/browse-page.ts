@@ -15,7 +15,7 @@ import * as Utility from "../utility-functions/utility-functions";
 import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
 import { topmost } from "tns-core-modules/ui/frame/frame";
 import { AppRootViewModel } from "~/app-root/app-root-view-model";
-import { I18N } from "~/i18n/i18n";
+import { I18N } from "~/utilities/i18n";
 
 let page: Page = null;
 let viewModel: BrowseViewModel = null;

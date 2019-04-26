@@ -8,7 +8,7 @@ import * as Test from "../data-models/test-data";
 import * as Utility from "../utility-functions/utility-functions";
 import { Nfc, NfcTagData } from "nativescript-nfc";
 
-import { I18N } from "~/i18n/i18n";
+import { I18N } from "~/utilities/i18n";
 
 let page: Page = null;
 let activeLanguage: string = null;
@@ -33,25 +33,16 @@ export function onLoaded(args: NavigatedData) {
     // Start the rfid (nfc) tag listener
     nfc.setOnTagDiscoveredListener((args: NfcTagData) => onTagDiscoveredListener(args));
 
-    let isEnglishEnabled = Utility.Language.getIsEnglishEnabled();
+    let isEnglishEnabled: boolean = i18n.isEnglishEnabled;
     viewModel.set("isEnglishEnabled", isEnglishEnabled);
 
-    let isSpanishEnabled = Utility.Language.getIsSpanishEnabled();
+    let isSpanishEnabled: boolean = i18n.isSpanishEnabled;
     viewModel.set("isSpanishEnabled", isSpanishEnabled);
 
-    if (isEnglishEnabled) { // Allow Spanish to be disabled if English is enabled
-        viewModel.set("isSpButtonEnabled", true);
-    }
-    else {
-        viewModel.set("isSpButtonEnabled", false);
-    }
-
-    if (isSpanishEnabled) { // Allow English to be disabled if Spanish is enabled
-        viewModel.set("isEnButtonEnabled", true);
-    }
-    else {
-        viewModel.set("isEnButtonEnabled", false);
-    }
+     // If only one language is enabled, then we make its corresponding button unselectable to prevent disabling the only enabled language.
+     // IE: Allow Spanish to be enabled/disabled (make button clickable) if English is enabled, make it unselectable if only Spanish is enabled.
+    viewModel.set("isEnButtonEnabled", isSpanishEnabled);
+    viewModel.set("isSpButtonEnabled", isEnglishEnabled);
 
     setI18N();
 }
@@ -67,7 +58,7 @@ export function onNavigatingFrom() {
 
 export function onEnglishTap(args: NavigatedData) {
     let isSpButtonEnabled: boolean;
-    let isEnglishEnabled = Utility.Language.toggleEnglishEnabled();
+    let isEnglishEnabled: boolean = i18n.toggleEnglishEnabled();
     if (!isEnglishEnabled) { // Don't allow both languages to be disabled
         isSpButtonEnabled = false; // set spanish as active language and prevent user from disabling it at the same time.
         i18n.activeLanguage = "spanish";
@@ -82,10 +73,10 @@ export function onEnglishTap(args: NavigatedData) {
 
 export function onSpanishTap(args: NavigatedData) {
     let isEnButtonEnabled: boolean;
-    let isSpanishEnabled = Utility.Language.toggleSpanishEnabled();
+    let isSpanishEnabled: boolean = i18n.toggleSpanishEnabled();
     if (!isSpanishEnabled) { // Don't allow both languages to be disabled
         isEnButtonEnabled = false; // set english as active language and prevent user from disabling it at the same time.
-        i18n.activeLanguage = "english";
+        i18n.activeLanguage = "english"; // should probably be doing this from an i18n function
     }
     else {
         isEnButtonEnabled = true;

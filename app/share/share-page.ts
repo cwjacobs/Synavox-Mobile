@@ -17,7 +17,7 @@ import { TextField } from "tns-core-modules/ui/text-field/text-field";
 import { ListPicker } from "tns-core-modules/ui/list-picker";
 import { Button } from "tns-core-modules/ui/button";
 import { AudioPlayer } from "~/audio-player/audio-player";
-import { I18N } from "~/i18n/i18n";
+import { I18N } from "~/utilities/i18n";
 
 let page: Page = null;
 let displayNames: string[] = [];

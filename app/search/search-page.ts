@@ -8,7 +8,7 @@ import { MedicineBinding } from "../data-models/medicine-binding";
 import { SearchViewModel } from "./search-view-model";
 import * as Test from "../data-models/test-data";
 import * as Utility from "../utility-functions/utility-functions";
-import { I18N } from "~/i18n/i18n";
+import { I18N } from "~/utilities/i18n";
 
 let viewModel: SearchViewModel = null;
 

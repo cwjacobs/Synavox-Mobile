@@ -18,7 +18,7 @@ import { confirm } from "tns-core-modules/ui/dialogs";
 import { MedicineBinding } from "~/data-models/medicine-binding";
 import { Button } from "tns-core-modules/ui/button/button";
 
-import { I18N } from "~/i18n/i18n";
+import { I18N } from "~/utilities/i18n";
 
 let medicineList: MedicineBinding[] = null;
 

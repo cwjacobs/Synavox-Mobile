@@ -11,20 +11,74 @@ export class I18N {
 
     private _activeLanguageIndex: number;
 
+    private _isEnglishEnabled: boolean;
+
+    private _isSpanishEnabled: boolean;
+
     private constructor() {
         if (I18N._instance) {
             throw new Error("Error: Instantiation failed: Use I18N.getInstance() instead of new.");
         }
         I18N._instance = this;
-        this.activeLanguage = I18N.defaultLanguage;
+        this.initialize();
     }
 
+    private initialize() {
+        this.activeLanguage = I18N.defaultLanguage;
+        if(this.activeLanguage === "english") {
+            this.isEnglishEnabled = true;
+            this.isSpanishEnabled = false;
+        }
+        else {
+            this.isEnglishEnabled = false;
+            this.isSpanishEnabled = true;
+        }
+    };
+
     public static get instance() {
-        return I18N._instance;
+        return this._instance;
     }
 
     private static get defaultLanguage() {
         return I18N._defaultLanguage;
+    }
+
+    public set isEnglishEnabled(value: boolean) {
+        this._isEnglishEnabled = value;
+    }
+
+    public get isEnglishEnabled(): boolean {
+        return this._isEnglishEnabled;
+    }
+
+    public set isSpanishEnabled(value: boolean) {
+        this._isSpanishEnabled = value;
+    }
+
+    public get isSpanishEnabled(): boolean {
+        return this._isSpanishEnabled;
+    }
+
+    public get isDualLanguageEnabled(): boolean {
+        return (this.isEnglishEnabled && this.isSpanishEnabled);
+    }
+
+    public toggleEnglishEnabled(): boolean {
+        this.isEnglishEnabled = !this.isEnglishEnabled;
+
+        if (!this.isEnglishEnabled) { // Must have at least one enabled & active language
+            this.activeLanguage = "spanish";
+        }
+        return this.isEnglishEnabled;
+    }
+
+    public toggleSpanishEnabled(): boolean {
+        this.isSpanishEnabled = !this.isSpanishEnabled;
+
+        if (!this.isSpanishEnabled) { // Must have at least one enabled & active language
+            this.activeLanguage = "english";
+        }
+        return this.isSpanishEnabled;
     }
 
     public get activeLanguage() {
@@ -343,10 +397,8 @@ export class I18N {
     }
 
     public get enableLanguageInstructionsSetting() {
-        const text: string[] = ["Press language button to enable or disable it",
-            "Pulse el botón de idioma para activarlo o desactivarlo"];
+        const text: string[] = ["Press language button to enable or disable it", "Pulse el botón de idioma para activarlo o desactivarlo"];
         return text[this._activeLanguageIndex];
     }
-
 }
 

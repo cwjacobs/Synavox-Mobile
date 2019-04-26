@@ -14,7 +14,7 @@ import { Nfc, NfcTagData } from "nativescript-nfc";
 
 // For Dialogs Branch
 import { confirm } from "tns-core-modules/ui/dialogs";
-import { I18N } from "~/i18n/i18n";
+import { I18N } from "~/utilities/i18n";
 
 let medicineList: MedicineBinding[] = null;
 

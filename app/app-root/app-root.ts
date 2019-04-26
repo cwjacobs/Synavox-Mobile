@@ -6,7 +6,7 @@ import { GridLayout } from "tns-core-modules/ui/layouts/grid-layout";
 
 import { AppRootViewModel } from "./app-root-view-model";
 
-import { I18N } from "~/i18n/i18n";
+import { I18N } from "~/utilities/i18n";
 
 let viewModel: AppRootViewModel = null;
 
@@ -20,7 +20,7 @@ export function onLoaded(args: EventData): void {
     const drawerComponent = <RadSideDrawer>args.object;
     viewModel = new AppRootViewModel();
     drawerComponent.bindingContext = viewModel;
-
+    
     appRootI18N();
 }
 

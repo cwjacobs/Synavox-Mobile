@@ -11,7 +11,7 @@ import * as fs from 'tns-core-modules/file-system';
 
 import * as Test from "../data-models/test-data";
 import { MedicineBinding } from "~/data-models/medicine-binding";
-import { I18N } from "~/i18n/i18n";
+import { I18N } from "~/utilities/i18n";
 
 // Page Text
 let i18n = I18N.instance;
@@ -179,39 +179,6 @@ export namespace Language {
 
     const lanugageDirectoryRoot: string = "~/audio/";
 
-    let isEnglishEnabled: boolean = true;
-    let isSpanishEnabled: boolean = false;
-
-    export function getIsEnglishEnabled(): boolean {
-        return isEnglishEnabled;
-    }
-
-    export function toggleEnglishEnabled(): boolean {
-        isEnglishEnabled = !isEnglishEnabled;
-
-        if (!isEnglishEnabled) { // Must have at least one enabled & active language
-            i18n.activeLanguage = "spanish";
-
-        }
-        return isEnglishEnabled;
-    }
-
-    export function getIsSpanishEnabled(): boolean {
-        return isSpanishEnabled;
-    }
-
-    export function toggleSpanishEnabled(): boolean {
-        isSpanishEnabled = !isSpanishEnabled;
-
-        if (!isSpanishEnabled) { // Must have at least one enabled & active language
-            i18n.activeLanguage = "english";
-        }
-        return isSpanishEnabled;
-    }
-
-    export function getIsDualLanguageEnabled(): boolean {
-        return isEnglishEnabled && isSpanishEnabled;
-    }
 
     export function getAudioPath(medicineName: string): string {
         // let languageMap: LanguageMap[] = [
