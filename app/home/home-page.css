@@ -8,8 +8,8 @@
 
 .title {
     font-size: 22;
-    margin-top:60px;
-    text-align: center;    
+    margin-top: 60px;
+    text-align: center;
 }
 
 .row-text {
@@ -43,7 +43,7 @@
 
 .my-button:active {
     background-color: lightslategray;
-    color:white;
+    color: white;
 }
 
 .my-button-control {
@@ -62,28 +62,27 @@
     /* margin-top: 10%; */
     /* margin-top: 620px; */
     vertical-align: bottom;
- }
-
+}
 
 /* Parallax */
-#headerLabel2
-{
+
+#headerLabel2 {
     font-size: 45;
     horizontal-align: center;
-    margin-top:-25;
-    color:#B2EBF2;
+    margin-top: -25;
+    color: #B2EBF2;
 }
 
-#headerLabel{
+#headerLabel {
     font-size: 45;
     horizontal-align: center;
-    padding-top:75;
-    color:#B2EBF2;
+    padding-top: 75;
+    color: #B2EBF2;
 }
 
-.header-template{
-    background-color:red;
-    background-image:url('~/images/home.jpg');
+.header-template {
+    background-color: red;
+    background-image: url('~/images/home.jpg');
     height: 205;
     background-size: cover;
     /* background-position: center top; */
@@ -91,20 +90,20 @@
     /* height: 50% */
 }
 
-.body-template TextView{
+.body-template TextView {
     margin: 30px;
 }
 
-.anchor{
+.anchor {
     height: 55;
-    width:100%;
-    background-color:white;
+    width: 100%;
+    background-color: white;
     /* background-color:#616161; */
 }
 
-#titleLabel{
-    font-weight:bold;
-    font-size:25;
-    padding:5 15;
-    color:#fff;
+#titleLabel {
+    font-weight: bold;
+    font-size: 25;
+    padding: 5 15;
+    color: #fff;
 }

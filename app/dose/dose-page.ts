@@ -578,8 +578,6 @@ function findMedicineNameIndex(medicineName: string, medicineBindingList: Medici
 function setActiveLanguageText(): void {
     viewModel.set("i18nPageTitle", i18n.dosePageTitle);
 
-    viewModel.set("i18nDose", i18n.dosePageTitle);
-
     viewModel.set("i18nEditTotalDosesPerDayButtonText", i18n.changeDosesPerDay);
     
     viewModel.set("i18nEditDosesTakenTodayButtonText", i18n.changeDosesTaken);
