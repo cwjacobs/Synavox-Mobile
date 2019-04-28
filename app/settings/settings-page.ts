@@ -6,7 +6,6 @@ import { NavigatedData, Page } from "tns-core-modules/ui/page";
 import { SettingsViewModel } from "./settings-view-model";
 import * as Test from "../data-models/test-data";
 import * as Utility from "../utility-functions/utility-functions";
-import { Nfc, NfcTagData } from "nativescript-nfc";
 
 import { I18N } from "~/utilities/i18n";
 
@@ -17,8 +16,6 @@ let viewModel: SettingsViewModel = null;
 // Page Text
 let i18n = I18N.instance;
 
-let nfc: Nfc = null;
-
 export function onNavigatingTo(args: NavigatedData) {
     page = <Page>args.object;
     viewModel = new SettingsViewModel();
@@ -27,12 +24,6 @@ export function onNavigatingTo(args: NavigatedData) {
 }
 
 export function onLoaded(args: NavigatedData) {
-    if (nfc === null) {
-        nfc = new Nfc();
-    }
-    // Start the rfid (nfc) tag listener
-    nfc.setOnTagDiscoveredListener((args: NfcTagData) => onTagDiscoveredListener(args));
-
     let isEnglishEnabled: boolean = i18n.isEnglishEnabled;
     viewModel.set("isEnglishEnabled", isEnglishEnabled);
 
@@ -45,15 +36,6 @@ export function onLoaded(args: NavigatedData) {
     viewModel.set("isSpButtonEnabled", isEnglishEnabled);
 
     setI18N();
-}
-
-function onTagDiscoveredListener(nfcTagData: NfcTagData) {
-    alert("Settings onTagDiscoveredListener");
-}
-
-export function onNavigatingFrom() {
-    alert("onNavigatingFrom Settings");
-    nfc.setOnTagDiscoveredListener(null);
 }
 
 export function onEnglishTap(args: NavigatedData) {

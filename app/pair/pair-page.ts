@@ -10,7 +10,6 @@ import { MedicineBinding } from "../data-models/medicine-binding";
 
 import * as Test from "../data-models/test-data";
 import * as Utility from "../utility-functions/utility-functions";
-import { Nfc, NfcTagData } from "nativescript-nfc";
 
 // For Dialogs Branch
 import { confirm } from "tns-core-modules/ui/dialogs";
@@ -21,7 +20,6 @@ let medicineList: MedicineBinding[] = null;
 let page: Page = null;
 let viewModel: PairViewModel = null;
 
-let nfc: Nfc = null;
 let isTagIdLocked: boolean;
 let audioPlayer: AudioPlayer = null;
 
@@ -64,10 +62,6 @@ export function onDrawerButtonTap(args: EventData) {
 };
 
 export function onLoaded(args: EventData) {
-    if (nfc === null) {
-        nfc = new Nfc();
-    }
-
     if (audioPlayer === null) {
         audioPlayer = new AudioPlayer();
     }
@@ -86,37 +80,34 @@ export function onLoaded(args: EventData) {
 
     // Set text to active language
     setActiveLanguageText();
-
-    // Start the rfid (nfc) tag listener
-    nfc.setOnTagDiscoveredListener((args: NfcTagData) => onTagDiscoveredListener(args));
 };
 
-function onTagDiscoveredListener(nfcTagData: NfcTagData) {
-    isTagIdLocked = false;
-    let tagId: string = Utility.Helpers.formatTagId(nfcTagData.id);
-    viewModel.set("currentTagId", tagId);
+// function onTagDiscoveredListener(nfcTagData: NfcTagData) {
+//     isTagIdLocked = false;
+//     let tagId: string = Utility.Helpers.formatTagId(nfcTagData.id);
+//     viewModel.set("currentTagId", tagId);
 
-    // See if medicine with this tag already exists in the myMedicineList
-    let index: number = findTagIdIndex(tagId);
-    if (index != -1) { // existing tag found, display associated medicine name
-        let medicineName: string = medicineList[index].medicineName;
-        viewModel.set("currentMedicineName", medicineName);
+//     // See if medicine with this tag already exists in the myMedicineList
+//     let index: number = findTagIdIndex(tagId);
+//     if (index != -1) { // existing tag found, display associated medicine name
+//         let medicineName: string = medicineList[index].medicineName;
+//         viewModel.set("currentMedicineName", medicineName);
 
-        let audioPath = Utility.Language.getAudioPath(medicineName);
-        AudioPlayer.useAudio(audioPath);
-        if (isAudioEnabled) {
-            AudioPlayer.play();
-        }
-    }
-    else { // New tag, lock tagId display
-        isTagIdLocked = true;
-        viewModel.set("currentMedicineName", "");
-    }
-}
+//         let audioPath = Utility.Language.getAudioPath(medicineName);
+//         AudioPlayer.useAudio(audioPath);
+//         if (isAudioEnabled) {
+//             AudioPlayer.play();
+//         }
+//     }
+//     else { // New tag, lock tagId display
+//         isTagIdLocked = true;
+//         viewModel.set("currentMedicineName", "");
+//     }
+// }
 
 export function onNavigatingFrom() {
     // Remove this page's listener
-    nfc.setOnTagDiscoveredListener(null);
+    // nfc.setOnTagDiscoveredListener(null);
 }
 
 export function onItemTap(args: ItemEventData) {

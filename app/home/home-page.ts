@@ -12,15 +12,20 @@ import * as Utility from "../utility-functions/utility-functions";
 import { MedicineBinding } from "~/data-models/medicine-binding";
 
 import { EventData } from "tns-core-modules/data/observable"; // working with this in nfc-observable branch
-import { NfcTagData, Nfc } from "nativescript-nfc";
+// import { NfcTagData, Nfc } from "nativescript-nfc";
 import { AppRootViewModel } from "~/app-root/app-root-view-model";
 import { appRootI18N } from "~/app-root/app-root";
 import { I18N } from "~/utilities/i18n";
+import { RFID } from "~/utilities/rfid";
 
 
 let page: Page = null;
 let viewModel: HomeViewModel = null;
 let medicineList: MedicineBinding[] = null;
+
+// Singleton class providing RFID via NFC
+let rfid: RFID = null;
+// let rfid: RFID = RFID.instance;
 
 // Singleton class providing english and spanish text
 let i18n = null;
@@ -29,7 +34,7 @@ let i18n = null;
 let isAudioActive: boolean = false;
 let isAudioEnabled: boolean = false;
 
-let nfc: Nfc = null;
+// let nfc: Nfc = null;
 let audioPlayer: AudioPlayer = null;
 
 export function onNavigatingTo(args: NavigatedData) {
@@ -44,17 +49,17 @@ export function onDrawerButtonTap() {
 }
 
 export function onLoaded() {
-    if (nfc === null) {
-        nfc = new Nfc();
-    }
-
     if (audioPlayer === null) {
         audioPlayer = new AudioPlayer();
     }
 
+    if (rfid === null) {
+        rfid = RFID.instance;
+        rfid.startTagListener();
+    }
+
     if (i18n === null) {
         i18n = I18N.instance; // Also will set active language to the default value (defined in I18N)
-        // i18n.activeLanguage = "english";
     }
 
     isAudioActive = false;
@@ -70,28 +75,28 @@ export function onLoaded() {
     setActiveLanguageText();
 
     // Start the rfid (nfc) tag listener
-    nfc.setOnTagDiscoveredListener((args: NfcTagData) => onTagDiscoveredListener(args));
+    // nfc.setOnTagDiscoveredListener((args: NfcTagData) => onTagDiscoveredListener(args));
 }
 
-function onTagDiscoveredListener(nfcTagData: NfcTagData) {
-    if (isAudioEnabled) {
-        let tagId: string = Utility.Helpers.formatTagId(nfcTagData.id);
-        let index: number = findTagIdIndex(tagId);
-        if (index != -1) { // existing tag found, play associated medicine information
-            let medicineName: string = medicineList[index].medicineName;
-            let audioPath = Utility.Language.getAudioPath(medicineName);
-            AudioPlayer.useAudio(audioPath);
-            AudioPlayer.play();
-        }
-        else {
-            alert(i18n.newTagAlert);
-        }
-    }
-}
+// function onTagDiscoveredListener(nfcTagData: NfcTagData) {
+//     if (isAudioEnabled) {
+//         let tagId: string = Utility.Helpers.formatTagId(nfcTagData.id);
+//         let index: number = findTagIdIndex(tagId);
+//         if (index != -1) { // existing tag found, play associated medicine information
+//             let medicineName: string = medicineList[index].medicineName;
+//             let audioPath = Utility.Language.getAudioPath(medicineName);
+//             AudioPlayer.useAudio(audioPath);
+//             AudioPlayer.play();
+//         }
+//         else {
+//             alert(i18n.newTagAlert);
+//         }
+//     }
+// }
 
 export function onNavigatingFrom() {
     // Remove this page's listener
-    nfc.setOnTagDiscoveredListener(null);
+    // nfc.setOnTagDiscoveredListener(null);
 }
 
 export function onItemTap(args: ItemEventData) {

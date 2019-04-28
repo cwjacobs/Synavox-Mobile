@@ -3,15 +3,11 @@ import * as app from "tns-core-modules/application";
 import { EventData } from "tns-core-modules/data/observable";
 import { NavigatedData, Page } from "tns-core-modules/ui/page";
 
-import { MedicineBinding } from "../data-models/medicine-binding";
-
 import { ShareViewModel } from "./share-view-model";
 import * as Permissions from "nativescript-permissions";
-import * as Test from "../data-models/test-data";
 
 import { Contact, GetContactResult } from "nativescript-contacts-lite";
 import * as Contacts from "nativescript-contacts-lite";
-import * as Utility from "../utility-functions/utility-functions";
 
 import { TextField } from "tns-core-modules/ui/text-field/text-field";
 import { ListPicker } from "tns-core-modules/ui/list-picker";
@@ -39,8 +35,6 @@ let i18n = I18N.instance;
 
 // Page control buttons
 let i18nShareButtonText: string = null;
-let i18nCancelButtonText: string = null;
-// let i18nDeleteButtonText: string = null;
 
 /**
  * initial state - Filter is blank, list is displayed, contact is not displayed
