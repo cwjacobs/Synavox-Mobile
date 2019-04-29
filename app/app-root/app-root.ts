@@ -49,7 +49,7 @@ export function appRootI18N(): void {
     viewModel.set("i18nPair", i18n.pairNav);
     viewModel.set("i18nShare", i18n.shareNav);
     viewModel.set("i18nBrowse", i18n.browseNav);
-    viewModel.set("i18nSearch", i18n.searchNav);
+    viewModel.set("i18nWizard", i18n.wizardNav);
     viewModel.set("i18nSettings", i18n.settingsNav);
 }
 

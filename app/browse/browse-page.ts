@@ -125,7 +125,7 @@ export function submit(args) {
                 console.log("Dialog closed!");
             });
     }
-}
+}``
 
 export function onGoBackTap() {
     const componentRoute = "browse/browse-page";

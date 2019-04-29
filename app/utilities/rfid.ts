@@ -3,10 +3,17 @@
  */
 
 import { NfcTagData, Nfc } from "nativescript-nfc";
+import { AppRootViewModel } from "~/app-root/app-root-view-model";
+import { topmost } from "tns-core-modules/ui/frame/frame";
+
+// for browse branch
+let tagId: string;
+let appRootContext: AppRootViewModel = null;
 
 export class RFID {
-
+    private _tagId: string;
     private _nfc: Nfc = null;
+    private _tagScanned: boolean;
     private _tagListenerStarted: boolean;
     private static _instance: RFID = new RFID();
 
@@ -16,7 +23,10 @@ export class RFID {
             throw new Error("Error: Instantiation failed: Use RFID.instance instead of new.");
         }
         RFID._instance = this;
+        this._tagScanned = false;
         this._tagListenerStarted = false;
+
+        appRootContext = new AppRootViewModel();
         console.log("rfid - constructor complete; RFID._instance: " + RFID._instance);
     }
 
@@ -24,12 +34,28 @@ export class RFID {
         return this._instance;
     }
 
-    public get nfcInterface() {
+    private get nfcInterface() {
         return this._nfc;
     }
 
-    public set nfcInterface(value: Nfc) {
+    private set nfcInterface(value: Nfc) {
         this._nfc = value;
+    }
+
+    public get tagId(): string {
+        return this._tagId;
+    }
+
+    public set tagId(value: string) {
+        this._tagId = value;
+    }
+
+    public get tagScanned(): boolean {
+        return this._tagScanned;
+    }
+
+    public set tagScanned(value: boolean) {
+        this._tagScanned = value;
     }
 
     public startTagListener() {
@@ -71,8 +97,21 @@ export class RFID {
         }
     }
 
-    public scanWizard(data: NfcTagData): void {
-        alert("scanWizard(data: NfcTagData): " + data.id + data.techList);
+    private scanWizard(data: NfcTagData): void {
+        // alert("scanWizard(data: NfcTagData): " + data.id + data.techList);
+        this._tagScanned = true;
+        this.tagId = data.id.toString();
+        const componentRoute = "wizard/wizard-page";
+        const componentTitle = "Wizard";
+
+        appRootContext.selectedPage = componentTitle;
+
+        topmost().navigate({
+            moduleName: componentRoute,
+            transition: {
+                name: "fade"
+            }
+        });
     }
 
     public stopTagListener(): void {

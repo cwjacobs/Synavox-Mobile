@@ -16,6 +16,11 @@
 				<Label id="headerLabel2" text="Search"></Label>
 			</parallax:Header>
 			<parallax:Anchored class="anchor">
+				<StackLayout orientation="horizontal">
+					<Button text="Home" onTap="onHomeTap" />
+					<Button text="Dose" onTap="onDoseTap" />
+					<Button text="Pair" onTap="onPairTap" />
+				</StackLayout>
 				<Label id="titleLabel" text="Filtered Search"></Label>
 			</parallax:Anchored>
 			<parallax:Content class="body-template">

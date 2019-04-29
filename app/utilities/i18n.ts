@@ -119,8 +119,8 @@ export class I18N {
         return text[this._activeLanguageIndex];
     }
 
-    public get searchNav() {
-        const text: string[] = ["Search", "Búsqueda"];
+    public get wizardNav() {
+        const text: string[] = ["Wizard", "Hechicero"];
         return text[this._activeLanguageIndex];
     }
 
@@ -160,7 +160,7 @@ export class I18N {
      ******************************/
 
     public get homePageTitle() {
-        const text: string[] = ["Home Pharmacist", "Farmacéutico de Casa"];
+        const text: string[] = ["Synavox Home Pharmacist", "Synavox Farmacéutico de Casa"];
         return text[this._activeLanguageIndex];
     }
 
@@ -187,7 +187,7 @@ export class I18N {
      ******************************/
 
     public get dosePageTitle() {
-        const text: string[] = ["Dose", "Dosis"];
+        const text: string[] = ["Synavox Home Pharmacist", "Synavox Farmacéutico de Casa"];
         return text[this._activeLanguageIndex];
     }
 
@@ -370,6 +370,15 @@ export class I18N {
         return text[this._activeLanguageIndex];
     }
 
+
+    /******************************
+     * Search Page
+     ******************************/
+
+    public get searchPageTitle() {
+        const text: string[] = ["Scan Wizard", "Asistente de Digitalización"];
+        return text[this._activeLanguageIndex];
+    }
 
 
     /******************************
