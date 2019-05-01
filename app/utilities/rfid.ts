@@ -14,6 +14,7 @@ export class RFID {
     private _tagId: string;
     private _nfc: Nfc = null;
     private _tagScanned: boolean;
+    private _newTagScanned: boolean;
     private _tagListenerStarted: boolean;
     private static _instance: RFID = new RFID();
 
@@ -56,6 +57,14 @@ export class RFID {
 
     public set tagScanned(value: boolean) {
         this._tagScanned = value;
+    }
+
+    public get newTagScanned(): boolean {
+        return this._newTagScanned;
+    }
+
+    public set newTagScanned(value: boolean) {
+        this._newTagScanned = value;
     }
 
     public startTagListener() {

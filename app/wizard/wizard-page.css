@@ -1,12 +1,79 @@
-
 .title {
     font-size: 22;
-    margin-top:60px;
-    text-align: center;    
+    margin-top: 60px;
+    text-align: center;
 }
-.searchPageContent{
+
+.list-container {
+    margin: 30px;
+}
+
+.pairing-TagId {
+    color: black;
+    font-size: 20;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    /* background-color: green; */
+}
+
+.pairing-MedicineName {
+    color: #3A53FF;
+    font-size: 20;
+    margin-top: 30px;
+    margin-bottom: 5px;
+    height: 150px;
+    /* background-color: red; */
+}
+
+.my-button {
+    border-radius: 5;
+    font-family: FontAwesome;
+    vertical-align: middle;
+    margin: 20px;
+}
+
+.my-button:active {
+    background-color: lightslategray;
+    color: white;
+}
+
+.audio-button-row {
+    width: auto;
+    height: 10%;
+    margin-top: 20px;
+}
+
+.text-underscore {
+    margin: 5px;
+}
+
+.hr-primary {
+    height: 1;
+    background-color: #3A53FF;
+    width: 100%
+}
+
+.hr-secondary {
+    height: 1;
+    background-color: #398881;
+    width: 100%
+}
+
+.indicator {
+    vertical-align: middle;
+    color: black;
+    font-size: 20;
+}
+
+.always-do-this {
+    font-size: 16;
+    margin-left: 0px;
+    margin-right: 30px;
+}
+
+.searchPageContent {
     margin: 60px;
-    margin-top:60px;
+    margin-top: 60px;
 }
 
 .item {
@@ -14,44 +81,34 @@
 }
 
 /* Parallax */
-#headerLabel2
-{
+
+#headerLabel {
     font-size: 45;
     horizontal-align: center;
-    margin-top:-25;
-    color:#B2EBF2;
+    padding-top: 75;
+    color: #B2EBF2;
 }
 
-#headerLabel{
-    font-size: 45;
-    horizontal-align: center;
-    padding-top:75;
-    color:#B2EBF2;
-}
-
-.header-template{
-    background-color:#212121;
-    background-image:url('~/images/search.jpg');
+.header-template {
+    background-color: #212121;
+    background-image: url('~/images/logo.png');
     background-size: cover;
     height: 200;
 }
 
-.body-template TextView{
-    font-size:20;
-    padding:5 15;
-    border:none;
+.body-template TextView {
+    margin: 30px;
 }
 
-.anchor{
+.anchor {
     height: 55;
-    width:100%;
-    background-color:#616161;
+    width: 100%;
+    background-color: white;
 }
 
-#titleLabel{
-    font-weight:bold;
-    font-size:25;
-    padding:5 15;
-    color:#fff;
- 
+#titleLabel {
+    font-weight: bold;
+    font-size: 25;
+    padding: 5 15;
+    color: #fff;
 }

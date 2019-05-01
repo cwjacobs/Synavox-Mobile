@@ -14,6 +14,7 @@ import * as Utility from "../utility-functions/utility-functions";
 // For Dialogs Branch
 import { confirm } from "tns-core-modules/ui/dialogs";
 import { I18N } from "~/utilities/i18n";
+import { RFID } from "~/utilities/rfid";
 
 let medicineList: MedicineBinding[] = null;
 
@@ -25,6 +26,9 @@ let audioPlayer: AudioPlayer = null;
 
 // Page Text
 let i18n = I18N.instance;
+
+// NFC access
+let rfid = RFID.instance;
 
 // Audio controls and buttons
 let isAudioActive: boolean = false;
@@ -70,9 +74,20 @@ export function onLoaded(args: EventData) {
     isAudioEnabled = false;
     viewModel.set("isAudioEnabled", isAudioEnabled);
 
-    // Initialize "Curent" values blank
-    viewModel.set("currentTagId", "");
-    viewModel.set("currentMedicineName", "");
+    // alert("rfid.tagScanned: " + rfid.tagScanned + " tagId: " + rfid.tagId);
+    
+    if (rfid.newTagScanned) {
+        console.log("rfid.tagScanned: " + rfid.tagScanned + " tagId: " + rfid.tagId);
+        // We're here because an unpaired tag was scanned, let's walk the user through next steps...
+        rfid.newTagScanned = false;
+        viewModel.set("currentTagId", rfid.tagId);
+        alert("Enter medicine name or select one from your list to replace a current pairing");
+    }
+    else {
+        // Initialize "Curent" values blank
+        viewModel.set("currentTagId", "");
+        viewModel.set("currentMedicineName", "");
+    }
 
     // Current list of paired medications
     medicineList = Test.Dataset.getCurrentTestData();
@@ -151,8 +166,6 @@ export function onDeleteTap(args: ItemEventData) {
 
             const listView: ListView = page.getViewById<ListView>("medicineList");
             listView.refresh();
-
-            viewModel.set("myMedicines", medicineList);
         }
     });
 };

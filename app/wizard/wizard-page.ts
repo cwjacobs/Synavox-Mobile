@@ -53,20 +53,33 @@ export function onLoaded(args: EventData) {
     }
 
     if (rfid.tagScanned) {
-        console.log("rfid.tagScanned. tagId: " + rfid.tagId);
+        viewModel.set("currentTagId", rfid.tagId);
+        viewModel.set("isTagDisplayed", true);
+        viewModel.set("isMedicineDisplayed", false);
 
         // We're here because a tag was scanned, let's walk the user through next steps...
         rfid.tagScanned = false;
         let pairedMedicineName: string = getPairedMedicineName(rfid.tagId, medicineTagPairs);
         if (!pairedMedicineName) {
-            let confirmMsg: string = "TBD-i18n --- New tag discovered. Would you like to pair this tag to a medicine name now?";
+            let confirmMsg: string = "New tag discovered. Would you like to pair this tag to a medicine name now?";
             confirm(confirmMsg).then((isConfirmed) => {
                 if (isConfirmed) {
+                    rfid.newTagScanned = true;
                     navigateTo("Pair", "pair/pair-page");
                 }
             });
         }
+        else {
+            viewModel.set("isTagDisplayed", false);
+            viewModel.set("isMedicineDisplayed", true);
+            viewModel.set("currentMedicineName", pairedMedicineName);
+            //pairedMedicineWizard(pairedMedicineName);
+        }
     }
+}
+
+function pairedMedicineWizard(pairedMedicineName: string): void {
+    alert("Do pairedMedicineWizard for: " + pairedMedicineName);
 }
 
 function getPairedMedicineName(tagId: string, medicineBindingList: MedicineBinding[]): string {
@@ -117,6 +130,10 @@ function navigateTo(componentTitle: string, componentRoute: string): void {
             name: "fade"
         }
     });
+}
+
+export function onAlwaysConfirmTap() {
+    alert("onAlwaysConfirmTap");
 }
 
 export function onHomeTap() {
