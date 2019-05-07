@@ -13,6 +13,11 @@ import { MedicineBinding } from "~/data-models/medicine-binding";
 import { AppRootViewModel } from "~/app-root/app-root-view-model";
 
 import * as Test from "../data-models/test-data";
+import * as Utility from "../utility-functions/utility-functions";
+
+import { AudioPlayer } from "~/audio-player/audio-player";
+import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
+import { ListPicker } from "tns-core-modules/ui/list-picker/list-picker";
 
 let viewModel: WizardViewModel = null;
 
@@ -45,7 +50,10 @@ export function onLoaded(args: EventData) {
     medicineTagPairs = Test.Dataset.getCurrentTestData();
     console.dir("medicineTagPairs: " + medicineTagPairs);
 
-    viewModel.set("myMedicineList", Test.Dataset.getCurrentTestData());
+    viewModel.set("myMedicineList", medicineTagPairs);
+    setActiveLanguageText();
+
+    viewModel.set("i18nMedicineListTitle", i18n.homePageTitle);
     setActiveLanguageText();
 
     if (appRootContext == null) {
@@ -55,7 +63,9 @@ export function onLoaded(args: EventData) {
     if (rfid.tagScanned) {
         viewModel.set("currentTagId", rfid.tagId);
         viewModel.set("isTagDisplayed", true);
-        viewModel.set("isMedicineDisplayed", false);
+        viewModel.set("isSelectingAction", true);
+        viewModel.set("isSelectingMedicine", false);
+        viewModel.set("i18nScannedOrSelected", i18n.scannedMsg);
 
         // We're here because a tag was scanned, let's walk the user through next steps...
         rfid.tagScanned = false;
@@ -70,12 +80,35 @@ export function onLoaded(args: EventData) {
             });
         }
         else {
-            viewModel.set("isTagDisplayed", false);
+            viewModel.set("isSelectingAction", true);
             viewModel.set("isMedicineDisplayed", true);
+
+            viewModel.set("isTagDisplayed", false);
+            viewModel.set("isSelectingMedicine", false);
             viewModel.set("currentMedicineName", pairedMedicineName);
             //pairedMedicineWizard(pairedMedicineName);
         }
     }
+    else {
+        let myMedicineNamesList: string[] = getMedicineNames(medicineTagPairs);
+        viewModel.set("myMedicineNamesList", myMedicineNamesList);
+        viewModel.set("isSelectingMedicine", true);
+        viewModel.set("index", 1);
+        
+        viewModel.set("isTagDisplayed", false);
+        viewModel.set("isMedicineDisplayed", false);
+        viewModel.set("isSelectingAction", false);
+        viewModel.set("i18nScannedOrSelected", i18n.selectedMsg);
+
+    }
+}
+
+function getMedicineNames(medicineTagPairs: MedicineBinding[]): string[] {
+    let medicineNames: string[] = [];
+    medicineTagPairs.forEach((pair) => {
+        medicineNames.push((pair.medicineName));
+    })
+    return medicineNames;
 }
 
 function pairedMedicineWizard(pairedMedicineName: string): void {
@@ -154,12 +187,47 @@ export function onPairTap() {
     navigateTo(componentTitle, componentRoute);
 }
 
-export function onSelect(args: EventData) {
-    alert("onSelect");
-}
+// Audio control functions
+export function onPlayTap(args: ItemEventData) {
+    let pairedMedicineName: string = viewModel.get("currentMedicineName");
+    if (pairedMedicineName.length === 0) {
+        alert("No medicine name...");
+        return;
+    }
+    let audioPath = Utility.Language.getAudioPath(pairedMedicineName);
+    AudioPlayer.useAudio(audioPath);
+    AudioPlayer.togglePlay();
+};
 
-export function onSearchTapped(args: EventData) {
-    alert("onSearchTapped");
+export function onStopTap(args: EventData) {
+    AudioPlayer.pause();
+
+    // Forces audio to restart on next play
+    let pairedMedicineName = viewModel.get("currentMedicineName");
+    let audioPath = Utility.Language.getAudioPath(pairedMedicineName);
+    AudioPlayer.useAudio(audioPath);
+};
+
+let medicineName: string = null;
+
+export function onListPickerLoaded(args: EventData) {
+    const listPicker = <ListPicker>args.object;
+    listPicker.on("selectedIndexChange", (lpargs) => {
+        viewModel.set("index", listPicker.selectedIndex);
+        medicineName = (<any>listPicker).selectedValue;
+        
+        console.log(`ListPicker selected value: ${(<any>listPicker).selectedValue}`);
+        console.log(`ListPicker selected index: ${listPicker.selectedIndex}`);
+    });
+};
+
+export function onSelectMedicineTap(args: EventData) {
+    viewModel.set("isSelectingAction", true);
+    viewModel.set("isMedicineDisplayed", true);
+
+    viewModel.set("isTagDisplayed", false);
+    viewModel.set("isSelectingMedicine", false);
+    viewModel.set("currentMedicineName", medicineName);
 }
 
 function setActiveLanguageText(): void {

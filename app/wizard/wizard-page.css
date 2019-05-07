@@ -1,6 +1,6 @@
 .title {
     font-size: 22;
-    margin-top: 60px;
+    /* margin-top: 60px; */
     text-align: center;
 }
 
@@ -71,6 +71,22 @@
     margin-right: 30px;
 }
 
+.align-left {
+    horizontal-align: left;
+}
+
+.align-center {
+    horizontal-align: center;
+}
+
+.align-right {
+    horizontal-align: right;
+}
+
+.selecting-medicine {
+    margin-top: inherit;
+}
+
 .searchPageContent {
     margin: 60px;
     margin-top: 60px;
@@ -91,7 +107,7 @@
 
 .header-template {
     background-color: #212121;
-    background-image: url('~/images/logo.png');
+    background-image: url('~/images/wizard.jpg');
     background-size: cover;
     height: 200;
 }

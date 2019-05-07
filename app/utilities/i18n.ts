@@ -381,6 +381,24 @@ export class I18N {
     }
 
 
+    i18nScannedOrSelected
+
+    /******************************
+     * Search Page
+     ******************************/
+
+    public get scannedMsg() {
+        const text: string[] = ["Scanned Tag for: ", "Etiqueta escaneada para: "];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get selectedMsg() {
+        const text: string[] = ["Selected Medicine: ", "Medicina eleccionada: "];
+        return text[this._activeLanguageIndex];
+    }
+
+
+
     /******************************
      * Settings Page
      ******************************/
