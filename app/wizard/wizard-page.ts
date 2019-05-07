@@ -19,7 +19,7 @@ import { AudioPlayer } from "~/audio-player/audio-player";
 import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
 import { ListPicker } from "tns-core-modules/ui/list-picker/list-picker";
 
-import { Settings } from "~/shared/settings";
+import { Settings } from "~/settings/settings";
 let settings: Settings = Settings.getInstance();
 
 let medicineName: string = null;
@@ -121,8 +121,8 @@ export function onConfirmDoseTakenTap() {
     settings.currentMedicine = viewModel.get("currentMedicineName");
     settings.isConfirmingDose = true;
     
-    const componentRoute = "dose/dose-page";
-    const componentTitle = "Dose";
+    const componentRoute = "home/home-page";
+    const componentTitle = "Home";
     navigateTo(componentTitle, componentRoute);
 }
 

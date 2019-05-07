@@ -18,8 +18,9 @@ import { MedicineBinding } from "~/data-models/medicine-binding";
 import { Button } from "tns-core-modules/ui/button/button";
 
 import { I18N } from "~/utilities/i18n";
+import { RFID } from "~/utilities/rfid";
 
-import { Settings } from "~/shared/settings";
+import { Settings } from "~/settings/settings";
 let settings: Settings = Settings.getInstance();
 
 let medicineList: MedicineBinding[] = null;
@@ -27,10 +28,9 @@ let medicineList: MedicineBinding[] = null;
 let page: Page = null;
 let viewModel: DoseViewModel = null;
 
-let audioPlayer: AudioPlayer = null;
-
-// Page Text
+// Singletons
 let i18n = I18N.instance;
+let rfid: RFID = null;
 
 // Editing buttons
 let isEditingAvailable: boolean = false;
@@ -38,6 +38,7 @@ let isEditingDosesTakenToday: boolean = false;
 let isEditingTotalDosesPerDay: boolean = false;
 
 // Audio controls and buttons
+let audioPlayer: AudioPlayer = null;
 let isAudioActive: boolean = false;
 let isAudioEnabled: boolean = false;
 
@@ -95,6 +96,11 @@ export function onLoaded(args: EventData) {
         audioPlayer = new AudioPlayer();
     }
 
+    if (rfid === null) {
+        rfid = RFID.instance;
+        rfid.startTagListener();
+    }
+
     isAudioActive = false;
     isAudioEnabled = false;
     viewModel.set("isAudioEnabled", isAudioEnabled);
@@ -130,6 +136,7 @@ export function onLoaded(args: EventData) {
 
     // Set text to active language
     setActiveLanguageText();
+    viewModel.set("isDualLanguageEnabled", i18n.isDualLanguageEnabled);
 };
 
 function displayCurrentDoses() {
@@ -559,6 +566,17 @@ export function onAudioEnableTap(args: ItemEventData) {
     let medicineName = viewModel.get("currentMedicineName");
     let audioPath = Utility.Language.getAudioPath(medicineName);
     AudioPlayer.useAudio(audioPath);
+};
+
+// Dose page does not have room for language buttons, switch from settings instead
+export function onEnglishTap() {
+    i18n.activeLanguage = "english";
+    setActiveLanguageText();
+};
+
+export function onSpanishTap() {
+    i18n.activeLanguage = "spanish";
+    setActiveLanguageText();
 };
 
 function findTagIdIndex(tagId: string, list: MedicineBinding[]): number {
