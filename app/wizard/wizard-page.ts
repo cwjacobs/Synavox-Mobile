@@ -19,6 +19,11 @@ import { AudioPlayer } from "~/audio-player/audio-player";
 import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
 import { ListPicker } from "tns-core-modules/ui/list-picker/list-picker";
 
+import { Settings } from "~/shared/settings";
+let settings: Settings = Settings.getInstance();
+
+let medicineName: string = null;
+
 let viewModel: WizardViewModel = null;
 
 let medicineTagPairs: MedicineBinding[] = null;
@@ -99,9 +104,89 @@ export function onLoaded(args: EventData) {
         viewModel.set("isMedicineDisplayed", false);
         viewModel.set("isSelectingAction", false);
         viewModel.set("i18nScannedOrSelected", i18n.selectedMsg);
-
     }
 }
+
+export function onAlwaysConfirmTap() {
+    alert("onAlwaysConfirmTap");
+}
+
+export function onHomeTap() {
+    const componentRoute = "home/home-page";
+    const componentTitle = "Home";
+    navigateTo(componentTitle, componentRoute);
+}
+
+export function onConfirmDoseTakenTap() {
+    settings.currentMedicine = viewModel.get("currentMedicineName");
+    settings.isConfirmingDose = true;
+    
+    const componentRoute = "dose/dose-page";
+    const componentTitle = "Dose";
+    navigateTo(componentTitle, componentRoute);
+}
+
+export function onPairTap() {
+    const componentRoute = "pair/pair-page";
+    const componentTitle = "Pair";
+    navigateTo(componentTitle, componentRoute);
+}
+
+// Audio control functions
+export function onPlayTap(args: ItemEventData) {
+    let pairedMedicineName: string = viewModel.get("currentMedicineName");
+    if (pairedMedicineName.length === 0) {
+        alert("No medicine name...");
+        return;
+    }
+    let audioPath = Utility.Language.getAudioPath(pairedMedicineName);
+    AudioPlayer.useAudio(audioPath);
+    AudioPlayer.togglePlay();
+};
+
+export function onStopTap(args: EventData) {
+    AudioPlayer.pause();
+
+    // Forces audio to restart on next play
+    let pairedMedicineName = viewModel.get("currentMedicineName");
+    let audioPath = Utility.Language.getAudioPath(pairedMedicineName);
+    AudioPlayer.useAudio(audioPath);
+};
+
+export function onListPickerLoaded(args: EventData) {
+    const listPicker = <ListPicker>args.object;
+    listPicker.on("selectedIndexChange", (lpargs) => {
+        viewModel.set("index", listPicker.selectedIndex);
+        medicineName = (<any>listPicker).selectedValue;
+
+        console.log(`ListPicker selected value: ${(<any>listPicker).selectedValue}`);
+        console.log(`ListPicker selected index: ${listPicker.selectedIndex}`);
+    });
+};
+
+export function onSelectMedicineTap(args: EventData) {
+    viewModel.set("isSelectingAction", true);
+    viewModel.set("isMedicineDisplayed", true);
+
+    viewModel.set("isTagDisplayed", false);
+    viewModel.set("isSelectingMedicine", false);
+    viewModel.set("currentMedicineName", medicineName);
+}
+
+function setActiveLanguageText(): void {
+    viewModel.set("i18nPageTitle", i18n.wizardPageTitle);
+    viewModel.set("i18nMedicineListTitle", i18n.myMedicines);
+
+    viewModel.set("i18nSelect", i18n.select);
+    viewModel.set("i18nScrollInstructions", i18n.scrollInstructions);
+
+    viewModel.set("i18nTookADose", i18n.action_tookADose);
+    viewModel.set("i18nConfirmDoseTaken", i18n.confirmDoseTaken);
+    viewModel.set("i18nAlwaysConfirmDose", i18n.action_alwaysConfirmDose);
+
+    viewModel.set("i18nHearAudio", i18n.action_hearAudio);
+    viewModel.set("i18nAlwaysPlayAudio", i18n.action_alwaysPlayAudio);
+};
 
 function getMedicineNames(medicineTagPairs: MedicineBinding[]): string[] {
     let medicineNames: string[] = [];
@@ -164,75 +249,5 @@ function navigateTo(componentTitle: string, componentRoute: string): void {
         }
     });
 }
-
-export function onAlwaysConfirmTap() {
-    alert("onAlwaysConfirmTap");
-}
-
-export function onHomeTap() {
-    const componentRoute = "home/home-page";
-    const componentTitle = "Home";
-    navigateTo(componentTitle, componentRoute);
-}
-
-export function onDoseTap() {
-    const componentRoute = "dose/dose-page";
-    const componentTitle = "Dose";
-    navigateTo(componentTitle, componentRoute);
-}
-
-export function onPairTap() {
-    const componentRoute = "pair/pair-page";
-    const componentTitle = "Pair";
-    navigateTo(componentTitle, componentRoute);
-}
-
-// Audio control functions
-export function onPlayTap(args: ItemEventData) {
-    let pairedMedicineName: string = viewModel.get("currentMedicineName");
-    if (pairedMedicineName.length === 0) {
-        alert("No medicine name...");
-        return;
-    }
-    let audioPath = Utility.Language.getAudioPath(pairedMedicineName);
-    AudioPlayer.useAudio(audioPath);
-    AudioPlayer.togglePlay();
-};
-
-export function onStopTap(args: EventData) {
-    AudioPlayer.pause();
-
-    // Forces audio to restart on next play
-    let pairedMedicineName = viewModel.get("currentMedicineName");
-    let audioPath = Utility.Language.getAudioPath(pairedMedicineName);
-    AudioPlayer.useAudio(audioPath);
-};
-
-let medicineName: string = null;
-
-export function onListPickerLoaded(args: EventData) {
-    const listPicker = <ListPicker>args.object;
-    listPicker.on("selectedIndexChange", (lpargs) => {
-        viewModel.set("index", listPicker.selectedIndex);
-        medicineName = (<any>listPicker).selectedValue;
-        
-        console.log(`ListPicker selected value: ${(<any>listPicker).selectedValue}`);
-        console.log(`ListPicker selected index: ${listPicker.selectedIndex}`);
-    });
-};
-
-export function onSelectMedicineTap(args: EventData) {
-    viewModel.set("isSelectingAction", true);
-    viewModel.set("isMedicineDisplayed", true);
-
-    viewModel.set("isTagDisplayed", false);
-    viewModel.set("isSelectingMedicine", false);
-    viewModel.set("currentMedicineName", medicineName);
-}
-
-function setActiveLanguageText(): void {
-    viewModel.set("i18nPageTitle", i18n.searchPageTitle);
-    viewModel.set("i18nMedicineListTitle", i18n.myMedicines);
-};
 
 

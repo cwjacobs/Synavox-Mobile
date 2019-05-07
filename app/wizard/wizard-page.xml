@@ -29,9 +29,9 @@
 			<parallax:Content class="body-template">
 				<StackLayout class="list-container" style="margin-top: 5px;">
 					<StackLayout class="selecting-medicine" visibility="{{ isSelectingMedicine ? 'visible' : 'collapsed' }}">
-						<Label class="title align-left" text="Scroll then Select medicine"></Label>
+						<Label class="title align-left" text="{{ i18nScrollInstructions }}"></Label>
 						<GridLayout rows="auto" columns="auto,*">
-							<Button class="my-button primary" text="Select" onTap="onSelectMedicineTap" row="0" col="0" />
+							<Button class="my-button primary" text="{{ i18nSelect }}" onTap="onSelectMedicineTap" row="0" col="0" />
 							<StackLayout row="0" col="1">
 								<ListPicker class="p-15 picker" items="{{ myMedicineNamesList }}" selectedIndex="{{ index }}" selectedValue="{{ selectedItem }}" loaded="onListPickerLoaded" row="1" />
 								<!-- <ListPicker items="{{ myMedicineNamesList }}" selectedIndex="{{ index }}" selectedValue="{{ selectedItem }}" loaded="onListPickerLoaded" class="p-15 picker" row="1" /> -->
@@ -40,23 +40,23 @@
 					</StackLayout>
 					<GridLayout rows="*,*,30,*,*,auto" columns="*,auto" visibility="{{ isSelectingAction ? 'visible' : 'collapsed' }}">
 						<StackLayout row="0" col="0">
-							<Label class="pairing-TagId" text="I just took a dose" />
+							<Label class="pairing-TagId" text="{{ i18nTookADose }}" />
 							<!-- <StackLayout class="hr-primary text-underscore"></StackLayout> -->
 						</StackLayout>
-						<Button class="my-button primary" text="Confirm" onTap="onDoseTap" row="0" col="1" rowSpan="2" />
+						<Button class="my-button primary" text="{{ i18nConfirmDoseTaken }}" onTap="onConfirmDoseTakenTap" row="0" col="1" rowSpan="2" />
 						<GridLayout style="margin-top: 50px;" rows="auto" columns="auto, *" row="1" col="0" colSpan="2">
-							<Label class="always-do-this" text="Always confirm dose" row="0" col="0" onTap="onAlwaysConfirmTap" />
+							<Label class="always-do-this" text="{{ i18nAlwaysConfirmDose }}" row="0" col="0" onTap="onAlwaysConfirmTap" />
 							<Label class="indicator fa" style="{{ isAlwaysConfirm ? 'color: #000000' : 'color: #AAAAAA' }}" text="&#xf046;" row="0" col="1" />
 						</GridLayout>
 						<StackLayout class="hr-secondary" row="2" col="0" colSpan="2"></StackLayout>
-						<Label class="pairing-TagId" text="I want to hear the audio" row="3" col="0" colSpan="2" />
+						<Label class="pairing-TagId" text="{{ i18nHearAudio }}" row="3" col="0" colSpan="2" />
 						<GridLayout class="audio-button-row" rows="70" columns="*,*" row="4" col="0" colSpan="2">
 							<!-- <Button class="my-button audio-button enableAudio-button fa" text="&#xf29e;" visibility="{{ isAudioEnabled ? 'collapsed' : 'visible' }}" onTap="onAudioEnableTap" row="0" col="0" /><Button class="my-button audio-button enableAudio-button fa" text="&#xf29e;  &#xf046;" visibility="{{ isAudioEnabled ? 'visible' : 'collapsed' }}" onTap="onAudioEnableTap" row="0" col="0" /> -->
 							<Button class="my-button audio-button fa" text="&#xf04b;" isEnabled="{{ isAudioEnabled }}" onTap="onPlayTap" row="0" col="0" />
 							<Button class="my-button audio-button fa" text="&#xf04d;" isEnabled="{{ isAudioEnabled }}" onTap="onStopTap" row="0" col="1" />
 						</GridLayout>
 						<GridLayout rows="auto" columns="auto, *" row="5" col="0" colSpan="2">
-							<Label class="always-do-this" text="Always play audio" row="0" col="0" onTap="onAlwaysPlayTap" />
+							<Label class="always-do-this" text="{{ i18nAlwaysPlayAudio }}" row="0" col="0" onTap="onAlwaysPlayTap" />
 							<Label class="indicator fa" style="{{ isAlwaysConfirm ? 'color: #000000' : 'color: #AAAAAA' }}" text="&#xf046;" row="0" col="1" />
 						</GridLayout>
 						<!-- <Button text="Audio" onTap="onHomeTap" row="1" col="1" /> -->

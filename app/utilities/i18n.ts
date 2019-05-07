@@ -372,20 +372,13 @@ export class I18N {
 
 
     /******************************
-     * Search Page
+     * Wizard Page
      ******************************/
 
-    public get searchPageTitle() {
+    public get wizardPageTitle() {
         const text: string[] = ["Scan Wizard", "Asistente de Digitalización"];
         return text[this._activeLanguageIndex];
     }
-
-
-    i18nScannedOrSelected
-
-    /******************************
-     * Search Page
-     ******************************/
 
     public get scannedMsg() {
         const text: string[] = ["Scanned Tag for: ", "Etiqueta escaneada para: "];
@@ -397,6 +390,40 @@ export class I18N {
         return text[this._activeLanguageIndex];
     }
 
+    public get action_tookADose() {
+        const text: string[] = ["I just took a dose", "Sólo tomé una dosis"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get action_hearAudio() {
+        const text: string[] = ["I want to hear the audio", "Quiero escuchar el audio"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get action_alwaysConfirmDose() {
+        const text: string[] = ["Always confirm dose", "Confirme siempre la dosis"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get action_alwaysPlayAudio() {
+        const text: string[] = ["Always play audio", "Siempre reproduzca audio"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get confirmDoseTaken() {
+        const text: string[] = ["Confirm", "Confirmar"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get scrollInstructions() {
+        const text: string[] = ["Scroll then Select medicine", "Desplácese a continuación, seleccione medicamento"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get select() {
+        const text: string[] = ["Select", "Seleccione"];
+        return text[this._activeLanguageIndex];
+    }
 
 
     /******************************

@@ -19,6 +19,9 @@ import { Button } from "tns-core-modules/ui/button/button";
 
 import { I18N } from "~/utilities/i18n";
 
+import { Settings } from "~/shared/settings";
+let settings: Settings = Settings.getInstance();
+
 let medicineList: MedicineBinding[] = null;
 
 let page: Page = null;
@@ -84,6 +87,10 @@ export function onLoaded(args: EventData) {
         displayCurrentListDoses();
     }, 1000);
 
+    // Current list of paired medications
+    medicineList = Test.Dataset.getCurrentTestData();
+    viewModel.set("myMedicineList", medicineList);
+
     if (audioPlayer === null) {
         audioPlayer = new AudioPlayer();
     }
@@ -94,7 +101,18 @@ export function onLoaded(args: EventData) {
 
     // Initialize "Curent" values blank
     viewModel.set("currentTagId", "");
-    viewModel.set("currentMedicineName", "");
+
+    if (settings.isConfirmingDose) {
+        settings.isConfirmingDose = false;
+        viewModel.set("currentMedicineName", settings.currentMedicine);
+        registerDoseTaken(settings.currentMedicine);
+
+        let index: number = findMedicineNameIndex(settings.currentMedicine, medicineList);
+        displayDosesPerDayInstructions(medicineList[index].dailyRequiredDoses);
+    }
+    else {
+        viewModel.set("currentMedicineName", "");
+    }
 
     // Initialize editing buttons state
     isEditingAvailable = false;
@@ -109,10 +127,6 @@ export function onLoaded(args: EventData) {
     viewModel.set("isEditingTotalDosesPerDay", isEditingTotalDosesPerDay);
     let editTotalDosesPerDayButton: Button = page.getViewById("edit-total-required-doses");
     editTotalDosesPerDayButton.backgroundColor = secondaryOff;
-
-    // Current list of paired medications
-    medicineList = Test.Dataset.getCurrentTestData();
-    viewModel.set("myMedicineList", medicineList);
 
     // Set text to active language
     setActiveLanguageText();
@@ -200,7 +214,7 @@ export function onSaveTotalDosesPerDayTap() {
     displayCurrentDoses();
     displayCurrentListDoses();
 
-    displayDosesPerDay(medicineList[index].dailyRequiredDoses);
+    displayDosesPerDayInstructions(medicineList[index].dailyRequiredDoses);
 
     setActiveLanguageText();
 }
@@ -224,7 +238,7 @@ export function onCancelTotalDosesPerDayTap() {
     displayCurrentDoses();
     displayCurrentListDoses();
 
-    displayDosesPerDay(dailyRequiredDoses_old);
+    displayDosesPerDayInstructions(dailyRequiredDoses_old);
 
     setActiveLanguageText();
 }
@@ -283,7 +297,7 @@ export function onSaveDosesTakenTodayTap() {
     displayCurrentDoses();
     displayCurrentListDoses();
 
-    displayDosesPerDay(medicineList[index].dailyRequiredDoses);
+    displayDosesPerDayInstructions(medicineList[index].dailyRequiredDoses);
 
     setActiveLanguageText();
 }
@@ -307,7 +321,7 @@ export function onCancelDosesTakenTodayTap() {
     displayCurrentDoses();
     displayCurrentListDoses();
 
-    displayDosesPerDay(dailyRequiredDoses_old);
+    displayDosesPerDayInstructions(dailyRequiredDoses_old);
 
     setActiveLanguageText();
 }
@@ -374,7 +388,7 @@ function adustDailyDoseRequirement(indicator: any) {
 
         // Data store behind list is being updated, but we won't display it until save is pressed
         medicineList[index].dailyRequiredDoses = dailyRequiredDoses;
-        displayDosesPerDay(dailyRequiredDoses);
+        displayDosesPerDayInstructions(dailyRequiredDoses);
     }
 }
 
@@ -504,7 +518,7 @@ export function onItemTap(args: ItemEventData) {
     displayCurrentDoses();
 
     // Display dose instructions
-    displayDosesPerDay(medicineList[args.index].dailyRequiredDoses);
+    displayDosesPerDayInstructions(medicineList[args.index].dailyRequiredDoses);
 
     let audioPath = Utility.Language.getAudioPath(medicineName);
     AudioPlayer.useAudio(audioPath);
@@ -579,7 +593,7 @@ function setActiveLanguageText(): void {
     viewModel.set("i18nPageTitle", i18n.dosePageTitle);
 
     viewModel.set("i18nEditTotalDosesPerDayButtonText", i18n.changeDosesPerDay);
-    
+
     viewModel.set("i18nEditDosesTakenTodayButtonText", i18n.changeDosesTaken);
 }
 
@@ -588,7 +602,7 @@ function displayDosesTaken(dosesTaken: number): void {
     viewModel.set("i18nDailyInstructions", dosesTakenText);
 }
 
-function displayDosesPerDay(dosesPerDay: number): void {
+function displayDosesPerDayInstructions(dosesPerDay: number): void {
     let dosesPerDayText = i18n.dosesPerDay(dosesPerDay);
     viewModel.set("i18nDailyInstructions", dosesPerDayText);
 }
