@@ -48,6 +48,10 @@ let primaryOff: string = "#c1c8f8";
 let secondaryOn: string = "#398881";
 let secondaryOff: string = "#a4cac7";
 
+let isAlertActive: boolean = false;
+let alertOn: string = "#ff0000";
+// There is no alertOff required
+
 let dailyDoses_old: number = 0;
 let dailyRequiredDoses_old: number = 0;
 
@@ -87,6 +91,9 @@ export function onLoaded(args: EventData) {
     setTimeout(() => {
         displayCurrentListDoses();
     }, 1000);
+
+    // For controlling display of red (alert) or white colored dose indicators
+    isAlertActive = false;
 
     // Current list of paired medications
     medicineList = Test.Dataset.getCurrentTestData();
@@ -142,13 +149,13 @@ export function onLoaded(args: EventData) {
 function displayCurrentDoses() {
     let medicineName: string = viewModel.get("currentMedicineName");
     let index: number = findMedicineNameIndex(medicineName, Test.Dataset.getCurrentTestData());
-    let doseIndicatorBaseId: string = "current";
+    let doseIndicatorId_Base: string = "current";
 
     let dailyRequiredDoses: number = medicineList[index].dailyRequiredDoses;
     let dailyDoses: number = medicineList[index].dailyDoses;
 
     for (let i = 1; i < 6; i++) {
-        let doseIndicatorId: string = doseIndicatorBaseId + i.toString(10);
+        let doseIndicatorId: string = doseIndicatorId_Base + i.toString(10);
         let doseIndicator: Label = page.getViewById(doseIndicatorId);
 
         if (i <= dailyRequiredDoses) {
@@ -160,7 +167,13 @@ function displayCurrentDoses() {
             }
         }
         else {
-            doseIndicator.color = new Color("white");
+            if (isAlertActive) {
+                isAlertActive = false;
+                doseIndicator.color = new Color("red");
+            }
+            else {
+                doseIndicator.color = new Color("white");
+            }
         }
     }
 }
@@ -373,7 +386,7 @@ function adustDailyDoseTaken(indicator: any): void {
 
     // Data store behind list is being updated, but we won't display it until save is pressed
     medicineList[index].dailyDoses = dailyDoses;
-    displayDosesTaken(dailyDoses);
+    displayDosesTakenMsg(dailyDoses);
 }
 
 function adustDailyDoseRequirement(indicator: any) {
@@ -454,13 +467,20 @@ function displayCurrentListDoses() {
                 }
             }
             else {
-                doseIndicator.color = new Color("white");
+                if (isAlertActive) {
+                    //isAlertActive = false;
+                    doseIndicator.color = new Color("red");
+                }
+                else {
+                    doseIndicator.color = new Color("white");
+                }
             }
         }
     })
 }
 
 function registerDoseTaken(medicineName: string): void {
+    isAlertActive = true;
     let confirmMsg: string = getI18NConfirmMsg(medicineName);
     confirm(confirmMsg).then((isConfirmed) => {
         if (isConfirmed) {
@@ -604,7 +624,7 @@ function setActiveLanguageText(): void {
     viewModel.set("i18nEditDosesTakenTodayButtonText", i18n.changeDosesTaken);
 }
 
-function displayDosesTaken(dosesTaken: number): void {
+function displayDosesTakenMsg(dosesTaken: number): void {
     let dosesTakenText = i18n.dosesTaken(dosesTaken);
     viewModel.set("i18nDailyInstructions", dosesTakenText);
 }
