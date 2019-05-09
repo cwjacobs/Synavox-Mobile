@@ -28,19 +28,18 @@ export class RFID {
         this._tagListenerStarted = false;
 
         appRootContext = new AppRootViewModel();
+
         console.log("rfid - constructor complete; RFID._instance: " + RFID._instance);
+        
+        // NFC device interface component requires app to be up and running, so delay here...
+        setTimeout(() => {
+            this._nfc = new Nfc();
+            console.log("Created NFC device interface");
+        }, 500);
     }
 
     public static get instance() {
         return this._instance;
-    }
-
-    private get nfcInterface() {
-        return this._nfc;
-    }
-
-    private set nfcInterface(value: Nfc) {
-        this._nfc = value;
     }
 
     public get tagId(): string {
@@ -70,21 +69,16 @@ export class RFID {
     public startTagListener() {
         console.log("startTagListener() ? this._tagListenerStarted: " + this._tagListenerStarted);
         if (!this._tagListenerStarted) {
-            this.nfcInterface = new Nfc();
-            console.log("this.nfcInterface: " + this.nfcInterface.toString());
-
-            this.nfcInterface.available().then((avail) => {
+            this._nfc.available().then((avail) => {
                 if (!avail) {
                     alert("Pairing (NFC) is not available on this device")
                 }
                 else {
-                    this.nfcInterface.enabled().then((on) => {
+                    this._nfc.enabled().then((on) => {
                         if (!on) {
                             alert("Pairing (NFC) is not enabled on this device")
                         }
                         else {
-                            // alert("Pairing (NFC) is enabled on this device, you are good to go!")
-
                             let self = this;
                             this._tagListenerStarted = true;
                             console.log("this._nfc.setOnTagDiscoveredListener - this._tagListenerStarted: " + this._tagListenerStarted);
@@ -107,7 +101,6 @@ export class RFID {
     }
 
     private scanWizard(data: NfcTagData): void {
-        // alert("scanWizard(data: NfcTagData): " + data.id + data.techList);
         this._tagScanned = true;
         this.tagId = data.id.toString();
         const componentRoute = "wizard/wizard-page";

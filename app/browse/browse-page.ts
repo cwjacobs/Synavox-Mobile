@@ -16,6 +16,7 @@ import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
 import { topmost } from "tns-core-modules/ui/frame/frame";
 import { AppRootViewModel } from "~/app-root/app-root-view-model";
 import { I18N } from "~/utilities/i18n";
+import { AudioPlayer } from "~/audio-player/audio-player";
 
 let page: Page = null;
 let viewModel: BrowseViewModel = null;
@@ -41,6 +42,10 @@ export function onNavigatingTo(args: NavigatedData) {
     page = <Page>args.object;
     viewModel = new BrowseViewModel();
     page.bindingContext = viewModel;
+}
+
+export function onNavigatingFrom(args: NavigatedData) {
+    AudioPlayer.stop();
 }
 
 export function onDrawerButtonTap(args: EventData) {

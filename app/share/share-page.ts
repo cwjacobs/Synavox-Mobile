@@ -36,6 +36,13 @@ let i18n = I18N.instance;
 // Page control buttons
 let i18nShareButtonText: string = null;
 
+// Dose indicator colors
+const alertColor: string = "#7700ff";
+const primary: string = "#3A53FF";
+const secondary: string = "#398881";
+const warning: string = "#B9B90C";
+
+
 /**
  * initial state - Filter is blank, list is displayed, contact is not displayed
  * Contact selected from list - Filter is blank, list is not displayed, contact is displayed
@@ -57,6 +64,7 @@ export function onNavigatingTo(args: NavigatedData) {
 }
 
 export function onNavigatingFrom(args: NavigatedData) {
+    AudioPlayer.stop();
 }
 
 export function onDrawerButtonTap(args: EventData) {
@@ -179,15 +187,9 @@ export function onContactTap(args: EventData) {
     viewModel.set("isShareComplete", isShareComplete);
 }
 
-const alertColor: string = "#7700ff";
-const primary: string = "#3A53FF";
-const secondary: string = "#398881";
-const warning: string = "#B9B90C";
-let shareText: string = null;
-
 export function onShareTap(args: EventData) {
     let shareButton: Button = page.getViewById("share-button");
-    shareText = shareButton.text;
+    let shareText: string = shareButton.text;
 
     let sharingText: string = get18NSharingText(shareText);
 

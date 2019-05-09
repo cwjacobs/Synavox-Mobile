@@ -29,18 +29,23 @@ let page: Page = null;
 let viewModel: HomeViewModel = null;
 
 // Singletons
-let i18n = I18N.instance;
-let rfid: RFID = null;
+// ****************************
+
+let i18n: I18N = I18N.instance;
+let rfid: RFID = RFID.instance;
+
+// Audio controls and buttons
+let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
+let isAudioActive: boolean = false;
+let isAudioEnabled: boolean = false;
+
+// ****************************
+
 
 // Editing buttons
 let isEditingAvailable: boolean = false;
 let isEditingDosesTakenToday: boolean = false;
 let isEditingTotalDosesPerDay: boolean = false;
-
-// Audio controls and buttons
-let audioPlayer: AudioPlayer = null;
-let isAudioActive: boolean = false;
-let isAudioEnabled: boolean = false;
 
 let primaryOn: string = "#3A53FF";
 let primaryOff: string = "#c1c8f8";
@@ -81,6 +86,10 @@ export function onNavigatingTo(args: NavigatedData) {
     page.bindingContext = viewModel;
 }
 
+export function onNavigatingFrom() {
+    AudioPlayer.stop();
+}
+
 export function onDrawerButtonTap(args: EventData) {
     const sideDrawer = <RadSideDrawer>app.getRootView();
     sideDrawer.showDrawer();
@@ -103,10 +112,8 @@ export function onLoaded(args: EventData) {
         audioPlayer = new AudioPlayer();
     }
 
-    if (rfid === null) {
-        rfid = RFID.instance;
-        rfid.startTagListener();
-    }
+    // Listener is stopped at each page exit to avoid runing in background
+    rfid.startTagListener();
 
     isAudioActive = false;
     isAudioEnabled = false;
@@ -145,38 +152,6 @@ export function onLoaded(args: EventData) {
     setActiveLanguageText();
     viewModel.set("isDualLanguageEnabled", i18n.isDualLanguageEnabled);
 };
-
-function displayCurrentDoses() {
-    let medicineName: string = viewModel.get("currentMedicineName");
-    let index: number = findMedicineNameIndex(medicineName, Test.Dataset.getCurrentTestData());
-    let doseIndicatorId_Base: string = "current";
-
-    let dailyRequiredDoses: number = medicineList[index].dailyRequiredDoses;
-    let dailyDoses: number = medicineList[index].dailyDoses;
-
-    for (let i = 1; i < 6; i++) {
-        let doseIndicatorId: string = doseIndicatorId_Base + i.toString(10);
-        let doseIndicator: Label = page.getViewById(doseIndicatorId);
-
-        if (i <= dailyRequiredDoses) {
-            if (i <= dailyDoses) {
-                doseIndicator.color = new Color(primaryOn);
-            }
-            else {
-                doseIndicator.color = new Color(primaryOff);
-            }
-        }
-        else {
-            if (isAlertActive) {
-                isAlertActive = false;
-                doseIndicator.color = new Color("red");
-            }
-            else {
-                doseIndicator.color = new Color("white");
-            }
-        }
-    }
-}
 
 export function onEditTotalDosesPerDayTap(args: EventData) {
     if ((isEditingAvailable) && (!isEditingDosesTakenToday)) {
@@ -346,6 +321,130 @@ export function onCancelDosesTakenTodayTap() {
     setActiveLanguageText();
 }
 
+export function current1(args: ItemEventData) {
+    let indicator: any = page.getViewById("current1");
+    adjustDoses(indicator);
+}
+
+export function current2(args: ItemEventData) {
+    let indicator: any = page.getViewById("current2");
+    adjustDoses(indicator);
+}
+
+export function current3(args: ItemEventData) {
+    let indicator: any = page.getViewById("current3");
+    adjustDoses(indicator);
+}
+
+export function current4(args: ItemEventData) {
+    let indicator: any = page.getViewById("current4");
+    adjustDoses(indicator);
+}
+
+export function current5(args: ItemEventData) {
+    let indicator: any = page.getViewById("current5");
+    adjustDoses(indicator);
+}
+
+export function onItemTap(args: ItemEventData) {
+    let medicineName: string = medicineList[args.index].medicineName;
+    viewModel.set("currentMedicineName", medicineName);
+
+    let currentMedicineNameView: any = page.getViewById("current-medicine-name");
+    currentMedicineNameView.color = primaryOn;
+
+    // Enable editing
+    isEditingAvailable = true;
+
+    isEditingDosesTakenToday = false;
+    viewModel.set("isEditingDosesTakenToday", isEditingDosesTakenToday);
+    let editDosesTakenTodayButton: Button = page.getViewById("edit-doses-taken-today");
+    editDosesTakenTodayButton.backgroundColor = primaryOn;
+
+    isEditingTotalDosesPerDay = false;
+    viewModel.set("isEditingTotalDosesPerDay", isEditingTotalDosesPerDay);
+    let editTotalDosesPerDayButton: Button = page.getViewById("edit-total-required-doses");
+    editTotalDosesPerDayButton.backgroundColor = secondaryOn;
+
+    // Get dose numbers for each medicine
+    displayCurrentDoses();
+
+    // Display dose instructions
+    displayDosesPerDayInstructions(medicineList[args.index].dailyRequiredDoses);
+
+    let audioPath = Utility.Language.getAudioPath(medicineName);
+    AudioPlayer.useAudio(audioPath);
+    if (isAudioEnabled) {
+        AudioPlayer.play();
+    }
+};
+
+// Audio control functions
+export function onPlayTap(args: ItemEventData) {
+    let medicineName: string = viewModel.get("currentMedicineName");
+    if (medicineName.length === 0) {
+        alert("No medicine name...");
+        return;
+    }
+
+    AudioPlayer.togglePlay();
+    isAudioActive = !isAudioActive;
+};
+
+export function onStopTap(args: EventData) {
+    AudioPlayer.pause();
+    isAudioActive = false;
+
+    // Forces audio to restart on next play
+    let medicineName = viewModel.get("currentMedicineName");
+    let audioPath = Utility.Language.getAudioPath(medicineName);
+    AudioPlayer.useAudio(audioPath);
+};
+
+export function onAudioEnableTap(args: ItemEventData) {
+    isAudioEnabled = !isAudioEnabled;
+    viewModel.set("isAudioEnabled", isAudioEnabled);
+
+    AudioPlayer.pause();
+    isAudioActive = false;
+
+    let medicineName = viewModel.get("currentMedicineName");
+    let audioPath = Utility.Language.getAudioPath(medicineName);
+    AudioPlayer.useAudio(audioPath);
+};
+
+function displayCurrentDoses() {
+    let medicineName: string = viewModel.get("currentMedicineName");
+    let index: number = findMedicineNameIndex(medicineName, Test.Dataset.getCurrentTestData());
+    let doseIndicatorId_Base: string = "current";
+
+    let dailyRequiredDoses: number = medicineList[index].dailyRequiredDoses;
+    let dailyDoses: number = medicineList[index].dailyDoses;
+
+    for (let i = 1; i < 6; i++) {
+        let doseIndicatorId: string = doseIndicatorId_Base + i.toString(10);
+        let doseIndicator: Label = page.getViewById(doseIndicatorId);
+
+        if (i <= dailyRequiredDoses) {
+            if (i <= dailyDoses) {
+                doseIndicator.color = new Color(primaryOn);
+            }
+            else {
+                doseIndicator.color = new Color(primaryOff);
+            }
+        }
+        else {
+            if (isAlertActive) {
+                isAlertActive = false;
+                doseIndicator.color = new Color("red");
+            }
+            else {
+                doseIndicator.color = new Color("white");
+            }
+        }
+    }
+}
+
 function toggleIndicator(indicator: any): number {
     let adjustTotal: number = 0;
 
@@ -424,31 +523,6 @@ function adjustDoses(indicator: any): void {
     }
 }
 
-export function current1(args: ItemEventData) {
-    let indicator: any = page.getViewById("current1");
-    adjustDoses(indicator);
-}
-
-export function current2(args: ItemEventData) {
-    let indicator: any = page.getViewById("current2");
-    adjustDoses(indicator);
-}
-
-export function current3(args: ItemEventData) {
-    let indicator: any = page.getViewById("current3");
-    adjustDoses(indicator);
-}
-
-export function current4(args: ItemEventData) {
-    let indicator: any = page.getViewById("current4");
-    adjustDoses(indicator);
-}
-
-export function current5(args: ItemEventData) {
-    let indicator: any = page.getViewById("current5");
-    adjustDoses(indicator);
-}
-
 function displayCurrentListDoses() {
     medicineList.forEach((value) => {
         let doseIndicatorBaseId: string = value.medicineName;
@@ -492,101 +566,6 @@ function registerDoseTaken(medicineName: string): void {
         }
     });
 }
-
-// function onTagDiscoveredListener(nfcTagData: NfcTagData) {
-//     let tagId: string = Utility.Helpers.formatTagId(nfcTagData.id);
-//     let medicineList: MedicineBinding[] = Test.Dataset.getCurrentTestData();
-
-//     // See if medicine with this tag already exists in the myMedicineList
-//     let index: number = findTagIdIndex(tagId, medicineList);
-//     if (index != -1) { // existing tag found, display associated medicine name
-//         let medicineName: string = medicineList[index].medicineName;
-//         viewModel.set("currentMedicineName", medicineName);
-
-//         registerDoseTaken(medicineName.toLowerCase());
-
-//         let audioPath = Utility.Language.getAudioPath(medicineName);
-//         AudioPlayer.useAudio(audioPath);
-//         if (isAudioEnabled) {
-//             AudioPlayer.play();
-//         }
-//     }
-//     else { // New tag, lock tagId display
-//         viewModel.set("currentMedicineName", "tag not found");
-//     }
-// }
-
-export function onNavigatingFrom() {
-    // Remove this page's listener
-    // nfc.setOnTagDiscoveredListener(null);
-}
-
-export function onItemTap(args: ItemEventData) {
-    let medicineName: string = medicineList[args.index].medicineName;
-    viewModel.set("currentMedicineName", medicineName);
-
-    let currentMedicineNameView: any = page.getViewById("current-medicine-name");
-    currentMedicineNameView.color = primaryOn;
-
-    // Enable editing
-    isEditingAvailable = true;
-
-    isEditingDosesTakenToday = false;
-    viewModel.set("isEditingDosesTakenToday", isEditingDosesTakenToday);
-    let editDosesTakenTodayButton: Button = page.getViewById("edit-doses-taken-today");
-    editDosesTakenTodayButton.backgroundColor = primaryOn;
-
-    isEditingTotalDosesPerDay = false;
-    viewModel.set("isEditingTotalDosesPerDay", isEditingTotalDosesPerDay);
-    let editTotalDosesPerDayButton: Button = page.getViewById("edit-total-required-doses");
-    editTotalDosesPerDayButton.backgroundColor = secondaryOn;
-
-    // Get dose numbers for each medicine
-    displayCurrentDoses();
-
-    // Display dose instructions
-    displayDosesPerDayInstructions(medicineList[args.index].dailyRequiredDoses);
-
-    let audioPath = Utility.Language.getAudioPath(medicineName);
-    AudioPlayer.useAudio(audioPath);
-    if (isAudioEnabled) {
-        AudioPlayer.play();
-    }
-};
-
-// Audio control functions
-export function onPlayTap(args: ItemEventData) {
-    let medicineName: string = viewModel.get("currentMedicineName");
-    if (medicineName.length === 0) {
-        alert("No medicine name...");
-        return;
-    }
-
-    AudioPlayer.togglePlay();
-    isAudioActive = !isAudioActive;
-};
-
-export function onStopTap(args: EventData) {
-    AudioPlayer.pause();
-    isAudioActive = false;
-
-    // Forces audio to restart on next play
-    let medicineName = viewModel.get("currentMedicineName");
-    let audioPath = Utility.Language.getAudioPath(medicineName);
-    AudioPlayer.useAudio(audioPath);
-};
-
-export function onAudioEnableTap(args: ItemEventData) {
-    isAudioEnabled = !isAudioEnabled;
-    viewModel.set("isAudioEnabled", isAudioEnabled);
-
-    AudioPlayer.pause();
-    isAudioActive = false;
-
-    let medicineName = viewModel.get("currentMedicineName");
-    let audioPath = Utility.Language.getAudioPath(medicineName);
-    AudioPlayer.useAudio(audioPath);
-};
 
 function findTagIdIndex(tagId: string, list: MedicineBinding[]): number {
     let i: number = 0;

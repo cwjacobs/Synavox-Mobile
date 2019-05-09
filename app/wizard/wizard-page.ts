@@ -44,6 +44,7 @@ export function onNavigatingTo(args: NavigatedData) {
 }
 
 export function onNavigatingFrom(args: NavigatedData) {
+    AudioPlayer.stop();
 }
 
 export function onDrawerButtonTap(args: EventData) {
@@ -99,7 +100,7 @@ export function onLoaded(args: EventData) {
         viewModel.set("myMedicineNamesList", myMedicineNamesList);
         viewModel.set("isSelectingMedicine", true);
         viewModel.set("index", 1);
-        
+
         viewModel.set("isTagDisplayed", false);
         viewModel.set("isMedicineDisplayed", false);
         viewModel.set("isSelectingAction", false);
@@ -120,7 +121,7 @@ export function onHomeTap() {
 export function onConfirmDoseTakenTap() {
     settings.currentMedicine = viewModel.get("currentMedicineName");
     settings.isConfirmingDose = true;
-    
+
     const componentRoute = "home/home-page";
     const componentTitle = "Home";
     navigateTo(componentTitle, componentRoute);

@@ -22,7 +22,6 @@ let page: Page = null;
 let viewModel: PairViewModel = null;
 
 let isTagIdLocked: boolean;
-let audioPlayer: AudioPlayer = null;
 
 // Page Text
 let i18n = I18N.instance;
@@ -31,6 +30,7 @@ let i18n = I18N.instance;
 let rfid = RFID.instance;
 
 // Audio controls and buttons
+let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
 let isAudioActive: boolean = false;
 let isAudioEnabled: boolean = false;
 
@@ -60,22 +60,20 @@ export function onNavigatingTo(args: NavigatedData) {
     page.bindingContext = viewModel;
 }
 
+export function onNavigatingFrom(args: NavigatedData) {
+    AudioPlayer.stop();
+}
+
 export function onDrawerButtonTap(args: EventData) {
     const sideDrawer = <RadSideDrawer>app.getRootView();
     sideDrawer.showDrawer();
 };
 
 export function onLoaded(args: EventData) {
-    if (audioPlayer === null) {
-        audioPlayer = new AudioPlayer();
-    }
-
     isAudioActive = false;
     isAudioEnabled = false;
     viewModel.set("isAudioEnabled", isAudioEnabled);
 
-    // alert("rfid.tagScanned: " + rfid.tagScanned + " tagId: " + rfid.tagId);
-    
     if (rfid.newTagScanned) {
         console.log("rfid.tagScanned: " + rfid.tagScanned + " tagId: " + rfid.tagId);
         // We're here because an unpaired tag was scanned, let's walk the user through next steps...
@@ -96,34 +94,6 @@ export function onLoaded(args: EventData) {
     // Set text to active language
     setActiveLanguageText();
 };
-
-// function onTagDiscoveredListener(nfcTagData: NfcTagData) {
-//     isTagIdLocked = false;
-//     let tagId: string = Utility.Helpers.formatTagId(nfcTagData.id);
-//     viewModel.set("currentTagId", tagId);
-
-//     // See if medicine with this tag already exists in the myMedicineList
-//     let index: number = findTagIdIndex(tagId);
-//     if (index != -1) { // existing tag found, display associated medicine name
-//         let medicineName: string = medicineList[index].medicineName;
-//         viewModel.set("currentMedicineName", medicineName);
-
-//         let audioPath = Utility.Language.getAudioPath(medicineName);
-//         AudioPlayer.useAudio(audioPath);
-//         if (isAudioEnabled) {
-//             AudioPlayer.play();
-//         }
-//     }
-//     else { // New tag, lock tagId display
-//         isTagIdLocked = true;
-//         viewModel.set("currentMedicineName", "");
-//     }
-// }
-
-export function onNavigatingFrom() {
-    // Remove this page's listener
-    // nfc.setOnTagDiscoveredListener(null);
-}
 
 export function onItemTap(args: ItemEventData) {
     let medicineName: string = medicineList[args.index].medicineName;

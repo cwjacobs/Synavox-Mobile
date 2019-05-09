@@ -8,6 +8,7 @@ import * as Test from "../data-models/test-data";
 import * as Utility from "../utility-functions/utility-functions";
 
 import { I18N } from "~/utilities/i18n";
+import { AudioPlayer } from "~/audio-player/audio-player";
 
 let page: Page = null;
 let activeLanguage: string = null;
@@ -21,6 +22,10 @@ export function onNavigatingTo(args: NavigatedData) {
     viewModel = new SettingsViewModel();
 
     page.bindingContext = viewModel;
+}
+
+export function onNavigatingFrom(args: NavigatedData) {
+    AudioPlayer.stop();
 }
 
 export function onLoaded(args: NavigatedData) {
