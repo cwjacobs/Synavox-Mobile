@@ -31,7 +31,7 @@ let contactFilter: string = null;
 let viewModel: ShareViewModel = null;
 
 // Page Text
-let i18n = I18N.instance;
+let i18n = I18N.getInstance();
 
 // Page control buttons
 let i18nShareButtonText: string = null;

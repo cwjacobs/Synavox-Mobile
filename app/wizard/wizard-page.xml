@@ -28,7 +28,7 @@
 			</parallax:Anchored>
 			<parallax:Content class="body-template">
 				<StackLayout class="list-container" style="margin-top: 5px;">
-					<StackLayout class="selecting-medicine" visibility="{{ isSelectingMedicine ? 'visible' : 'collapsed' }}">
+					<StackLayout visibility="{{ isSelectingMedicine ? 'visible' : 'collapsed' }}">
 						<Label class="title align-left" text="{{ i18nScrollInstructions }}"></Label>
 						<GridLayout rows="auto" columns="auto,*">
 							<Button class="my-button primary" text="{{ i18nSelect }}" onTap="onSelectMedicineTap" row="0" col="0" />
@@ -45,23 +45,20 @@
 						</StackLayout>
 						<Button class="my-button primary" text="{{ i18nConfirmDoseTaken }}" onTap="onConfirmDoseTakenTap" row="0" col="1" rowSpan="2" />
 						<GridLayout style="margin-top: 50px;" rows="auto" columns="auto, *" row="1" col="0" colSpan="2">
-							<Label class="always-do-this" text="{{ i18nAlwaysConfirmDose }}" row="0" col="0" onTap="onAlwaysConfirmTap" />
-							<Label class="indicator fa" style="{{ isAlwaysConfirm ? 'color: #000000' : 'color: #AAAAAA' }}" text="&#xf046;" row="0" col="1" />
+							<Label class="always-do-this" style="{{ isAlwaysConfirmDose ? 'color: #7700ff' : 'color: #DDDDDD' }}" text="{{ i18nAlwaysConfirmDose }}" row="0" col="0" onTap="onAlwaysConfirmTap" />
+							<Label class="indicator fa" style="{{ isAlwaysConfirmDose ? 'color: #7700ff' : 'color: #DDDDDD' }}" text="&#xf046;" row="0" col="1" />
 						</GridLayout>
 						<StackLayout class="hr-secondary" row="2" col="0" colSpan="2"></StackLayout>
 						<Label class="pairing-TagId" text="{{ i18nHearAudio }}" row="3" col="0" colSpan="2" />
 						<GridLayout class="audio-button-row" rows="70" columns="*,*" row="4" col="0" colSpan="2">
-							<!-- <Button class="my-button audio-button enableAudio-button fa" text="&#xf29e;" visibility="{{ isAudioEnabled ? 'collapsed' : 'visible' }}" onTap="onAudioEnableTap" row="0" col="0" /><Button class="my-button audio-button enableAudio-button fa" text="&#xf29e;  &#xf046;" visibility="{{ isAudioEnabled ? 'visible' : 'collapsed' }}" onTap="onAudioEnableTap" row="0" col="0" /> -->
 							<Button class="my-button audio-button fa" text="&#xf04b;" isEnabled="{{ isAudioEnabled }}" onTap="onPlayTap" row="0" col="0" />
 							<Button class="my-button audio-button fa" text="&#xf04d;" isEnabled="{{ isAudioEnabled }}" onTap="onStopTap" row="0" col="1" />
 						</GridLayout>
 						<GridLayout rows="auto" columns="auto, *" row="5" col="0" colSpan="2">
-							<Label class="always-do-this" text="{{ i18nAlwaysPlayAudio }}" row="0" col="0" onTap="onAlwaysPlayTap" />
-							<Label class="indicator fa" style="{{ isAlwaysConfirm ? 'color: #000000' : 'color: #AAAAAA' }}" text="&#xf046;" row="0" col="1" />
+							<Label class="always-do-this" style="{{ isAlwaysPlayAudio ? 'color: #7700ff' : 'color: #DDDDDD' }}" text="{{ i18nAlwaysPlayAudio }}" row="0" col="0" onTap="onAlwaysPlayTap" />
+							<Label class="indicator fa" style="{{ isAlwaysPlayAudio ? 'color: #7700ff' : 'color: #DDDDDD' }}" text="&#xf046;" row="0" col="1" />
 						</GridLayout>
-						<!-- <Button text="Audio" onTap="onHomeTap" row="1" col="1" /> -->
 					</GridLayout>
-					<!-- <Label class="title" text="{{ i18nMedicineListTitle }}"></Label> -->
 				</StackLayout>
 			</parallax:Content>
 		</parallax:ParallaxView>

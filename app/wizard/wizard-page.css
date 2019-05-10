@@ -47,6 +47,12 @@
     margin: 5px;
 }
 
+.hr-alert {
+    height: 1;
+    background-color: #7700ff;
+    width: 100%
+}
+
 .hr-primary {
     height: 1;
     background-color: #3A53FF;
@@ -67,6 +73,7 @@
 
 .always-do-this {
     font-size: 16;
+    font-weight:bold;
     margin-left: 0px;
     margin-right: 30px;
 }
@@ -81,10 +88,6 @@
 
 .align-right {
     horizontal-align: right;
-}
-
-.selecting-medicine {
-    margin-top: inherit;
 }
 
 .searchPageContent {

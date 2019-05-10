@@ -35,7 +35,7 @@ export class I18N {
         }
     };
 
-    public static get instance() {
+    public static getInstance() {
         return this._instance;
     }
 

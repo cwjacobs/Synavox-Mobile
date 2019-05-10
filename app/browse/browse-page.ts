@@ -31,12 +31,7 @@ let isUserBrowsing: boolean;
 let webViewSrcModel = null;
 
 // Page Text
-let i18n = I18N.instance;
-
-// let i18nPageTitle: string = null;
-// let i18nMedicineListTitle: string = null;
-// let i18nBackButtonText: string = null;
-// let i18nSaveButtonText: string = null;
+let i18n = I18N.getInstance();
 
 export function onNavigatingTo(args: NavigatedData) {
     page = <Page>args.object;

@@ -31,8 +31,8 @@ let viewModel: HomeViewModel = null;
 // Singletons
 // ****************************
 
-let i18n: I18N = I18N.instance;
-let rfid: RFID = RFID.instance;
+let i18n: I18N = I18N.getInstance();
+let rfid: RFID = RFID.getInstance();
 
 // Audio controls and buttons
 let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
@@ -171,7 +171,7 @@ export function onEditTotalDosesPerDayTap(args: EventData) {
         let currentMedicineNameView: any = page.getViewById("current-medicine-name");
         currentMedicineNameView.color = secondaryOn;
 
-        let index: number = findMedicineNameIndex(medicineName, Test.Dataset.getCurrentTestData());
+        let index: number = findMedicineNameIndex(medicineName, medicineList);
         // index_old = index;
 
         let doseIndicatorBaseId: string = "current";
@@ -203,7 +203,6 @@ export function onSaveTotalDosesPerDayTap() {
     let currentMedicineNameView: any = page.getViewById("current-medicine-name");
     currentMedicineNameView.color = primaryOn;
 
-    medicineList = Test.Dataset.getCurrentTestData();
     let index: number = findMedicineNameIndex(currentMedicineNameView.text, medicineList);
 
     displayCurrentDoses();
@@ -225,7 +224,6 @@ export function onCancelTotalDosesPerDayTap() {
     currentMedicineNameView.color = primaryOn;
 
     let medicineName: string = currentMedicineNameView.text;
-    medicineList = Test.Dataset.getCurrentTestData();
 
     let index: number = findMedicineNameIndex(medicineName, medicineList);
     medicineList[index].dailyRequiredDoses = dailyRequiredDoses_old;
@@ -256,7 +254,7 @@ export function onEditDosesTakenTodayTap(args: EventData) {
         let currentMedicineNameView: any = page.getViewById("current-medicine-name");
         currentMedicineNameView.color = primaryOn;
 
-        let index: number = findMedicineNameIndex(medicineName, Test.Dataset.getCurrentTestData());
+        let index: number = findMedicineNameIndex(medicineName, medicineList);
 
         let doseIndicatorBaseId: string = "current";
 
@@ -286,7 +284,6 @@ export function onSaveDosesTakenTodayTap() {
     let currentMedicineNameView: any = page.getViewById("current-medicine-name");
     currentMedicineNameView.color = primaryOn;
 
-    medicineList = Test.Dataset.getCurrentTestData();
     let index: number = findMedicineNameIndex(currentMedicineNameView.text, medicineList);
 
     displayCurrentDoses();
@@ -308,8 +305,6 @@ export function onCancelDosesTakenTodayTap() {
     currentMedicineNameView.color = primaryOn;
 
     let medicineName: string = currentMedicineNameView.text;
-    medicineList = Test.Dataset.getCurrentTestData();
-
     let index: number = findMedicineNameIndex(medicineName, medicineList);
     medicineList[index].dailyDoses = dailyDoses_old;
 
@@ -415,7 +410,7 @@ export function onAudioEnableTap(args: ItemEventData) {
 
 function displayCurrentDoses() {
     let medicineName: string = viewModel.get("currentMedicineName");
-    let index: number = findMedicineNameIndex(medicineName, Test.Dataset.getCurrentTestData());
+    let index: number = findMedicineNameIndex(medicineName, medicineList);
     let doseIndicatorId_Base: string = "current";
 
     let dailyRequiredDoses: number = medicineList[index].dailyRequiredDoses;
@@ -469,7 +464,6 @@ function toggleIndicator(indicator: any): number {
 
 function adustDailyDoseTaken(indicator: any): void {
     let medicineName: string = viewModel.get("currentMedicineName");
-    medicineList = Test.Dataset.getCurrentTestData();
     let index: number = findMedicineNameIndex(medicineName, medicineList);
     let dailyDoses: number = medicineList[index].dailyDoses;
 
@@ -490,7 +484,6 @@ function adustDailyDoseTaken(indicator: any): void {
 
 function adustDailyDoseRequirement(indicator: any) {
     let medicineName: string = viewModel.get("currentMedicineName");
-    medicineList = Test.Dataset.getCurrentTestData();
     let index: number = findMedicineNameIndex(medicineName, medicineList);
     let dailyRequiredDoses: number = medicineList[index].dailyRequiredDoses;
 
@@ -558,7 +551,7 @@ function registerDoseTaken(medicineName: string): void {
     let confirmMsg: string = getI18NConfirmMsg(medicineName);
     confirm(confirmMsg).then((isConfirmed) => {
         if (isConfirmed) {
-            let index: number = findMedicineNameIndex(medicineName, Test.Dataset.getCurrentTestData());
+            let index: number = findMedicineNameIndex(medicineName, medicineList);
             medicineList[index].dailyDoses += 1;
 
             displayCurrentDoses();

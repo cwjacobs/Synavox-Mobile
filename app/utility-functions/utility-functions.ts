@@ -14,7 +14,7 @@ import { MedicineBinding } from "~/data-models/medicine-binding";
 import { I18N } from "~/utilities/i18n";
 
 // Page Text
-let i18n = I18N.instance;
+let i18n = I18N.getInstance();
 
 // export namespace Rfid {
 //     let nfc: Nfc = null;

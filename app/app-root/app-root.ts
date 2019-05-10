@@ -11,7 +11,7 @@ import { I18N } from "~/utilities/i18n";
 let viewModel: AppRootViewModel = null;
 
 // I-18-N
-let i18n = I18N.instance;
+let i18n = I18N.getInstance();
 
 export function onNavigatingTo(args: EventData): void {
 }

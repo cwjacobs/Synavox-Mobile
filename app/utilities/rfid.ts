@@ -5,6 +5,14 @@
 import { NfcTagData, Nfc } from "nativescript-nfc";
 import { AppRootViewModel } from "~/app-root/app-root-view-model";
 import { topmost } from "tns-core-modules/ui/frame/frame";
+import { Settings } from "~/settings/settings";
+import { MedicineBinding } from "~/data-models/medicine-binding";
+
+import * as Test from "../data-models/test-data";
+import * as Utility from "../utility-functions/utility-functions";
+import { AudioPlayer } from "~/audio-player/audio-player";
+
+let settings: Settings = Settings.getInstance();
 
 // for browse branch
 let tagId: string;
@@ -30,7 +38,7 @@ export class RFID {
         appRootContext = new AppRootViewModel();
 
         console.log("rfid - constructor complete; RFID._instance: " + RFID._instance);
-        
+
         // NFC device interface component requires app to be up and running, so delay here...
         setTimeout(() => {
             this._nfc = new Nfc();
@@ -38,7 +46,7 @@ export class RFID {
         }, 500);
     }
 
-    public static get instance() {
+    public static getInstance() {
         return this._instance;
     }
 
@@ -100,22 +108,6 @@ export class RFID {
         }
     }
 
-    private scanWizard(data: NfcTagData): void {
-        this._tagScanned = true;
-        this.tagId = data.id.toString();
-        const componentRoute = "wizard/wizard-page";
-        const componentTitle = "Wizard";
-
-        appRootContext.selectedPage = componentTitle;
-
-        topmost().navigate({
-            moduleName: componentRoute,
-            transition: {
-                name: "fade"
-            }
-        });
-    }
-
     public stopTagListener(): void {
         this._nfc.setOnTagDiscoveredListener(null).then(() => {
             this._tagListenerStarted = false;
@@ -125,8 +117,54 @@ export class RFID {
         });
     }
 
-    public setOnTagDiscoveredListener(callback: any) {
-        alert("rfid - public setOnTagDiscoveredListener()");
-        // this.nfc.setOnTagDiscoveredListener((args: NfcTagData) => callback(args));
+    private scanWizard(data: NfcTagData): void {
+        this._tagScanned = true;
+        this.tagId = data.id.toString();
+
+        let medicineList = Test.Dataset.getCurrentTestData();
+        let medicineName: string = medicineList[this.findTagIdIndex(this.tagId, medicineList)].medicineName;
+
+        if (settings.isAlwaysPlayAudio) {
+            let audioPath = Utility.Language.getAudioPath(medicineName);
+            AudioPlayer.useAudio(audioPath);
+            AudioPlayer.togglePlay();
+        }
+        else if (settings.isAlwaysConfirmDose) {
+            settings.isConfirmingDose = true;
+            settings.currentMedicine = medicineName;
+
+            const componentRoute = "home/home-page";
+            const componentTitle = "Home";
+            this.navigateTo(componentTitle, componentRoute);
+        }
+        else {
+            const componentRoute = "wizard/wizard-page";
+            const componentTitle = "Wizard";
+            this.navigateTo(componentTitle, componentRoute);
+        }
+    }
+
+    private navigateTo(componentTitle: string, componentRoute: string): void {
+        appRootContext.selectedPage = componentTitle;
+        topmost().navigate({
+            moduleName: componentRoute,
+            transition: {
+                name: "fade"
+            }
+        });
+    }
+
+    private findTagIdIndex(tagId: string, list: MedicineBinding[]): number {
+        let i: number = 0;
+        let index: number = -1;
+        list.forEach(value => {
+            if (value.tagId === tagId) {
+                index = i;
+            }
+            else {
+                i = i + 1;
+            }
+        })
+        return index;
     }
 }

@@ -24,10 +24,10 @@ let viewModel: PairViewModel = null;
 let isTagIdLocked: boolean;
 
 // Page Text
-let i18n = I18N.instance;
+let i18n = I18N.getInstance();
 
 // NFC access
-let rfid = RFID.instance;
+let rfid = RFID.getInstance();
 
 // Audio controls and buttons
 let audioPlayer: AudioPlayer = AudioPlayer.getInstance();

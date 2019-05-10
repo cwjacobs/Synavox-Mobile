@@ -15,7 +15,7 @@ let activeLanguage: string = null;
 let viewModel: SettingsViewModel = null;
 
 // Page Text
-let i18n = I18N.instance;
+let i18n = I18N.getInstance();
 
 export function onNavigatingTo(args: NavigatedData) {
     page = <Page>args.object;

@@ -32,10 +32,10 @@ let medicineTagPairs: MedicineBinding[] = null;
 let appRootContext: AppRootViewModel = null;
 
 // Page Text
-let i18n = I18N.instance;
+let i18n = I18N.getInstance();
 
 // NFC access
-let rfid = RFID.instance;
+let rfid = RFID.getInstance();
 
 export function onNavigatingTo(args: NavigatedData) {
     const page = <Page>args.object;
@@ -55,9 +55,6 @@ export function onDrawerButtonTap(args: EventData) {
 export function onLoaded(args: EventData) {
     medicineTagPairs = Test.Dataset.getCurrentTestData();
     console.dir("medicineTagPairs: " + medicineTagPairs);
-
-    viewModel.set("myMedicineList", medicineTagPairs);
-    setActiveLanguageText();
 
     viewModel.set("i18nMedicineListTitle", i18n.homePageTitle);
     setActiveLanguageText();
@@ -92,7 +89,6 @@ export function onLoaded(args: EventData) {
             viewModel.set("isTagDisplayed", false);
             viewModel.set("isSelectingMedicine", false);
             viewModel.set("currentMedicineName", pairedMedicineName);
-            //pairedMedicineWizard(pairedMedicineName);
         }
     }
     else {
@@ -108,8 +104,22 @@ export function onLoaded(args: EventData) {
     }
 }
 
+export function onAlwaysPlayTap() {
+    settings.isAlwaysPlayAudio = !settings.isAlwaysPlayAudio;
+    viewModel.set("isAlwaysPlayAudio", settings.isAlwaysPlayAudio);
+    if (settings.isAlwaysPlayAudio) {
+        settings.isAlwaysConfirmDose = false;
+        viewModel.set("isAlwaysConfirmDose", settings.isAlwaysConfirmDose);
+    }
+}
+
 export function onAlwaysConfirmTap() {
-    alert("onAlwaysConfirmTap");
+    settings.isAlwaysConfirmDose = !settings.isAlwaysConfirmDose;
+    viewModel.set("isAlwaysConfirmDose", settings.isAlwaysConfirmDose);
+    if (settings.isAlwaysConfirmDose) {
+        settings.isAlwaysPlayAudio = false;
+        viewModel.set("isAlwaysPlayAudio", settings.isAlwaysPlayAudio);
+    }
 }
 
 export function onHomeTap() {
@@ -183,9 +193,11 @@ function setActiveLanguageText(): void {
 
     viewModel.set("i18nTookADose", i18n.action_tookADose);
     viewModel.set("i18nConfirmDoseTaken", i18n.confirmDoseTaken);
+    viewModel.set("isAlwaysConfirmDose", settings.isAlwaysConfirmDose);
     viewModel.set("i18nAlwaysConfirmDose", i18n.action_alwaysConfirmDose);
 
     viewModel.set("i18nHearAudio", i18n.action_hearAudio);
+    viewModel.set("isAlwaysPlayAudio", settings.isAlwaysPlayAudio);
     viewModel.set("i18nAlwaysPlayAudio", i18n.action_alwaysPlayAudio);
 };
 
@@ -195,10 +207,6 @@ function getMedicineNames(medicineTagPairs: MedicineBinding[]): string[] {
         medicineNames.push((pair.medicineName));
     })
     return medicineNames;
-}
-
-function pairedMedicineWizard(pairedMedicineName: string): void {
-    alert("Do pairedMedicineWizard for: " + pairedMedicineName);
 }
 
 function getPairedMedicineName(tagId: string, medicineBindingList: MedicineBinding[]): string {

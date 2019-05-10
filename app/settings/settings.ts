@@ -4,6 +4,10 @@ export class Settings {
 
     private _isConfirmingDose: boolean;
 
+    private _isAlwaysPlayAudio: boolean;
+
+    private _isAlwaysConfirmDose: boolean;
+
     private static _instance: Settings = new Settings();
 
     constructor() {
@@ -31,5 +35,21 @@ export class Settings {
 
     public set isConfirmingDose(value: boolean) {
         this._isConfirmingDose = value;
+    }
+
+    public get isAlwaysPlayAudio() {
+        return this._isAlwaysPlayAudio;
+    }
+
+    public set isAlwaysPlayAudio(value: boolean) {
+        this._isAlwaysPlayAudio = value;
+    }
+
+    public get isAlwaysConfirmDose() {
+        return this._isAlwaysConfirmDose;
+    }
+
+    public set isAlwaysConfirmDose(value: boolean) {
+        this._isAlwaysConfirmDose = value;
     }
 }
