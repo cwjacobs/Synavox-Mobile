@@ -14,7 +14,7 @@
 			<parallax:Anchored class="anchor" height="100vh">
 				<StackLayout class="list-container">
 					<GridLayout rows="auto" columns="200vw,*,*,*,*,*">
-						<TextField class="pairing-MedicineName fas" id="current-medicine-name" text="{{ currentMedicineName }}" hint="&#xf484;" returnKeyType="done" row="0" col="0" />
+						<TextField class="pairing-MedicineName fas" id="current-medicine-name" text="{{ currentMedicineName }}" hint="{{ i18nMyMedicines, '&#xf484; ' + i18nMyMedicines }}" returnKeyType="done" row="0" col="0" colSpan="6" />
 						<Label class="reminder-mark fa" id="current1" text="&#xf058;" row="0" col="1" onTap="current1"/>
 						<Label class="reminder-mark fa" id="current2" text="&#xf058;" row="0" col="2" onTap="current2" />
 						<Label class="reminder-mark fa" id="current3" text="&#xf058;" row="0" col="3" onTap="current3" />

@@ -53,9 +53,8 @@ let primaryOff: string = "#c1c8f8";
 let secondaryOn: string = "#398881";
 let secondaryOff: string = "#a4cac7";
 
-let isAlertActive: boolean = false;
 let alertOn: string = "#ff0000";
-// There is no alertOff required
+let alertOff: string = "#ffc8c8";
 
 let dailyDoses_old: number = 0;
 let dailyRequiredDoses_old: number = 0;
@@ -101,9 +100,6 @@ export function onLoaded(args: EventData) {
         displayCurrentListDoses();
     }, 1000);
 
-    // For controlling display of red (alert) or white colored dose indicators
-    isAlertActive = false;
-
     // Current list of paired medications
     medicineList = Test.Dataset.getCurrentTestData();
     viewModel.set("myMedicineList", medicineList);
@@ -112,7 +108,7 @@ export function onLoaded(args: EventData) {
         audioPlayer = new AudioPlayer();
     }
 
-    // Listener is stopped at each page exit to avoid runing in background
+    // Listener is stopped at each page exit to avoid runing in background... nope. was thinking of audio...
     rfid.startTagListener();
 
     isAudioActive = false;
@@ -238,6 +234,8 @@ export function onCancelTotalDosesPerDayTap() {
 
 export function onEditDosesTakenTodayTap(args: EventData) {
     if ((isEditingAvailable) && (!isEditingTotalDosesPerDay)) {
+        let maxDosesDisplayed: number = 6;
+
         isEditingDosesTakenToday = true;
         viewModel.set("isEditingDosesTakenToday", isEditingDosesTakenToday);
 
@@ -258,17 +256,28 @@ export function onEditDosesTakenTodayTap(args: EventData) {
 
         let doseIndicatorBaseId: string = "current";
 
-        let dailyDoses: number = medicineList[index].dailyDoses;
+        let dosesTakenToday: number = medicineList[index].dailyDoses;
+        let dailyDosesRequired: number = medicineList[index].dailyRequiredDoses;
 
-        for (let i = 1; i < 6; i++) {
+        for (let i = 1; i < maxDosesDisplayed; i++) {
             let doseIndicatorId: string = doseIndicatorBaseId + i.toString(10);
             let doseIndicator: any = page.getViewById<any>(doseIndicatorId);
 
-            if (i <= dailyDoses) {
-                doseIndicator.color = primaryOn;
+            if (i <= dosesTakenToday) {
+                if (i <= dailyDosesRequired) {
+                    doseIndicator.color = primaryOn;
+                }
+                else {
+                    doseIndicator.color = alertOn;
+                }
             }
             else {
-                doseIndicator.color = primaryOff;
+                if (i <= dailyDosesRequired) {
+                    doseIndicator.color = primaryOff;
+                }
+                else {
+                    doseIndicator.color = alertOff;
+                }
             }
         }
     }
@@ -409,19 +418,23 @@ export function onAudioEnableTap(args: ItemEventData) {
 };
 
 function displayCurrentDoses() {
+    let maxDosesDisplayed: number = 6;
+    let doseIndicatorIdBase: string = "current";
     let medicineName: string = viewModel.get("currentMedicineName");
     let index: number = findMedicineNameIndex(medicineName, medicineList);
-    let doseIndicatorId_Base: string = "current";
 
-    let dailyRequiredDoses: number = medicineList[index].dailyRequiredDoses;
-    let dailyDoses: number = medicineList[index].dailyDoses;
+    let dosesTakenToday: number = medicineList[index].dailyDoses;
+    let dailyDosesRequired: number = medicineList[index].dailyRequiredDoses;
 
-    for (let i = 1; i < 6; i++) {
-        let doseIndicatorId: string = doseIndicatorId_Base + i.toString(10);
+    // Iterate over each display position
+    for (let i = 1; i < maxDosesDisplayed; i++) {
+        // Get the view id for the current indicator
+        let doseIndicatorId: string = doseIndicatorIdBase + i.toString(10);
         let doseIndicator: Label = page.getViewById(doseIndicatorId);
 
-        if (i <= dailyRequiredDoses) {
-            if (i <= dailyDoses) {
+        if (i <= dailyDosesRequired) {
+            // Has not taken too many
+            if (i <= dosesTakenToday) {
                 doseIndicator.color = new Color(primaryOn);
             }
             else {
@@ -429,8 +442,7 @@ function displayCurrentDoses() {
             }
         }
         else {
-            if (isAlertActive) {
-                isAlertActive = false;
+            if ((i > dailyDosesRequired) && (i <= dosesTakenToday)) {
                 doseIndicator.color = new Color("red");
             }
             else {
@@ -442,9 +454,10 @@ function displayCurrentDoses() {
 
 function toggleIndicator(indicator: any): number {
     let adjustTotal: number = 0;
+    let indicatorCurrentColor: string = indicator.color.toString().toLowerCase();
 
     if (isEditingDosesTakenToday) {
-        if (indicator.color.toString().toLowerCase() === primaryOff.toLowerCase()) {
+        if (indicatorCurrentColor === primaryOff.toLowerCase() || indicatorCurrentColor === alertOff.toLowerCase()) {
             adjustTotal = 1;
         }
         else {
@@ -452,7 +465,7 @@ function toggleIndicator(indicator: any): number {
         }
     }
     else if (isEditingTotalDosesPerDay) {
-        if (indicator.color.toString().toLowerCase() === secondaryOff.toLowerCase()) {
+        if (indicatorCurrentColor === secondaryOff.toLowerCase()) {
             adjustTotal = 1;
         }
         else {
@@ -464,22 +477,51 @@ function toggleIndicator(indicator: any): number {
 
 function adustDailyDoseTaken(indicator: any): void {
     let medicineName: string = viewModel.get("currentMedicineName");
+
     let index: number = findMedicineNameIndex(medicineName, medicineList);
-    let dailyDoses: number = medicineList[index].dailyDoses;
+    let dosesTakenToday: number = medicineList[index].dailyDoses;
+    let dailyDosesRequired: number = medicineList[index].dailyRequiredDoses;
 
-    let adjustedDoses: number = toggleIndicator(indicator);
-    dailyDoses += adjustedDoses;
+    let doseAdjustment: number = toggleIndicator(indicator);
+    dosesTakenToday += doseAdjustment;
 
-    if (adjustedDoses === 1) {
-        indicator.color = primaryOn;
+    console.log("dosesTakenToday: " + dosesTakenToday);
+    console.log("dailyDosesRequired: " + dailyDosesRequired);
+
+    let dose: number = getIndicatorDoseNumber(indicator.id);
+    console.log("dose: " + dose);
+
+    if (doseAdjustment === 1) {
+        // Adding a dose
+        if (dose <= dailyDosesRequired) {
+            indicator.color = primaryOn;
+            console.log("primaryOn");
+        }
+        else {
+            indicator.color = alertOn;
+            console.log("alertOn");
+        }
     }
     else {
-        indicator.color = primaryOff;
+        // Subtracting a dose
+        if (dose <= dailyDosesRequired) {
+            indicator.color = primaryOff;
+            console.log("primaryOff");
+        }
+        else {
+            indicator.color = alertOff; 
+            console.log("alertOff");
+        }
     }
 
     // Data store behind list is being updated, but we won't display it until save is pressed
-    medicineList[index].dailyDoses = dailyDoses;
-    displayDosesTakenMsg(dailyDoses);
+    medicineList[index].dailyDoses = dosesTakenToday;
+    displayDosesTakenMsg(dosesTakenToday);
+}
+
+function getIndicatorDoseNumber(indicator: string): number {
+    let dose: number = Number(indicator.slice(-1));
+    return dose;
 }
 
 function adustDailyDoseRequirement(indicator: any) {
@@ -517,16 +559,21 @@ function adjustDoses(indicator: any): void {
 }
 
 function displayCurrentListDoses() {
-    medicineList.forEach((value) => {
-        let doseIndicatorBaseId: string = value.medicineName;
-        for (let i = 1; i < 6; i++) {
-            let doseIndicatorId: string = doseIndicatorBaseId + i.toString(10);
+    medicineList.forEach((medicine) => {
+        let maxDosesDisplayed: number = 6;
+        let dosesTakenToday: number = medicine.dailyDoses;
+        let doseIndicatorIdBase: string = medicine.medicineName;
+        let dailyDosesRequired: number = medicine.dailyRequiredDoses;
+
+        // Iterate over each display position
+        for (let i = 1; i < maxDosesDisplayed; i++) {
+            // Get the view id for the current indicator
+            let doseIndicatorId: string = doseIndicatorIdBase + i.toString(10);
             let doseIndicator: any = page.getViewById<any>(doseIndicatorId);
 
-            let dailyRequiredDoses: number = value.dailyRequiredDoses;
-            let dailyDoses: number = value.dailyDoses;
-            if (i <= dailyRequiredDoses) {
-                if (i <= dailyDoses) {
+            if (i <= dailyDosesRequired) {
+                // Has not taken too many
+                if (i <= dosesTakenToday) {
                     doseIndicator.color = primaryOn;
                 }
                 else {
@@ -534,8 +581,7 @@ function displayCurrentListDoses() {
                 }
             }
             else {
-                if (isAlertActive) {
-                    //isAlertActive = false;
+                if ((i > dailyDosesRequired) && (i <= dosesTakenToday)) {
                     doseIndicator.color = new Color("red");
                 }
                 else {
@@ -547,7 +593,6 @@ function displayCurrentListDoses() {
 }
 
 function registerDoseTaken(medicineName: string): void {
-    isAlertActive = true;
     let confirmMsg: string = getI18NConfirmMsg(medicineName);
     confirm(confirmMsg).then((isConfirmed) => {
         if (isConfirmed) {
@@ -590,6 +635,8 @@ function findMedicineNameIndex(medicineName: string, medicineBindingList: Medici
 
 function setActiveLanguageText(): void {
     viewModel.set("i18nPageTitle", i18n.dosePageTitle);
+
+    viewModel.set("i18nMyMedicines", i18n.myMedicines);
 
     viewModel.set("i18nEditTotalDosesPerDayButtonText", i18n.changeDosesPerDay);
 
