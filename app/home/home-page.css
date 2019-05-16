@@ -100,6 +100,30 @@
     /* background-color: white; */
 }
 
+.align-top {
+    vertical-align: middle;
+}
+
+.vAlign-center {
+    vertical-align: middle;
+}
+
+.align-bottom {
+    vertical-align: middle;
+}
+
+.align-left {
+    horizontal-align: middle;
+}
+
+.hAlign-center {
+    horizontal-align: middle;
+}
+
+.align-right {
+    horizontal-align: middle;
+}
+
 /* Parallax */
 #headerLabel2
 {

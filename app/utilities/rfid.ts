@@ -121,8 +121,9 @@ export class RFID {
         this._tagScanned = true;
         this.tagId = data.id.toString();
 
-        let medicineList = Test.Dataset.getCurrentTestData();
-        let medicineName: string = medicineList[this.findTagIdIndex(this.tagId, medicineList)].medicineName;
+        let medicineList = settings.medicineList;
+        let medicineName: string = medicineList.getMedicineBindingByTagId(this.tagId).medicineName;
+        settings.currentMedicine = medicineName;
 
         if (settings.isAlwaysPlayAudio) {
             let audioPath = Utility.Language.getAudioPath(medicineName);
@@ -152,19 +153,5 @@ export class RFID {
                 name: "fade"
             }
         });
-    }
-
-    private findTagIdIndex(tagId: string, list: MedicineBinding[]): number {
-        let i: number = 0;
-        let index: number = -1;
-        list.forEach(value => {
-            if (value.tagId === tagId) {
-                index = i;
-            }
-            else {
-                i = i + 1;
-            }
-        })
-        return index;
     }
 }

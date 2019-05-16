@@ -1,15 +1,9 @@
 import * as Utility from "../utility-functions/utility-functions";
 import { MedicineBinding } from "./medicine-binding";
 
-export namespace Dataset {
+export class Dataset {
 
-    interface TestdataMap {
-        [key: string]: MedicineBinding[];
-    }
-
-    let testData: MedicineBinding[] = null;
-    
-    let enTestData: MedicineBinding[] = [
+    private static readonly _enTestData: MedicineBinding[] = [
         { tagId: "-99,55,102,114", medicineName: "Oxycodone", dailyRequiredDoses: 20, dailyDoses: 3 },
         { tagId: "-99,-81,70,-106", medicineName: "Lisinopril", dailyRequiredDoses: 1, dailyDoses: 0 },
         { tagId: "77,-4,75,-106", medicineName: "Rosuvastatin", dailyRequiredDoses: 2, dailyDoses: 1 },
@@ -17,36 +11,48 @@ export namespace Dataset {
         // { tagId: "-67,45,90,-106", medicineName: "Atorvastatin", dailyRequiredDoses: 1, dailyDoses: 0 },
         { tagId: "-67,45,90,-106", medicineName: "Metformin", dailyRequiredDoses: 3, dailyDoses: 1 },
     ];
-
-    // let spTestData: MedicineBinding[] = [
-    //     { tagId: "-99,55,102,114", medicineName: "Oxycodone", dailyRequiredDoses: 20, dailyDoses: 4 },
-    //     { tagId: "-99,-81,70,-106", medicineName: "Lisinopril", dailyRequiredDoses: 1, dailyDoses: 1 },
-    //     { tagId: "77,-4,75,-106", medicineName: "Rosuvastatin", dailyRequiredDoses: 2, dailyDoses: 2 },
-    //     { tagId: "-3,18,81,-106", medicineName: "Levothyroxine", dailyRequiredDoses: 1, dailyDoses: 0 },
-    //     // {tagId: "-67,45,90,-106", medicineName: "Atorvastatin", dailyRequiredDoses: 1, dailyDoses: 0 },
-    //     { tagId: "-67,45,90,-106", medicineName: "Metformin", dailyRequiredDoses: 3, dailyDoses: 2 },
-    // ];
-
-    // Sets current testdata to default and returns it
-    export function addMedicineBinding(medicineBinding: MedicineBinding) {
-        testData.push(medicineBinding);
+    
+    public static get testData() {
+        return Dataset._enTestData;
     };
+
+    // private static readonly _testData: MedicineBinding[] = Dataset._enTestData;
+    // private static _instance: Dataset = new Dataset();
+
+    // private constructor() {
+    //     if (Dataset._instance) {
+    //         throw new Error("Error: Instantiation failed: Use Dataset.getInstance() instead of new.");
+    //     }
+    //     Dataset._instance = this;
+    // }
+
+    // public static getInstance() {
+    //     return this._instance;
+    // }
 
     // Returns testdata, if testData === null, sets testData to default and returns it
-    export function getCurrentTestData(): MedicineBinding[] {
-        if (testData == null) {
-            testData = getDefaultTestData();
-        }
-        return testData;
-    };
+    // public get medicineBindings(): MedicineBinding[] {
+    //     if (this._testData === null) {
+    //         this._testData.forEach(binding => {
+
+    //         })
+    //         this._testData = this.defaultTestData;
+    //     }
+    //     return this._testData;
+    // };
+
+    // Returns testdata, if testData === null, sets testData to default and returns it
+    // public set medicineBindings(value: MedicineBinding[]) {
+    //     this._testData = [...value];
+    // };
 
     // Returns default language test data
-    function getDefaultTestData(): MedicineBinding[] {
-        return enTestData;
-    };
+    // private get defaultTestData(): MedicineBinding[] {
+    //     return [...this._enTestData];
+    // };
 
     /** Browse Branch **/
-    let webViewSrcArray = [
+    private static readonly _webViewSrcArray = [
         {
             medicineName: "Oxycodone",
             srcLinks: [
@@ -176,8 +182,8 @@ export namespace Dataset {
     ];
 
     // Sets current testdata to default and returns it
-    export function getWebViewSrcArray() {
-        return webViewSrcArray;
+    public get webViewSrcArray() {
+        return Dataset._webViewSrcArray;
     };
     /** Browse Branch End **/
 }

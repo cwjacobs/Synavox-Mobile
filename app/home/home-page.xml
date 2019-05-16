@@ -14,13 +14,14 @@
 			<parallax:Anchored class="anchor" height="100vh">
 				<StackLayout class="list-container">
 					<GridLayout rows="auto" columns="200vw,*,*,*,*,*">
-						<TextField class="pairing-MedicineName fas" id="current-medicine-name" text="{{ currentMedicineName }}" hint="{{ i18nMyMedicines, '&#xf484; ' + i18nMyMedicines }}" returnKeyType="done" row="0" col="0" colSpan="6" />
+						<Label class="pairing-MedicineName fas" id="current-medicine-name" text="{{ currentMedicineName, '&#xf484; ' + currentMedicineName }}" row="0" col="0" colSpan="1" />
 						<Label class="reminder-mark fa" id="current1" text="&#xf058;" row="0" col="1" onTap="current1"/>
 						<Label class="reminder-mark fa" id="current2" text="&#xf058;" row="0" col="2" onTap="current2" />
 						<Label class="reminder-mark fa" id="current3" text="&#xf058;" row="0" col="3" onTap="current3" />
 						<Label class="reminder-mark fa" id="current4" text="&#xf058;" row="0" col="4" onTap="current4" />
 						<Label class="reminder-mark fa" id="current5" text="&#xf058;" row="0" col="5" onTap="current5" />
 					</GridLayout>
+					<!-- <StackLayout class="hr-light"></StackLayout> -->
 					<!-- <StackLayout class="daily-instruction" orientation="horizontal"> -->
 					<Label class="daily-instruction" text="{{ i18nDailyInstructions }}" />
 					<!-- </StackLayout> -->
@@ -49,13 +50,13 @@
 		</parallax:ParallaxView>
 		<GridLayout class="list-container button-row" rows="auto" columns="*,*">
 			<!-- Edit Doses Required Daily -->
-			<Button class="button my-button secondary" id="edit-total-required-doses" text="{{ i18nEditTotalDosesPerDayButtonText }}" visibility="{{ isEditingTotalDosesPerDay ? 'collapsed' : 'visible' }}" row="0" col="0" onTap="onEditTotalDosesPerDayTap" />
+			<Button class="button my-button secondary" id="edit-total-required-doses" text="{{ i18nEditTotalDosesPerDayButtonText }}" visibility="{{ isEditingTotalDosesPerDay ? 'collapsed' : 'visible' }}" row="0" col="0" onTap="onChangeTotalDosesPerDayTap" />
 			<GridLayout rows="auto" columns="auto,*" visibility="{{ isEditingTotalDosesPerDay ? 'visible' : 'collapsed' }}" row="0" col="0">
 				<Button class="button my-button-small secondary" text="{{ i18nSaveButtonText }}" row="0" col="0" onTap="onSaveTotalDosesPerDayTap" />
 				<Button class="button my-button-small alert" text="{{ i18nCancelButtonText }}" row="0" col="1" onTap="onCancelTotalDosesPerDayTap" />
 			</GridLayout>
 			<!-- Edit Doses Taken Today -->
-			<Button class="button my-button primary" id="edit-doses-taken-today" text="{{ i18nEditDosesTakenTodayButtonText }}" visibility="{{ isEditingDosesTakenToday ? 'collapsed' : 'visible' }}" row="0" col="1" onTap="onEditDosesTakenTodayTap" />
+			<Button class="button my-button primary" id="edit-doses-taken-today" text="{{ i18nEditDosesTakenTodayButtonText }}" visibility="{{ isEditingDosesTakenToday ? 'collapsed' : 'visible' }}" row="0" col="1" onTap="onChangeDosesTakenTodayTap" />
 			<GridLayout rows="auto" columns="auto,*" visibility="{{ isEditingDosesTakenToday ? 'visible' : 'collapsed' }}" row="0" col="1">
 				<Button class="button my-button-small primary" text="{{ i18nSaveButtonText }}" row="0" col="0" onTap="onSaveDosesTakenTodayTap" />
 				<Button class="button my-button-small alert" text="{{ i18nCancelButtonText }}" row="0" col="1" onTap="onCancelDosesTakenTodayTap" />

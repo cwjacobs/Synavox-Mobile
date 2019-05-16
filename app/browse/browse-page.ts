@@ -8,19 +8,24 @@ import { TextField } from "tns-core-modules/ui/text-field";
 import * as dialogs from "tns-core-modules/ui/dialogs";
 
 import { BrowseViewModel } from "./browse-view-model";
-import { MedicineBinding } from "~/data-models/medicine-binding";
+import { MedicineBinding, MedicineBindingList } from "~/data-models/medicine-binding";
 
-import * as Test from "../data-models/test-data";
+// import * as Test from "../data-models/test-data";
 import * as Utility from "../utility-functions/utility-functions";
 import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
 import { topmost } from "tns-core-modules/ui/frame/frame";
 import { AppRootViewModel } from "~/app-root/app-root-view-model";
 import { I18N } from "~/utilities/i18n";
+import { Dataset } from "~/data-models/test-data";
 import { AudioPlayer } from "~/audio-player/audio-player";
+import { Settings } from "~/settings/settings";
+
+let testData: Dataset = new Dataset();
+let settings: Settings = Settings.getInstance();
 
 let page: Page = null;
 let viewModel: BrowseViewModel = null;
-let medicineList: MedicineBinding[] = null;
+let medicineList: MedicineBindingList = settings.medicineList;
 
 // for browse branch
 let appRootContext: AppRootViewModel = null;
@@ -56,8 +61,8 @@ export function onLoaded(args: EventData) {
     isUserBrowsing = false;
     viewModel.set("isUserBrowsing", isUserBrowsing);
 
-    medicineList = Test.Dataset.getCurrentTestData();
-    viewModel.set("myMedicineList", medicineList);
+    //medicineList = testData.medicineBindings;
+    viewModel.set("myMedicineList", medicineList.bindings);
 
     // Set text to active language
     setActiveLanguageText();
@@ -69,10 +74,9 @@ export function onItemTap(args: ItemEventData) {
     let column: number = button.id.substring(0, 1);
     let medicineName: string = button.id.substring(1);
 
-    webViewSrcModel = Test.Dataset.getWebViewSrcArray();
-    let wvsMedicineNameIndex: number = findMedicineNameIndex(medicineName);
-    let wvsMedicineName: string = webViewSrcModel[wvsMedicineNameIndex].medicineName;
-    let wvsMedicineSrc: string = webViewSrcModel[wvsMedicineNameIndex].srcLinks[column].webViewSrc;
+    webViewSrcModel = testData.webViewSrcArray;
+    let index: number = settings.medicineList.getMedicineBindingIndex(medicineName);
+    let wvsMedicineSrc: string = webViewSrcModel[index].srcLinks[column].webViewSrc;
 
     viewModel.set("webViewSrc", wvsMedicineSrc);
     submit(args);
@@ -152,18 +156,4 @@ function setActiveLanguageText(): void {
     viewModel.set("i18nBackButtonText", i18n.browseBack);
     viewModel.set("i18nSaveButtonText", i18n.browseSave);
 };
-
-function findMedicineNameIndex(medicineName: string): number {
-    let i: number = 0;
-    let index: number = -1;
-    webViewSrcModel.forEach(value => {
-        if (value.medicineName === medicineName) {
-            index = i;
-        }
-        else {
-            i = i + 1;
-        }
-    })
-    return index;
-}
 

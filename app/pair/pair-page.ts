@@ -6,7 +6,7 @@ import { ListView, ItemEventData } from "tns-core-modules/ui/list-view/list-view
 
 import { PairViewModel } from "./pair-view-model";
 import { AudioPlayer } from "~/audio-player/audio-player";
-import { MedicineBinding } from "../data-models/medicine-binding";
+import { MedicineBinding, MedicineBindingList } from "../data-models/medicine-binding";
 
 import * as Test from "../data-models/test-data";
 import * as Utility from "../utility-functions/utility-functions";
@@ -15,8 +15,12 @@ import * as Utility from "../utility-functions/utility-functions";
 import { confirm } from "tns-core-modules/ui/dialogs";
 import { I18N } from "~/utilities/i18n";
 import { RFID } from "~/utilities/rfid";
+import { Settings } from "~/settings/settings";
+import { Dataset } from "../data-models/test-data";
 
-let medicineList: MedicineBinding[] = null;
+let testData: Dataset = new Dataset();
+let settings: Settings = Settings.getInstance();
+let medicineList: MedicineBindingList = settings.medicineList;
 
 let page: Page = null;
 let viewModel: PairViewModel = null;
@@ -88,19 +92,18 @@ export function onLoaded(args: EventData) {
     }
 
     // Current list of paired medications
-    medicineList = Test.Dataset.getCurrentTestData();
-    viewModel.set("myMedicineList", medicineList);
+    viewModel.set("myMedicineList", medicineList.bindings);
 
     // Set text to active language
     setActiveLanguageText();
 };
 
 export function onItemTap(args: ItemEventData) {
-    let medicineName: string = medicineList[args.index].medicineName;
+    let medicineName: string = medicineList.bindings[args.index].medicineName;
     viewModel.set("currentMedicineName", medicineName);
 
     if (!isTagIdLocked) {
-        viewModel.set("currentTagId", medicineList[args.index].tagId);
+        viewModel.set("currentTagId", medicineList.bindings[args.index].tagId);
     }
 
     let audioPath = Utility.Language.getAudioPath(medicineName);
@@ -128,10 +131,10 @@ export function onDeleteTap(args: ItemEventData) {
     let confirmMsg: string = getParingUpdatConfirmMsg(binding.medicineName);
     confirm(confirmMsg).then((isConfirmed) => {
         if (isConfirmed) {
-            let index: number = findMedicineNameIndex(binding.medicineName);
+            let index: number = settings.medicineList.getMedicineBindingIndex(binding.medicineName);
 
             if (index != -1) { // Delete current binding
-                medicineList.splice(index, 1);
+                medicineList.bindings.splice(index, 1);
             }
 
             const listView: ListView = page.getViewById<ListView>("medicineList");
@@ -155,16 +158,16 @@ export function onSaveTap(args: ItemEventData) {
         return;
     }
 
-    let index: number = findMedicineNameIndex(binding.medicineName);
+    let index: number = settings.medicineList.getMedicineBindingIndex(binding.medicineName);
 
     if (index != -1) { // Replace current binding
-        medicineList[index] = binding;
+        medicineList.bindings[index] = binding;
         alert(getPairingUpdatedMsg(binding.medicineName));
     }
     else {
-        index = findTagIdIndex(binding.tagId);
+        index = settings.medicineList.getMedicineBindingIndexByTagId(binding.tagId);
         if (index != -1) { // Replace current binding
-            medicineList[index] = binding; // use the util functions to add data to array
+            medicineList.bindings[index] = binding; // use the util functions to add data to array
         }
         else { // Add new binding
             page.bindingContext.myMedicineList.push({
@@ -224,34 +227,6 @@ export function onAudioEnableTap(args: ItemEventData) {
     let audioPath = Utility.Language.getAudioPath(medicineName);
     AudioPlayer.useAudio(audioPath);
 };
-
-function findMedicineNameIndex(medicineName: string): number {
-    let i: number = 0;
-    let index: number = -1;
-    medicineList.forEach(value => {
-        if (value.medicineName === medicineName) {
-            index = i;
-        }
-        else {
-            i = i + 1;
-        }
-    })
-    return index;
-}
-
-function findTagIdIndex(tagId: string): number {
-    let i: number = 0;
-    let index: number = -1;
-    medicineList.forEach(value => {
-        if (value.tagId === tagId) {
-            index = i;
-        }
-        else {
-            i = i + 1;
-        }
-    })
-    return index;
-}
 
 function setActiveLanguageText(): void {
     viewModel.set("i18nPageTitle", i18n.pairPageTitle);

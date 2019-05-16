@@ -53,7 +53,7 @@ export function onDrawerButtonTap(args: EventData) {
 }
 
 export function onLoaded(args: EventData) {
-    medicineTagPairs = Test.Dataset.getCurrentTestData();
+    medicineTagPairs = settings.medicineList.bindings;
     console.dir("medicineTagPairs: " + medicineTagPairs);
 
     viewModel.set("i18nMedicineListTitle", i18n.homePageTitle);
@@ -226,20 +226,6 @@ function findTagIdIndex(tagId: string, list: MedicineBinding[]): number {
     let index: number = -1;
     list.forEach(value => {
         if (value.tagId === tagId) {
-            index = i;
-        }
-        else {
-            i = i + 1;
-        }
-    })
-    return index;
-}
-
-function findMedicineNameIndex(medicineName: string, medicineBindingList: MedicineBinding[]): number {
-    let i: number = 0;
-    let index: number = -1;
-    medicineBindingList.forEach(value => {
-        if (value.medicineName.toLocaleLowerCase() === medicineName.toLocaleLowerCase()) {
             index = i;
         }
         else {

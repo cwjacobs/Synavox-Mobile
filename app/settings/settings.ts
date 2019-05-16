@@ -1,3 +1,5 @@
+import { MedicineBinding, MedicineBindingList } from "~/data-models/medicine-binding";
+
 export class Settings {
 
     private _currentMedicine: string;
@@ -7,6 +9,8 @@ export class Settings {
     private _isAlwaysPlayAudio: boolean;
 
     private _isAlwaysConfirmDose: boolean;
+
+    private _medicineList: MedicineBindingList;
 
     private static _instance: Settings = new Settings();
 
@@ -19,6 +23,14 @@ export class Settings {
 
     public static getInstance(): Settings {
         return Settings._instance;
+    }
+
+    public get medicineList() {
+        return this._medicineList;
+    }
+
+    public set medicineList(value: MedicineBindingList) {
+        this._medicineList = value;
     }
 
     public get currentMedicine() {
