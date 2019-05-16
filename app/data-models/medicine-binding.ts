@@ -73,6 +73,10 @@ export class MedicineBindingList {
         return (index !== -1) ? this._bindings[index] : null;
     }
 
+    public getMedicineBindingByIndex(index: number): MedicineBinding {
+        return this._bindings[index];
+    }
+
     public getDailyDosesRequired(medicineName: string): number {
         let dailyDosesRequired: number;
         let medicineBinding: MedicineBinding = this.getMedicineBindingByName(medicineName);

@@ -105,29 +105,8 @@ export function onLoaded(args: EventData) {
         audioPlayer = new AudioPlayer();
     }
 
-    // Listener is stopped at each page exit to avoid runing in background... nope. was thinking of audio...
-    rfid.startTagListener();
-
-    isAudioActive = false;
-    isAudioEnabled = false;
-    viewModel.set("isAudioEnabled", isAudioEnabled);
-
-    // Initialize "Curent" values blank
-    viewModel.set("currentTagId", "");
-
-    if (settings.isConfirmingDose) {
-        isEditingAvailable = true;
-        viewModel.set("currentMedicineName", settings.currentMedicine);
-        registerDoseTaken(settings.currentMedicine);
-        displayDosesPerDayInstructions(medicineList.getDailyDosesRequired(settings.currentMedicine));
-    }
-    else {
-        isEditingAvailable = false;
-        viewModel.set("currentMedicineName", "");
-        let currentMedicineView: Label = page.getViewById("current-medicine-name");
-    }
-
     // Initialize editing buttons state
+    isEditingAvailable = true;
     viewModel.set("isEditingAvailable", isEditingAvailable);
 
     isEditingDosesTakenToday = false;
@@ -139,6 +118,24 @@ export function onLoaded(args: EventData) {
     viewModel.set("isEditingTotalDosesPerDay", isEditingTotalDosesPerDay);
     let editTotalDosesPerDayButton: Button = page.getViewById("edit-total-required-doses");
     editTotalDosesPerDayButton.backgroundColor = isEditingAvailable ? secondaryOn : secondaryOff;
+
+    if (settings.isConfirmingDose) {
+        viewModel.set("currentMedicineName", settings.currentMedicine);
+        registerDoseTaken(settings.currentMedicine);
+    }
+    else {
+        settings.currentMedicine = medicineList.getMedicineBindingByIndex(1).medicineName;
+        viewModel.set("currentMedicineName", settings.currentMedicine);
+        displayCurrentDoses();
+    }
+    displayDosesPerDayInstructions(medicineList.getDailyDosesRequired(settings.currentMedicine));
+
+    // Listener is stopped at each page exit to avoid runing in background... nope. was thinking of audio...
+    rfid.startTagListener();
+
+    isAudioActive = false;
+    isAudioEnabled = false;
+    viewModel.set("isAudioEnabled", isAudioEnabled);
 
     // Set text to active language
     setActiveLanguageText();

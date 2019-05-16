@@ -2,6 +2,8 @@ import { MedicineBinding, MedicineBindingList } from "~/data-models/medicine-bin
 
 export class Settings {
 
+    private _currentTagId: string;
+
     private _currentMedicine: string;
 
     private _isConfirmingDose: boolean;
@@ -31,6 +33,14 @@ export class Settings {
 
     public set medicineList(value: MedicineBindingList) {
         this._medicineList = value;
+    }
+
+    public get currentTagId() {
+        return this._currentTagId;
+    }
+
+    public set currentTagId(value: string) {
+        this._currentTagId = value;
     }
 
     public get currentMedicine() {
