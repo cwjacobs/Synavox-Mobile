@@ -116,28 +116,29 @@ export function onLoaded(args: EventData) {
     viewModel.set("currentTagId", "");
 
     if (settings.isConfirmingDose) {
-        settings.isConfirmingDose = false;
+        isEditingAvailable = true;
         viewModel.set("currentMedicineName", settings.currentMedicine);
         registerDoseTaken(settings.currentMedicine);
         displayDosesPerDayInstructions(medicineList.getDailyDosesRequired(settings.currentMedicine));
     }
     else {
+        isEditingAvailable = false;
         viewModel.set("currentMedicineName", "");
+        let currentMedicineView: Label = page.getViewById("current-medicine-name");
     }
 
     // Initialize editing buttons state
-    isEditingAvailable = false;
     viewModel.set("isEditingAvailable", isEditingAvailable);
 
     isEditingDosesTakenToday = false;
     viewModel.set("isEditingDosesTakenToday", isEditingDosesTakenToday);
     let editDosesTakenTodayButton: Button = page.getViewById("edit-doses-taken-today");
-    editDosesTakenTodayButton.backgroundColor = primaryOff;
+    editDosesTakenTodayButton.backgroundColor = isEditingAvailable ? primaryOn : primaryOff;
 
     isEditingTotalDosesPerDay = false;
     viewModel.set("isEditingTotalDosesPerDay", isEditingTotalDosesPerDay);
     let editTotalDosesPerDayButton: Button = page.getViewById("edit-total-required-doses");
-    editTotalDosesPerDayButton.backgroundColor = secondaryOff;
+    editTotalDosesPerDayButton.backgroundColor = isEditingAvailable ? secondaryOn : secondaryOff;
 
     // Set text to active language
     setActiveLanguageText();
@@ -601,8 +602,18 @@ function registerDoseTaken(medicineName: string): void {
     let confirmMsg: string = getI18NConfirmMsg(medicineName);
     confirm(confirmMsg).then((isConfirmed) => {
         if (isConfirmed) {
-            let dosesTakenToday = tempMedicineList.getDosesTakenToday(medicineName);
-            tempMedicineList.setDosesTakenToday(medicineName, (dosesTakenToday + 1));
+            let _activeMedicineList: MedicineBindingList;
+            if (settings.isConfirmingDose) {
+                // Scanned a tag if here
+                _activeMedicineList = medicineList;
+                settings.isConfirmingDose = false;
+            }
+            else {
+                // User changing doses if here
+                _activeMedicineList = tempMedicineList;
+            }
+            let dosesTakenToday = _activeMedicineList.getDosesTakenToday(medicineName);
+            _activeMedicineList.setDosesTakenToday(medicineName, (dosesTakenToday + 1));
             displayCurrentDoses();
             displayCurrentListDoses();
         }

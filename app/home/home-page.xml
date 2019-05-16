@@ -21,10 +21,7 @@
 						<Label class="reminder-mark fa" id="current4" text="&#xf058;" row="0" col="4" onTap="current4" />
 						<Label class="reminder-mark fa" id="current5" text="&#xf058;" row="0" col="5" onTap="current5" />
 					</GridLayout>
-					<!-- <StackLayout class="hr-light"></StackLayout> -->
-					<!-- <StackLayout class="daily-instruction" orientation="horizontal"> -->
 					<Label class="daily-instruction" text="{{ i18nDailyInstructions }}" />
-					<!-- </StackLayout> -->
 					<StackLayout class="hr-light"></StackLayout>
 				</StackLayout>
 			</parallax:Anchored>

@@ -89,9 +89,12 @@ export function onLoaded(args: EventData) {
             viewModel.set("isTagDisplayed", false);
             viewModel.set("isSelectingMedicine", false);
             viewModel.set("currentMedicineName", pairedMedicineName);
+
+            settings.currentMedicine = pairedMedicineName;
         }
     }
     else {
+        // User navigated here
         let myMedicineNamesList: string[] = getMedicineNames(medicineTagPairs);
         viewModel.set("myMedicineNamesList", myMedicineNamesList);
         viewModel.set("isSelectingMedicine", true);
