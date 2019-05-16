@@ -7,6 +7,10 @@ export class Settings {
     private _currentMedicine: string;
 
     private _isConfirmingDose: boolean;
+    
+    private _isAudioActive: boolean;
+
+    private _isAudioEnabled: boolean;
 
     private _isAlwaysPlayAudio: boolean;
 
@@ -57,6 +61,22 @@ export class Settings {
 
     public set isConfirmingDose(value: boolean) {
         this._isConfirmingDose = value;
+    }
+
+    public get isAudioActive() {
+        return this._isAudioActive;
+    }
+
+    public set isAudioActive(value: boolean) {
+        this._isAudioActive = value;
+    }
+
+    public get isAudioEnabled() {
+        return this._isAudioEnabled;
+    }
+
+    public set isAudioEnabled(value: boolean) {
+        this._isAudioEnabled = value;
     }
 
     public get isAlwaysPlayAudio() {

@@ -37,8 +37,6 @@ let viewModel: HomeViewModel = null;
 
 // Audio controls and buttons
 let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
-let isAudioActive: boolean = false;
-let isAudioEnabled: boolean = false;
 
 // Editing buttons
 let isEditingAvailable: boolean = false;
@@ -103,7 +101,10 @@ export function onLoaded(args: EventData) {
 
     if (audioPlayer === null) {
         audioPlayer = new AudioPlayer();
+        settings.isAudioActive = false;
+        settings.isAudioEnabled = false;
     }
+    viewModel.set("isAudioEnabled", settings.isAudioEnabled);
 
     // Initialize editing buttons state
     isEditingAvailable = true;
@@ -132,10 +133,6 @@ export function onLoaded(args: EventData) {
 
     // Listener is stopped at each page exit to avoid runing in background... nope. was thinking of audio...
     rfid.startTagListener();
-
-    isAudioActive = false;
-    isAudioEnabled = false;
-    viewModel.set("isAudioEnabled", isAudioEnabled);
 
     // Set text to active language
     setActiveLanguageText();
@@ -379,7 +376,7 @@ export function onItemTap(args: ItemEventData) {
 
     let audioPath = Utility.Language.getAudioPath(medicineName);
     AudioPlayer.useAudio(audioPath);
-    if (isAudioEnabled) {
+    if (settings.isAudioEnabled) {
         AudioPlayer.play();
     }
 };
@@ -393,12 +390,12 @@ export function onPlayTap(args: ItemEventData) {
     }
 
     AudioPlayer.togglePlay();
-    isAudioActive = !isAudioActive;
+    settings.isAudioActive = !settings.isAudioActive;
 };
 
 export function onStopTap(args: EventData) {
     AudioPlayer.pause();
-    isAudioActive = false;
+    settings.isAudioActive = false;
 
     // Forces audio to restart on next play
     let medicineName = viewModel.get("currentMedicineName");
@@ -407,11 +404,11 @@ export function onStopTap(args: EventData) {
 };
 
 export function onAudioEnableTap(args: ItemEventData) {
-    isAudioEnabled = !isAudioEnabled;
-    viewModel.set("isAudioEnabled", isAudioEnabled);
+    settings.isAudioEnabled = !settings.isAudioEnabled;
+    viewModel.set("isAudioEnabled", settings.isAudioEnabled);
 
     AudioPlayer.pause();
-    isAudioActive = false;
+    settings.isAudioActive = false;
 
     let medicineName = viewModel.get("currentMedicineName");
     let audioPath = Utility.Language.getAudioPath(medicineName);
