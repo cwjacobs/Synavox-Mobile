@@ -4,8 +4,6 @@ import { EventData } from "tns-core-modules/data/observable";
 import { NavigatedData, Page } from "tns-core-modules/ui/page";
 
 import { SettingsViewModel } from "./settings-view-model";
-import * as Test from "../data-models/test-data";
-import * as Utility from "../utility-functions/utility-functions";
 
 import { I18N } from "~/utilities/i18n";
 import { AudioPlayer } from "~/audio-player/audio-player";

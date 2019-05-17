@@ -1,19 +1,33 @@
 import { TNSPlayer } from 'nativescript-audio';
+import { I18N } from "~/utilities/i18n";
+import { Settings } from "~/settings/settings";
+import { MedicineBinding } from '~/data-models/medicine-binding';
+
+// Page Text
+let i18n: I18N = I18N.getInstance();
+
+// App scope variables
+let settings: Settings = Settings.getInstance();
 
 export class AudioPlayer {
-    private static _player: TNSPlayer = null;
+    private static readonly lanugageDirectoryRoot: string = "~/audio/";
 
-    constructor(audioPath?: string) {
+    private static _player: TNSPlayer = null;
+    private static _instance: AudioPlayer = new AudioPlayer();
+
+    constructor() {
         console.log("AudioPlayer - private constructor() invoked; AudioPlayer._instance: " + AudioPlayer._player);
         if (AudioPlayer._player) {
-            throw new Error("Error: Instantiation failed: Use AudioPlayer.instance instead of new.");
+            throw new Error("Error: Instantiation failed: Use AudioPlayer.getInstance() instead of new.");
         }
+        AudioPlayer._instance = this;
+
         AudioPlayer._player = new TNSPlayer();
         AudioPlayer._player.debug = true; // set true to enable TNSPlayer console logs for debugging.
     }
 
     public static getInstance() {
-        return this._player;
+        return this._instance;
     }
 
     public static useAudio(audioPath: string) {
@@ -53,6 +67,66 @@ export class AudioPlayer {
         } else {
             AudioPlayer._player.play();
         }
+    }
+
+    public getAudioPath(medicineName: string): string {
+        let languageDirectory: string;
+        let activeLanguage: string = i18n.activeLanguage;
+        if (activeLanguage === "english") {
+            languageDirectory = "en/";
+        }
+        else {
+            languageDirectory = "sp/";
+        }
+
+        let audioPath = AudioPlayer.lanugageDirectoryRoot + languageDirectory + medicineName.toLowerCase() + ".mp3";
+
+        //let file: fs.File = new fs.File();
+        //let fileExists: boolean = fs.File.exists(audioPath);
+        //fileExists= true; // Until I figure out how to use or get a better fs object
+
+        // if (!fileExists) {
+        // alert("No corresponding audio: " + audioPath + " using default...");
+        // audioPath = getDefaultAudio(languageDirectory);
+        // }
+        return audioPath;
+    }
+
+    public getAudioPathByTagId(tagId: string): string {
+        let languageDirectory: string;
+        let activeLanguage: string = i18n.activeLanguage;
+        if (activeLanguage === "english") {
+            languageDirectory = "en/";
+        }
+        else {
+            languageDirectory = "sp/";
+        }
+
+        let medicineName: string;
+        let binding: MedicineBinding = settings.medicineList.getMedicineBindingByTagId(tagId);
+        if (binding === null) {
+            // medicineName not found in current list of medicine bindings
+            medicineName = "default";
+        }
+        else {
+            medicineName = binding.medicineName;
+        }
+        let audioPath = AudioPlayer.lanugageDirectoryRoot + languageDirectory + medicineName.toLowerCase() + ".mp3";
+
+        //let file: fs.File = new fs.File();
+        //let fileExists: boolean = fs.File.exists(audioPath);
+        //fileExists= true; // Until I figure out how to use or get a better fs object
+
+        // if (!fileExists) {
+        // alert("No corresponding audio: " + audioPath + " using default...");
+        // audioPath = getDefaultAudio(languageDirectory);
+        // }
+        return audioPath;
+    }
+
+    private getDefaultAudio(languageDirectory: string): string {
+        let defaultAudioPath: string = AudioPlayer.lanugageDirectoryRoot + languageDirectory + "/default.mp3";
+        return defaultAudioPath;
     }
 
     private static _trackComplete(args: any) {

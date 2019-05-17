@@ -5,11 +5,7 @@ import { NavigatedData, Page } from "tns-core-modules/ui/page";
 import { ListView, ItemEventData } from "tns-core-modules/ui/list-view/list-view";
 
 import { PairViewModel } from "./pair-view-model";
-import { AudioPlayer } from "~/audio-player/audio-player";
 import { MedicineBinding, MedicineBindingList } from "../data-models/medicine-binding";
-
-import * as Test from "../data-models/test-data";
-import * as Utility from "../utility-functions/utility-functions";
 
 // For Dialogs Branch
 import { confirm } from "tns-core-modules/ui/dialogs";
@@ -17,6 +13,9 @@ import { I18N } from "~/utilities/i18n";
 import { RFID } from "~/utilities/rfid";
 import { Settings } from "~/settings/settings";
 import { Dataset } from "../data-models/test-data";
+
+import { AudioPlayer } from "~/audio-player/audio-player";
+let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
 
 let testData: Dataset = new Dataset();
 let settings: Settings = Settings.getInstance();
@@ -104,7 +103,7 @@ export function onItemTap(args: ItemEventData) {
         viewModel.set("currentTagId", medicineList.bindings[args.index].tagId);
     }
 
-    let audioPath = Utility.Language.getAudioPath(medicineName);
+    let audioPath = audioPlayer.getAudioPath(medicineName);
     AudioPlayer.useAudio(audioPath);
     if (settings.isAudioEnabled) {
         AudioPlayer.play();
@@ -210,7 +209,7 @@ export function onStopTap(args: EventData) {
     
     // Forces audio to restart on next play
     let medicineName = viewModel.get("currentMedicineName");
-    let audioPath = Utility.Language.getAudioPath(medicineName);
+    let audioPath = audioPlayer.getAudioPath(medicineName);
     AudioPlayer.useAudio(audioPath);
 };
 
@@ -222,7 +221,7 @@ export function onAudioEnableTap(args: ItemEventData) {
     settings.isAudioActive = false;
 
     let medicineName = viewModel.get("currentMedicineName");
-    let audioPath = Utility.Language.getAudioPath(medicineName);
+    let audioPath = audioPlayer.getAudioPath(medicineName);
     AudioPlayer.useAudio(audioPath);
 };
 

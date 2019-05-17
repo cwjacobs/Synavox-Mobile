@@ -5,14 +5,12 @@
 import { NfcTagData, Nfc } from "nativescript-nfc";
 import { AppRootViewModel } from "~/app-root/app-root-view-model";
 import { topmost } from "tns-core-modules/ui/frame/frame";
+
 import { Settings } from "~/settings/settings";
-import { MedicineBinding } from "~/data-models/medicine-binding";
-
-import * as Test from "../data-models/test-data";
-import * as Utility from "../utility-functions/utility-functions";
-import { AudioPlayer } from "~/audio-player/audio-player";
-
 let settings: Settings = Settings.getInstance();
+
+import { AudioPlayer } from "~/audio-player/audio-player";
+let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
 
 // for browse branch
 let tagId: string;
@@ -121,19 +119,13 @@ export class RFID {
         this._tagScanned = true;
         this.tagId = data.id.toString();
 
-        let medicineList = settings.medicineList;
-        let medicineName: string = medicineList.getMedicineBindingByTagId(this.tagId).medicineName;
-        settings.currentMedicine = medicineName;
-
         if (settings.isAlwaysPlayAudio) {
-            let audioPath = Utility.Language.getAudioPath(medicineName);
+            let audioPath = audioPlayer.getAudioPath(this.tagId);
             AudioPlayer.useAudio(audioPath);
             AudioPlayer.togglePlay();
         }
         else if (settings.isAlwaysConfirmDose) {
             settings.isConfirmingDose = true;
-            settings.currentMedicine = medicineName;
-
             const componentRoute = "home/home-page";
             const componentTitle = "Home";
             this.navigateTo(componentTitle, componentRoute);

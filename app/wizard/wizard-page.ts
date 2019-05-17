@@ -12,15 +12,14 @@ import { WizardViewModel } from "./wizard-view-model";
 import { MedicineBinding } from "~/data-models/medicine-binding";
 import { AppRootViewModel } from "~/app-root/app-root-view-model";
 
-import * as Test from "../data-models/test-data";
-import * as Utility from "../utility-functions/utility-functions";
-
-import { AudioPlayer } from "~/audio-player/audio-player";
 import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
 import { ListPicker } from "tns-core-modules/ui/list-picker/list-picker";
 
 import { Settings } from "~/settings/settings";
 let settings: Settings = Settings.getInstance();
+
+import { AudioPlayer } from "~/audio-player/audio-player";
+let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
 
 let medicineName: string = null;
 
@@ -32,7 +31,7 @@ let medicineTagPairs: MedicineBinding[] = null;
 let appRootContext: AppRootViewModel = null;
 
 // Page Text
-let i18n = I18N.getInstance();
+let i18n: I18N = I18N.getInstance();
 
 // NFC access
 let rfid = RFID.getInstance();
@@ -153,7 +152,7 @@ export function onPlayTap(args: ItemEventData) {
         alert("No medicine name...");
         return;
     }
-    let audioPath = Utility.Language.getAudioPath(pairedMedicineName);
+    let audioPath = audioPlayer.getAudioPath(pairedMedicineName);
     AudioPlayer.useAudio(audioPath);
     AudioPlayer.togglePlay();
 };
@@ -163,7 +162,7 @@ export function onStopTap(args: EventData) {
 
     // Forces audio to restart on next play
     let pairedMedicineName = viewModel.get("currentMedicineName");
-    let audioPath = Utility.Language.getAudioPath(pairedMedicineName);
+    let audioPath = audioPlayer.getAudioPath(pairedMedicineName);
     AudioPlayer.useAudio(audioPath);
 };
 

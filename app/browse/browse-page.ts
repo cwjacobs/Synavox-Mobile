@@ -8,20 +8,22 @@ import { TextField } from "tns-core-modules/ui/text-field";
 import * as dialogs from "tns-core-modules/ui/dialogs";
 
 import { BrowseViewModel } from "./browse-view-model";
-import { MedicineBinding, MedicineBindingList } from "~/data-models/medicine-binding";
+import { MedicineBindingList } from "~/data-models/medicine-binding";
 
 // import * as Test from "../data-models/test-data";
-import * as Utility from "../utility-functions/utility-functions";
 import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
 import { topmost } from "tns-core-modules/ui/frame/frame";
 import { AppRootViewModel } from "~/app-root/app-root-view-model";
 import { I18N } from "~/utilities/i18n";
-import { Dataset } from "~/data-models/test-data";
-import { AudioPlayer } from "~/audio-player/audio-player";
-import { Settings } from "~/settings/settings";
 
+import { Dataset } from "~/data-models/test-data";
 let testData: Dataset = new Dataset();
+
+import { Settings } from "~/settings/settings";
 let settings: Settings = Settings.getInstance();
+
+import { AudioPlayer } from "~/audio-player/audio-player";
+let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
 
 let page: Page = null;
 let viewModel: BrowseViewModel = null;
