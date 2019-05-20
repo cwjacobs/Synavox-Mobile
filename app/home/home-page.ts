@@ -28,7 +28,6 @@ let settings: Settings = Settings.getInstance();
 settings.medicineList = new MedicineBindingList(Dataset.testData);
 
 // Page scope medicine lists, point local medicineList to shared datastore
-let medicineList: MedicineBindingList = settings.medicineList;
 let tempMedicineList: MedicineBindingList;
 
 let page: Page = null;
@@ -88,7 +87,8 @@ export function onDrawerButtonTap(args: EventData) {
 
 export function onLoaded(args: EventData) {
     // Current list of paired medications
-    viewModel.set("myMedicineList", medicineList.bindings);
+    //medicineList = settings.medicineList;
+    viewModel.set("myMedicineList", settings.medicineList.bindings);
 
     // Get dose numbers for each medicine
     setTimeout(() => {
@@ -121,11 +121,11 @@ export function onLoaded(args: EventData) {
         registerDoseTaken(settings.currentMedicine);
     }
     else {
-        settings.currentMedicine = medicineList.getMedicineBindingByIndex(1).medicineName;
+        settings.currentMedicine = settings.medicineList.getMedicineBindingByIndex(1).medicineName;
         viewModel.set("currentMedicineName", settings.currentMedicine);
         displayCurrentDoses();
     }
-    displayDosesPerDayInstructions(medicineList.getDailyDosesRequired(settings.currentMedicine));
+    displayDosesPerDayInstructions(settings.medicineList.getDailyDosesRequired(settings.currentMedicine));
 
     // Listener is stopped at each page exit to avoid runing in background... nope. was thinking of audio...
     rfid.startTagListener();
@@ -137,7 +137,7 @@ export function onLoaded(args: EventData) {
 export function onChangeTotalDosesPerDayTap(args: EventData) {
     if ((isEditingAvailable) && (!isEditingDosesTakenToday)) {
         // Copy list to temp list for editing
-        tempMedicineList = new MedicineBindingList(medicineList.bindings);
+        tempMedicineList = new MedicineBindingList(settings.medicineList.bindings);
 
         isEditingTotalDosesPerDay = true;
         viewModel.set("isEditingTotalDosesPerDay", isEditingTotalDosesPerDay);
@@ -176,10 +176,10 @@ export function onChangeTotalDosesPerDayTap(args: EventData) {
 export function onSaveTotalDosesPerDayTap() {
     // Commit edits to doses per day
 
-    medicineList = new MedicineBindingList(tempMedicineList.bindings);
+    settings.medicineList = new MedicineBindingList(tempMedicineList.bindings);
 
     tempMedicineList = null;
-    console.dir("medicineList: " + medicineList);
+    console.dir("medicineList: " + settings.medicineList);
     console.dir("tempMedicineList: " + tempMedicineList);
 
     isEditingTotalDosesPerDay = false;
@@ -195,13 +195,13 @@ export function onSaveTotalDosesPerDayTap() {
     displayCurrentListDoses();
 
     let medicineName: string = viewModel.get("currentMedicineName");
-    displayDosesPerDayInstructions(medicineList.getDailyDosesRequired(medicineName));
+    displayDosesPerDayInstructions(settings.medicineList.getDailyDosesRequired(medicineName));
     // setActiveLanguageText();
 }
 
 export function onCancelTotalDosesPerDayTap() {
     tempMedicineList = null;
-    console.dir("medicineList: " + medicineList);
+    console.dir("medicineList: " + settings.medicineList);
     console.dir("tempMedicineList: " + tempMedicineList);
 
     isEditingTotalDosesPerDay = false;
@@ -217,7 +217,7 @@ export function onCancelTotalDosesPerDayTap() {
     displayCurrentListDoses();
 
     let medicineName: string = viewModel.get("currentMedicineName");
-    displayDosesPerDayInstructions(medicineList.getDailyDosesRequired(medicineName));
+    displayDosesPerDayInstructions(settings.medicineList.getDailyDosesRequired(medicineName));
 
     //setActiveLanguageText();
 }
@@ -225,7 +225,7 @@ export function onCancelTotalDosesPerDayTap() {
 export function onChangeDosesTakenTodayTap(args: EventData) {
     if ((isEditingAvailable) && (!isEditingTotalDosesPerDay)) {
         // Copy list to temp list for editing
-        tempMedicineList = new MedicineBindingList(medicineList.bindings);
+        tempMedicineList = new MedicineBindingList(settings.medicineList.bindings);
 
         isEditingDosesTakenToday = true;
         viewModel.set("isEditingDosesTakenToday", isEditingDosesTakenToday);
@@ -275,7 +275,7 @@ export function onChangeDosesTakenTodayTap(args: EventData) {
 
 export function onSaveDosesTakenTodayTap() {
     // Save changes
-    medicineList = new MedicineBindingList(tempMedicineList.bindings);
+    settings.medicineList = new MedicineBindingList(tempMedicineList.bindings);
 
     tempMedicineList = null;
 
@@ -292,7 +292,7 @@ export function onSaveDosesTakenTodayTap() {
     displayCurrentListDoses();
 
     let medicineName: string = viewModel.get("currentMedicineName");
-    displayDosesPerDayInstructions(medicineList.getDailyDosesRequired(medicineName));
+    displayDosesPerDayInstructions(settings.medicineList.getDailyDosesRequired(medicineName));
 
     //setActiveLanguageText();
 }
@@ -313,7 +313,7 @@ export function onCancelDosesTakenTodayTap() {
     displayCurrentListDoses();
 
     let medicineName: string = viewModel.get("currentMedicineName");
-    displayDosesPerDayInstructions(medicineList.getDailyDosesRequired(medicineName));
+    displayDosesPerDayInstructions(settings.medicineList.getDailyDosesRequired(medicineName));
 
     //setActiveLanguageText();
 }
@@ -344,7 +344,7 @@ export function current5(args: ItemEventData) {
 }
 
 export function onItemTap(args: ItemEventData) {
-    let medicineName: string = medicineList.bindings[args.index].medicineName;
+    let medicineName: string = settings.medicineList.bindings[args.index].medicineName;
     viewModel.set("currentMedicineName", medicineName);
 
     let currentMedicineNameView: any = page.getViewById("current-medicine-name");
@@ -367,7 +367,7 @@ export function onItemTap(args: ItemEventData) {
     displayCurrentDoses();
 
     // Display dose instructions
-    displayDosesPerDayInstructions(medicineList.bindings[args.index].dailyRequiredDoses);
+    displayDosesPerDayInstructions(settings.medicineList.bindings[args.index].dailyRequiredDoses);
 
     let audioPath = audioPlayer.getAudioPath(medicineName);
     AudioPlayer.useAudio(audioPath);
@@ -414,8 +414,8 @@ function displayCurrentDoses() {
     let doseIndicatorIdBase: string = "current";
     let medicineName: string = viewModel.get("currentMedicineName");
 
-    let dosesTakenToday: number = medicineList.getDosesTakenToday(medicineName);
-    let dailyDosesRequired: number = medicineList.getDailyDosesRequired(medicineName);
+    let dosesTakenToday: number = settings.medicineList.getDosesTakenToday(medicineName);
+    let dailyDosesRequired: number = settings.medicineList.getDailyDosesRequired(medicineName);
 
     // Iterate over each display position
     let maxDosesDisplayed: number = 6;
@@ -520,7 +520,11 @@ function adustDailyDoseRequirement(indicator: any) {
     let medicineName: string = viewModel.get("currentMedicineName");
     let dailyDosesRequired: number = tempMedicineList.getDailyDosesRequired(medicineName);
 
-    if ((dailyDosesRequired >= 1) && (dailyDosesRequired <= 5)) {
+    if (dailyDosesRequired === 0) {
+        dailyDosesRequired = 1;
+        indicator.color = secondaryOn;
+    }
+    else if ((dailyDosesRequired >= 1) && (dailyDosesRequired <= 5)) {
         let adjustedDoses: number = toggleIndicator(indicator);
         dailyDosesRequired += adjustedDoses;
 
@@ -530,11 +534,11 @@ function adustDailyDoseRequirement(indicator: any) {
         else {
             indicator.color = secondaryOff;
         }
-
-        // Data store behind list is being updated, but we won't display it until save is pressed
-        tempMedicineList.setDailyDoseRequirement(medicineName, dailyDosesRequired);
-        displayDosesPerDayInstructions(dailyDosesRequired);
     }
+
+    // Data store behind list is being updated, but we won't display it until save is pressed
+    tempMedicineList.setDailyDoseRequirement(medicineName, dailyDosesRequired);
+    displayDosesPerDayInstructions(dailyDosesRequired);
 }
 
 function adjustDoses(indicator: any): void {
@@ -551,7 +555,7 @@ function adjustDoses(indicator: any): void {
 
 function displayCurrentListDoses() {
     // console.dir(medicineList);
-    medicineList.bindings.forEach((medicine: MedicineBinding) => {
+    settings.medicineList.bindings.forEach((medicine: MedicineBinding) => {
         let dosesTakenToday: number = medicine.dailyDoses;
         let doseIndicatorIdBase: string = medicine.medicineName;
         let dailyDosesRequired: number = medicine.dailyRequiredDoses;
@@ -594,7 +598,7 @@ function registerDoseTaken(medicineName: string): void {
             let _activeMedicineList: MedicineBindingList;
             if (settings.isConfirmingDose) {
                 // Scanned a tag if here
-                _activeMedicineList = medicineList;
+                _activeMedicineList = settings.medicineList;
                 settings.isConfirmingDose = false;
             }
             else {

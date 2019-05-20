@@ -4,7 +4,6 @@ import { EventData } from "tns-core-modules/data/observable";
 import { NavigatedData, Page } from "tns-core-modules/ui/page";
 
 import { WebView, LoadEventData } from "tns-core-modules/ui/web-view";
-import { TextField } from "tns-core-modules/ui/text-field";
 import * as dialogs from "tns-core-modules/ui/dialogs";
 
 import { BrowseViewModel } from "./browse-view-model";
@@ -27,7 +26,6 @@ let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
 
 let page: Page = null;
 let viewModel: BrowseViewModel = null;
-let medicineList: MedicineBindingList = settings.medicineList;
 
 // for browse branch
 let appRootContext: AppRootViewModel = null;
@@ -62,9 +60,7 @@ export function onLoaded(args: EventData) {
 
     isUserBrowsing = false;
     viewModel.set("isUserBrowsing", isUserBrowsing);
-
-    //medicineList = testData.medicineBindings;
-    viewModel.set("myMedicineList", medicineList.bindings);
+    viewModel.set("myMedicineList", settings.medicineList.bindings);
 
     // Set text to active language
     setActiveLanguageText();

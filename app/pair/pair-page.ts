@@ -19,7 +19,7 @@ let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
 
 let testData: Dataset = new Dataset();
 let settings: Settings = Settings.getInstance();
-let medicineList: MedicineBindingList = settings.medicineList;
+//let medicineList: MedicineBindingList = settings.medicineList;
 
 let page: Page = null;
 let viewModel: PairViewModel = null;
@@ -89,18 +89,18 @@ export function onLoaded(args: EventData) {
     }
 
     // Current list of paired medications
-    viewModel.set("myMedicineList", medicineList.bindings);
+    viewModel.set("myMedicineList", settings.medicineList.bindings);
 
     // Set text to active language
     setActiveLanguageText();
 };
 
 export function onItemTap(args: ItemEventData) {
-    let medicineName: string = medicineList.bindings[args.index].medicineName;
+    let medicineName: string = settings.medicineList.bindings[args.index].medicineName;
     viewModel.set("currentMedicineName", medicineName);
 
     if (!isTagIdLocked) {
-        viewModel.set("currentTagId", medicineList.bindings[args.index].tagId);
+        viewModel.set("currentTagId", settings.medicineList.bindings[args.index].tagId);
     }
 
     let audioPath = audioPlayer.getAudioPath(medicineName);
@@ -131,11 +131,12 @@ export function onDeleteTap(args: ItemEventData) {
             let index: number = settings.medicineList.getMedicineBindingIndex(binding.medicineName);
 
             if (index != -1) { // Delete current binding
-                medicineList.bindings.splice(index, 1);
-            }
+                settings.medicineList.bindings.splice(index, 1);
+                viewModel.set("myMedicines", settings.medicineList);
 
-            const listView: ListView = page.getViewById<ListView>("medicineList");
-            listView.refresh();
+                const listView: ListView = page.getViewById<ListView>("medicineList");
+                listView.refresh();
+            }
         }
     });
 };
@@ -158,25 +159,26 @@ export function onSaveTap(args: ItemEventData) {
     let index: number = settings.medicineList.getMedicineBindingIndex(binding.medicineName);
 
     if (index != -1) { // Replace current binding
-        medicineList.bindings[index] = binding;
+        settings.medicineList.bindings[index] = binding; // use the util functions to add data to array
         alert(getPairingUpdatedMsg(binding.medicineName));
     }
     else {
         index = settings.medicineList.getMedicineBindingIndexByTagId(binding.tagId);
         if (index != -1) { // Replace current binding
-            medicineList.bindings[index] = binding; // use the util functions to add data to array
+            settings.medicineList.bindings[index] = binding; // use the util functions to add data to array
+            alert(getPairingUpdatedMsg(binding.medicineName));
         }
         else { // Add new binding
-            page.bindingContext.myMedicineList.push({
-                tagId: binding.tagId,
-                medicineName: binding.medicineName,
-            });
+            binding.dailyDoses = 0;
+            binding.dailyRequiredDoses = 0;
+            settings.medicineList.bindings.push(binding); // use the util function to add new binging to array
+            // page.bindingContext.myMedicineList.push(binding);
         }
     }
+    viewModel.set("myMedicines", settings.medicineList);
+
     const listView: ListView = page.getViewById<ListView>("medicineList");
     listView.refresh();
-
-    viewModel.set("myMedicines", medicineList);
 }
 
 export function onCancelTap(args: ItemEventData) {
@@ -206,7 +208,7 @@ export function onPlayTap(args: ItemEventData) {
 export function onStopTap(args: EventData) {
     AudioPlayer.pause();
     settings.isAudioActive = false;
-    
+
     // Forces audio to restart on next play
     let medicineName = viewModel.get("currentMedicineName");
     let audioPath = audioPlayer.getAudioPath(medicineName);
