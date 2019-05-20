@@ -17,15 +17,14 @@
 		<StackLayout>
 			<image src="~/images/settings.jpg" width="100%" height="auto" />
 			<Label class="title settings-content fa" text="{{ i18nLanguageOptionsTitle, i18nLanguageOptionsTitle + ' &#xf1ab;' }}"></Label>
-			<Label class="subtitle settings-content" text="{{ i18nActiveLanguageText }}"></Label>
 			<Label class="subtitle settings-content" text="{{ i18nInstalledLanguagesText }}"></Label>
 			<GridLayout class="button-row" rows="*,*" columns="*,*">
 				<Button class="my-button" style="{{ isEnButtonEnabled ? 'background-color: #3A53FF' : 'background-color: #c1c8f8' }}" isEnabled="{{ isEnButtonEnabled }}" text="{{ i18nEnglishButtonText }}" row="0" col="0" onTap="onEnglishTap" />
-				<Label class="indicator fa" style="{{ isEnglishEnabled ? 'color: #000000' : 'color: #AAAAAA' }}" text="&#xf046; Enabled" row="0" col="1" />
+				<Label class="indicator fa" style="{{ isEnButtonEnabled ? 'color: #AAAAAA' : 'color: #000000' }}" text="&#xf046; Active" row="0" col="1" />
 				<Button class="my-button" style="{{ isSpButtonEnabled ? 'background-color: #398881' : 'background-color: #a4cac7' }}" isEnabled="{{ isSpButtonEnabled }}" text="{{ i18nSpanishButtonText }}" row="1" col="0" onTap="onSpanishTap" />
-				<Label class="indicator fa" style="{{ isSpanishEnabled ? 'color: #000000' : 'color: #AAAAAA' }}" text="&#xf046; Habilitado" row="1" col="2" />
+				<Label class="indicator fa" style="{{ isSpButtonEnabled ? 'color: #AAAAAA' : 'color: #000000' }}" text="&#xf046; Activo" row="1" col="2" />
 			</GridLayout>
-			<Label class="fa footer" textWrap="true" text="{{ i18nEnableLanguageInstructionsText , '&#xf0eb; ' + i18nEnableLanguageInstructionsText }}" />
+			<!-- <Label class="fa footer" textWrap="true" text="{{ i18nEnableLanguageInstructionsText , '&#xf0eb; ' + i18nEnableLanguageInstructionsText }}" /> -->
 			<Label class="subtitle settings-content" text="NFC:"></Label>
 			<GridLayout class="button-row" rows="*,*" columns="*,*">
 				<Button class="button alert fa" text="&#xf02b;  NFC (RFID)" row="0" col="0" onTap="onRfidTap" />

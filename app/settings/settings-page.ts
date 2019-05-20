@@ -7,9 +7,9 @@ import { SettingsViewModel } from "./settings-view-model";
 
 import { I18N } from "~/utilities/i18n";
 import { AudioPlayer } from "~/audio-player/audio-player";
+import { appRootI18N } from "~/app-root/app-root";
 
 let page: Page = null;
-let activeLanguage: string = null;
 let viewModel: SettingsViewModel = null;
 
 // Page Text
@@ -27,48 +27,36 @@ export function onNavigatingFrom(args: NavigatedData) {
 }
 
 export function onLoaded(args: NavigatedData) {
-    let isEnglishEnabled: boolean = i18n.isEnglishEnabled;
-    viewModel.set("isEnglishEnabled", isEnglishEnabled);
+    if(i18n.activeLanguage.toLowerCase() === "english") {
+        viewModel.set("isSpButtonEnabled", true);
+        viewModel.set("isEnButtonEnabled", false);
+    }
+    else {
+        viewModel.set("isEnButtonEnabled", true);
+        viewModel.set("isSpButtonEnabled", false);
 
-    let isSpanishEnabled: boolean = i18n.isSpanishEnabled;
-    viewModel.set("isSpanishEnabled", isSpanishEnabled);
-
-     // If only one language is enabled, then we make its corresponding button unselectable to prevent disabling the only enabled language.
-     // IE: Allow Spanish to be enabled/disabled (make button clickable) if English is enabled, make it unselectable if only Spanish is enabled.
-    viewModel.set("isEnButtonEnabled", isSpanishEnabled);
-    viewModel.set("isSpButtonEnabled", isEnglishEnabled);
-
+    }
     setI18N();
 }
 
 export function onEnglishTap(args: NavigatedData) {
-    let isSpButtonEnabled: boolean;
-    let isEnglishEnabled: boolean = i18n.toggleEnglishEnabled();
-    if (!isEnglishEnabled) { // Don't allow both languages to be disabled
-        isSpButtonEnabled = false; // set spanish as active language and prevent user from disabling it at the same time.
-        i18n.activeLanguage = "spanish";
+    let isEnButtonEnabled: boolean = viewModel.get("isEnButtonEnabled");
+    if (isEnButtonEnabled) {
+        i18n.activeLanguage = "english";
+        viewModel.set("isEnButtonEnabled", false);
+        viewModel.set("isSpButtonEnabled", true);
+        setI18N();
     }
-    else {
-        isSpButtonEnabled = true;
-    }
-    viewModel.set("isEnglishEnabled", isEnglishEnabled);
-    viewModel.set("isSpButtonEnabled", isSpButtonEnabled);
-    setI18N();
 }
 
 export function onSpanishTap(args: NavigatedData) {
-    let isEnButtonEnabled: boolean;
-    let isSpanishEnabled: boolean = i18n.toggleSpanishEnabled();
-    if (!isSpanishEnabled) { // Don't allow both languages to be disabled
-        isEnButtonEnabled = false; // set english as active language and prevent user from disabling it at the same time.
-        i18n.activeLanguage = "english"; // should probably be doing this from an i18n function
+    let isSpButtonEnabled: boolean = viewModel.get("isSpButtonEnabled");
+    if (isSpButtonEnabled) {
+        i18n.activeLanguage = "spanish";
+        viewModel.set("isSpButtonEnabled", false);
+        viewModel.set("isEnButtonEnabled", true);
+        setI18N();
     }
-    else {
-        isEnButtonEnabled = true;
-    }
-    viewModel.set("isEnButtonEnabled", isEnButtonEnabled);
-    viewModel.set("isSpanishEnabled", isSpanishEnabled);
-    setI18N();
 }
 
 export function onDrawerButtonTap(args: EventData) {
@@ -85,9 +73,9 @@ export function getNfcButtonColor(): string {
 function setI18N(): void {
     viewModel.set("i18nPageTitle", i18n.settingsPageTitle);
     viewModel.set("i18nLanguageOptionsTitle", i18n.languageOptionsSetting);
-    viewModel.set("i18nActiveLanguageText", i18n.activeLanguageSetting);
     viewModel.set("i18nInstalledLanguagesText", i18n.installedLanguageSetting);
     viewModel.set("i18nEnglishButtonText", i18n.english);
     viewModel.set("i18nSpanishButtonText", i18n.spanish);
-    viewModel.set("i18nEnableLanguageInstructionsText", i18n.enableLanguageInstructionsSetting);
+
+    appRootI18N();
 }

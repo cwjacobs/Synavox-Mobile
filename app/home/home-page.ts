@@ -132,7 +132,6 @@ export function onLoaded(args: EventData) {
 
     // Set text to active language
     setActiveLanguageText();
-    viewModel.set("isDualLanguageEnabled", i18n.isDualLanguageEnabled);
 };
 
 export function onChangeTotalDosesPerDayTap(args: EventData) {

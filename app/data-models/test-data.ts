@@ -1,4 +1,3 @@
-import * as Utility from "../utility-functions/utility-functions";
 import { MedicineBinding } from "./medicine-binding";
 
 export class Dataset {
@@ -16,42 +15,7 @@ export class Dataset {
         return Dataset._enTestData;
     };
 
-    // private static readonly _testData: MedicineBinding[] = Dataset._enTestData;
-    // private static _instance: Dataset = new Dataset();
 
-    // private constructor() {
-    //     if (Dataset._instance) {
-    //         throw new Error("Error: Instantiation failed: Use Dataset.getInstance() instead of new.");
-    //     }
-    //     Dataset._instance = this;
-    // }
-
-    // public static getInstance() {
-    //     return this._instance;
-    // }
-
-    // Returns testdata, if testData === null, sets testData to default and returns it
-    // public get medicineBindings(): MedicineBinding[] {
-    //     if (this._testData === null) {
-    //         this._testData.forEach(binding => {
-
-    //         })
-    //         this._testData = this.defaultTestData;
-    //     }
-    //     return this._testData;
-    // };
-
-    // Returns testdata, if testData === null, sets testData to default and returns it
-    // public set medicineBindings(value: MedicineBinding[]) {
-    //     this._testData = [...value];
-    // };
-
-    // Returns default language test data
-    // private get defaultTestData(): MedicineBinding[] {
-    //     return [...this._enTestData];
-    // };
-
-    /** Browse Branch **/
     private static readonly _webViewSrcArray = [
         {
             medicineName: "Oxycodone",
@@ -185,5 +149,4 @@ export class Dataset {
     public get webViewSrcArray() {
         return Dataset._webViewSrcArray;
     };
-    /** Browse Branch End **/
 }
