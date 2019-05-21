@@ -7,9 +7,9 @@ import { AppRootViewModel } from "~/app-root/app-root-view-model";
 import { topmost } from "tns-core-modules/ui/frame/frame";
 
 import { Settings } from "~/settings/settings";
-let settings: Settings = Settings.getInstance();
-
 import { AudioPlayer } from "~/audio-player/audio-player";
+
+let settings: Settings = Settings.getInstance();
 let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
 
 // for browse branch
@@ -64,11 +64,11 @@ export class RFID {
         this._tagScanned = value;
     }
 
-    public get newTagScanned(): boolean {
+    public get manageNewTag(): boolean {
         return this._newTagScanned;
     }
 
-    public set newTagScanned(value: boolean) {
+    public set manageNewTag(value: boolean) {
         this._newTagScanned = value;
     }
 
@@ -120,20 +120,22 @@ export class RFID {
         this.tagId = data.id.toString();
 
         if (settings.isAlwaysPlayAudio) {
-            let audioPath = audioPlayer.getAudioPath(this.tagId);
-            AudioPlayer.useAudio(audioPath);
-            AudioPlayer.togglePlay();
-        }
-        else if (settings.isAlwaysConfirmDose) {
-            settings.isConfirmingDose = true;
-            const componentRoute = "home/home-page";
-            const componentTitle = "Home";
-            this.navigateTo(componentTitle, componentRoute);
+            let medicineName: string = settings.medicineList.getMedicineBindingByTagId(this.tagId).medicineName;
+            audioPlayer.play(medicineName);
         }
         else {
-            const componentRoute = "wizard/wizard-page";
-            const componentTitle = "Wizard";
-            this.navigateTo(componentTitle, componentRoute);
+            let pageTitle: string;
+            let pageRoute: string;
+            if (settings.isAlwaysConfirmDose) {
+                pageTitle = "Home";
+                pageRoute = "home/home-page";
+                settings.isConfirmingDose = true;
+            }
+            else {
+                pageTitle = "Wizard";
+                pageRoute = "wizard/wizard-page";
+            }
+            this.navigateTo(pageTitle, pageRoute);
         }
     }
 

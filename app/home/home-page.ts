@@ -2,30 +2,29 @@ import { RadSideDrawer } from "nativescript-ui-sidedrawer";
 import * as app from "tns-core-modules/application";
 import { EventData } from "tns-core-modules/data/observable";
 import { NavigatedData, Page, Color } from "tns-core-modules/ui/page";
-import { ListView, ItemEventData } from "tns-core-modules/ui/list-view/list-view";
+import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
 import { Label } from "tns-core-modules/ui/label/label";
-
 import { HomeViewModel } from "./home-view-model";
-// For Dialogs Branch
 import { confirm } from "tns-core-modules/ui/dialogs";
 import { MedicineBinding, MedicineBindingList } from "~/data-models/medicine-binding";
 import { Button } from "tns-core-modules/ui/button/button";
 
 import { I18N } from "~/utilities/i18n";
-let i18n: I18N = I18N.getInstance();
-
 import { RFID } from "~/utilities/rfid";
-let rfid: RFID = RFID.getInstance();
-
-import { AudioPlayer } from "~/audio-player/audio-player";
-let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
-
 import { Dataset } from "~/data-models/test-data";
 import { Settings } from "~/settings/settings";
-let settings: Settings = Settings.getInstance();
+import { AudioPlayer } from "~/audio-player/audio-player";
 
-// initialize app scope list of medicines from static test data
+let i18n: I18N = I18N.getInstance();
+let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
+
+// Init default app Settings
+let settings: Settings = Settings.getInstance();
+settings.isAudioEnabled = true;
 settings.medicineList = new MedicineBindingList(Dataset.testData);
+
+// NFC tag methods
+let rfid: RFID = RFID.getInstance();
 
 // Page scope medicine lists, point local medicineList to shared datastore
 let tempMedicineList: MedicineBindingList;
@@ -46,9 +45,6 @@ let secondaryOff: string = "#a4cac7";
 
 let alertOn: string = "#ff0000";
 let alertOff: string = "#ffc8c8";
-
-let dailyDoses_old: number = 0;
-let dailyRequiredDoses_old: number = 0;
 
 /***
  * Pairing VM states:
@@ -77,7 +73,7 @@ export function onNavigatingTo(args: NavigatedData) {
 }
 
 export function onNavigatingFrom() {
-    AudioPlayer.stop();
+    audioPlayer.stop();
 }
 
 export function onDrawerButtonTap(args: EventData) {
@@ -86,21 +82,14 @@ export function onDrawerButtonTap(args: EventData) {
 };
 
 export function onLoaded(args: EventData) {
-    // Current list of paired medications
-    //medicineList = settings.medicineList;
-    viewModel.set("myMedicineList", settings.medicineList.bindings);
-
     // Get dose numbers for each medicine
     setTimeout(() => {
         displayCurrentListDoses();
     }, 500);
 
-    if (audioPlayer === null) {
-        audioPlayer = new AudioPlayer();
-        settings.isAudioActive = false;
-        settings.isAudioEnabled = false;
-    }
+    // Current list of paired medications
     viewModel.set("isAudioEnabled", settings.isAudioEnabled);
+    viewModel.set("myMedicineList", settings.medicineList.bindings);
 
     // Initialize editing buttons state
     isEditingAvailable = true;
@@ -116,66 +105,32 @@ export function onLoaded(args: EventData) {
     let editTotalDosesPerDayButton: Button = page.getViewById("edit-total-required-doses");
     editTotalDosesPerDayButton.backgroundColor = isEditingAvailable ? secondaryOn : secondaryOff;
 
+    if (!settings.currentMedicine) {
+        settings.currentMedicine = settings.medicineList.getMedicineBindingByIndex(1).medicineName;
+    }
+    viewModel.set("currentMedicineName", settings.currentMedicine);
+
     if (settings.isConfirmingDose) {
-        viewModel.set("currentMedicineName", settings.currentMedicine);
         registerDoseTaken(settings.currentMedicine);
     }
     else {
-        settings.currentMedicine = settings.medicineList.getMedicineBindingByIndex(1).medicineName;
-        viewModel.set("currentMedicineName", settings.currentMedicine);
         displayCurrentDoses();
     }
-    displayDosesPerDayInstructions(settings.medicineList.getDailyDosesRequired(settings.currentMedicine));
 
-    // Listener is stopped at each page exit to avoid runing in background... nope. was thinking of audio...
-    rfid.startTagListener();
+    displayDosesPerDayInstructions(settings.medicineList.getDailyDosesRequired(settings.currentMedicine));
 
     // Set text to active language
     setActiveLanguageText();
+
+    // startTagListener checks if listener is active before starting
+    rfid.startTagListener();
 };
 
 export function onChangeTotalDosesPerDayTap(args: EventData) {
-    if ((isEditingAvailable) && (!isEditingDosesTakenToday)) {
-        // Copy list to temp list for editing
-        tempMedicineList = new MedicineBindingList(settings.medicineList.bindings);
-
-        isEditingTotalDosesPerDay = true;
-        viewModel.set("isEditingTotalDosesPerDay", isEditingTotalDosesPerDay);
-
-        let i18nSaveButtonText: string = getI18nSaveButtonText();
-        viewModel.set("i18nSaveButtonText", i18nSaveButtonText);
-
-        let i18nCancelButtonText: string = getI18nCancelButtonText();
-        viewModel.set("i18nCancelButtonText", i18nCancelButtonText);
-
-        let editDosesTakenTodayButton: Button = page.getViewById("edit-doses-taken-today");
-        editDosesTakenTodayButton.backgroundColor = primaryOff;
-
-        let medicineName: string = viewModel.get("currentMedicineName");
-        let currentMedicineNameView: any = page.getViewById("current-medicine-name");
-        currentMedicineNameView.color = secondaryOn;
-
-        let doseIndicatorBaseId: string = "current";
-        let dailyRequiredDoses: number = tempMedicineList.getDailyDosesRequired(medicineName);
-
-        let maxDosesDisplayed: number = 6;
-        for (let i = 1; i < maxDosesDisplayed; i++) {
-            let doseIndicatorId: string = doseIndicatorBaseId + i.toString(10);
-            let doseIndicator: any = page.getViewById<any>(doseIndicatorId);
-
-            if (i <= dailyRequiredDoses) {
-                doseIndicator.color = secondaryOn;
-            }
-            else {
-                doseIndicator.color = secondaryOff;
-            }
-        }
-    }
+    changeTotalDosesPerDay();
 }
 
 export function onSaveTotalDosesPerDayTap() {
-    // Commit edits to doses per day
-
     settings.medicineList = new MedicineBindingList(tempMedicineList.bindings);
 
     tempMedicineList = null;
@@ -196,7 +151,6 @@ export function onSaveTotalDosesPerDayTap() {
 
     let medicineName: string = viewModel.get("currentMedicineName");
     displayDosesPerDayInstructions(settings.medicineList.getDailyDosesRequired(medicineName));
-    // setActiveLanguageText();
 }
 
 export function onCancelTotalDosesPerDayTap() {
@@ -218,8 +172,6 @@ export function onCancelTotalDosesPerDayTap() {
 
     let medicineName: string = viewModel.get("currentMedicineName");
     displayDosesPerDayInstructions(settings.medicineList.getDailyDosesRequired(medicineName));
-
-    //setActiveLanguageText();
 }
 
 export function onChangeDosesTakenTodayTap(args: EventData) {
@@ -293,8 +245,6 @@ export function onSaveDosesTakenTodayTap() {
 
     let medicineName: string = viewModel.get("currentMedicineName");
     displayDosesPerDayInstructions(settings.medicineList.getDailyDosesRequired(medicineName));
-
-    //setActiveLanguageText();
 }
 
 export function onCancelDosesTakenTodayTap() {
@@ -314,8 +264,6 @@ export function onCancelDosesTakenTodayTap() {
 
     let medicineName: string = viewModel.get("currentMedicineName");
     displayDosesPerDayInstructions(settings.medicineList.getDailyDosesRequired(medicineName));
-
-    //setActiveLanguageText();
 }
 
 export function current1(args: ItemEventData) {
@@ -345,6 +293,7 @@ export function current5(args: ItemEventData) {
 
 export function onItemTap(args: ItemEventData) {
     let medicineName: string = settings.medicineList.bindings[args.index].medicineName;
+    settings.currentMedicine = medicineName;
     viewModel.set("currentMedicineName", medicineName);
 
     let currentMedicineNameView: any = page.getViewById("current-medicine-name");
@@ -369,46 +318,74 @@ export function onItemTap(args: ItemEventData) {
     // Display dose instructions
     displayDosesPerDayInstructions(settings.medicineList.bindings[args.index].dailyRequiredDoses);
 
-    let audioPath = audioPlayer.getAudioPath(medicineName);
-    AudioPlayer.useAudio(audioPath);
     if (settings.isAudioEnabled) {
-        AudioPlayer.play();
+        audioPlayer.play(medicineName);
     }
 };
 
 // Audio control functions
 export function onPlayTap(args: ItemEventData) {
-    let medicineName: string = viewModel.get("currentMedicineName");
-    if (medicineName.length === 0) {
-        alert("No medicine name...");
-        return;
+    if (settings.isAudioEnabled) {
+        let medicineName: string = viewModel.get("currentMedicineName");
+        if (!medicineName) {
+            alert("Please select a medicine from the list below..."); // i18n this...
+            return;
+        }
+        audioPlayer.play(medicineName);
     }
-
-    AudioPlayer.togglePlay();
-    settings.isAudioActive = !settings.isAudioActive;
 };
 
 export function onStopTap(args: EventData) {
-    AudioPlayer.pause();
-    settings.isAudioActive = false;
-
-    // Forces audio to restart on next play
-    let medicineName = viewModel.get("currentMedicineName");
-    let audioPath = audioPlayer.getAudioPath(medicineName);
-    AudioPlayer.useAudio(audioPath);
+    audioPlayer.stop();
 };
 
 export function onAudioEnableTap(args: ItemEventData) {
     settings.isAudioEnabled = !settings.isAudioEnabled;
     viewModel.set("isAudioEnabled", settings.isAudioEnabled);
 
-    AudioPlayer.pause();
-    settings.isAudioActive = false;
-
-    let medicineName = viewModel.get("currentMedicineName");
-    let audioPath = audioPlayer.getAudioPath(medicineName);
-    AudioPlayer.useAudio(audioPath);
+    if (!settings.isAudioEnabled) {
+        audioPlayer.stop();
+    }
 };
+
+function changeTotalDosesPerDay() {
+    if ((isEditingAvailable) && (!isEditingDosesTakenToday)) {
+        // Copy list to temp list for editing
+        tempMedicineList = new MedicineBindingList(settings.medicineList.bindings);
+
+        isEditingTotalDosesPerDay = true;
+        viewModel.set("isEditingTotalDosesPerDay", isEditingTotalDosesPerDay);
+
+        let i18nSaveButtonText: string = getI18nSaveButtonText();
+        viewModel.set("i18nSaveButtonText", i18nSaveButtonText);
+
+        let i18nCancelButtonText: string = getI18nCancelButtonText();
+        viewModel.set("i18nCancelButtonText", i18nCancelButtonText);
+
+        let editDosesTakenTodayButton: Button = page.getViewById("edit-doses-taken-today");
+        editDosesTakenTodayButton.backgroundColor = primaryOff;
+
+        let medicineName: string = viewModel.get("currentMedicineName");
+        let currentMedicineNameView: any = page.getViewById("current-medicine-name");
+        currentMedicineNameView.color = secondaryOn;
+
+        let doseIndicatorBaseId: string = "current";
+        let dailyRequiredDoses: number = tempMedicineList.getDailyDosesRequired(medicineName);
+
+        let maxDosesDisplayed: number = 6;
+        for (let i = 1; i < maxDosesDisplayed; i++) {
+            let doseIndicatorId: string = doseIndicatorBaseId + i.toString(10);
+            let doseIndicator: any = page.getViewById<any>(doseIndicatorId);
+
+            if (i <= dailyRequiredDoses) {
+                doseIndicator.color = secondaryOn;
+            }
+            else {
+                doseIndicator.color = secondaryOff;
+            }
+        }
+    }
+}
 
 function displayCurrentDoses() {
     let doseIndicatorIdBase: string = "current";
@@ -554,7 +531,6 @@ function adjustDoses(indicator: any): void {
 }
 
 function displayCurrentListDoses() {
-    // console.dir(medicineList);
     settings.medicineList.bindings.forEach((medicine: MedicineBinding) => {
         let dosesTakenToday: number = medicine.dailyDoses;
         let doseIndicatorIdBase: string = medicine.medicineName;
@@ -589,6 +565,12 @@ function displayCurrentListDoses() {
             }
         }
     })
+
+    if (rfid.manageNewTag) {
+        rfid.manageNewTag = false;
+        changeTotalDosesPerDay();
+        alert("Enter number of daily doses prescribed for " + settings.currentMedicine);
+    }
 }
 
 function registerDoseTaken(medicineName: string): void {

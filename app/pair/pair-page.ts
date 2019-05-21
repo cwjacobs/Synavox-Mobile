@@ -9,31 +9,22 @@ import { MedicineBinding, MedicineBindingList } from "../data-models/medicine-bi
 
 // For Dialogs Branch
 import { confirm } from "tns-core-modules/ui/dialogs";
-import { I18N } from "~/utilities/i18n";
 import { RFID } from "~/utilities/rfid";
+import { I18N } from "~/utilities/i18n";
 import { Settings } from "~/settings/settings";
-import { Dataset } from "../data-models/test-data";
-
 import { AudioPlayer } from "~/audio-player/audio-player";
-let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
 
-let testData: Dataset = new Dataset();
+import { navigateTo } from "~/app-root/app-root";
+
+let rfid = RFID.getInstance();
+let i18n = I18N.getInstance();
 let settings: Settings = Settings.getInstance();
-//let medicineList: MedicineBindingList = settings.medicineList;
+let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
 
 let page: Page = null;
 let viewModel: PairViewModel = null;
 
 let isTagIdLocked: boolean;
-
-// Page Text
-let i18n = I18N.getInstance();
-
-// NFC access
-let rfid = RFID.getInstance();
-
-// Audio controls and buttons
-//let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
 
 /***
  * Pairing VM states:
@@ -62,55 +53,60 @@ export function onNavigatingTo(args: NavigatedData) {
 }
 
 export function onNavigatingFrom(args: NavigatedData) {
-    AudioPlayer.stop();
+    audioPlayer.stop();
 }
 
 export function onDrawerButtonTap(args: EventData) {
+    // Reset new tag management flag
+    rfid.manageNewTag = false;
+
     const sideDrawer = <RadSideDrawer>app.getRootView();
     sideDrawer.showDrawer();
 };
 
 export function onLoaded(args: EventData) {
-    // settings.isAudioActive = false;
-    // settings.isAudioEnabled = false;
+    // Set audio buttons state
     viewModel.set("isAudioEnabled", settings.isAudioEnabled);
-
-    if (rfid.newTagScanned) {
-        console.log("rfid.tagScanned: " + rfid.tagScanned + " tagId: " + rfid.tagId);
-        // We're here because an unpaired tag was scanned, let's walk the user through next steps...
-        rfid.newTagScanned = false;
-        viewModel.set("currentTagId", rfid.tagId);
-        alert("Enter medicine name or select one from your list to replace a current pairing");
-    }
-    else {
-        // Initialize "Curent" values blank
-        viewModel.set("currentTagId", "");
-        viewModel.set("currentMedicineName", "");
-    }
 
     // Current list of paired medications
     viewModel.set("myMedicineList", settings.medicineList.bindings);
 
     // Set text to active language
     setActiveLanguageText();
+
+    if (rfid.manageNewTag) {
+        console.log("rfid.tagScanned: " + rfid.tagScanned + " tagId: " + rfid.tagId);
+
+        // We're here because an unpaired tag was scanned, let's walk the user through next steps...
+        // rfid.manageNewTag = false;
+        viewModel.set("currentTagId", rfid.tagId);
+        alert("Enter medicine name or select one from your list to replace a current pairing");
+    }
+    else {
+        if (settings.currentMedicine) {
+            settings.currentTagId = settings.medicineList.getMedicineBindingByName(settings.currentMedicine).tagId;
+            viewModel.set("currentTagId", settings.currentTagId);
+            viewModel.set("currentMedicineName", settings.currentMedicine);
+        }
+    }
 };
 
 export function onItemTap(args: ItemEventData) {
-    let medicineName: string = settings.medicineList.bindings[args.index].medicineName;
-    viewModel.set("currentMedicineName", medicineName);
+    // Reset new tag management flag
+    rfid.manageNewTag = false;
+
+    settings.currentMedicine = settings.medicineList.bindings[args.index].medicineName;
+    viewModel.set("currentMedicineName", settings.currentMedicine);
 
     if (!isTagIdLocked) {
-        viewModel.set("currentTagId", settings.medicineList.bindings[args.index].tagId);
-    }
-
-    let audioPath = audioPlayer.getAudioPath(medicineName);
-    AudioPlayer.useAudio(audioPath);
-    if (settings.isAudioEnabled) {
-        AudioPlayer.play();
+        settings.currentTagId = settings.medicineList.bindings[args.index].tagId;
+        viewModel.set("currentTagId", settings.currentTagId);
     }
 };
 
 export function onDeleteTap(args: ItemEventData) {
+    audioPlayer.stop();
+
     let binding: MedicineBinding = new MedicineBinding();
 
     binding.tagId = viewModel.get("currentTagId");
@@ -136,6 +132,8 @@ export function onDeleteTap(args: ItemEventData) {
 
                 const listView: ListView = page.getViewById<ListView>("medicineList");
                 listView.refresh();
+
+                settings.currentMedicine = "";
             }
         }
     });
@@ -156,6 +154,7 @@ export function onSaveTap(args: ItemEventData) {
         return;
     }
 
+    settings.currentMedicine = binding.medicineName;
     let index: number = settings.medicineList.getMedicineBindingIndex(binding.medicineName);
 
     if (index != -1) { // Replace current binding
@@ -172,62 +171,57 @@ export function onSaveTap(args: ItemEventData) {
             binding.dailyDoses = 0;
             binding.dailyRequiredDoses = 0;
             settings.medicineList.bindings.push(binding); // use the util function to add new binging to array
-            // page.bindingContext.myMedicineList.push(binding);
         }
     }
     viewModel.set("myMedicines", settings.medicineList);
 
     const listView: ListView = page.getViewById<ListView>("medicineList");
     listView.refresh();
+
+    // if (rfid.manageNewTag) {
+    rfid.manageNewTag = true;
+    const pageTitle = "Home";
+    const pageRoute = "home/home-page";
+    navigateTo(pageTitle, pageRoute);
+    // }
 }
 
 export function onCancelTap(args: ItemEventData) {
     isTagIdLocked = false;
     viewModel.set("currentTagId", "");
     viewModel.set("currentMedicineName", "");
+    audioPlayer.stop();
 };
 
 // Audio control functions
 export function onPlayTap(args: ItemEventData) {
-    let tagId: string = viewModel.get("currentTagId");
-    if (tagId.length === 0) {
-        alert("No valid tag id...");
-        return;
+    if (settings.isAudioEnabled) {
+        let medicineName: string = viewModel.get("currentMedicineName");
+        if (!medicineName) {
+            alert("No medicine name selected..."); // i18n this
+            return;
+        }
+        audioPlayer.play(medicineName);
     }
-
-    let medicineName: string = viewModel.get("currentMedicineName");
-    if (medicineName.length === 0) {
-        alert("No medicine name...");
-        return;
-    }
-
-    AudioPlayer.togglePlay();
-    settings.isAudioActive = !settings.isAudioActive;
 };
 
 export function onStopTap(args: EventData) {
-    AudioPlayer.pause();
-    settings.isAudioActive = false;
-
-    // Forces audio to restart on next play
-    let medicineName = viewModel.get("currentMedicineName");
-    let audioPath = audioPlayer.getAudioPath(medicineName);
-    AudioPlayer.useAudio(audioPath);
+    audioPlayer.stop();
 };
 
 export function onAudioEnableTap(args: ItemEventData) {
+    settings = Settings.getInstance();
+
     settings.isAudioEnabled = !settings.isAudioEnabled;
     viewModel.set("isAudioEnabled", settings.isAudioEnabled);
-
-    AudioPlayer.pause();
-    settings.isAudioActive = false;
-
-    let medicineName = viewModel.get("currentMedicineName");
-    let audioPath = audioPlayer.getAudioPath(medicineName);
-    AudioPlayer.useAudio(audioPath);
+    if (!settings.isAudioEnabled) {
+        audioPlayer.stop();
+    }
 };
 
 function setActiveLanguageText(): void {
+    i18n = I18N.getInstance();
+
     viewModel.set("i18nPageTitle", i18n.pairPageTitle);
     viewModel.set("i18nMedicineNameHint", i18n.pairMedicineNameHint);
     viewModel.set("i18nSaveButtonText", i18n.save);

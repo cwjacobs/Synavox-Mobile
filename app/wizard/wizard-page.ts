@@ -3,22 +3,26 @@ import * as app from "tns-core-modules/application";
 import { EventData } from "tns-core-modules/data/observable";
 import { NavigatedData, Page } from "tns-core-modules/ui/page";
 import { confirm } from "tns-core-modules/ui/dialogs";
-import { topmost } from "tns-core-modules/ui/frame/frame";
+//import { topmost } from "tns-core-modules/ui/frame/frame";
 
 import { I18N } from "~/utilities/i18n";
 import { RFID } from "~/utilities/rfid"
 
 import { WizardViewModel } from "./wizard-view-model";
 import { MedicineBinding } from "~/data-models/medicine-binding";
-import { AppRootViewModel } from "~/app-root/app-root-view-model";
+//import { AppRootViewModel } from "~/app-root/app-root-view-model";
 
 import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
 import { ListPicker } from "tns-core-modules/ui/list-picker/list-picker";
 
 import { Settings } from "~/settings/settings";
-let settings: Settings = Settings.getInstance();
-
 import { AudioPlayer } from "~/audio-player/audio-player";
+
+import { navigateTo } from "~/app-root/app-root";
+
+let i18n: I18N = I18N.getInstance();
+let rfid = RFID.getInstance();
+let settings: Settings = Settings.getInstance();
 let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
 
 let medicineName: string = null;
@@ -27,14 +31,8 @@ let viewModel: WizardViewModel = null;
 
 let medicineTagPairs: MedicineBinding[] = null;
 
-// for browse branch
-let appRootContext: AppRootViewModel = null;
-
-// Page Text
-let i18n: I18N = I18N.getInstance();
-
-// NFC access
-let rfid = RFID.getInstance();
+// Used to switch pages based on user input
+//let appRootContext: AppRootViewModel = null;
 
 export function onNavigatingTo(args: NavigatedData) {
     const page = <Page>args.object;
@@ -43,7 +41,7 @@ export function onNavigatingTo(args: NavigatedData) {
 }
 
 export function onNavigatingFrom(args: NavigatedData) {
-    AudioPlayer.stop();
+    audioPlayer.stop();
 }
 
 export function onDrawerButtonTap(args: EventData) {
@@ -53,14 +51,13 @@ export function onDrawerButtonTap(args: EventData) {
 
 export function onLoaded(args: EventData) {
     medicineTagPairs = settings.medicineList.bindings;
-    console.dir("medicineTagPairs: " + medicineTagPairs);
 
     viewModel.set("i18nMedicineListTitle", i18n.homePageTitle);
     setActiveLanguageText();
 
-    if (appRootContext == null) {
-        appRootContext = new AppRootViewModel();
-    }
+    // if (appRootContext == null) {
+    //     appRootContext = new AppRootViewModel();
+    // }
 
     if (rfid.tagScanned) {
         viewModel.set("currentTagId", rfid.tagId);
@@ -73,11 +70,16 @@ export function onLoaded(args: EventData) {
         rfid.tagScanned = false;
         let pairedMedicineName: string = getPairedMedicineName(rfid.tagId, medicineTagPairs);
         if (!pairedMedicineName) {
+            // This is an unbound tag
             let confirmMsg: string = "New tag discovered. Would you like to pair this tag to a medicine name now?";
             confirm(confirmMsg).then((isConfirmed) => {
                 if (isConfirmed) {
-                    rfid.newTagScanned = true;
+                    rfid.manageNewTag = true;
                     navigateTo("Pair", "pair/pair-page");
+                }
+                else {
+                    rfid.manageNewTag = false;
+                    letUserSelectMedicine();
                 }
             });
         }
@@ -93,16 +95,8 @@ export function onLoaded(args: EventData) {
         }
     }
     else {
-        // User navigated here
-        let myMedicineNamesList: string[] = getMedicineNames(medicineTagPairs);
-        viewModel.set("myMedicineNamesList", myMedicineNamesList);
-        viewModel.set("isSelectingMedicine", true);
-        viewModel.set("index", 1);
-
-        viewModel.set("isTagDisplayed", false);
-        viewModel.set("isMedicineDisplayed", false);
-        viewModel.set("isSelectingAction", false);
-        viewModel.set("i18nScannedOrSelected", i18n.selectedMsg);
+        // No currentMedicine, allow user to select
+        letUserSelectMedicine();
     }
 }
 
@@ -125,45 +119,40 @@ export function onAlwaysConfirmTap() {
 }
 
 export function onHomeTap() {
-    const componentRoute = "home/home-page";
-    const componentTitle = "Home";
-    navigateTo(componentTitle, componentRoute);
+    const pageTitle = "Home";
+    const pageRoute = "home/home-page";
+    navigateTo(pageTitle, pageRoute);
 }
 
 export function onConfirmDoseTakenTap() {
     settings.currentMedicine = viewModel.get("currentMedicineName");
     settings.isConfirmingDose = true;
 
-    const componentRoute = "home/home-page";
-    const componentTitle = "Home";
-    navigateTo(componentTitle, componentRoute);
+    const pageTitle = "Home";
+    const pageRoute = "home/home-page";
+    navigateTo(pageTitle, pageRoute);
 }
 
 export function onPairTap() {
-    const componentRoute = "pair/pair-page";
-    const componentTitle = "Pair";
-    navigateTo(componentTitle, componentRoute);
+    const pageTitle = "Pair";
+    const pageRoute = "pair/pair-page";
+    navigateTo(pageTitle, pageRoute);
 }
 
 // Audio control functions
 export function onPlayTap(args: ItemEventData) {
-    let pairedMedicineName: string = viewModel.get("currentMedicineName");
-    if (pairedMedicineName.length === 0) {
-        alert("No medicine name...");
-        return;
+    if (settings.isAudioEnabled) {
+        let medicineName: string = viewModel.get("currentMedicineName");
+        if (!medicineName) {
+            alert("No medicine name selected..."); // i18n this
+            return;
+        }
+        audioPlayer.play(medicineName);
     }
-    let audioPath = audioPlayer.getAudioPath(pairedMedicineName);
-    AudioPlayer.useAudio(audioPath);
-    AudioPlayer.togglePlay();
 };
 
 export function onStopTap(args: EventData) {
-    AudioPlayer.pause();
-
-    // Forces audio to restart on next play
-    let pairedMedicineName = viewModel.get("currentMedicineName");
-    let audioPath = audioPlayer.getAudioPath(pairedMedicineName);
-    AudioPlayer.useAudio(audioPath);
+    audioPlayer.stop();
 };
 
 export function onListPickerLoaded(args: EventData) {
@@ -172,18 +161,32 @@ export function onListPickerLoaded(args: EventData) {
         viewModel.set("index", listPicker.selectedIndex);
         medicineName = (<any>listPicker).selectedValue;
 
-        console.log(`ListPicker selected value: ${(<any>listPicker).selectedValue}`);
-        console.log(`ListPicker selected index: ${listPicker.selectedIndex}`);
+        // console.log(`ListPicker selected value: ${(<any>listPicker).selectedValue}`);
+        // console.log(`ListPicker selected index: ${listPicker.selectedIndex}`);
     });
 };
 
 export function onSelectMedicineTap(args: EventData) {
+    settings.currentMedicine = medicineName;
+
     viewModel.set("isSelectingAction", true);
     viewModel.set("isMedicineDisplayed", true);
 
     viewModel.set("isTagDisplayed", false);
     viewModel.set("isSelectingMedicine", false);
     viewModel.set("currentMedicineName", medicineName);
+}
+
+function letUserSelectMedicine() {
+    let myMedicineNamesList: string[] = getMedicineNames(medicineTagPairs);
+    viewModel.set("myMedicineNamesList", myMedicineNamesList);
+    viewModel.set("isSelectingMedicine", true);
+    viewModel.set("index", 1);
+
+    viewModel.set("isTagDisplayed", false);
+    viewModel.set("isMedicineDisplayed", false);
+    viewModel.set("isSelectingAction", false);
+    viewModel.set("i18nScannedOrSelected", i18n.selectedMsg);
 }
 
 function setActiveLanguageText(): void {
@@ -235,16 +238,6 @@ function findTagIdIndex(tagId: string, list: MedicineBinding[]): number {
         }
     })
     return index;
-}
-
-function navigateTo(componentTitle: string, componentRoute: string): void {
-    appRootContext.selectedPage = componentTitle;
-    topmost().navigate({
-        moduleName: componentRoute,
-        transition: {
-            name: "fade"
-        }
-    });
 }
 
 

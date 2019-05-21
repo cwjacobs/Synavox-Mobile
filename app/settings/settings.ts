@@ -8,8 +8,6 @@ export class Settings {
 
     private _isConfirmingDose: boolean;
     
-    private _isAudioActive: boolean;
-
     private _isAudioEnabled: boolean;
 
     private _isAlwaysPlayAudio: boolean;
@@ -28,7 +26,7 @@ export class Settings {
     }
 
     public static getInstance(): Settings {
-        return Settings._instance;
+        return this._instance;
     }
 
     public get medicineList() {
@@ -61,14 +59,6 @@ export class Settings {
 
     public set isConfirmingDose(value: boolean) {
         this._isConfirmingDose = value;
-    }
-
-    public get isAudioActive() {
-        return this._isAudioActive;
-    }
-
-    public set isAudioActive(value: boolean) {
-        this._isAudioActive = value;
     }
 
     public get isAudioEnabled() {

@@ -15,6 +15,9 @@ let viewModel: SettingsViewModel = null;
 // Page Text
 let i18n = I18N.getInstance();
 
+// Audio Playback
+let audioPlayer = AudioPlayer.getInstance();
+
 export function onNavigatingTo(args: NavigatedData) {
     page = <Page>args.object;
     viewModel = new SettingsViewModel();
@@ -23,7 +26,7 @@ export function onNavigatingTo(args: NavigatedData) {
 }
 
 export function onNavigatingFrom(args: NavigatedData) {
-    AudioPlayer.stop();
+    audioPlayer.stop();
 }
 
 export function onLoaded(args: NavigatedData) {

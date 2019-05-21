@@ -43,6 +43,16 @@ export function onNavigationItemTap(args: EventData): void {
     drawerComponent.closeDrawer();
 }
 
+export function navigateTo(pageTitle: string, pageRoute: string): void {
+    viewModel.selectedPage = pageTitle;
+    topmost().navigate({
+        moduleName: pageRoute,
+        transition: {
+            name: "fade"
+        }
+    });
+}
+
 export function appRootI18N(): void {
     viewModel.set("i18nHome", i18n.homeNav);
     viewModel.set("i18nDose", i18n.doseNav);

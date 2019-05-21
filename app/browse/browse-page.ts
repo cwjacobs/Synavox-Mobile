@@ -45,7 +45,7 @@ export function onNavigatingTo(args: NavigatedData) {
 }
 
 export function onNavigatingFrom(args: NavigatedData) {
-    AudioPlayer.stop();
+    audioPlayer.stop();
 }
 
 export function onDrawerButtonTap(args: EventData) {

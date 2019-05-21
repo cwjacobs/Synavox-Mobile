@@ -31,10 +31,13 @@ let contactFilter: string = null;
 let viewModel: ShareViewModel = null;
 
 // Page Text
-let i18n = I18N.getInstance();
+let i18n: I18N = I18N.getInstance();
 
 // Page control buttons
 let i18nShareButtonText: string = null;
+
+// Page Text
+let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
 
 // Dose indicator colors
 const alertColor: string = "#7700ff";
@@ -64,7 +67,7 @@ export function onNavigatingTo(args: NavigatedData) {
 }
 
 export function onNavigatingFrom(args: NavigatedData) {
-    AudioPlayer.stop();
+    audioPlayer.stop();
 }
 
 export function onDrawerButtonTap(args: EventData) {
@@ -247,8 +250,7 @@ function shareLibrary(counter) {
             shareButton.backgroundColor = primary;
 
             let audioPath: string = "~/audio/sounds/success.mp3";
-            AudioPlayer.useAudio(audioPath);
-            AudioPlayer.play();
+            audioPlayer.playFrom(audioPath);
         }
     }
 }
