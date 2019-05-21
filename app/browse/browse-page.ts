@@ -144,7 +144,7 @@ export function onGoBackTap() {
 }
 
 export function onSaveTap() {
-    alert("Saved...");
+    alert(i18n.saved);
     // TBD: hook the actual current website and save as button property
 }
 

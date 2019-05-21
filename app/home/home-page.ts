@@ -328,7 +328,7 @@ export function onPlayTap(args: ItemEventData) {
     if (settings.isAudioEnabled) {
         let medicineName: string = viewModel.get("currentMedicineName");
         if (!medicineName) {
-            alert("Please select a medicine from the list below..."); // i18n this...
+            alert(i18n.selectMedicineMsg);
             return;
         }
         audioPlayer.play(medicineName);
@@ -525,9 +525,6 @@ function adjustDoses(indicator: any): void {
     else if (isEditingTotalDosesPerDay) {
         adustDailyDoseRequirement(indicator);
     }
-    else {
-        alert("we are not editing...");
-    }
 }
 
 function displayCurrentListDoses() {
@@ -569,7 +566,7 @@ function displayCurrentListDoses() {
     if (rfid.manageNewTag) {
         rfid.manageNewTag = false;
         changeTotalDosesPerDay();
-        alert("Enter number of daily doses prescribed for " + settings.currentMedicine);
+        alert(i18n.enterDosesPrescribed + settings.currentMedicine);
     }
 }
 

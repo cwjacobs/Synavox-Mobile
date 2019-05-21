@@ -80,7 +80,7 @@ export function onLoaded(args: EventData) {
         // We're here because an unpaired tag was scanned, let's walk the user through next steps...
         // rfid.manageNewTag = false;
         viewModel.set("currentTagId", rfid.tagId);
-        alert("Enter medicine name or select one from your list to replace a current pairing");
+        alert(i18n.enterMedicneName);
     }
     else {
         if (settings.currentMedicine) {
@@ -111,13 +111,13 @@ export function onDeleteTap(args: ItemEventData) {
 
     binding.tagId = viewModel.get("currentTagId");
     if (binding.tagId.length === 0) {
-        alert("No valid tag id...");
+        alert(i18n.selectMedicineMsg);
         return;
     }
 
     binding.medicineName = viewModel.get("currentMedicineName");
     if (binding.medicineName.length === 0) {
-        alert("No medicine name...");
+        alert(i18n.selectMedicineMsg);
         return;
     }
 
@@ -144,13 +144,13 @@ export function onSaveTap(args: ItemEventData) {
 
     binding.tagId = viewModel.get("currentTagId");
     if (binding.tagId.length === 0) {
-        alert("No valid tag id...");
+        alert(i18n.selectMedicineMsg);
         return;
     }
 
     binding.medicineName = viewModel.get("currentMedicineName");
     if (binding.medicineName.length === 0) {
-        alert("No medicine name...");
+        alert(i18n.selectMedicineMsg);
         return;
     }
 
@@ -198,7 +198,7 @@ export function onPlayTap(args: ItemEventData) {
     if (settings.isAudioEnabled) {
         let medicineName: string = viewModel.get("currentMedicineName");
         if (!medicineName) {
-            alert("No medicine name selected..."); // i18n this
+            alert(i18n.selectMedicineMsg);
             return;
         }
         audioPlayer.play(medicineName);

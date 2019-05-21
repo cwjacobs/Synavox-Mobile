@@ -6,9 +6,11 @@ import { NfcTagData, Nfc } from "nativescript-nfc";
 import { AppRootViewModel } from "~/app-root/app-root-view-model";
 import { topmost } from "tns-core-modules/ui/frame/frame";
 
+import { I18N } from "~/utilities/i18n";
 import { Settings } from "~/settings/settings";
 import { AudioPlayer } from "~/audio-player/audio-player";
 
+let i18n: I18N = I18N.getInstance();
 let settings: Settings = Settings.getInstance();
 let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
 
@@ -77,12 +79,12 @@ export class RFID {
         if (!this._tagListenerStarted) {
             this._nfc.available().then((avail) => {
                 if (!avail) {
-                    alert("Pairing (NFC) is not available on this device")
+                    alert(i18n.nfcNotAvailable)
                 }
                 else {
                     this._nfc.enabled().then((on) => {
                         if (!on) {
-                            alert("Pairing (NFC) is not enabled on this device")
+                            alert(i18n.nfcNotEnabled)
                         }
                         else {
                             let self = this;
@@ -91,7 +93,6 @@ export class RFID {
                             this._nfc.setOnTagDiscoveredListener((data: NfcTagData) => {
                                 self.scanWizard(data);
                             }).then(() => {
-                                // alert("OnTagDiscovered Listener set");
                             }, (err) => {
                                 alert(err);
                             });

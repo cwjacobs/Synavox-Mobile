@@ -40,7 +40,7 @@ export class I18N {
         this._activeLanguageIndex = this.activeLanguage === "english" ? 0 : 1;
     }
 
-    
+
     /******************************
      * Page Navigation
      ******************************/
@@ -319,6 +319,11 @@ export class I18N {
         return text[this._activeLanguageIndex];
     }
 
+    public get saved() {
+        const text: string[] = ["Saved", "Guardado"];
+        return text[this._activeLanguageIndex];
+    }
+
 
     /******************************
      * Wizard Page
@@ -393,5 +398,58 @@ export class I18N {
         const text: string[] = ["Installed Languages:", "Idiomas Instalados:"];
         return text[this._activeLanguageIndex];
     }
+
+
+    /******************************
+     * Confirm Messages
+     ******************************/
+
+    public get newTagMsg() {
+        const text: string[] = [
+            "New tag discovered. Would you like to pair this tag to a medicine name now?",
+            "Nueva etiqueta descubierta. ¿Le gustaría emparejar esta etiqueta con un nombre de medicamento ahora?"];
+        return text[this._activeLanguageIndex];
+    }
+
+
+    /******************************
+     * Alert Messages
+     ******************************/
+
+    public get selectMedicineMsg() {
+        const text: string[] = [
+            "Please select a medicine from the list below...",
+            "Por favor, seleccione un medicamento de la lista a continuación..."];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get enterDosesPrescribed() {
+        const text: string[] = [
+            "Enter number of daily doses prescribed for ",
+            "Introduzca el número de dosis diarias prescritas para "];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get enterMedicneName() {
+        const text: string[] = [
+            "Enter medicine name or select one from your list to replace a current pairing",
+            "Ingresa el nombre del medicamento o selecciona uno de tu lista para reemplazar un emparejamiento actual"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get nfcNotAvailable() {
+        const text: string[] = [
+            "Pairing (NFC) is not available on this device",
+            "El emparejamiento (NFC) no está disponible en este dispositivo"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get nfcNotEnabled() {
+        const text: string[] = [
+            "Pairing (NFC) is not enabled on this device",
+            "El emparejamiento (NFC) no está habilitado en este dispositivo"];
+        return text[this._activeLanguageIndex];
+    }
 }
+
 

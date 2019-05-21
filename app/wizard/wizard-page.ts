@@ -31,9 +31,6 @@ let viewModel: WizardViewModel = null;
 
 let medicineTagPairs: MedicineBinding[] = null;
 
-// Used to switch pages based on user input
-//let appRootContext: AppRootViewModel = null;
-
 export function onNavigatingTo(args: NavigatedData) {
     const page = <Page>args.object;
     viewModel = new WizardViewModel();
@@ -71,7 +68,7 @@ export function onLoaded(args: EventData) {
         let pairedMedicineName: string = getPairedMedicineName(rfid.tagId, medicineTagPairs);
         if (!pairedMedicineName) {
             // This is an unbound tag
-            let confirmMsg: string = "New tag discovered. Would you like to pair this tag to a medicine name now?";
+            let confirmMsg: string = i18n.newTagMsg;
             confirm(confirmMsg).then((isConfirmed) => {
                 if (isConfirmed) {
                     rfid.manageNewTag = true;
@@ -144,7 +141,7 @@ export function onPlayTap(args: ItemEventData) {
     if (settings.isAudioEnabled) {
         let medicineName: string = viewModel.get("currentMedicineName");
         if (!medicineName) {
-            alert("No medicine name selected..."); // i18n this
+            alert(i18n.selectMedicineMsg);
             return;
         }
         audioPlayer.play(medicineName);
