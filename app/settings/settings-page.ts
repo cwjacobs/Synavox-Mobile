@@ -8,6 +8,7 @@ import { SettingsViewModel } from "./settings-view-model";
 import { I18N } from "~/utilities/i18n";
 import { AudioPlayer } from "~/audio-player/audio-player";
 import { appRootI18N } from "~/app-root/app-root";
+import { Settings } from "./settings";
 
 let page: Page = null;
 let viewModel: SettingsViewModel = null;
@@ -17,6 +18,9 @@ let i18n = I18N.getInstance();
 
 // Audio Playback
 let audioPlayer = AudioPlayer.getInstance();
+
+// App scope variables
+let settings = Settings.getInstance();
 
 export function onNavigatingTo(args: NavigatedData) {
     page = <Page>args.object;
@@ -30,7 +34,7 @@ export function onNavigatingFrom(args: NavigatedData) {
 }
 
 export function onLoaded(args: NavigatedData) {
-    if(i18n.activeLanguage.toLowerCase() === "english") {
+    if (i18n.activeLanguage.toLowerCase() === "english") {
         viewModel.set("isSpButtonEnabled", true);
         viewModel.set("isEnButtonEnabled", false);
     }
@@ -67,10 +71,22 @@ export function onDrawerButtonTap(args: EventData) {
     sideDrawer.showDrawer();
 }
 
-export function getNfcButtonColor(): string {
-    let buttonColor: string = "red";
-    // viewModel.set("activeLanguage", buttonColor);
-    return buttonColor;
+export function onAlwaysPlayTap() {
+    settings.isAlwaysPlayAudio = !settings.isAlwaysPlayAudio;
+    viewModel.set("isAlwaysPlayAudio", settings.isAlwaysPlayAudio);
+    if (settings.isAlwaysPlayAudio) {
+        settings.isAlwaysConfirmDose = false;
+        viewModel.set("isAlwaysConfirmDose", settings.isAlwaysConfirmDose);
+    }
+}
+
+export function onAlwaysConfirmTap() {
+    settings.isAlwaysConfirmDose = !settings.isAlwaysConfirmDose;
+    viewModel.set("isAlwaysConfirmDose", settings.isAlwaysConfirmDose);
+    if (settings.isAlwaysConfirmDose) {
+        settings.isAlwaysPlayAudio = false;
+        viewModel.set("isAlwaysPlayAudio", settings.isAlwaysPlayAudio);
+    }
 }
 
 function setI18N(): void {
@@ -79,6 +95,12 @@ function setI18N(): void {
     viewModel.set("i18nInstalledLanguagesText", i18n.installedLanguageSetting);
     viewModel.set("i18nEnglishButtonText", i18n.english);
     viewModel.set("i18nSpanishButtonText", i18n.spanish);
+
+    viewModel.set("isAlwaysPlayAudio", settings.isAlwaysPlayAudio);
+    viewModel.set("i18nAlwaysPlayAudio", i18n.action_alwaysPlayAudio);
+
+    viewModel.set("isAlwaysConfirmDose", settings.isAlwaysConfirmDose);
+    viewModel.set("i18nAlwaysConfirmDose", i18n.action_alwaysConfirmDose);
 
     appRootI18N();
 }

@@ -142,15 +142,15 @@ export function onDeleteTap(args: ItemEventData) {
 export function onSaveTap(args: ItemEventData) {
     let binding: MedicineBinding = new MedicineBinding();
 
-    binding.tagId = viewModel.get("currentTagId");
-    if (binding.tagId.length === 0) {
+    binding.medicineName = viewModel.get("currentMedicineName");
+    if (!binding.medicineName) {
         alert(i18n.selectMedicineMsg);
         return;
     }
 
-    binding.medicineName = viewModel.get("currentMedicineName");
-    if (binding.medicineName.length === 0) {
-        alert(i18n.selectMedicineMsg);
+    binding.tagId = viewModel.get("currentTagId");
+    if (!binding.tagId) {
+        alert(i18n.enterTagIdMsg + binding.medicineName);
         return;
     }
 
@@ -178,12 +178,10 @@ export function onSaveTap(args: ItemEventData) {
     const listView: ListView = page.getViewById<ListView>("medicineList");
     listView.refresh();
 
-    // if (rfid.manageNewTag) {
     rfid.manageNewTag = true;
     const pageTitle = "Home";
     const pageRoute = "home/home-page";
     navigateTo(pageTitle, pageRoute);
-    // }
 }
 
 export function onCancelTap(args: ItemEventData) {

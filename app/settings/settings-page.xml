@@ -24,11 +24,15 @@
 				<Button class="my-button" style="{{ isSpButtonEnabled ? 'background-color: #398881' : 'background-color: #a4cac7' }}" isEnabled="{{ isSpButtonEnabled }}" text="{{ i18nSpanishButtonText }}" row="1" col="0" onTap="onSpanishTap" />
 				<Label class="indicator fa" style="{{ isSpButtonEnabled ? 'color: #AAAAAA' : 'color: #000000' }}" text="&#xf046; Activo" row="1" col="2" />
 			</GridLayout>
-			<!-- <Label class="fa footer" textWrap="true" text="{{ i18nEnableLanguageInstructionsText , '&#xf0eb; ' + i18nEnableLanguageInstructionsText }}" /> -->
-			<Label class="subtitle settings-content" text="NFC:"></Label>
-			<GridLayout class="button-row" rows="*,*" columns="*,*">
-				<Button class="button alert fa" text="&#xf02b;  NFC (RFID)" row="0" col="0" onTap="onRfidTap" />
-				<Label class="indicator fa" text="&#xf046;" row="0" col="1"/>
+			<StackLayout class="hr-light"></StackLayout>
+			<Label class="subtitle settings-content" text="Scan Actions:"></Label>
+			<GridLayout class="settings-content" rows="auto" columns="230, *, *">
+				<Button class="my-button primary" text="{{ i18nAlwaysPlayAudio }}" row="0" col="0" onTap="onAlwaysPlayTap" />
+				<Label class="indicator fa left" style="{{ isAlwaysPlayAudio ? 'color: black' : 'color: #BBBBBB' }}" text="&#xf046;" row="0" col="1" />
+			</GridLayout>
+			<GridLayout class="settings-content" rows="auto" columns="230, *, *">
+				<Button class="my-button secondary" text="{{ i18nAlwaysConfirmDose }}" row="1" col="0" onTap="onAlwaysConfirmTap" />
+				<Label class="indicator fa left" style="{{ isAlwaysConfirmDose ? 'color: black' : 'color: #BBBBBB' }}" text="&#xf046;" row="1" col="1" />
 			</GridLayout>
 		</StackLayout>
 	</GridLayout>

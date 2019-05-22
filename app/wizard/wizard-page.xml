@@ -45,8 +45,8 @@
 						</StackLayout>
 						<Button class="my-button primary" text="{{ i18nConfirmDoseTaken }}" onTap="onConfirmDoseTakenTap" row="0" col="1" rowSpan="2" />
 						<GridLayout style="margin-top: 50px;" rows="auto" columns="auto, *" row="1" col="0" colSpan="2">
-							<Label class="always-do-this" style="{{ isAlwaysConfirmDose ? 'color: #7700ff' : 'color: #BBBBBB' }}" text="{{ i18nAlwaysConfirmDose }}" row="0" col="0" onTap="onAlwaysConfirmTap" />
-							<Label class="indicator fa" style="{{ isAlwaysConfirmDose ? 'color: #7700ff' : 'color: #BBBBBB' }}" text="&#xf046;" row="0" col="1" />
+							<Label class="always-do-this" style="{{ isAlwaysConfirmDose ? 'color: #398881' : 'color: #BBBBBB' }}" text="{{ i18nAlwaysConfirmDose }}" row="0" col="0" onTap="onAlwaysConfirmTap" />
+							<Label class="indicator fa" style="{{ isAlwaysConfirmDose ? 'color: #398881' : 'color: #BBBBBB' }}" text="&#xf046;" row="0" col="1" />
 						</GridLayout>
 						<StackLayout class="hr-secondary" row="2" col="0" colSpan="2"></StackLayout>
 						<Label class="pairing-TagId" text="{{ i18nHearAudio }}" row="3" col="0" colSpan="2" />
@@ -55,8 +55,8 @@
 							<Button class="my-button audio-button fa" text="&#xf04d;" isEnabled="{{ isAudioEnabled }}" onTap="onStopTap" row="0" col="1" />
 						</GridLayout>
 						<GridLayout rows="auto" columns="auto, *" row="5" col="0" colSpan="2">
-							<Label class="always-do-this" style="{{ isAlwaysPlayAudio ? 'color: #7700ff' : 'color: #BBBBBB' }}" text="{{ i18nAlwaysPlayAudio }}" row="0" col="0" onTap="onAlwaysPlayTap" />
-							<Label class="indicator fa" style="{{ isAlwaysPlayAudio ? 'color: #7700ff' : 'color: #BBBBBB' }}" text="&#xf046;" row="0" col="1" />
+							<Label class="always-do-this" style="{{ isAlwaysPlayAudio ? 'color: #3A53FF' : 'color: #BBBBBB' }}" text="{{ i18nAlwaysPlayAudio }}" row="0" col="0" onTap="onAlwaysPlayTap" />
+							<Label class="indicator fa" style="{{ isAlwaysPlayAudio ? 'color: #3A53FF' : 'color: #BBBBBB' }}" text="&#xf046;" row="0" col="1" />
 						</GridLayout>
 					</GridLayout>
 				</StackLayout>

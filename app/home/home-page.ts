@@ -578,7 +578,6 @@ function registerDoseTaken(medicineName: string): void {
             if (settings.isConfirmingDose) {
                 // Scanned a tag if here
                 _activeMedicineList = settings.medicineList;
-                settings.isConfirmingDose = false;
             }
             else {
                 // User changing doses if here
@@ -589,6 +588,8 @@ function registerDoseTaken(medicineName: string): void {
             displayCurrentDoses();
             displayCurrentListDoses();
         }
+        // Reset trigger whether confirmed or not
+        settings.isConfirmingDose = false;
     });
 }
 

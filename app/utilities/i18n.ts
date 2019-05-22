@@ -416,10 +416,17 @@ export class I18N {
      * Alert Messages
      ******************************/
 
+    public get enterTagIdMsg() {
+        const text: string[] = [
+            "Please enter or scan a Tag ID for ",
+            "Introduzca o escanee un ID de Etiqueta para  "];
+        return text[this._activeLanguageIndex];
+    }
+
     public get selectMedicineMsg() {
         const text: string[] = [
-            "Please select a medicine from the list below...",
-            "Por favor, seleccione un medicamento de la lista a continuación..."];
+            "Please select a medicine from the list below or enter a new medicine name",
+            "Por favor, seleccione un medicamento de la lista siguiente o introduzca un nuevo nombre de medicamento"];
         return text[this._activeLanguageIndex];
     }
 

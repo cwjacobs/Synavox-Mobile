@@ -9,6 +9,7 @@ import { topmost } from "tns-core-modules/ui/frame/frame";
 import { I18N } from "~/utilities/i18n";
 import { Settings } from "~/settings/settings";
 import { AudioPlayer } from "~/audio-player/audio-player";
+import { MedicineBinding } from "~/data-models/medicine-binding";
 
 let i18n: I18N = I18N.getInstance();
 let settings: Settings = Settings.getInstance();
@@ -119,24 +120,32 @@ export class RFID {
     private scanWizard(data: NfcTagData): void {
         this._tagScanned = true;
         this.tagId = data.id.toString();
+        let pageTitle: string;
+        let pageRoute: string;
 
-        if (settings.isAlwaysPlayAudio) {
-            let medicineName: string = settings.medicineList.getMedicineBindingByTagId(this.tagId).medicineName;
-            audioPlayer.play(medicineName);
+        let binding: MedicineBinding = settings.medicineList.getMedicineBindingByTagId(this.tagId);
+        if (!binding) {
+            // New tag, go to wizard
+            pageTitle = "Wizard";
+            pageRoute = "wizard/wizard-page";
+            this.navigateTo(pageTitle, pageRoute);
         }
         else {
-            let pageTitle: string;
-            let pageRoute: string;
-            if (settings.isAlwaysConfirmDose) {
-                pageTitle = "Home";
-                pageRoute = "home/home-page";
-                settings.isConfirmingDose = true;
+            if (settings.isAlwaysPlayAudio) {
+                audioPlayer.play(binding.medicineName);
             }
             else {
-                pageTitle = "Wizard";
-                pageRoute = "wizard/wizard-page";
+                if (settings.isAlwaysConfirmDose) {
+                    pageTitle = "Home";
+                    pageRoute = "home/home-page";
+                    settings.isConfirmingDose = true;
+                }
+                else {
+                    pageTitle = "Wizard";
+                    pageRoute = "wizard/wizard-page";
+                }
+                this.navigateTo(pageTitle, pageRoute);
             }
-            this.navigateTo(pageTitle, pageRoute);
         }
     }
 
