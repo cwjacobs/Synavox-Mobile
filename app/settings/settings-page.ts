@@ -96,6 +96,9 @@ function setI18N(): void {
     viewModel.set("i18nEnglishButtonText", i18n.english);
     viewModel.set("i18nSpanishButtonText", i18n.spanish);
 
+    viewModel.set("i18nScanOptionsTitle", i18n.scanOptionsTitle);
+    viewModel.set("i18nScanOptionsText", i18n.scanOptionsText);
+    
     viewModel.set("isAlwaysPlayAudio", settings.isAlwaysPlayAudio);
     viewModel.set("i18nAlwaysPlayAudio", i18n.action_alwaysPlayAudio);
 

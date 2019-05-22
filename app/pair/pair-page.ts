@@ -15,6 +15,7 @@ import { Settings } from "~/settings/settings";
 import { AudioPlayer } from "~/audio-player/audio-player";
 
 import { navigateTo } from "~/app-root/app-root";
+import { TextField } from "tns-core-modules/ui/text-field/text-field";
 
 let rfid = RFID.getInstance();
 let i18n = I18N.getInstance();
@@ -81,6 +82,9 @@ export function onLoaded(args: EventData) {
         // rfid.manageNewTag = false;
         viewModel.set("currentTagId", rfid.tagId);
         alert(i18n.enterMedicneName);
+
+        const input: TextField = page.getViewById<TextField>("medicineName-input");
+        input.focus();
     }
     else {
         if (settings.currentMedicine) {

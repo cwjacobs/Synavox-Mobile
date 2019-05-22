@@ -399,6 +399,16 @@ export class I18N {
         return text[this._activeLanguageIndex];
     }
 
+    public get scanOptionsTitle() {
+        const text: string[] = ["Scan Options", "Opciones de escaneo"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get scanOptionsText() {
+        const text: string[] = ["On new tag discovered:", "En la nueva etiqueta descubierta:"];
+        return text[this._activeLanguageIndex];
+    }
+
 
     /******************************
      * Confirm Messages

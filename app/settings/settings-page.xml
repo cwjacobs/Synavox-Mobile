@@ -1,4 +1,4 @@
-<Page navigatingTo="onNavigatingTo" loaded="onLoaded" xmlns="http://schemas.nativescript.org/tns.xsd">
+<Page navigatingTo="onNavigatingTo" loaded="onLoaded" xmlns="http://schemas.nativescript.org/tns.xsd" xmlns:parallax="nativescript-parallax">
 	<ActionBar class="action-bar">
 		<!-- 
         Use the NavigationButton as a side-drawer button in Android
@@ -13,27 +13,34 @@
 		<ActionItem icon="res://navigation/menu" android:visibility="collapsed" tap="onDrawerButtonTap" ios.position="left"></ActionItem>
 		<Label class="action-bar-title fa" text="{{ i18nPageTitle }}"></Label>
 	</ActionBar>
-	<GridLayout class="page-content">
-		<StackLayout>
-			<image src="~/images/settings.jpg" width="100%" height="auto" />
-			<Label class="title settings-content fa" text="{{ i18nLanguageOptionsTitle, i18nLanguageOptionsTitle + ' &#xf1ab;' }}"></Label>
-			<Label class="subtitle settings-content" text="{{ i18nInstalledLanguagesText }}"></Label>
-			<GridLayout class="button-row" rows="*,*" columns="*,*">
-				<Button class="my-button" style="{{ isEnButtonEnabled ? 'background-color: #3A53FF' : 'background-color: #c1c8f8' }}" isEnabled="{{ isEnButtonEnabled }}" text="{{ i18nEnglishButtonText }}" row="0" col="0" onTap="onEnglishTap" />
-				<Label class="indicator fa" style="{{ isEnButtonEnabled ? 'color: #AAAAAA' : 'color: #000000' }}" text="&#xf046; Active" row="0" col="1" />
-				<Button class="my-button" style="{{ isSpButtonEnabled ? 'background-color: #398881' : 'background-color: #a4cac7' }}" isEnabled="{{ isSpButtonEnabled }}" text="{{ i18nSpanishButtonText }}" row="1" col="0" onTap="onSpanishTap" />
-				<Label class="indicator fa" style="{{ isSpButtonEnabled ? 'color: #AAAAAA' : 'color: #000000' }}" text="&#xf046; Activo" row="1" col="2" />
-			</GridLayout>
-			<StackLayout class="hr-light"></StackLayout>
-			<Label class="subtitle settings-content" text="Scan Actions:"></Label>
-			<GridLayout class="settings-content" rows="auto" columns="230, *, *">
-				<Button class="my-button primary" text="{{ i18nAlwaysPlayAudio }}" row="0" col="0" onTap="onAlwaysPlayTap" />
-				<Label class="indicator fa left" style="{{ isAlwaysPlayAudio ? 'color: black' : 'color: #BBBBBB' }}" text="&#xf046;" row="0" col="1" />
-			</GridLayout>
-			<GridLayout class="settings-content" rows="auto" columns="230, *, *">
-				<Button class="my-button secondary" text="{{ i18nAlwaysConfirmDose }}" row="1" col="0" onTap="onAlwaysConfirmTap" />
-				<Label class="indicator fa left" style="{{ isAlwaysConfirmDose ? 'color: black' : 'color: #BBBBBB' }}" text="&#xf046;" row="1" col="1" />
-			</GridLayout>
-		</StackLayout>
-	</GridLayout>
+	<StackLayout>
+		<!-- height="75%" Positions buttons correctly on the bottom of the screen -->
+		<parallax:ParallaxView height="100%" background="white">
+			<parallax:Header class="header-template" dropShadow="false"></parallax:Header>
+			<parallax:Anchored class="anchor" height="10vh"></parallax:Anchored>
+			<parallax:Content class="body-template" height="540vh" stretchLastChild="false" background="white">
+				<Label class="title settings-content fa" text="{{ i18nLanguageOptionsTitle, i18nLanguageOptionsTitle + ' &#xf1ab;' }}"></Label>
+				<Label class="subtitle settings-content" text="{{ i18nInstalledLanguagesText }}"></Label>
+				<GridLayout class="button-row" rows="*,*" columns="*,*">
+					<Button class="my-button" style="{{ isEnButtonEnabled ? 'background-color: #3A53FF' : 'background-color: #c1c8f8' }}" isEnabled="{{ isEnButtonEnabled }}" text="{{ i18nEnglishButtonText }}" row="0" col="0" onTap="onEnglishTap" />
+					<Label class="indicator fa" style="{{ isEnButtonEnabled ? 'color: #AAAAAA' : 'color: #000000' }}" text="&#xf046; Active" row="0" col="1" />
+					<Button class="my-button" style="{{ isSpButtonEnabled ? 'background-color: #398881' : 'background-color: #a4cac7' }}" isEnabled="{{ isSpButtonEnabled }}" text="{{ i18nSpanishButtonText }}" row="1" col="0" onTap="onSpanishTap" />
+					<Label class="indicator fa" style="{{ isSpButtonEnabled ? 'color: #AAAAAA' : 'color: #000000' }}" text="&#xf046; Activo" row="1" col="2" />
+				</GridLayout>
+				<StackLayout class="hr-light"></StackLayout>
+				<Label class="title settings-content fa" text="{{ i18nScanOptionsTitle, i18nScanOptionsTitle + ' &#xf02c;' }}"></Label>
+				<Label class="subtitle settings-content" text="{{ i18nScanOptionsText }}"></Label>
+				<GridLayout class="button-row" rows="auto, auto" columns="230, *, *">
+					<Button class="my-button primary" text="{{ i18nAlwaysPlayAudio }}" row="0" col="0" onTap="onAlwaysPlayTap" />
+					<Label class="indicator fa left" style="{{ isAlwaysPlayAudio ? 'color: black' : 'color: #BBBBBB' }}" text="&#xf046;" row="0" col="1" />
+					<Button class="my-button secondary" text="{{ i18nAlwaysConfirmDose }}" row="1" col="0" onTap="onAlwaysConfirmTap" />
+					<Label class="indicator fa left" style="{{ isAlwaysConfirmDose ? 'color: black' : 'color: #BBBBBB' }}" text="&#xf046;" row="1" col="1" />
+				</GridLayout>
+				<!-- <GridLayout class="button-row" rows="auto" columns="230, *, *">
+					<Button class="my-button secondary" text="{{ i18nAlwaysConfirmDose }}" row="1" col="0" onTap="onAlwaysConfirmTap" />
+					<Label class="indicator fa left" style="{{ isAlwaysConfirmDose ? 'color: black' : 'color: #BBBBBB' }}" text="&#xf046;" row="1" col="1" />
+				</GridLayout> -->
+			</parallax:Content>
+		</parallax:ParallaxView>
+	</StackLayout>
 </Page>

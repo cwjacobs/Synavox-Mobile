@@ -53,7 +53,7 @@
 }
 
 .my-button:active {
-    background-color: #398881;
+    background-color: #8f9b9a;
     color: white;
 }
 
@@ -78,3 +78,46 @@
     padding: 30px;
 }
 
+/* Parallax */
+#headerLabel2
+{
+    font-size: 45;
+    horizontal-align: center;
+    margin-top:-25;
+    color:#B2EBF2;
+}
+
+#headerLabel{
+    font-size: 45;
+    horizontal-align: center;
+    padding-top:75;
+    color:#B2EBF2;
+}
+
+.header-template{
+    background-color:red;
+    background-image:url('~/images/settings.jpg');
+    height: 205;
+    background-size: cover;
+    /* background-position: center top; */
+    background-repeat: no-repeat;
+    /* margin-bottom: 10px; */
+}
+
+.body-template TextView{
+    margin: 30px;
+}
+
+.anchor{
+    height: 5;
+    width:100%;
+    background-color:white;
+    /* background-color:#616161; */
+}
+
+#titleLabel{
+    font-weight:bold;
+    font-size:25;
+    padding:5 15;
+    color:#fff;
+}

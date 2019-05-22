@@ -31,7 +31,29 @@ export class AudioPlayer {
         return this._instance;
     }
 
-    public useAudio(medicineName: string) {
+    // private useAudio(medicineName: string) {
+    //     let audioPath: string = this.getAudioPath(medicineName);
+    //     AudioPlayer._player
+    //         .initFromFile({
+    //             audioFile: audioPath, // ~ = app directory
+    //             loop: false,
+    //             completeCallback: AudioPlayer._trackComplete.bind(this),
+    //             errorCallback: AudioPlayer._trackError.bind(this)
+    //         })
+    //         .then(() => {
+    //             AudioPlayer._player.getAudioTrackDuration().then(duration => {
+    //                 // iOS: duration is in seconds
+    //                 // Android: duration is in milliseconds
+    //                 // console.log(`audio duration:`, duration);
+    //                 // alert("Audio duration: " + duration);
+    //             });
+    //         })
+    //         .then(() => {
+    //             AudioPlayer._player.play()
+    //         });;
+    // }
+
+    public play(medicineName: string) {
         let audioPath: string = this.getAudioPath(medicineName);
         AudioPlayer._player
             .initFromFile({
@@ -47,12 +69,10 @@ export class AudioPlayer {
                     // console.log(`audio duration:`, duration);
                     // alert("Audio duration: " + duration);
                 });
-            });
-    }
-
-    public play(medicineName: string) {
-        this.useAudio(medicineName);
-        AudioPlayer._player.play();
+            })
+            .then(() => {
+                AudioPlayer._player.play()
+            });;
     }
 
     public playFrom(audioPath: string) {
@@ -81,8 +101,7 @@ export class AudioPlayer {
     }
 
     public stop() {
-        this.useAudio("");
-        // AudioPlayer._player.dispose(); <- this is the correct way to do this, implement later...
+        AudioPlayer._player.dispose();
     }
 
     public togglePlay() {
