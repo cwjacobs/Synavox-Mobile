@@ -52,30 +52,26 @@ export function onLoaded(args: EventData) {
     viewModel.set("i18nMedicineListTitle", i18n.homePageTitle);
     setActiveLanguageText();
 
-    // if (appRootContext == null) {
-    //     appRootContext = new AppRootViewModel();
-    // }
-
-    if (rfid.tagScanned) {
+    if (rfid.isTagScanned) {
         viewModel.set("currentTagId", rfid.tagId);
         viewModel.set("isTagDisplayed", true);
         viewModel.set("isSelectingAction", true);
         viewModel.set("isSelectingMedicine", false);
         viewModel.set("i18nScannedOrSelected", i18n.scannedMsg);
 
-        // We're here because a tag was scanned, let's walk the user through next steps...
-        rfid.tagScanned = false;
+        // We're here because a tag was scanned, reset flag and let's walk the user through next steps...
+        rfid.isTagScanned = false;
         let pairedMedicineName: string = getPairedMedicineName(rfid.tagId, medicineTagPairs);
         if (!pairedMedicineName) {
             // This is an unbound tag
             let confirmMsg: string = i18n.newTagMsg;
             confirm(confirmMsg).then((isConfirmed) => {
                 if (isConfirmed) {
-                    rfid.manageNewTag = true;
+                    settings.isNewBinding = true;
                     navigateTo("Pair", "pair/pair-page");
                 }
                 else {
-                    rfid.manageNewTag = false;
+                    settings.isNewBinding = false;
                     letUserSelectMedicine();
                 }
             });

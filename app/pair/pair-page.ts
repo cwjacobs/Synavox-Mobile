@@ -59,7 +59,7 @@ export function onNavigatingFrom(args: NavigatedData) {
 
 export function onDrawerButtonTap(args: EventData) {
     // Reset new tag management flag
-    rfid.manageNewTag = false;
+    settings.isNewBinding = false;
 
     const sideDrawer = <RadSideDrawer>app.getRootView();
     sideDrawer.showDrawer();
@@ -75,8 +75,9 @@ export function onLoaded(args: EventData) {
     // Set text to active language
     setActiveLanguageText();
 
-    if (rfid.manageNewTag) {
-        console.log("rfid.tagScanned: " + rfid.tagScanned + " tagId: " + rfid.tagId);
+    if (settings.isNewBinding) {
+        // rfid.isConfigureNewBinding = false;
+        console.log("rfid.tagScanned: " + rfid.isTagScanned + " tagId: " + rfid.tagId);
 
         // We're here because an unpaired tag was scanned, let's walk the user through next steps...
         // rfid.manageNewTag = false;
@@ -97,7 +98,7 @@ export function onLoaded(args: EventData) {
 
 export function onItemTap(args: ItemEventData) {
     // Reset new tag management flag
-    rfid.manageNewTag = false;
+    settings.isNewBinding = false;
 
     settings.currentMedicine = settings.medicineList.bindings[args.index].medicineName;
     viewModel.set("currentMedicineName", settings.currentMedicine);
@@ -146,12 +147,14 @@ export function onDeleteTap(args: ItemEventData) {
 export function onSaveTap(args: ItemEventData) {
     let binding: MedicineBinding = new MedicineBinding();
 
+    // Use displayed medicine name
     binding.medicineName = viewModel.get("currentMedicineName");
     if (!binding.medicineName) {
         alert(i18n.selectMedicineMsg);
         return;
     }
 
+    // Use displayed tagId
     binding.tagId = viewModel.get("currentTagId");
     if (!binding.tagId) {
         alert(i18n.enterTagIdMsg + binding.medicineName);
@@ -161,13 +164,17 @@ export function onSaveTap(args: ItemEventData) {
     settings.currentMedicine = binding.medicineName;
     let index: number = settings.medicineList.getMedicineBindingIndex(binding.medicineName);
 
-    if (index != -1) { // Replace current binding
+    if (index != -1) { // Replace a current binding
+        binding.dailyDoses = settings.medicineList.bindings[index].dailyDoses;
+        binding.dailyRequiredDoses = settings.medicineList.bindings[index].dailyRequiredDoses;
         settings.medicineList.bindings[index] = binding; // use the util functions to add data to array
         alert(getPairingUpdatedMsg(binding.medicineName));
     }
     else {
         index = settings.medicineList.getMedicineBindingIndexByTagId(binding.tagId);
-        if (index != -1) { // Replace current binding
+        if (index != -1) { // Replace a current binding
+            binding.dailyDoses = settings.medicineList.bindings[index].dailyDoses;
+            binding.dailyRequiredDoses = settings.medicineList.bindings[index].dailyRequiredDoses;
             settings.medicineList.bindings[index] = binding; // use the util functions to add data to array
             alert(getPairingUpdatedMsg(binding.medicineName));
         }
@@ -175,17 +182,17 @@ export function onSaveTap(args: ItemEventData) {
             binding.dailyDoses = 0;
             binding.dailyRequiredDoses = 0;
             settings.medicineList.bindings.push(binding); // use the util function to add new binging to array
+            settings.isNewBinding = true;
+            
+            const pageTitle = "Home";
+            const pageRoute = "home/home-page";
+            navigateTo(pageTitle, pageRoute);
         }
     }
     viewModel.set("myMedicines", settings.medicineList);
 
     const listView: ListView = page.getViewById<ListView>("medicineList");
     listView.refresh();
-
-    rfid.manageNewTag = true;
-    const pageTitle = "Home";
-    const pageRoute = "home/home-page";
-    navigateTo(pageTitle, pageRoute);
 }
 
 export function onCancelTap(args: ItemEventData) {

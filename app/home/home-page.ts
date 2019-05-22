@@ -563,8 +563,8 @@ function displayCurrentListDoses() {
         }
     })
 
-    if (rfid.manageNewTag) {
-        rfid.manageNewTag = false;
+    if (settings.isNewBinding) {
+        settings.isNewBinding = false;
         changeTotalDosesPerDay();
         alert(i18n.enterDosesPrescribed + settings.currentMedicine);
     }

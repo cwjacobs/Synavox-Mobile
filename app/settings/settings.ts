@@ -14,6 +14,8 @@ export class Settings {
 
     private _isAlwaysConfirmDose: boolean;
 
+    private _isNewBinding: boolean;
+
     private _medicineList: MedicineBindingList;
 
     private static _instance: Settings = new Settings();
@@ -83,5 +85,13 @@ export class Settings {
 
     public set isAlwaysConfirmDose(value: boolean) {
         this._isAlwaysConfirmDose = value;
+    }
+
+    public get isNewBinding() {
+        return this._isNewBinding;
+    }
+
+    public set isNewBinding(value: boolean) {
+        this._isNewBinding = value;
     }
 }

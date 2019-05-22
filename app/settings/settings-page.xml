@@ -18,7 +18,7 @@
 		<parallax:ParallaxView height="100%" background="white">
 			<parallax:Header class="header-template" dropShadow="false"></parallax:Header>
 			<parallax:Anchored class="anchor" height="10vh"></parallax:Anchored>
-			<parallax:Content class="body-template" height="540vh" stretchLastChild="false" background="white">
+			<parallax:Content class="body-template" height="650vh" stretchLastChild="false" background="white">
 				<Label class="title settings-content fa" text="{{ i18nLanguageOptionsTitle, i18nLanguageOptionsTitle + ' &#xf1ab;' }}"></Label>
 				<Label class="subtitle settings-content" text="{{ i18nInstalledLanguagesText }}"></Label>
 				<GridLayout class="button-row" rows="*,*" columns="*,*">

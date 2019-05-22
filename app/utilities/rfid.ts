@@ -23,7 +23,6 @@ export class RFID {
     private _tagId: string;
     private _nfc: Nfc = null;
     private _tagScanned: boolean;
-    private _newTagScanned: boolean;
     private _tagListenerStarted: boolean;
     private static _instance: RFID = new RFID();
 
@@ -59,20 +58,12 @@ export class RFID {
         this._tagId = value;
     }
 
-    public get tagScanned(): boolean {
+    public get isTagScanned(): boolean {
         return this._tagScanned;
     }
 
-    public set tagScanned(value: boolean) {
+    public set isTagScanned(value: boolean) {
         this._tagScanned = value;
-    }
-
-    public get manageNewTag(): boolean {
-        return this._newTagScanned;
-    }
-
-    public set manageNewTag(value: boolean) {
-        this._newTagScanned = value;
     }
 
     public startTagListener() {
@@ -126,6 +117,8 @@ export class RFID {
         let binding: MedicineBinding = settings.medicineList.getMedicineBindingByTagId(this.tagId);
         if (!binding) {
             // New tag, go to wizard
+            settings.isNewBinding = true;
+
             pageTitle = "Wizard";
             pageRoute = "wizard/wizard-page";
             this.navigateTo(pageTitle, pageRoute);
