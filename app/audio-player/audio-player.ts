@@ -70,6 +70,9 @@ export class AudioPlayer {
                     // console.log(`audio duration:`, duration);
                     // alert("Audio duration: " + duration);
                 });
+            })
+            .then(() => {
+                AudioPlayer._player.play()
             });
     }
 

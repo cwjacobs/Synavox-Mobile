@@ -217,6 +217,11 @@ export function onAudioEnableTap(args: ItemEventData) {
     }
 };
 
+export function onLogoTap(args: ItemEventData) {
+    audioPlayer.play("default");
+};
+
+
 function setActiveLanguageText(): void {
     i18n = I18N.getInstance();
 

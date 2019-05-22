@@ -35,7 +35,7 @@
 					<Label text= "left" height="290vh" color="white" background="white" dock="left" />
 					<Label text= "right" height="290vh" color="white" background="white" dock="right" />
 					<StackLayout dock="bottom">
-						<image src="~/images/logo.png" />
+						<image src="~/images/logo.png" onTap="onLogoTap" />
 					</StackLayout>
 				</DockLayout>
 			</parallax:Content>
