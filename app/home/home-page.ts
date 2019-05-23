@@ -14,6 +14,9 @@ import { RFID } from "~/utilities/rfid";
 import { Dataset } from "~/data-models/test-data";
 import { Settings } from "~/settings/settings";
 import { AudioPlayer } from "~/audio-player/audio-player";
+import { VR } from "~/utilities/vr";
+
+//let vr: VR = VR.getInstance(); // Will set settings._isSpeechRecognitionAvailable in private constructor.
 
 let i18n: I18N = I18N.getInstance();
 let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
@@ -65,6 +68,14 @@ let alertOff: string = "#ffc8c8";
  *      -- Play associated audio
  *
  ***/
+
+// export function onLogoTap(args: EventData) {
+//     if(settings.isSpeechRecognitionAvailable) {
+//         // let audioPath: string = "~/audio/sounds/success.mp3";
+//         // audioPlayer.playFrom(audioPath);
+//         vr.startListening();
+//     }
+// }
 
 export function onNavigatingTo(args: NavigatedData) {
     page = <Page>args.object;

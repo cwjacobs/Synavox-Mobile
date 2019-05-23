@@ -16,6 +16,8 @@ export class Settings {
 
     private _isNewBinding: boolean;
 
+    private _isSpeechRecognitionAvailable: boolean;
+
     private _medicineList: MedicineBindingList;
 
     private static _instance: Settings = new Settings();
@@ -93,5 +95,13 @@ export class Settings {
 
     public set isNewBinding(value: boolean) {
         this._isNewBinding = value;
+    }
+
+    public get isSpeechRecognitionAvailable() {
+        return this._isSpeechRecognitionAvailable;
+    }
+
+    public set isSpeechRecognitionAvailable(value: boolean) {
+        this._isSpeechRecognitionAvailable = value;
     }
 }

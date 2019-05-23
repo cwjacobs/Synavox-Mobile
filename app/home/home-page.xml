@@ -40,7 +40,7 @@
 						</ListView.itemTemplate>
 					</ListView>
 					<StackLayout dock="bottom">
-						<image src="~/images/logo.png" />
+						<image src="~/images/logo.png" onTap="onLogoTap" />
 					</StackLayout>
 				</DockLayout>
 			</parallax:Content>

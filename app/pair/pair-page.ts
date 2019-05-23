@@ -16,6 +16,7 @@ import { AudioPlayer } from "~/audio-player/audio-player";
 
 import { navigateTo } from "~/app-root/app-root";
 import { TextField } from "tns-core-modules/ui/text-field/text-field";
+import { VR } from "~/utilities/vr";
 
 let rfid = RFID.getInstance();
 let i18n = I18N.getInstance();
@@ -26,6 +27,8 @@ let page: Page = null;
 let viewModel: PairViewModel = null;
 
 let isTagIdLocked: boolean;
+let vr: VR = VR.getInstance(); // Will set settings._isSpeechRecognitionAvailable in private constructor.
+
 
 /***
  * Pairing VM states:
@@ -65,6 +68,15 @@ export function onDrawerButtonTap(args: EventData) {
     sideDrawer.showDrawer();
 };
 
+export function onSpeechRecognition(transcription: string) {
+    const input: TextField = page.getViewById<TextField>("medicineName-input");
+    input.text = capitalizeFirstLetter(transcription);
+}
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 export function onLoaded(args: EventData) {
     // Set audio buttons state
     viewModel.set("isAudioEnabled", settings.isAudioEnabled);
@@ -76,13 +88,16 @@ export function onLoaded(args: EventData) {
     setActiveLanguageText();
 
     if (settings.isNewBinding) {
-        // rfid.isConfigureNewBinding = false;
         console.log("rfid.tagScanned: " + rfid.isTagScanned + " tagId: " + rfid.tagId);
 
         // We're here because an unpaired tag was scanned, let's walk the user through next steps...
         // rfid.manageNewTag = false;
         viewModel.set("currentTagId", rfid.tagId);
         alert(i18n.enterMedicneName);
+
+        if(settings.isSpeechRecognitionAvailable) {
+            vr.startListening();
+        }
 
         const input: TextField = page.getViewById<TextField>("medicineName-input");
         input.focus();
