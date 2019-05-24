@@ -17,6 +17,10 @@ export class MedicineBindingList {
         return this._bindings;
     }
 
+    public set bindings(value: MedicineBinding[]) {
+        this._bindings = value;
+    }
+
     public getMedicineBindingIndex(medicineName: string): number {
         let i: number = 0;
         let index: number = -1;
@@ -102,23 +106,21 @@ export class MedicineBindingList {
     }
 
     public setDosesTakenToday(medicineName: string, doses: number): void {
-        let medicineBinding: MedicineBinding = this.getMedicineBindingByName(medicineName);
-        if (medicineBinding) {
-            medicineBinding.dailyDoses = doses;
-        }
-        else {
-            console.log("setDosesTakenToday: " + medicineName + " not found in _medicineBindings");
-        }
+        let index: number = this.getMedicineBindingIndex(medicineName);
+        this.bindings[index].dailyDoses = doses;
     }
 
     public setDailyDoseRequirement(medicineName: string, doses: number): void {
-        let medicineBinding: MedicineBinding = this.getMedicineBindingByName(medicineName);
-        if (medicineBinding) {
-            medicineBinding.dailyRequiredDoses = doses;
-        }
-        else {
-            console.log("setDailyDoseRequirement: " + medicineName + " not found in _medicineBindings");
-        }
+        let index: number = this.getMedicineBindingIndex(medicineName);
+        this.bindings[index].dailyRequiredDoses = doses;
+
+        // let medicineBinding: MedicineBinding = this.getMedicineBindingByName(medicineName);
+        // if (medicineBinding) {
+        //     medicineBinding.dailyRequiredDoses = doses;
+        // }
+        // else {
+        //     console.log("setDailyDoseRequirement: " + medicineName + " not found in _medicineBindings");
+        // }
     }
 
     public addMedicineBinding(medicineBinding: MedicineBinding) {

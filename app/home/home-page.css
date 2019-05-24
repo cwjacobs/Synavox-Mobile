@@ -124,7 +124,29 @@
     horizontal-align: middle;
 }
 
-/* Parallax */
+
+/* Tabs
+----------- */
+.tabs {
+    margin-top: 50px;
+}
+
+.tab1 {
+    color: #3A53FF;
+}
+
+.tab2 {
+    color: #398881;
+    font-weight:bold;
+}
+
+.tab3 {
+    color: #7700ff;
+    font-weight:bold;
+}
+
+/* Parallax
+----------- */
 #headerLabel2
 {
     font-size: 45;

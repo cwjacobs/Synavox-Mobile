@@ -2,19 +2,39 @@ import { MedicineBinding } from "./medicine-binding";
 
 export class Dataset {
 
-    private static readonly _enTestData: MedicineBinding[] = [
+    private static readonly _myTestData: MedicineBinding[] = [
+        { tagId: "-99,-81,70,-106", medicineName: "Lisinopril", dailyRequiredDoses: 1, dailyDoses: 0 },
+        { tagId: "77,-4,75,-106", medicineName: "Rosuvastatin", dailyRequiredDoses: 1, dailyDoses: 1 },
+    ];
+
+    private static readonly _momTestData: MedicineBinding[] = [
+        { tagId: "-3,18,81,-106", medicineName: "Levothyroxine", dailyRequiredDoses: 1, dailyDoses: 1 },
+        { tagId: "-67,45,90,-106", medicineName: "Metformin", dailyRequiredDoses: 3, dailyDoses: 1 },
+        { tagId: "77,-4,75,-106", medicineName: "Rosuvastatin", dailyRequiredDoses: 2, dailyDoses: 1 },
+
+    ];
+
+    private static readonly _dadTestData: MedicineBinding[] = [
         { tagId: "-99,55,102,114", medicineName: "Oxycodone", dailyRequiredDoses: 20, dailyDoses: 3 },
         { tagId: "-99,-81,70,-106", medicineName: "Lisinopril", dailyRequiredDoses: 1, dailyDoses: 0 },
-        { tagId: "77,-4,75,-106", medicineName: "Rosuvastatin", dailyRequiredDoses: 2, dailyDoses: 1 },
-        { tagId: "-3,18,81,-106", medicineName: "Levothyroxine", dailyRequiredDoses: 1, dailyDoses: 1 },
-        // { tagId: "-67,45,90,-106", medicineName: "Atorvastatin", dailyRequiredDoses: 1, dailyDoses: 0 },
-        { tagId: "-67,45,90,-106", medicineName: "Metformin", dailyRequiredDoses: 3, dailyDoses: 1 },
+        { tagId: "77,-4,75,-106", medicineName: "Rosuvastatin", dailyRequiredDoses: 2, dailyDoses: 2 },
     ];
-    
-    public static get testData() {
-        return Dataset._enTestData;
+
+    public static get myData() {
+        return Dataset._myTestData;
     };
 
+    public static get momData() {
+        return Dataset._momTestData;
+    };
+
+    public static get dadData() {
+        return Dataset._dadTestData;
+    };
+
+    public static get defaultData() {
+        return Dataset._myTestData;
+    };
 
     private static readonly _webViewSrcArray = [
         {

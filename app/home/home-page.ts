@@ -1,22 +1,20 @@
 import { RadSideDrawer } from "nativescript-ui-sidedrawer";
 import * as app from "tns-core-modules/application";
-import { EventData } from "tns-core-modules/data/observable";
+import { EventData, Observable } from "tns-core-modules/data/observable";
 import { NavigatedData, Page, Color } from "tns-core-modules/ui/page";
-import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
+import { ListView, ItemEventData } from "tns-core-modules/ui/list-view/list-view";
 import { Label } from "tns-core-modules/ui/label/label";
 import { HomeViewModel } from "./home-view-model";
 import { confirm } from "tns-core-modules/ui/dialogs";
 import { MedicineBinding, MedicineBindingList } from "~/data-models/medicine-binding";
 import { Button } from "tns-core-modules/ui/button/button";
+import { TabView, TabViewItem, SelectedIndexChangedEventData } from "tns-core-modules/ui/tab-view";
 
 import { I18N } from "~/utilities/i18n";
 import { RFID } from "~/utilities/rfid";
 import { Dataset } from "~/data-models/test-data";
 import { Settings } from "~/settings/settings";
 import { AudioPlayer } from "~/audio-player/audio-player";
-import { VR } from "~/utilities/vr";
-
-//let vr: VR = VR.getInstance(); // Will set settings._isSpeechRecognitionAvailable in private constructor.
 
 let i18n: I18N = I18N.getInstance();
 let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
@@ -24,13 +22,20 @@ let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
 // Init default app Settings
 let settings: Settings = Settings.getInstance();
 settings.isAudioEnabled = true;
-settings.medicineList = new MedicineBindingList(Dataset.testData);
+settings.medicineList = new MedicineBindingList(Dataset.defaultData);
 
-// NFC tag methods
-let rfid: RFID = RFID.getInstance();
+// Individual medicine lists
+let myMedicineList: MedicineBindingList = new MedicineBindingList(Dataset.myData);
+let momMedicineList: MedicineBindingList = new MedicineBindingList(Dataset.momData);
+let dadMedicineList: MedicineBindingList = new MedicineBindingList(Dataset.dadData);
+
+let medicineLists: MedicineBindingList[] = [myMedicineList, momMedicineList, dadMedicineList];
 
 // Page scope medicine lists, point local medicineList to shared datastore
 let tempMedicineList: MedicineBindingList;
+
+// NFC tag methods
+let rfid: RFID = RFID.getInstance();
 
 let page: Page = null;
 let viewModel: HomeViewModel = null;
@@ -49,33 +54,34 @@ let secondaryOff: string = "#a4cac7";
 let alertOn: string = "#ff0000";
 let alertOff: string = "#ffc8c8";
 
-/***
- * Pairing VM states:
- *
- *  New tag scanned (pairing in progress)
- *      -- Display and lock new tagId (isTagIdLocked = true)
- *      -- Clear medicine name
- *      -- Allow medicine name to be entered or selected from list
- *
- *  Existing tag scanned (pairing in progress)
- *      -- Display tagId
- *      -- Display associated medicine name
- *      -- Play associated audio
- *
- *  Existing tag scanned (pairing not in progress)
- *      -- Display tagId
- *      -- Display associated medicine name
- *      -- Play associated audio
- *
- ***/
+let isTabsInitialized: boolean = false;
 
-// export function onLogoTap(args: EventData) {
-//     if(settings.isSpeechRecognitionAvailable) {
-//         // let audioPath: string = "~/audio/sounds/success.mp3";
-//         // audioPlayer.playFrom(audioPath);
-//         vr.startListening();
-//     }
-// }
+let currentTab: number = 0;
+
+export function onSelectedIndexChanged(args) {
+    if (isTabsInitialized) {
+        // Get dose numbers for each medicine
+        setTimeout(() => {
+            displayCurrentListDoses();
+        }, 500);
+
+        currentTab = args.newIndex;
+        settings.medicineList = medicineLists[currentTab];
+
+        viewModel.set("myMedicineList", settings.medicineList.bindings);
+
+        settings.currentMedicine = settings.medicineList.getMedicineBindingByIndex(0).medicineName;
+        viewModel.set("currentMedicineName", settings.currentMedicine);
+
+        const listView: ListView = page.getViewById<ListView>("medicineList");
+        listView.refresh();
+        
+        displayCurrentDoses();
+
+        displayDosesPerDayInstructions(settings.medicineList.getDailyDosesRequired(settings.currentMedicine));
+    }
+    isTabsInitialized = true;
+}
 
 export function onNavigatingTo(args: NavigatedData) {
     page = <Page>args.object;
@@ -90,7 +96,7 @@ export function onNavigatingFrom() {
 export function onDrawerButtonTap(args: EventData) {
     const sideDrawer = <RadSideDrawer>app.getRootView();
     sideDrawer.showDrawer();
-};
+}
 
 export function onLoaded(args: EventData) {
     // Get dose numbers for each medicine
@@ -117,7 +123,7 @@ export function onLoaded(args: EventData) {
     editTotalDosesPerDayButton.backgroundColor = isEditingAvailable ? secondaryOn : secondaryOff;
 
     if (!settings.currentMedicine) {
-        settings.currentMedicine = settings.medicineList.getMedicineBindingByIndex(1).medicineName;
+        settings.currentMedicine = settings.medicineList.getMedicineBindingByIndex(0).medicineName;
     }
     viewModel.set("currentMedicineName", settings.currentMedicine);
 
@@ -142,11 +148,13 @@ export function onChangeTotalDosesPerDayTap(args: EventData) {
 }
 
 export function onSaveTotalDosesPerDayTap() {
-    settings.medicineList = new MedicineBindingList(tempMedicineList.bindings);
-
+    // Save changes
+    medicineLists[currentTab] = new MedicineBindingList(tempMedicineList.bindings);
+    settings.medicineList = medicineLists[currentTab];;
     tempMedicineList = null;
-    console.dir("medicineList: " + settings.medicineList);
-    console.dir("tempMedicineList: " + tempMedicineList);
+    
+    // settings.medicineList = new MedicineBindingList(tempMedicineList.bindings);
+    // tempMedicineList = null;
 
     isEditingTotalDosesPerDay = false;
     viewModel.set("isEditingTotalDosesPerDay", isEditingTotalDosesPerDay);
@@ -166,8 +174,6 @@ export function onSaveTotalDosesPerDayTap() {
 
 export function onCancelTotalDosesPerDayTap() {
     tempMedicineList = null;
-    console.dir("medicineList: " + settings.medicineList);
-    console.dir("tempMedicineList: " + tempMedicineList);
 
     isEditingTotalDosesPerDay = false;
     viewModel.set("isEditingTotalDosesPerDay", isEditingTotalDosesPerDay);
@@ -238,8 +244,8 @@ export function onChangeDosesTakenTodayTap(args: EventData) {
 
 export function onSaveDosesTakenTodayTap() {
     // Save changes
-    settings.medicineList = new MedicineBindingList(tempMedicineList.bindings);
-
+    medicineLists[currentTab] = new MedicineBindingList(tempMedicineList.bindings);
+    settings.medicineList = medicineLists[currentTab];;
     tempMedicineList = null;
 
     isEditingDosesTakenToday = false;
@@ -465,11 +471,11 @@ function adustDailyDoseTaken(indicator: any): void {
     let doseAdjustment: number = toggleIndicator(indicator);
     dosesTakenToday += doseAdjustment;
 
-    console.log("dosesTakenToday: " + dosesTakenToday);
-    console.log("dailyDosesRequired: " + dailyDosesRequired);
+    // console.log("dosesTakenToday: " + dosesTakenToday);
+    // console.log("dailyDosesRequired: " + dailyDosesRequired);
 
     let dose: number = getIndicatorDoseNumber(indicator.id);
-    console.log("dose: " + dose);
+    // console.log("dose: " + dose);
 
     if (doseAdjustment === 1) {
         // Adding a dose
@@ -486,11 +492,11 @@ function adustDailyDoseTaken(indicator: any): void {
         // Subtracting a dose
         if (dose <= dailyDosesRequired) {
             indicator.color = primaryOff;
-            console.log("primaryOff");
+            // console.log("primaryOff");
         }
         else {
             indicator.color = alertOff;
-            console.log("alertOff");
+            // console.log("alertOff");
         }
     }
 

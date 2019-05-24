@@ -10,8 +10,29 @@
 	</ActionBar>
 	<StackLayout>
 		<parallax:ParallaxView height="75%" background="white">
-			<parallax:Header class="header-template" dropShadow="false"></parallax:Header>
+			<parallax:Header class="header-template" dropShadow="false">
+				<!-- <Label style="background-color: black; color: orangered" text="parallax:Header" /> -->
+			</parallax:Header>
 			<parallax:Anchored class="anchor" height="100vh">
+				<TabView class="list-container" id="tabViewContainer" selectedIndexChanged="onSelectedIndexChanged">
+					<TabViewItem class="fa" title="Me">
+						<StackLayout>
+							<Label text="My Prescriptions" textWrap="true" class="h2 text-left tab1 tabs" />
+						</StackLayout>
+					</TabViewItem>
+					<TabViewItem class="fa" title="Mom &#xf1e0;">
+						<StackLayout>
+							<Label text="Mom's Prescriptions" textWrap="true" class="h2 text-left tab1 tabs" />
+						</StackLayout>
+					</TabViewItem>
+					<TabViewItem class="fa" title="Dad &#xf1e0;">
+						<StackLayout>
+							<Label text="Dad's Prescriptions" textWrap="true" class="h2 text-left tab1 tabs" />
+						</StackLayout>
+					</TabViewItem>
+				</TabView>
+			</parallax:Anchored>
+			<parallax:Content class="body-template" height="550vh" stretchLastChild="false" background="white">
 				<StackLayout class="list-container">
 					<GridLayout rows="auto" columns="200vw,*,*,*,*,*">
 						<Label class="pairing-MedicineName fas" id="current-medicine-name" text="{{ currentMedicineName, '&#xf484; ' + currentMedicineName }}" row="0" col="0" colSpan="1" />
@@ -24,8 +45,6 @@
 					<Label class="daily-instruction" text="{{ i18nDailyInstructions }}" />
 					<StackLayout class="hr-light"></StackLayout>
 				</StackLayout>
-			</parallax:Anchored>
-			<parallax:Content class="body-template" height="550vh" stretchLastChild="false" background="white">
 				<DockLayout width="auto" height="450vh" background="white">
 					<ListView class="list-container" id="medicineList" items="{{ myMedicineList }}" itemTap="onItemTap" height="300vh" background="white" dock="top">
 						<ListView.itemTemplate>
