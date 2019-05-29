@@ -1,39 +1,38 @@
-import { MedicineBinding } from "./medicine-binding";
+import { MedicineCabinet } from "./medicine-cabinet";
 
-export class Dataset {
+export class TestData {
 
-    private static readonly _myTestData: MedicineBinding[] = [
-        { tagId: "-99,-81,70,-106", medicineName: "Lisinopril", dailyRequiredDoses: 1, dailyDoses: 0 },
-        { tagId: "77,-4,75,-106", medicineName: "Rosuvastatin", dailyRequiredDoses: 1, dailyDoses: 1 },
-    ];
+    private static readonly _myMedicineCabinet: MedicineCabinet = new MedicineCabinet("me",
+        [
+            { tagId: "-99,-81,70,-106", medicineName: "Lisinopril", dailyRequiredDoses: 1, dailyDoses: 0 },
+            { tagId: "77,-4,75,-106", medicineName: "Rosuvastatin", dailyRequiredDoses: 1, dailyDoses: 1 },
+        ]);
 
-    private static readonly _momTestData: MedicineBinding[] = [
-        { tagId: "-3,18,81,-106", medicineName: "Levothyroxine", dailyRequiredDoses: 1, dailyDoses: 1 },
-        { tagId: "-67,45,90,-106", medicineName: "Metformin", dailyRequiredDoses: 3, dailyDoses: 1 },
-        { tagId: "77,-4,75,-106", medicineName: "Rosuvastatin", dailyRequiredDoses: 2, dailyDoses: 1 },
+    private static readonly _momMedicineCabinet: MedicineCabinet = new MedicineCabinet("mom",
+        [
+            { tagId: "-3,18,81,-106", medicineName: "Levothyroxine", dailyRequiredDoses: 1, dailyDoses: 1 },
+            { tagId: "-67,45,90,-106", medicineName: "Metformin", dailyRequiredDoses: 3, dailyDoses: 1 },
+        ]);
 
-    ];
+    private static readonly _dadMedicineCabinet: MedicineCabinet = new MedicineCabinet("dad",
+        [
+            { tagId: "-99,55,102,114", medicineName: "Oxycodone", dailyRequiredDoses: 20, dailyDoses: 3 },
+        ]);
 
-    private static readonly _dadTestData: MedicineBinding[] = [
-        { tagId: "-99,55,102,114", medicineName: "Oxycodone", dailyRequiredDoses: 20, dailyDoses: 3 },
-        { tagId: "-99,-81,70,-106", medicineName: "Lisinopril", dailyRequiredDoses: 1, dailyDoses: 0 },
-        { tagId: "77,-4,75,-106", medicineName: "Rosuvastatin", dailyRequiredDoses: 2, dailyDoses: 2 },
-    ];
-
-    public static get myData() {
-        return Dataset._myTestData;
+    public static get myMedicineCabinet() {
+        return TestData._myMedicineCabinet;
     };
 
-    public static get momData() {
-        return Dataset._momTestData;
+    public static get momMedicineCabinet() {
+        return TestData._momMedicineCabinet;
     };
 
-    public static get dadData() {
-        return Dataset._dadTestData;
+    public static get dadMedicineCabinet() {
+        return TestData._dadMedicineCabinet;
     };
 
-    public static get defaultData() {
-        return Dataset._myTestData;
+    public static get defaultMedicineCabinet() {
+        return TestData._myMedicineCabinet;
     };
 
     private static readonly _webViewSrcArray = [
@@ -167,6 +166,6 @@ export class Dataset {
 
     // Sets current testdata to default and returns it
     public get webViewSrcArray() {
-        return Dataset._webViewSrcArray;
+        return TestData._webViewSrcArray;
     };
 }

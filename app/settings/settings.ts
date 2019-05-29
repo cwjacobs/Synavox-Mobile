@@ -1,10 +1,15 @@
-import { MedicineBinding, MedicineBindingList } from "~/data-models/medicine-binding";
+import { MedicineCabinet } from "~/data-models/medicine-cabinet";
+import { TestData } from "~/data-models/test-data";
 
 export class Settings {
 
+    private static readonly _version: string = "version: 1.00";
+
+    private static readonly _defaultMedicineCabinet: MedicineCabinet = TestData.defaultMedicineCabinet;
+
     private _currentTagId: string;
 
-    private _currentMedicine: string;
+    private _currentMedicineName: string;
 
     private _isConfirmingDose: boolean;
     
@@ -16,9 +21,13 @@ export class Settings {
 
     private _isNewBinding: boolean;
 
+    private _isWaitingForSave: boolean;
+
     private _isSpeechRecognitionAvailable: boolean;
 
-    private _medicineList: MedicineBindingList;
+    private _curentMedicineCabinet: MedicineCabinet;
+
+    private _medicineCabinets: MedicineCabinet[] = [];
 
     private static _instance: Settings = new Settings();
 
@@ -30,15 +39,27 @@ export class Settings {
     }
 
     public static getInstance(): Settings {
-        return this._instance;
+        return Settings._instance;
     }
 
-    public get medicineList() {
-        return this._medicineList;
+    public static get version() {
+        return this._version;
     }
 
-    public set medicineList(value: MedicineBindingList) {
-        this._medicineList = value;
+    public get currentMedicineCabinet() {
+        return this._curentMedicineCabinet;
+    }
+
+    public set currentMedicineCabinet(value: MedicineCabinet) {
+        this._curentMedicineCabinet = value;
+    }
+
+    public getMedicineCabinet(owner: string) {
+        return this._medicineCabinets[owner];
+    }
+
+    public setMedicineCabinet(owner: string, value: MedicineCabinet) {
+        this._medicineCabinets[owner] = value;
     }
 
     public get currentTagId() {
@@ -49,12 +70,12 @@ export class Settings {
         this._currentTagId = value;
     }
 
-    public get currentMedicine() {
-        return this._currentMedicine;
+    public get currentMedicineName() {
+        return this._currentMedicineName;
     }
 
-    public set currentMedicine(value: string) {
-        this._currentMedicine = value;
+    public set currentMedicineName(value: string) {
+        this._currentMedicineName = value;
     }
 
     public get isConfirmingDose() {
@@ -95,6 +116,14 @@ export class Settings {
 
     public set isNewBinding(value: boolean) {
         this._isNewBinding = value;
+    }
+
+    public get isWaitingForSave() {
+        return this._isWaitingForSave;
+    }
+
+    public set isWaitingForSave(value: boolean) {
+        this._isWaitingForSave = value;
     }
 
     public get isSpeechRecognitionAvailable() {

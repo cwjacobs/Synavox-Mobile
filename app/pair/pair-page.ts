@@ -5,7 +5,7 @@ import { NavigatedData, Page } from "tns-core-modules/ui/page";
 import { ListView, ItemEventData } from "tns-core-modules/ui/list-view/list-view";
 
 import { PairViewModel } from "./pair-view-model";
-import { MedicineBinding, MedicineBindingList } from "../data-models/medicine-binding";
+import { MedicineBinding, MedicineCabinet } from "../data-models/medicine-cabinet";
 
 // For Dialogs Branch
 import { confirm } from "tns-core-modules/ui/dialogs";
@@ -61,7 +61,7 @@ export function onNavigatingFrom(args: NavigatedData) {
 }
 
 export function onDrawerButtonTap(args: EventData) {
-    // Reset new tag management flag
+    // Reset new tag binding flag
     settings.isNewBinding = false;
 
     const sideDrawer = <RadSideDrawer>app.getRootView();
@@ -70,7 +70,24 @@ export function onDrawerButtonTap(args: EventData) {
 
 export function onSpeechRecognition(transcription: string) {
     const input: TextField = page.getViewById<TextField>("medicineName-input");
-    input.text = capitalizeFirstLetter(transcription);
+    if ((settings.isWaitingForSave) && (transcription === "save")) {
+        onSaveTap();
+        settings.isWaitingForSave = false;
+    }
+    else {
+        input.text = capitalizeFirstLetter(transcription);
+        viewModel.set("currentMedicineName", input.text);
+
+        // settings.isWaitingForSave = true;
+        // vr.startListening();
+
+        // setTimeout(() => {
+        //     if (isListeningForSave) {
+        // vr.startListening();
+        //         isListeningForSave = false;
+        //     }
+        // }, 3000);
+    }
 }
 
 function capitalizeFirstLetter(string) {
@@ -82,7 +99,7 @@ export function onLoaded(args: EventData) {
     viewModel.set("isAudioEnabled", settings.isAudioEnabled);
 
     // Current list of paired medications
-    viewModel.set("myMedicineList", settings.medicineList.bindings);
+    viewModel.set("myMedicineList", settings.currentMedicineCabinet.medicines);
 
     // Set text to active language
     setActiveLanguageText();
@@ -93,20 +110,23 @@ export function onLoaded(args: EventData) {
         // We're here because an unpaired tag was scanned, let's walk the user through next steps...
         // rfid.manageNewTag = false;
         viewModel.set("currentTagId", rfid.tagId);
-        alert(i18n.enterMedicneName);
 
-        if(settings.isSpeechRecognitionAvailable) {
-            vr.startListening();
-        }
+        // Request medicine name
+        alert(i18n.enterMedicneName);
+        setTimeout(() => {
+            if (settings.isSpeechRecognitionAvailable) {
+                vr.startListening();
+            }
+        }, 1000);
 
         const input: TextField = page.getViewById<TextField>("medicineName-input");
         input.focus();
     }
     else {
-        if (settings.currentMedicine) {
-            settings.currentTagId = settings.medicineList.getMedicineBindingByName(settings.currentMedicine).tagId;
+        if (settings.currentMedicineName) {
+            settings.currentTagId = settings.currentMedicineCabinet.getMedicineBinding(settings.currentMedicineName).tagId;
             viewModel.set("currentTagId", settings.currentTagId);
-            viewModel.set("currentMedicineName", settings.currentMedicine);
+            viewModel.set("currentMedicineName", settings.currentMedicineName);
         }
     }
 };
@@ -115,11 +135,11 @@ export function onItemTap(args: ItemEventData) {
     // Reset new tag management flag
     settings.isNewBinding = false;
 
-    settings.currentMedicine = settings.medicineList.bindings[args.index].medicineName;
-    viewModel.set("currentMedicineName", settings.currentMedicine);
+    settings.currentMedicineName = settings.currentMedicineCabinet.medicines[args.index].medicineName;
+    viewModel.set("currentMedicineName", settings.currentMedicineName);
 
     if (!isTagIdLocked) {
-        settings.currentTagId = settings.medicineList.bindings[args.index].tagId;
+        settings.currentTagId = settings.currentMedicineCabinet.medicines[args.index].tagId;
         viewModel.set("currentTagId", settings.currentTagId);
     }
 };
@@ -144,67 +164,73 @@ export function onDeleteTap(args: ItemEventData) {
     let confirmMsg: string = getParingUpdatConfirmMsg(binding.medicineName);
     confirm(confirmMsg).then((isConfirmed) => {
         if (isConfirmed) {
-            let index: number = settings.medicineList.getMedicineBindingIndex(binding.medicineName);
+            let index: number = settings.currentMedicineCabinet.getMedicineBindingIndex(binding.medicineName);
 
             if (index != -1) { // Delete current binding
-                settings.medicineList.bindings.splice(index, 1);
-                viewModel.set("myMedicines", settings.medicineList);
+                settings.currentMedicineCabinet.medicines.splice(index, 1);
+                viewModel.set("myMedicines", settings.currentMedicineCabinet);
 
                 const listView: ListView = page.getViewById<ListView>("medicineList");
                 listView.refresh();
 
-                settings.currentMedicine = "";
+                settings.currentMedicineName = "";
             }
         }
     });
 };
 
-export function onSaveTap(args: ItemEventData) {
+export function onSaveTap() {
     let binding: MedicineBinding = new MedicineBinding();
 
-    // Use displayed medicine name
-    binding.medicineName = viewModel.get("currentMedicineName");
-    if (!binding.medicineName) {
-        alert(i18n.selectMedicineMsg);
-        return;
-    }
+    // if (settings.isWaitingForSave) {
+    //     binding.tagId = settings.currentTagId;
+    //     binding.medicineName = settings.currentMedicineName;
+    // }
+    // else {
+        // Use displayed medicine name
+        binding.medicineName = viewModel.get("currentMedicineName");
+        if (!binding.medicineName) {
+            alert(i18n.selectMedicineMsg);
+            return;
+        }
 
-    // Use displayed tagId
-    binding.tagId = viewModel.get("currentTagId");
-    if (!binding.tagId) {
-        alert(i18n.enterTagIdMsg + binding.medicineName);
-        return;
-    }
+        // Use displayed tagId
+        binding.tagId = viewModel.get("currentTagId");
+        if (!binding.tagId) {
+            alert(i18n.enterTagIdMsg + binding.medicineName);
+            return;
+        }
+    // }
 
-    settings.currentMedicine = binding.medicineName;
-    let index: number = settings.medicineList.getMedicineBindingIndex(binding.medicineName);
+    settings.currentMedicineName = binding.medicineName;
+    let index: number = settings.currentMedicineCabinet.getMedicineBindingIndex(binding.medicineName);
 
     if (index != -1) { // Replace a current binding
-        binding.dailyDoses = settings.medicineList.bindings[index].dailyDoses;
-        binding.dailyRequiredDoses = settings.medicineList.bindings[index].dailyRequiredDoses;
-        settings.medicineList.bindings[index] = binding; // use the util functions to add data to array
+        binding.dailyDoses = settings.currentMedicineCabinet.medicines[index].dailyDoses;
+        binding.dailyRequiredDoses = settings.currentMedicineCabinet.medicines[index].dailyRequiredDoses;
+        settings.currentMedicineCabinet.medicines[index] = binding; // use the util functions to add data to array
         alert(getPairingUpdatedMsg(binding.medicineName));
     }
     else {
-        index = settings.medicineList.getMedicineBindingIndexByTagId(binding.tagId);
+        index = settings.currentMedicineCabinet.getMedicineBindingIndexByTagId(binding.tagId);
         if (index != -1) { // Replace a current binding
-            binding.dailyDoses = settings.medicineList.bindings[index].dailyDoses;
-            binding.dailyRequiredDoses = settings.medicineList.bindings[index].dailyRequiredDoses;
-            settings.medicineList.bindings[index] = binding; // use the util functions to add data to array
+            binding.dailyDoses = settings.currentMedicineCabinet.medicines[index].dailyDoses;
+            binding.dailyRequiredDoses = settings.currentMedicineCabinet.medicines[index].dailyRequiredDoses;
+            settings.currentMedicineCabinet.medicines[index] = binding; // use the util functions to add data to array
             alert(getPairingUpdatedMsg(binding.medicineName));
         }
         else { // Add new binding
             binding.dailyDoses = 0;
             binding.dailyRequiredDoses = 0;
-            settings.medicineList.bindings.push(binding); // use the util function to add new binging to array
+            settings.currentMedicineCabinet.medicines.push(binding); // use the util function to add new binging to array
             settings.isNewBinding = true;
-            
+
             const pageTitle = "Home";
             const pageRoute = "home/home-page";
             navigateTo(pageTitle, pageRoute);
         }
     }
-    viewModel.set("myMedicines", settings.medicineList);
+    viewModel.set("myMedicines", settings.currentMedicineCabinet);
 
     const listView: ListView = page.getViewById<ListView>("medicineList");
     listView.refresh();
@@ -244,7 +270,9 @@ export function onAudioEnableTap(args: ItemEventData) {
 };
 
 export function onLogoTap(args: ItemEventData) {
-    audioPlayer.play("default");
+    //audioPlayer.play("default");
+
+    vr.startListening();
 };
 
 

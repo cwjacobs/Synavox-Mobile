@@ -9,7 +9,7 @@ import { topmost } from "tns-core-modules/ui/frame/frame";
 import { I18N } from "~/utilities/i18n";
 import { Settings } from "~/settings/settings";
 import { AudioPlayer } from "~/audio-player/audio-player";
-import { MedicineBinding } from "~/data-models/medicine-binding";
+import { MedicineBinding } from "~/data-models/medicine-cabinet";
 
 let i18n: I18N = I18N.getInstance();
 let settings: Settings = Settings.getInstance();
@@ -27,7 +27,6 @@ export class RFID {
     private static _instance: RFID = new RFID();
 
     private constructor() {
-        console.log("rfid - private constructor() invoked; RFID._instance: " + RFID._instance);
         if (RFID._instance) {
             throw new Error("Error: Instantiation failed: Use RFID.instance instead of new.");
         }
@@ -36,8 +35,6 @@ export class RFID {
         this._tagListenerStarted = false;
 
         appRootContext = new AppRootViewModel();
-
-        console.log("rfid - constructor complete; RFID._instance: " + RFID._instance);
 
         // NFC device interface component requires app to be up and running, so delay here...
         setTimeout(() => {
@@ -109,12 +106,13 @@ export class RFID {
     }
 
     private scanWizard(data: NfcTagData): void {
-        this._tagScanned = true;
-        this.tagId = data.id.toString();
         let pageTitle: string;
         let pageRoute: string;
 
-        let binding: MedicineBinding = settings.medicineList.getMedicineBindingByTagId(this.tagId);
+        this._tagScanned = true;
+        this.tagId = data.id.toString();
+
+        let binding: MedicineBinding = settings.currentMedicineCabinet.getMedicineBindingByTagId(this.tagId);
         if (!binding) {
             // New tag, go to wizard
             settings.isNewBinding = true;

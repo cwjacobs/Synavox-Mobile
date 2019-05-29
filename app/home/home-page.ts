@@ -6,33 +6,33 @@ import { ListView, ItemEventData } from "tns-core-modules/ui/list-view/list-view
 import { Label } from "tns-core-modules/ui/label/label";
 import { HomeViewModel } from "./home-view-model";
 import { confirm } from "tns-core-modules/ui/dialogs";
-import { MedicineBinding, MedicineBindingList } from "~/data-models/medicine-binding";
+import { MedicineCabinet } from "~/data-models/medicine-cabinet";
 import { Button } from "tns-core-modules/ui/button/button";
 import { TabView, TabViewItem, SelectedIndexChangedEventData } from "tns-core-modules/ui/tab-view";
 
 import { I18N } from "~/utilities/i18n";
 import { RFID } from "~/utilities/rfid";
-import { Dataset } from "~/data-models/test-data";
+import { TestData } from "~/data-models/test-data";
 import { Settings } from "~/settings/settings";
 import { AudioPlayer } from "~/audio-player/audio-player";
 
 let i18n: I18N = I18N.getInstance();
 let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
 
+// Individual medicine lists
+let myMedicineCabinet: MedicineCabinet = new MedicineCabinet(TestData.myMedicineCabinet.owner, TestData.myMedicineCabinet.medicines);
+let momMedicineCabinet: MedicineCabinet = new MedicineCabinet(TestData.momMedicineCabinet.owner, TestData.momMedicineCabinet.medicines);
+let dadMedicineCabinet: MedicineCabinet = new MedicineCabinet(TestData.dadMedicineCabinet.owner, TestData.dadMedicineCabinet.medicines);
+
 // Init default app Settings
 let settings: Settings = Settings.getInstance();
 settings.isAudioEnabled = true;
-settings.medicineList = new MedicineBindingList(Dataset.defaultData);
+settings.currentMedicineCabinet = myMedicineCabinet;
 
-// Individual medicine lists
-let myMedicineList: MedicineBindingList = new MedicineBindingList(Dataset.myData);
-let momMedicineList: MedicineBindingList = new MedicineBindingList(Dataset.momData);
-let dadMedicineList: MedicineBindingList = new MedicineBindingList(Dataset.dadData);
-
-let medicineLists: MedicineBindingList[] = [myMedicineList, momMedicineList, dadMedicineList];
+let medicineCabinets: MedicineCabinet[] = [myMedicineCabinet, momMedicineCabinet, dadMedicineCabinet];
 
 // Page scope medicine lists, point local medicineList to shared datastore
-let tempMedicineList: MedicineBindingList;
+let tempMedicineCabinet: MedicineCabinet;
 
 // NFC tag methods
 let rfid: RFID = RFID.getInstance();
@@ -54,33 +54,48 @@ let secondaryOff: string = "#a4cac7";
 let alertOn: string = "#ff0000";
 let alertOff: string = "#ffc8c8";
 
-let isTabsInitialized: boolean = false;
+let isTabsViewInitialized: boolean = false;
 
 let currentTab: number = 0;
 
-export function onSelectedIndexChanged(args) {
-    if (isTabsInitialized) {
+export function onLogoTap() {
+    alert(Settings.version);
+}
+
+export function onTabsLoaded() {
+    // alert("onTabsLoaded");
+}
+
+export function onSelectedIndexChanged(args: SelectedIndexChangedEventData) {
+    if ((isTabsViewInitialized) && (!settings.isNewBinding)) {
+        let tabView: any = args.object;
+        let tab: any = tabView.items[args.newIndex];
+        let title: string = tab.title;
+        // alert(title);
+
+        console.dir(title);
+
         // Get dose numbers for each medicine
         setTimeout(() => {
             displayCurrentListDoses();
         }, 500);
 
         currentTab = args.newIndex;
-        settings.medicineList = medicineLists[currentTab];
+        settings.currentMedicineCabinet = medicineCabinets[currentTab];
 
-        viewModel.set("myMedicineList", settings.medicineList.bindings);
+        viewModel.set("myMedicineList", settings.currentMedicineCabinet.medicines);
 
-        settings.currentMedicine = settings.medicineList.getMedicineBindingByIndex(0).medicineName;
-        viewModel.set("currentMedicineName", settings.currentMedicine);
+        settings.currentMedicineName = settings.currentMedicineCabinet.getMedicineBindingByIndex(0).medicineName;
+        viewModel.set("currentMedicineName", settings.currentMedicineName);
 
         const listView: ListView = page.getViewById<ListView>("medicineList");
         listView.refresh();
-        
+
         displayCurrentDoses();
 
-        displayDosesPerDayInstructions(settings.medicineList.getDailyDosesRequired(settings.currentMedicine));
+        displayDosesPerDayInstructions(settings.currentMedicineCabinet.getDailyDosesRequired(settings.currentMedicineName));
     }
-    isTabsInitialized = true;
+    isTabsViewInitialized = true;
 }
 
 export function onNavigatingTo(args: NavigatedData) {
@@ -106,7 +121,7 @@ export function onLoaded(args: EventData) {
 
     // Current list of paired medications
     viewModel.set("isAudioEnabled", settings.isAudioEnabled);
-    viewModel.set("myMedicineList", settings.medicineList.bindings);
+    viewModel.set("myMedicineList", settings.currentMedicineCabinet.medicines);
 
     // Initialize editing buttons state
     isEditingAvailable = true;
@@ -122,19 +137,19 @@ export function onLoaded(args: EventData) {
     let editTotalDosesPerDayButton: Button = page.getViewById("edit-total-required-doses");
     editTotalDosesPerDayButton.backgroundColor = isEditingAvailable ? secondaryOn : secondaryOff;
 
-    if (!settings.currentMedicine) {
-        settings.currentMedicine = settings.medicineList.getMedicineBindingByIndex(0).medicineName;
+    if (!settings.currentMedicineName) {
+        settings.currentMedicineName = settings.currentMedicineCabinet.getMedicineBindingByIndex(0).medicineName;
     }
-    viewModel.set("currentMedicineName", settings.currentMedicine);
+    viewModel.set("currentMedicineName", settings.currentMedicineName);
 
     if (settings.isConfirmingDose) {
-        registerDoseTaken(settings.currentMedicine);
+        registerDoseTaken(settings.currentMedicineName);
     }
     else {
         displayCurrentDoses();
     }
 
-    displayDosesPerDayInstructions(settings.medicineList.getDailyDosesRequired(settings.currentMedicine));
+    displayDosesPerDayInstructions(settings.currentMedicineCabinet.getDailyDosesRequired(settings.currentMedicineName));
 
     // Set text to active language
     setActiveLanguageText();
@@ -149,10 +164,10 @@ export function onChangeTotalDosesPerDayTap(args: EventData) {
 
 export function onSaveTotalDosesPerDayTap() {
     // Save changes
-    medicineLists[currentTab] = new MedicineBindingList(tempMedicineList.bindings);
-    settings.medicineList = medicineLists[currentTab];;
-    tempMedicineList = null;
-    
+    medicineCabinets[currentTab] = new MedicineCabinet(tempMedicineCabinet.owner, tempMedicineCabinet.medicines);
+    settings.currentMedicineCabinet = medicineCabinets[currentTab];;
+    tempMedicineCabinet = null;
+
     // settings.medicineList = new MedicineBindingList(tempMedicineList.bindings);
     // tempMedicineList = null;
 
@@ -169,11 +184,11 @@ export function onSaveTotalDosesPerDayTap() {
     displayCurrentListDoses();
 
     let medicineName: string = viewModel.get("currentMedicineName");
-    displayDosesPerDayInstructions(settings.medicineList.getDailyDosesRequired(medicineName));
+    displayDosesPerDayInstructions(settings.currentMedicineCabinet.getDailyDosesRequired(medicineName));
 }
 
 export function onCancelTotalDosesPerDayTap() {
-    tempMedicineList = null;
+    tempMedicineCabinet = null;
 
     isEditingTotalDosesPerDay = false;
     viewModel.set("isEditingTotalDosesPerDay", isEditingTotalDosesPerDay);
@@ -188,13 +203,13 @@ export function onCancelTotalDosesPerDayTap() {
     displayCurrentListDoses();
 
     let medicineName: string = viewModel.get("currentMedicineName");
-    displayDosesPerDayInstructions(settings.medicineList.getDailyDosesRequired(medicineName));
+    displayDosesPerDayInstructions(settings.currentMedicineCabinet.getDailyDosesRequired(medicineName));
 }
 
 export function onChangeDosesTakenTodayTap(args: EventData) {
     if ((isEditingAvailable) && (!isEditingTotalDosesPerDay)) {
         // Copy list to temp list for editing
-        tempMedicineList = new MedicineBindingList(settings.medicineList.bindings);
+        tempMedicineCabinet = new MedicineCabinet(settings.currentMedicineCabinet.owner, settings.currentMedicineCabinet.medicines);
 
         isEditingDosesTakenToday = true;
         viewModel.set("isEditingDosesTakenToday", isEditingDosesTakenToday);
@@ -214,8 +229,8 @@ export function onChangeDosesTakenTodayTap(args: EventData) {
 
         let doseIndicatorBaseId: string = "current";
 
-        let dosesTakenToday: number = tempMedicineList.getDosesTakenToday(medicineName);
-        let dailyDosesRequired: number = tempMedicineList.getDailyDosesRequired(medicineName);
+        let dosesTakenToday: number = tempMedicineCabinet.getDosesTakenToday(medicineName);
+        let dailyDosesRequired: number = tempMedicineCabinet.getDailyDosesRequired(medicineName);
 
         let maxDosesDisplayed: number = 6;
         for (let i = 1; i < maxDosesDisplayed; i++) {
@@ -244,9 +259,9 @@ export function onChangeDosesTakenTodayTap(args: EventData) {
 
 export function onSaveDosesTakenTodayTap() {
     // Save changes
-    medicineLists[currentTab] = new MedicineBindingList(tempMedicineList.bindings);
-    settings.medicineList = medicineLists[currentTab];;
-    tempMedicineList = null;
+    medicineCabinets[currentTab] = new MedicineCabinet(tempMedicineCabinet.owner, tempMedicineCabinet.medicines);
+    settings.currentMedicineCabinet = medicineCabinets[currentTab];;
+    tempMedicineCabinet = null;
 
     isEditingDosesTakenToday = false;
     viewModel.set("isEditingDosesTakenToday", isEditingDosesTakenToday);
@@ -261,11 +276,11 @@ export function onSaveDosesTakenTodayTap() {
     displayCurrentListDoses();
 
     let medicineName: string = viewModel.get("currentMedicineName");
-    displayDosesPerDayInstructions(settings.medicineList.getDailyDosesRequired(medicineName));
+    displayDosesPerDayInstructions(settings.currentMedicineCabinet.getDailyDosesRequired(medicineName));
 }
 
 export function onCancelDosesTakenTodayTap() {
-    tempMedicineList = null;
+    tempMedicineCabinet = null;
 
     isEditingDosesTakenToday = false;
     viewModel.set("isEditingDosesTakenToday", isEditingDosesTakenToday);
@@ -280,7 +295,7 @@ export function onCancelDosesTakenTodayTap() {
     displayCurrentListDoses();
 
     let medicineName: string = viewModel.get("currentMedicineName");
-    displayDosesPerDayInstructions(settings.medicineList.getDailyDosesRequired(medicineName));
+    displayDosesPerDayInstructions(settings.currentMedicineCabinet.getDailyDosesRequired(medicineName));
 }
 
 export function current1(args: ItemEventData) {
@@ -309,8 +324,8 @@ export function current5(args: ItemEventData) {
 }
 
 export function onItemTap(args: ItemEventData) {
-    let medicineName: string = settings.medicineList.bindings[args.index].medicineName;
-    settings.currentMedicine = medicineName;
+    let medicineName: string = settings.currentMedicineCabinet.medicines[args.index].medicineName;
+    settings.currentMedicineName = medicineName;
     viewModel.set("currentMedicineName", medicineName);
 
     let currentMedicineNameView: any = page.getViewById("current-medicine-name");
@@ -333,7 +348,7 @@ export function onItemTap(args: ItemEventData) {
     displayCurrentDoses();
 
     // Display dose instructions
-    displayDosesPerDayInstructions(settings.medicineList.bindings[args.index].dailyRequiredDoses);
+    displayDosesPerDayInstructions(settings.currentMedicineCabinet.medicines[args.index].dailyRequiredDoses);
 
     if (settings.isAudioEnabled) {
         audioPlayer.play(medicineName);
@@ -368,7 +383,7 @@ export function onAudioEnableTap(args: ItemEventData) {
 function changeTotalDosesPerDay() {
     if ((isEditingAvailable) && (!isEditingDosesTakenToday)) {
         // Copy list to temp list for editing
-        tempMedicineList = new MedicineBindingList(settings.medicineList.bindings);
+        tempMedicineCabinet = new MedicineCabinet(settings.currentMedicineCabinet.owner, settings.currentMedicineCabinet.medicines);
 
         isEditingTotalDosesPerDay = true;
         viewModel.set("isEditingTotalDosesPerDay", isEditingTotalDosesPerDay);
@@ -387,7 +402,7 @@ function changeTotalDosesPerDay() {
         currentMedicineNameView.color = secondaryOn;
 
         let doseIndicatorBaseId: string = "current";
-        let dailyRequiredDoses: number = tempMedicineList.getDailyDosesRequired(medicineName);
+        let dailyRequiredDoses: number = tempMedicineCabinet.getDailyDosesRequired(medicineName);
 
         let maxDosesDisplayed: number = 6;
         for (let i = 1; i < maxDosesDisplayed; i++) {
@@ -408,8 +423,8 @@ function displayCurrentDoses() {
     let doseIndicatorIdBase: string = "current";
     let medicineName: string = viewModel.get("currentMedicineName");
 
-    let dosesTakenToday: number = settings.medicineList.getDosesTakenToday(medicineName);
-    let dailyDosesRequired: number = settings.medicineList.getDailyDosesRequired(medicineName);
+    let dosesTakenToday: number = settings.currentMedicineCabinet.getDosesTakenToday(medicineName);
+    let dailyDosesRequired: number = settings.currentMedicineCabinet.getDailyDosesRequired(medicineName);
 
     // Iterate over each display position
     let maxDosesDisplayed: number = 6;
@@ -465,8 +480,8 @@ function toggleIndicator(indicator: any): number {
 function adustDailyDoseTaken(indicator: any): void {
     let medicineName: string = viewModel.get("currentMedicineName");
 
-    let dosesTakenToday: number = tempMedicineList.getDosesTakenToday(medicineName);
-    let dailyDosesRequired: number = tempMedicineList.getDailyDosesRequired(medicineName);
+    let dosesTakenToday: number = tempMedicineCabinet.getDosesTakenToday(medicineName);
+    let dailyDosesRequired: number = tempMedicineCabinet.getDailyDosesRequired(medicineName);
 
     let doseAdjustment: number = toggleIndicator(indicator);
     dosesTakenToday += doseAdjustment;
@@ -501,7 +516,7 @@ function adustDailyDoseTaken(indicator: any): void {
     }
 
     // Data store behind list is being updated, but we won't display it until save is pressed
-    tempMedicineList.setDosesTakenToday(medicineName, dosesTakenToday);
+    tempMedicineCabinet.setDosesTakenToday(medicineName, dosesTakenToday);
     displayDosesTakenMsg(dosesTakenToday);
 }
 
@@ -512,7 +527,7 @@ function getIndicatorDoseNumber(indicator: string): number {
 
 function adustDailyDoseRequirement(indicator: any) {
     let medicineName: string = viewModel.get("currentMedicineName");
-    let dailyDosesRequired: number = tempMedicineList.getDailyDosesRequired(medicineName);
+    let dailyDosesRequired: number = tempMedicineCabinet.getDailyDosesRequired(medicineName);
 
     if (dailyDosesRequired === 0) {
         dailyDosesRequired = 1;
@@ -531,7 +546,7 @@ function adustDailyDoseRequirement(indicator: any) {
     }
 
     // Data store behind list is being updated, but we won't display it until save is pressed
-    tempMedicineList.setDailyDoseRequirement(medicineName, dailyDosesRequired);
+    tempMedicineCabinet.setDailyDoseRequirement(medicineName, dailyDosesRequired);
     displayDosesPerDayInstructions(dailyDosesRequired);
 }
 
@@ -545,10 +560,10 @@ function adjustDoses(indicator: any): void {
 }
 
 function displayCurrentListDoses() {
-    settings.medicineList.bindings.forEach((medicine: MedicineBinding) => {
+    settings.currentMedicineCabinet.medicines.forEach((medicine) => {
         let dosesTakenToday: number = medicine.dailyDoses;
-        let doseIndicatorIdBase: string = medicine.medicineName;
         let dailyDosesRequired: number = medicine.dailyRequiredDoses;
+        let doseIndicatorIdBase: string = medicine.medicineName;
 
         // Iterate over each display position
         let maxDosesDisplayed: number = 6;
@@ -583,7 +598,7 @@ function displayCurrentListDoses() {
     if (settings.isNewBinding) {
         settings.isNewBinding = false;
         changeTotalDosesPerDay();
-        alert(i18n.enterDosesPrescribed + settings.currentMedicine);
+        alert(i18n.enterDosesPrescribed + settings.currentMedicineName);
     }
 }
 
@@ -591,14 +606,14 @@ function registerDoseTaken(medicineName: string): void {
     let confirmMsg: string = getI18NConfirmMsg(medicineName);
     confirm(confirmMsg).then((isConfirmed) => {
         if (isConfirmed) {
-            let _activeMedicineList: MedicineBindingList;
+            let _activeMedicineList: MedicineCabinet;
             if (settings.isConfirmingDose) {
                 // Scanned a tag if here
-                _activeMedicineList = settings.medicineList;
+                _activeMedicineList = settings.currentMedicineCabinet;
             }
             else {
                 // User changing doses if here
-                _activeMedicineList = tempMedicineList;
+                _activeMedicineList = tempMedicineCabinet;
             }
             let dosesTakenToday = _activeMedicineList.getDosesTakenToday(medicineName);
             _activeMedicineList.setDosesTakenToday(medicineName, (dosesTakenToday + 1));

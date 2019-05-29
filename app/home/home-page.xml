@@ -14,7 +14,7 @@
 				<!-- <Label style="background-color: black; color: orangered" text="parallax:Header" /> -->
 			</parallax:Header>
 			<parallax:Anchored class="anchor" height="100vh">
-				<TabView class="list-container" id="tabViewContainer" selectedIndexChanged="onSelectedIndexChanged">
+				<TabView class="list-container" id="tabViewContainer" loaded="onTabsLoaded" selectedIndexChanged="onSelectedIndexChanged">
 					<TabViewItem class="fa" title="Me">
 						<StackLayout>
 							<Label text="My Prescriptions" textWrap="true" class="h2 text-left tab1 tabs" />
@@ -32,7 +32,7 @@
 					</TabViewItem>
 				</TabView>
 			</parallax:Anchored>
-			<parallax:Content class="body-template" height="550vh" stretchLastChild="false" background="white">
+			<parallax:Content class="body-template" height="600vh" stretchLastChild="false" background="white">
 				<StackLayout class="list-container">
 					<GridLayout rows="auto" columns="200vw,*,*,*,*,*">
 						<Label class="pairing-MedicineName fas" id="current-medicine-name" text="{{ currentMedicineName, '&#xf484; ' + currentMedicineName }}" row="0" col="0" colSpan="1" />

@@ -7,7 +7,7 @@ import { WebView, LoadEventData } from "tns-core-modules/ui/web-view";
 import * as dialogs from "tns-core-modules/ui/dialogs";
 
 import { BrowseViewModel } from "./browse-view-model";
-import { MedicineBindingList } from "~/data-models/medicine-binding";
+import { MedicineCabinet } from "~/data-models/medicine-cabinet";
 
 // import * as Test from "../data-models/test-data";
 import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
@@ -15,8 +15,8 @@ import { topmost } from "tns-core-modules/ui/frame/frame";
 import { AppRootViewModel } from "~/app-root/app-root-view-model";
 import { I18N } from "~/utilities/i18n";
 
-import { Dataset } from "~/data-models/test-data";
-let testData: Dataset = new Dataset();
+import { TestData } from "~/data-models/test-data";
+let testData: TestData = new TestData();
 
 import { Settings } from "~/settings/settings";
 let settings: Settings = Settings.getInstance();
@@ -27,12 +27,8 @@ let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
 let page: Page = null;
 let viewModel: BrowseViewModel = null;
 
-// for browse branch
 let appRootContext: AppRootViewModel = null;
-
-// for dose branch
 let isUserBrowsing: boolean;
-
 let webViewSrcModel = null;
 
 // Page Text
@@ -60,7 +56,7 @@ export function onLoaded(args: EventData) {
 
     isUserBrowsing = false;
     viewModel.set("isUserBrowsing", isUserBrowsing);
-    viewModel.set("myMedicineList", settings.medicineList.bindings);
+    viewModel.set("myMedicineList", settings.currentMedicineCabinet.medicines);
 
     // Set text to active language
     setActiveLanguageText();
@@ -73,7 +69,7 @@ export function onItemTap(args: ItemEventData) {
     let medicineName: string = button.id.substring(1);
 
     webViewSrcModel = testData.webViewSrcArray;
-    let index: number = settings.medicineList.getMedicineBindingIndex(medicineName);
+    let index: number = settings.currentMedicineCabinet.getMedicineBindingIndex(medicineName);
     let wvsMedicineSrc: string = webViewSrcModel[index].srcLinks[column].webViewSrc;
 
     viewModel.set("webViewSrc", wvsMedicineSrc);

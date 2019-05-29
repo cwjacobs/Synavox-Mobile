@@ -1,7 +1,8 @@
 import { TNSPlayer } from 'nativescript-audio';
 import { I18N } from "~/utilities/i18n";
 import { Settings } from "~/settings/settings";
-import { MedicineBinding } from '~/data-models/medicine-binding';
+import { MedicineBinding } from '~/data-models/medicine-cabinet';
+// import { MedicineBinding } from '~/data-models/medicine-binding';
 
 export class AudioPlayer {
     private _i18n: I18N = I18N.getInstance();
@@ -146,7 +147,7 @@ export class AudioPlayer {
         }
 
         let medicineName: string;
-        let binding: MedicineBinding = this._settings.medicineList.getMedicineBindingByTagId(tagId);
+        let binding: MedicineBinding = this._settings.currentMedicineCabinet.getMedicineBindingByTagId(tagId);
         if (binding === null) {
             // medicineName not found in current list of medicine bindings
             medicineName = "default";

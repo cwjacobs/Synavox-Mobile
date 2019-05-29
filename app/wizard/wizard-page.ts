@@ -9,7 +9,7 @@ import { I18N } from "~/utilities/i18n";
 import { RFID } from "~/utilities/rfid"
 
 import { WizardViewModel } from "./wizard-view-model";
-import { MedicineBinding } from "~/data-models/medicine-binding";
+import { MedicineBinding } from "~/data-models/medicine-cabinet";
 //import { AppRootViewModel } from "~/app-root/app-root-view-model";
 
 import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
@@ -47,7 +47,7 @@ export function onDrawerButtonTap(args: EventData) {
 }
 
 export function onLoaded(args: EventData) {
-    medicineTagPairs = settings.medicineList.bindings;
+    medicineTagPairs = settings.currentMedicineCabinet.medicines;
 
     viewModel.set("i18nMedicineListTitle", i18n.homePageTitle);
     setActiveLanguageText();
@@ -59,15 +59,16 @@ export function onLoaded(args: EventData) {
         viewModel.set("isSelectingMedicine", false);
         viewModel.set("i18nScannedOrSelected", i18n.scannedMsg);
 
-        // We're here because a tag was scanned, reset flag and let's walk the user through next steps...
+        // We're here because a tag was scanned, reset isTagScanned flag and walk the user through next steps...
         rfid.isTagScanned = false;
-        let pairedMedicineName: string = getPairedMedicineName(rfid.tagId, medicineTagPairs);
+        let pairedMedicineName: string = getPairedMedicineName(rfid.tagId, medicineTagPairs); // getPairedMedicineName should be on the datatype itself, not the container
         if (!pairedMedicineName) {
-            // This is an unbound tag
+            // This is an unbound tag with no corresponding medicine name
+            settings.currentMedicineName = "";
             let confirmMsg: string = i18n.newTagMsg;
             confirm(confirmMsg).then((isConfirmed) => {
                 if (isConfirmed) {
-                    settings.isNewBinding = true;
+                    settings.isNewBinding = true; // Informs pair-page that this is a new medicine/tag binding
                     navigateTo("Pair", "pair/pair-page");
                 }
                 else {
@@ -77,6 +78,7 @@ export function onLoaded(args: EventData) {
             });
         }
         else {
+            // Tag is paired with an existing medicine, display action options
             viewModel.set("isSelectingAction", true);
             viewModel.set("isMedicineDisplayed", true);
 
@@ -84,11 +86,11 @@ export function onLoaded(args: EventData) {
             viewModel.set("isSelectingMedicine", false);
             viewModel.set("currentMedicineName", pairedMedicineName);
 
-            settings.currentMedicine = pairedMedicineName;
+            settings.currentMedicineName = pairedMedicineName;
         }
     }
     else {
-        // No currentMedicine, allow user to select
+        // No current medicine, allow user to select
         letUserSelectMedicine();
     }
 }
@@ -118,7 +120,7 @@ export function onHomeTap() {
 }
 
 export function onConfirmDoseTakenTap() {
-    settings.currentMedicine = viewModel.get("currentMedicineName");
+    settings.currentMedicineName = viewModel.get("currentMedicineName");
     settings.isConfirmingDose = true;
 
     const pageTitle = "Home";
@@ -160,7 +162,7 @@ export function onListPickerLoaded(args: EventData) {
 };
 
 export function onSelectMedicineTap(args: EventData) {
-    settings.currentMedicine = medicineName;
+    settings.currentMedicineName = medicineName;
 
     viewModel.set("isSelectingAction", true);
     viewModel.set("isMedicineDisplayed", true);
