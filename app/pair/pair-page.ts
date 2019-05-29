@@ -89,7 +89,7 @@ export function onLoaded(args: EventData) {
     setActiveLanguageText();
 
     if (settings.isNewBinding) {
-        console.log("rfid.tagScanned: " + rfid.isTagScanned + " tagId: " + rfid.tagId);
+        // console.log("rfid.tagScanned: " + rfid.isTagScanned + " tagId: " + rfid.tagId);
 
         // We're here because an unpaired tag was scanned, let's walk the user through next steps...
         // rfid.manageNewTag = false;
@@ -203,8 +203,6 @@ export function onSaveTap() {
             // settings.currentMedicineCabinet.medicines.push(binding); // use the util function to add new binging to array
             settings.currentMedicineCabinet.addMedicineBinding(binding);
             settings.isNewBinding = true;
-
-            console.log("Owner: " + settings.currentMedicineCabinet.owner);
 
             const pageTitle = "Home";
             const pageRoute = "home/home-page";

@@ -28,7 +28,7 @@ export class VR {
             .then((available: boolean) => {
                 // alert(available ? "Voice Recognition is available on this device" : "Voice Recognition is NOT available on this device");
                 this.settings.isSpeechRecognitionAvailable = available;
-                console.log("isSpeechRecognitionAvailable: " + available);
+                // console.log("isSpeechRecognitionAvailable: " + available);
             },
                 (err: string) => {
                     console.log(err);
@@ -43,7 +43,7 @@ export class VR {
         this.speechRecognition.requestPermission().then((granted: boolean) => {
             // alert("Granted? " + granted);
             this.settings.isSpeechRecognitionAvailable = granted;
-            console.log("Granted? " + granted);
+            // console.log("Granted? " + granted);
         });
     }
 
@@ -62,8 +62,8 @@ export class VR {
                         let self: any = this;
                         // alert(`User said: ${transcription.text}`);
                         // alert(`User finished?: ${transcription.finished}`);
-                        console.log(`User said: ${transcription.text}`);
-                        console.log(`User finished?: ${transcription.finished}`);
+                        // console.log(`User said: ${transcription.text}`);
+                        // console.log(`User finished?: ${transcription.finished}`);
 
                         onSpeechRecognition(transcription.text);
                         self.isListening = false;
@@ -76,7 +76,7 @@ export class VR {
                     }
                 }
             ).then(
-                (started: boolean) => { console.log(`started listening`) },
+                (started: boolean) => { /* console.log(`started listening`) */ },
                 (errorMessage: string) => { console.log(`Error: ${errorMessage}`); }
             ).catch((error: string | number) => {
                 // same as the 'onError' handler, but this may not return if the error occurs after listening has successfully started (because that resolves the promise,

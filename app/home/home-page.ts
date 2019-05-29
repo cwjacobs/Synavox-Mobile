@@ -73,9 +73,6 @@ export function onSelectedIndexChanged(args: SelectedIndexChangedEventData) {
         let tabView: any = args.object;
         let tab: any = tabView.items[args.newIndex];
         let title: string = tab.title;
-        // alert(title);
-
-        console.dir(title);
 
         // Get dose numbers for each medicine
         setTimeout(() => {
