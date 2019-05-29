@@ -182,25 +182,19 @@ export function onDeleteTap(args: ItemEventData) {
 export function onSaveTap() {
     let binding: MedicineBinding = new MedicineBinding();
 
-    // if (settings.isWaitingForSave) {
-    //     binding.tagId = settings.currentTagId;
-    //     binding.medicineName = settings.currentMedicineName;
-    // }
-    // else {
-        // Use displayed medicine name
-        binding.medicineName = viewModel.get("currentMedicineName");
-        if (!binding.medicineName) {
-            alert(i18n.selectMedicineMsg);
-            return;
-        }
+    // Use displayed medicine name
+    binding.medicineName = viewModel.get("currentMedicineName");
+    if (!binding.medicineName) {
+        alert(i18n.selectMedicineMsg);
+        return;
+    }
 
-        // Use displayed tagId
-        binding.tagId = viewModel.get("currentTagId");
-        if (!binding.tagId) {
-            alert(i18n.enterTagIdMsg + binding.medicineName);
-            return;
-        }
-    // }
+    // Use displayed tagId
+    binding.tagId = viewModel.get("currentTagId");
+    if (!binding.tagId) {
+        alert(i18n.enterTagIdMsg + binding.medicineName);
+        return;
+    }
 
     settings.currentMedicineName = binding.medicineName;
     let index: number = settings.currentMedicineCabinet.getMedicineBindingIndex(binding.medicineName);
@@ -222,8 +216,11 @@ export function onSaveTap() {
         else { // Add new binding
             binding.dailyDoses = 0;
             binding.dailyRequiredDoses = 0;
-            settings.currentMedicineCabinet.medicines.push(binding); // use the util function to add new binging to array
+            // settings.currentMedicineCabinet.medicines.push(binding); // use the util function to add new binging to array
+            settings.currentMedicineCabinet.addMedicineBinding(binding);
             settings.isNewBinding = true;
+
+            console.log("Owner: " + settings.currentMedicineCabinet.owner);
 
             const pageTitle = "Home";
             const pageRoute = "home/home-page";

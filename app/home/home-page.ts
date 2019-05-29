@@ -67,7 +67,7 @@ export function onTabsLoaded() {
 }
 
 export function onSelectedIndexChanged(args: SelectedIndexChangedEventData) {
-    if ((isTabsViewInitialized) && (!settings.isNewBinding)) {
+    if ((isTabsViewInitialized) && (!settings.isNewBinding) && (!settings.isConfirmingDose)) {
         let tabView: any = args.object;
         let tab: any = tabView.items[args.newIndex];
         let title: string = tab.title;
@@ -137,15 +137,16 @@ export function onLoaded(args: EventData) {
     let editTotalDosesPerDayButton: Button = page.getViewById("edit-total-required-doses");
     editTotalDosesPerDayButton.backgroundColor = isEditingAvailable ? secondaryOn : secondaryOff;
 
-    if (!settings.currentMedicineName) {
-        settings.currentMedicineName = settings.currentMedicineCabinet.getMedicineBindingByIndex(0).medicineName;
-    }
-    viewModel.set("currentMedicineName", settings.currentMedicineName);
 
     if (settings.isConfirmingDose) {
+        viewModel.set("currentMedicineName", settings.currentMedicineName);
         registerDoseTaken(settings.currentMedicineName);
     }
     else {
+        if (!settings.currentMedicineName) {
+            settings.currentMedicineName = settings.currentMedicineCabinet.getMedicineBindingByIndex(0).medicineName;
+        }
+        viewModel.set("currentMedicineName", settings.currentMedicineName);
         displayCurrentDoses();
     }
 
