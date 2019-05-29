@@ -14,7 +14,7 @@
 				<!-- <Label style="background-color: black; color: orangered" text="parallax:Header" /> -->
 			</parallax:Header>
 			<parallax:Anchored class="anchor" height="100vh">
-				<TabView class="list-container" id="tabViewContainer" loaded="onTabsLoaded" selectedIndexChanged="onSelectedIndexChanged">
+				<TabView class="list-container" id="tabViewContainer" loaded="onTabsLoaded" selectedIndex="{{ tabSelectedIndex }}" selectedIndexChanged="onSelectedIndexChanged">
 					<TabViewItem class="fa" title="Me">
 						<StackLayout>
 							<Label text="My Prescriptions" textWrap="true" class="h2 text-left tab1 tabs" />

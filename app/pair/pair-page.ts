@@ -70,24 +70,8 @@ export function onDrawerButtonTap(args: EventData) {
 
 export function onSpeechRecognition(transcription: string) {
     const input: TextField = page.getViewById<TextField>("medicineName-input");
-    if ((settings.isWaitingForSave) && (transcription === "save")) {
-        onSaveTap();
-        settings.isWaitingForSave = false;
-    }
-    else {
-        input.text = capitalizeFirstLetter(transcription);
-        viewModel.set("currentMedicineName", input.text);
-
-        // settings.isWaitingForSave = true;
-        // vr.startListening();
-
-        // setTimeout(() => {
-        //     if (isListeningForSave) {
-        // vr.startListening();
-        //         isListeningForSave = false;
-        //     }
-        // }, 3000);
-    }
+    input.text = capitalizeFirstLetter(transcription);
+    viewModel.set("currentMedicineName", input.text);
 }
 
 function capitalizeFirstLetter(string) {

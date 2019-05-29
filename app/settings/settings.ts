@@ -7,12 +7,14 @@ export class Settings {
 
     private static readonly _defaultMedicineCabinet: MedicineCabinet = TestData.defaultMedicineCabinet;
 
+    private _currentTab: number;
+
     private _currentTagId: string;
 
     private _currentMedicineName: string;
 
     private _isConfirmingDose: boolean;
-    
+
     private _isAudioEnabled: boolean;
 
     private _isAlwaysPlayAudio: boolean;
@@ -20,8 +22,6 @@ export class Settings {
     private _isAlwaysConfirmDose: boolean;
 
     private _isNewBinding: boolean;
-
-    private _isWaitingForSave: boolean;
 
     private _isSpeechRecognitionAvailable: boolean;
 
@@ -44,6 +44,14 @@ export class Settings {
 
     public static get version() {
         return this._version;
+    }
+
+    public get currentTab(): number {
+        return this._currentTab;
+    }
+
+    public set currentTab(value: number) {
+        this._currentTab = value;
     }
 
     public get currentMedicineCabinet() {
@@ -116,14 +124,6 @@ export class Settings {
 
     public set isNewBinding(value: boolean) {
         this._isNewBinding = value;
-    }
-
-    public get isWaitingForSave() {
-        return this._isWaitingForSave;
-    }
-
-    public set isWaitingForSave(value: boolean) {
-        this._isWaitingForSave = value;
     }
 
     public get isSpeechRecognitionAvailable() {

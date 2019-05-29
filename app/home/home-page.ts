@@ -56,7 +56,7 @@ let alertOff: string = "#ffc8c8";
 
 let isTabsViewInitialized: boolean = false;
 
-let currentTab: number = 0;
+//let currentTab: number = 0;
 
 export function onLogoTap() {
     alert(Settings.version);
@@ -64,6 +64,8 @@ export function onLogoTap() {
 
 export function onTabsLoaded() {
     // alert("onTabsLoaded");
+    // settings.currentTab = 0;
+    viewModel.set("tabSelectedIndex", settings.currentTab);
 }
 
 export function onSelectedIndexChanged(args: SelectedIndexChangedEventData) {
@@ -80,9 +82,10 @@ export function onSelectedIndexChanged(args: SelectedIndexChangedEventData) {
             displayCurrentListDoses();
         }, 500);
 
-        currentTab = args.newIndex;
-        settings.currentMedicineCabinet = medicineCabinets[currentTab];
+        settings.currentTab = args.newIndex;
+        settings.currentMedicineCabinet = medicineCabinets[settings.currentTab];
 
+        viewModel.set("tabSelectedIndex", settings.currentTab);
         viewModel.set("myMedicineList", settings.currentMedicineCabinet.medicines);
 
         settings.currentMedicineName = settings.currentMedicineCabinet.getMedicineBindingByIndex(0).medicineName;
@@ -118,6 +121,9 @@ export function onLoaded(args: EventData) {
     setTimeout(() => {
         displayCurrentListDoses();
     }, 500);
+    
+    // Select tab
+    viewModel.set("tabSelectedIndex", settings.currentTab);
 
     // Current list of paired medications
     viewModel.set("isAudioEnabled", settings.isAudioEnabled);
@@ -165,8 +171,8 @@ export function onChangeTotalDosesPerDayTap(args: EventData) {
 
 export function onSaveTotalDosesPerDayTap() {
     // Save changes
-    medicineCabinets[currentTab] = new MedicineCabinet(tempMedicineCabinet.owner, tempMedicineCabinet.medicines);
-    settings.currentMedicineCabinet = medicineCabinets[currentTab];;
+    medicineCabinets[settings.currentTab] = new MedicineCabinet(tempMedicineCabinet.owner, tempMedicineCabinet.medicines);
+    settings.currentMedicineCabinet = medicineCabinets[settings.currentTab];;
     tempMedicineCabinet = null;
 
     // settings.medicineList = new MedicineBindingList(tempMedicineList.bindings);
@@ -260,8 +266,8 @@ export function onChangeDosesTakenTodayTap(args: EventData) {
 
 export function onSaveDosesTakenTodayTap() {
     // Save changes
-    medicineCabinets[currentTab] = new MedicineCabinet(tempMedicineCabinet.owner, tempMedicineCabinet.medicines);
-    settings.currentMedicineCabinet = medicineCabinets[currentTab];;
+    medicineCabinets[settings.currentTab] = new MedicineCabinet(tempMedicineCabinet.owner, tempMedicineCabinet.medicines);
+    settings.currentMedicineCabinet = medicineCabinets[settings.currentTab];;
     tempMedicineCabinet = null;
 
     isEditingDosesTakenToday = false;
