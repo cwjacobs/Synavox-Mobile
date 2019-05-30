@@ -20,14 +20,12 @@ import { VR } from "~/utilities/vr";
 
 let rfid = RFID.getInstance();
 let i18n = I18N.getInstance();
+let vr: VR = VR.getInstance(); // Will set settings._isSpeechRecognitionAvailable in private constructor.
 let settings: Settings = Settings.getInstance();
 let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
 
 let page: Page = null;
 let viewModel: PairViewModel = null;
-
-let isTagIdLocked: boolean;
-let vr: VR = VR.getInstance(); // Will set settings._isSpeechRecognitionAvailable in private constructor.
 
 
 /***
@@ -79,21 +77,15 @@ function capitalizeFirstLetter(string) {
 }
 
 export function onLoaded(args: EventData) {
-    // Set audio buttons state
     viewModel.set("isAudioEnabled", settings.isAudioEnabled);
-
-    // Current list of paired medications
     viewModel.set("myMedicineList", settings.currentMedicineCabinet.medicines);
 
     // Set text to active language
     setActiveLanguageText();
 
     if (settings.isNewBinding) {
-        // console.log("rfid.tagScanned: " + rfid.isTagScanned + " tagId: " + rfid.tagId);
-
         // We're here because an unpaired tag was scanned, let's walk the user through next steps...
-        // rfid.manageNewTag = false;
-        viewModel.set("currentTagId", rfid.tagId);
+        viewModel.set("currentTagId", settings.currentTagId);
 
         // Request medicine name
         alert(i18n.enterMedicneName);
@@ -116,13 +108,10 @@ export function onLoaded(args: EventData) {
 };
 
 export function onItemTap(args: ItemEventData) {
-    // Reset new tag management flag
-    settings.isNewBinding = false;
-
     settings.currentMedicineName = settings.currentMedicineCabinet.medicines[args.index].medicineName;
     viewModel.set("currentMedicineName", settings.currentMedicineName);
 
-    if (!isTagIdLocked) {
+    if (!settings.isNewBinding) {
         settings.currentTagId = settings.currentMedicineCabinet.medicines[args.index].tagId;
         viewModel.set("currentTagId", settings.currentTagId);
     }
@@ -164,6 +153,7 @@ export function onDeleteTap(args: ItemEventData) {
 };
 
 export function onSaveTap() {
+    settings.isNewBinding = false; // Saved, so this will be complete now
     let binding: MedicineBinding = new MedicineBinding();
 
     // Use displayed medicine name
@@ -183,18 +173,18 @@ export function onSaveTap() {
     settings.currentMedicineName = binding.medicineName;
     let index: number = settings.currentMedicineCabinet.getMedicineBindingIndex(binding.medicineName);
 
-    if (index != -1) { // Replace a current binding
+    if (index != -1) { // Medicine Name not found, replace a current binding
         binding.dailyDoses = settings.currentMedicineCabinet.medicines[index].dailyDoses;
         binding.dailyRequiredDoses = settings.currentMedicineCabinet.medicines[index].dailyRequiredDoses;
-        settings.currentMedicineCabinet.medicines[index] = binding; // use the util functions to add data to array
+        settings.currentMedicineCabinet.replaceMedicineBinding(index, binding);
         alert(getPairingUpdatedMsg(binding.medicineName));
     }
     else {
         index = settings.currentMedicineCabinet.getMedicineBindingIndexByTagId(binding.tagId);
-        if (index != -1) { // Replace a current binding
+        if (index != -1) { // Medicine Tag not found, replace a current binding
             binding.dailyDoses = settings.currentMedicineCabinet.medicines[index].dailyDoses;
             binding.dailyRequiredDoses = settings.currentMedicineCabinet.medicines[index].dailyRequiredDoses;
-            settings.currentMedicineCabinet.medicines[index] = binding; // use the util functions to add data to array
+            settings.currentMedicineCabinet.replaceMedicineBinding(index, binding);
             alert(getPairingUpdatedMsg(binding.medicineName));
         }
         else { // Add new binding
@@ -216,7 +206,7 @@ export function onSaveTap() {
 }
 
 export function onCancelTap(args: ItemEventData) {
-    isTagIdLocked = false;
+    settings.isNewBinding = false;
     viewModel.set("currentTagId", "");
     viewModel.set("currentMedicineName", "");
     audioPlayer.stop();

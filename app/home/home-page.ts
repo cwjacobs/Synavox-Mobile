@@ -56,15 +56,21 @@ let alertOff: string = "#ffc8c8";
 
 let isTabsViewInitialized: boolean = false;
 
-//let currentTab: number = 0;
-
 export function onLogoTap() {
     alert(Settings.version);
+    viewModel.set("tabZeroDisplayed", true);
+    viewModel.set("tabOneDisplayed", false);
+    viewModel.set("tabTwoDisplayed", false);
 }
 
 export function onTabsLoaded() {
     // alert("onTabsLoaded");
     // settings.currentTab = 0;
+
+    viewModel.set("tabZeroDisplayed", true);
+    viewModel.set("tabOneDisplayed", false);
+    viewModel.set("tabTwoDisplayed", false);
+
     viewModel.set("tabSelectedIndex", settings.currentTab);
 }
 
@@ -118,7 +124,7 @@ export function onLoaded(args: EventData) {
     setTimeout(() => {
         displayCurrentListDoses();
     }, 500);
-    
+
     // Select tab
     viewModel.set("tabSelectedIndex", settings.currentTab);
 
@@ -304,27 +310,52 @@ export function onCancelDosesTakenTodayTap() {
 
 export function current1(args: ItemEventData) {
     let indicator: any = page.getViewById("current1");
-    adjustDoses(indicator);
+    if ((!isEditingDosesTakenToday) && (!isEditingTotalDosesPerDay) && (indicator.color.name === "red")) {
+        alert("Call a doctor!!!");
+    }
+    else {
+        adjustDoses(indicator);
+    }
 }
 
 export function current2(args: ItemEventData) {
     let indicator: any = page.getViewById("current2");
-    adjustDoses(indicator);
+    if ((!isEditingDosesTakenToday) && (!isEditingTotalDosesPerDay) && (indicator.color.name === "red")) {
+        alert("Call a doctor!!!");
+    }
+    else {
+        adjustDoses(indicator);
+    }
 }
 
 export function current3(args: ItemEventData) {
     let indicator: any = page.getViewById("current3");
-    adjustDoses(indicator);
+    if ((!isEditingDosesTakenToday) && (!isEditingTotalDosesPerDay) && (indicator.color.name === "red")) {
+        alert("Call a doctor!!!");
+    }
+    else {
+        adjustDoses(indicator);
+    }
 }
 
 export function current4(args: ItemEventData) {
     let indicator: any = page.getViewById("current4");
-    adjustDoses(indicator);
+    if ((!isEditingDosesTakenToday) && (!isEditingTotalDosesPerDay) && (indicator.color.name === "red")) {
+        alert("Call a doctor!!!");
+    }
+    else {
+        adjustDoses(indicator);
+    }
 }
 
 export function current5(args: ItemEventData) {
     let indicator: any = page.getViewById("current5");
-    adjustDoses(indicator);
+    if ((!isEditingDosesTakenToday) && (!isEditingTotalDosesPerDay) && (indicator.color.name === "red")) {
+        alert("Call a doctor!!!");
+    }
+    else {
+        adjustDoses(indicator);
+    }
 }
 
 export function onItemTap(args: ItemEventData) {

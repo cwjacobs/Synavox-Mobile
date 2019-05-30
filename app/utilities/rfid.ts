@@ -20,7 +20,7 @@ let tagId: string;
 let appRootContext: AppRootViewModel = null;
 
 export class RFID {
-    private _tagId: string;
+    // private _tagId: string;
     private _nfc: Nfc = null;
     private _tagScanned: boolean;
     private _tagListenerStarted: boolean;
@@ -45,14 +45,6 @@ export class RFID {
 
     public static getInstance() {
         return this._instance;
-    }
-
-    public get tagId(): string {
-        return this._tagId;
-    }
-
-    public set tagId(value: string) {
-        this._tagId = value;
     }
 
     public get isTagScanned(): boolean {
@@ -110,9 +102,9 @@ export class RFID {
         let pageRoute: string;
 
         this._tagScanned = true;
-        this.tagId = data.id.toString();
+        settings.currentTagId = data.id.toString();
 
-        let binding: MedicineBinding = settings.currentMedicineCabinet.getMedicineBindingByTagId(this.tagId);
+        let binding: MedicineBinding = settings.currentMedicineCabinet.getMedicineBindingByTagId(settings.currentTagId);
         if (!binding) {
             // New tag, go to wizard
             settings.isNewBinding = true;

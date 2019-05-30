@@ -3,14 +3,12 @@ import * as app from "tns-core-modules/application";
 import { EventData } from "tns-core-modules/data/observable";
 import { NavigatedData, Page } from "tns-core-modules/ui/page";
 import { confirm } from "tns-core-modules/ui/dialogs";
-//import { topmost } from "tns-core-modules/ui/frame/frame";
 
 import { I18N } from "~/utilities/i18n";
 import { RFID } from "~/utilities/rfid"
 
 import { WizardViewModel } from "./wizard-view-model";
 import { MedicineBinding } from "~/data-models/medicine-cabinet";
-//import { AppRootViewModel } from "~/app-root/app-root-view-model";
 
 import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
 import { ListPicker } from "tns-core-modules/ui/list-picker/list-picker";
@@ -52,18 +50,15 @@ export function onLoaded(args: EventData) {
     viewModel.set("i18nMedicineListTitle", i18n.homePageTitle);
     setActiveLanguageText();
 
+    // Two ways to get here, tag is scanned or user navigated here
     if (rfid.isTagScanned) {
-        viewModel.set("currentTagId", rfid.tagId);
-        viewModel.set("isTagDisplayed", true);
+        rfid.isTagScanned = false; // Scan is handled
+
         viewModel.set("isSelectingAction", true);
         viewModel.set("isSelectingMedicine", false);
         viewModel.set("i18nScannedOrSelected", i18n.scannedMsg);
 
-        // We're here because a tag was scanned, reset isTagScanned flag and walk the user through next steps...
-        rfid.isTagScanned = false;
-        let pairedMedicineName: string = getPairedMedicineName(rfid.tagId, medicineTagPairs); // getPairedMedicineName should be on the datatype itself, not the container
-        if (!pairedMedicineName) {
-            // This is an unbound tag with no corresponding medicine name
+        if (settings.isNewBinding) {
             settings.currentMedicineName = "";
             let confirmMsg: string = i18n.newTagMsg;
             confirm(confirmMsg).then((isConfirmed) => {
@@ -78,19 +73,18 @@ export function onLoaded(args: EventData) {
             });
         }
         else {
-            // Tag is paired with an existing medicine, display action options
+            let pairedMedicineName: string = getPairedMedicineName(settings.currentTagId, medicineTagPairs);
+            settings.currentMedicineName = pairedMedicineName;
+
             viewModel.set("isSelectingAction", true);
             viewModel.set("isMedicineDisplayed", true);
 
-            viewModel.set("isTagDisplayed", false);
             viewModel.set("isSelectingMedicine", false);
             viewModel.set("currentMedicineName", pairedMedicineName);
-
-            settings.currentMedicineName = pairedMedicineName;
         }
     }
     else {
-        // No current medicine, allow user to select
+        // User navigated here, or no current medicine, allow user to select
         letUserSelectMedicine();
     }
 }
@@ -167,7 +161,6 @@ export function onSelectMedicineTap(args: EventData) {
     viewModel.set("isSelectingAction", true);
     viewModel.set("isMedicineDisplayed", true);
 
-    viewModel.set("isTagDisplayed", false);
     viewModel.set("isSelectingMedicine", false);
     viewModel.set("currentMedicineName", medicineName);
 }
@@ -178,7 +171,6 @@ function letUserSelectMedicine() {
     viewModel.set("isSelectingMedicine", true);
     viewModel.set("index", 1);
 
-    viewModel.set("isTagDisplayed", false);
     viewModel.set("isMedicineDisplayed", false);
     viewModel.set("isSelectingAction", false);
     viewModel.set("i18nScannedOrSelected", i18n.selectedMsg);

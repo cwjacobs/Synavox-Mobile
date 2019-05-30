@@ -140,4 +140,8 @@ export class MedicineCabinet {
     public addMedicineBinding(medicineBinding: MedicineBinding) {
         this._medicines.push(medicineBinding);
     };
+
+    public replaceMedicineBinding(index: number, medicineBinding: MedicineBinding) {
+        this._medicines.splice(index, 1, medicineBinding);
+    };
 }
