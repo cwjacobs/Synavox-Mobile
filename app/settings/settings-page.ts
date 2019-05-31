@@ -90,6 +90,10 @@ export function onAlwaysConfirmTap() {
 }
 
 function setI18N(): void {
+    let medicineCabinetOwners: string[] = [i18n.me, i18n.mom, i18n.dad];
+    let owner: string = medicineCabinetOwners[settings.currentTab];
+    settings.currentMedicineCabinet.owner = capitalizeFirstLetter(owner);
+
     viewModel.set("i18nPageTitle", i18n.settingsPageTitle);
     viewModel.set("i18nLanguageOptionsTitle", i18n.languageOptionsSetting);
     viewModel.set("i18nInstalledLanguagesText", i18n.installedLanguageSetting);
@@ -106,4 +110,8 @@ function setI18N(): void {
     viewModel.set("i18nAlwaysConfirmDose", i18n.action_alwaysConfirmDose);
 
     appRootI18N();
+}
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }

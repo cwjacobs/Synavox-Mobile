@@ -10,7 +10,6 @@ import { I18N } from "~/utilities/i18n";
 
 let viewModel: AppRootViewModel = null;
 
-// I-18-N
 let i18n = I18N.getInstance();
 
 export function onNavigatingTo(args: EventData): void {
@@ -55,7 +54,6 @@ export function navigateTo(pageTitle: string, pageRoute: string): void {
 
 export function appRootI18N(): void {
     viewModel.set("i18nHome", i18n.homeNav);
-    viewModel.set("i18nDose", i18n.doseNav);
     viewModel.set("i18nPair", i18n.pairNav);
     viewModel.set("i18nShare", i18n.shareNav);
     viewModel.set("i18nBrowse", i18n.browseNav);

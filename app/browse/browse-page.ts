@@ -146,8 +146,11 @@ export function onSaveTap() {
 
 function setActiveLanguageText(): void {
     viewModel.set("i18nPageTitle", i18n.browsePageTitle);
+    viewModel.set("i18nMedicineCabinetOwner", settings.currentMedicineCabinet.owner);
+
     viewModel.set("i18nMedicineListTitle", i18n.myMedicines);
     viewModel.set("i18nBackButtonText", i18n.browseBack);
     viewModel.set("i18nSaveButtonText", i18n.browseSave);
+
 };
 

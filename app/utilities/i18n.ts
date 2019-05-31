@@ -50,11 +50,6 @@ export class I18N {
         return text[this._activeLanguageIndex];
     }
 
-    public get doseNav() {
-        const text: string[] = ["Dose", "Dosis"];
-        return text[this._activeLanguageIndex];
-    }
-
     public get pairNav() {
         const text: string[] = ["Pair", "Partido"];
         return text[this._activeLanguageIndex];
@@ -111,7 +106,7 @@ export class I18N {
      ******************************/
 
     public get homePageTitle() {
-        const text: string[] = ["Synavox Home Pharmacist", "Synavox Farmacéutico de Casa"];
+        const text: string[] = ["Home Pharmacist", "Farmacéutico de Casa"];
         return text[this._activeLanguageIndex];
     }
 
@@ -161,15 +156,6 @@ export class I18N {
         return text[this._activeLanguageIndex];
     }
 
-
-    /******************************
-     * Dose Page
-     ******************************/
-
-    public get dosePageTitle() {
-        const text: string[] = ["Synavox Home Pharmacist", "Synavox Farmacéutico de Casa"];
-        return text[this._activeLanguageIndex];
-    }
 
     public get changeDosesPerDay() {
         const text: string[] = ["Change Doses per Day", "Cambiar Dosis por Día"];
@@ -242,7 +228,7 @@ export class I18N {
      ******************************/
 
     public get pairPageTitle() {
-        const text: string[] = ["Pair", "Partido"];
+        const text: string[] = ["Pair RFID Tag to Medicine", "Etiqueta de Coincidencia"];
         return text[this._activeLanguageIndex];
     }
 
@@ -279,7 +265,7 @@ export class I18N {
      ******************************/
 
     public get sharePageTitle() {
-        const text: string[] = ["Share", "Compartir"];
+        const text: string[] = ["Share Medicine Cabinet", "Compartir Botiquín"];
         return text[this._activeLanguageIndex];
     }
 
@@ -335,7 +321,7 @@ export class I18N {
      ******************************/
 
     public get browsePageTitle() {
-        const text: string[] = ["Browse", "Navega"];
+        const text: string[] = ["Information Resources", "Recursos de Información"];
         return text[this._activeLanguageIndex];
     }
 

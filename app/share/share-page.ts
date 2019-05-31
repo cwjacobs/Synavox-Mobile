@@ -14,6 +14,7 @@ import { ListPicker } from "tns-core-modules/ui/list-picker";
 import { Button } from "tns-core-modules/ui/button";
 import { AudioPlayer } from "~/audio-player/audio-player";
 import { I18N } from "~/utilities/i18n";
+import { Settings } from "~/settings/settings";
 
 let page: Page = null;
 let displayNames: string[] = [];
@@ -30,8 +31,8 @@ let isShareComplete: boolean = false;
 let contactFilter: string = null;
 let viewModel: ShareViewModel = null;
 
-// Page Text
 let i18n: I18N = I18N.getInstance();
+let settings: Settings = Settings.getInstance();
 
 // Page control buttons
 let i18nShareButtonText: string = null;
@@ -368,6 +369,8 @@ function logContact(args: GetContactResult) {
 
 function setActiveLanguageText(): void {
     viewModel.set("i18nPageTitle", i18n.sharePageTitle);
+    viewModel.set("i18nMedicineCabinetOwner", settings.currentMedicineCabinet.owner);
+
     viewModel.set("i18nContentTitle", i18n.sharePageHeading);
     viewModel.set("i18nContactFilterLabel", i18n.shareContactFilterLabel);
     viewModel.set("i18nContactFilterHint", i18n.shareContactFilterHint);

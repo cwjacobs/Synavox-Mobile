@@ -27,6 +27,7 @@ let dadMedicineCabinet: MedicineCabinet = new MedicineCabinet(TestData.dadMedici
 // Init default app Settings
 let settings: Settings = Settings.getInstance();
 settings.isAudioEnabled = true;
+// settings.currentTabTitle = "me";
 settings.currentMedicineCabinet = myMedicineCabinet;
 
 let medicineCabinets: MedicineCabinet[] = [myMedicineCabinet, momMedicineCabinet, dadMedicineCabinet];
@@ -68,11 +69,14 @@ export function onTabsLoaded() {
 
 export function onSelectedIndexChanged(args: SelectedIndexChangedEventData) {
     if ((isTabsViewInitialized) && (!settings.isNewBinding) && (!settings.isConfirmingDose)) {
+        let medicineCabinetOwners: string[] = [i18n.me, i18n.mom, i18n.dad];
+
         let tabView: any = args.object;
         let tab: any = tabView.items[args.newIndex];
-        let title: string = tab.title;
+        let tabTitle: string = tab.title;
 
         // Get dose numbers for each medicine
+        let self: any = this;
         setTimeout(() => {
             displayCurrentListDoses();
         }, 800);
@@ -86,6 +90,10 @@ export function onSelectedIndexChanged(args: SelectedIndexChangedEventData) {
         settings.currentMedicineName = settings.currentMedicineCabinet.getMedicineBindingByIndex(0).medicineName;
         viewModel.set("currentMedicineName", settings.currentMedicineName);
 
+        let owner: string = medicineCabinetOwners[settings.currentTab];
+        settings.currentMedicineCabinet.owner = capitalizeFirstLetter(owner);
+        viewModel.set("i18nMedicineCabinetOwner", settings.currentMedicineCabinet.owner);
+
         const listView: ListView = page.getViewById<ListView>("medicineList");
         listView.refresh();
 
@@ -94,6 +102,10 @@ export function onSelectedIndexChanged(args: SelectedIndexChangedEventData) {
         displayDosesPerDayInstructions(settings.currentMedicineCabinet.getDailyDosesRequired(settings.currentMedicineName));
     }
     isTabsViewInitialized = true;
+}
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 export function onNavigatingTo(args: NavigatedData) {
@@ -653,7 +665,7 @@ function registerDoseTaken(medicineName: string): void {
 }
 
 function setActiveLanguageText(): void {
-    viewModel.set("i18nPageTitle", i18n.dosePageTitle);
+    viewModel.set("i18nPageTitle", i18n.homePageTitle);
     viewModel.set("i18nMyMedicines", i18n.myMedicines);
 
     viewModel.set("i18nMe", i18n.me);

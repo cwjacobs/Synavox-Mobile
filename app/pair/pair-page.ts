@@ -248,6 +248,7 @@ function setActiveLanguageText(): void {
     i18n = I18N.getInstance();
 
     viewModel.set("i18nPageTitle", i18n.pairPageTitle);
+    viewModel.set("i18nMedicineCabinetOwner", settings.currentMedicineCabinet.owner);
     viewModel.set("i18nMedicineNameHint", i18n.pairMedicineNameHint);
     viewModel.set("i18nSaveButtonText", i18n.save);
     viewModel.set("i18nCancelButtonText", i18n.cancel);

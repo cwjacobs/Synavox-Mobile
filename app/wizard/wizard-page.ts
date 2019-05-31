@@ -178,6 +178,8 @@ function letUserSelectMedicine() {
 
 function setActiveLanguageText(): void {
     viewModel.set("i18nPageTitle", i18n.wizardPageTitle);
+    viewModel.set("i18nMedicineCabinetOwner", settings.currentMedicineCabinet.owner);
+
     viewModel.set("i18nMedicineListTitle", i18n.myMedicines);
 
     viewModel.set("i18nSelect", i18n.select);

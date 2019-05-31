@@ -9,6 +9,8 @@ export class Settings {
 
     private _currentTab: number;
 
+    private _currentTabTitle: string;
+
     private _currentTagId: string;
 
     private _currentMedicineName: string;
@@ -52,6 +54,14 @@ export class Settings {
 
     public set currentTab(value: number) {
         this._currentTab = value;
+    }
+
+    public get currentTabTitle(): string {
+        return this._currentTabTitle;
+    }
+
+    public set currentTabTitle(value: string) {
+        this._currentTabTitle = value;
     }
 
     public get currentMedicineCabinet() {
