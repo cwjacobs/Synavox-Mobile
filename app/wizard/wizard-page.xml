@@ -20,7 +20,7 @@
 				<StackLayout class="hr-light"></StackLayout>
 			</parallax:Anchored>
 			<parallax:Content class="body-template">
-				<StackLayout class="list-container" style="margin-top: 5px;">
+				<StackLayout class="list-container">
 					<StackLayout visibility="{{ isSelectingMedicine ? 'visible' : 'collapsed' }}">
 						<Label class="title align-left" text="{{ i18nScrollInstructions }}"></Label>
 						<GridLayout rows="auto" columns="auto,*">
@@ -35,7 +35,7 @@
 							<Label class="pairing-TagId" text="{{ i18nTookADose }}" />
 						</StackLayout>
 						<Button class="my-button primary" text="{{ i18nConfirmDoseTaken }}" onTap="onConfirmDoseTakenTap" row="0" col="1" rowSpan="2" />
-						<GridLayout style="margin-top: 50px;" rows="auto" columns="auto, *" row="1" col="0" colSpan="2">
+						<GridLayout style="margin-top: 50vh;" rows="auto" columns="auto, *" row="1" col="0" colSpan="2">
 							<Label class="always-do-this" style="{{ isAlwaysConfirmDose ? 'color: #398881' : 'color: #BBBBBB' }}" text="{{ i18nAlwaysConfirmDose }}" row="0" col="0" onTap="onAlwaysConfirmTap" />
 							<Label class="indicator fa" style="{{ isAlwaysConfirmDose ? 'color: #398881' : 'color: #BBBBBB' }}" text="&#xf046;" row="0" col="1" />
 						</GridLayout>

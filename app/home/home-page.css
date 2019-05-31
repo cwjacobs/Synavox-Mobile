@@ -1,8 +1,8 @@
-.title {
-    font-size: 22;
+/* .title {
+    font-size: 22em;
     margin-top: 60px;
     text-align: center;
-}
+} */
 
 .image-container {
     width: 100%;
@@ -16,45 +16,39 @@
 
 .daily-instruction {
     color: black;
-    font-size: 22;
+    font-size: 22em;
     margin-top: 5px;
     margin-bottom: 5px;
 }
 
 .pairing-MedicineName {
     color: #3A53FF;
-    font-size: 22;
+    font-size: 22em;
     margin-top: 5px;
     margin-bottom: 5px;
 }
 
 .list-MedicineName {
-    font-size: 18;
-    /* padding: 40 px; */
+    font-size: 18em;
     color: #3A53FF;
 }
 
 .list-TagId {
-    font-size: 14;
-    /* padding: 40 px; */
+    font-size: 14em;
     color: black;
-    /* vertical-align: middle; */
     text-align: left;
 }
 
 .list-TagIcon {
-    font-size: 14;
+    font-size: 14em;
     color: gray;
-    /* vertical-align: middle; */
     text-align: right;
     margin-right: 10px
 }
 
 .reminder-mark {
-    font-size: 20;
+    font-size: 20em;
     padding: 10px;
-    /* padding-bottom: 20px; */
-    /* margin: 20px; */
     color: white;
     vertical-align: middle;
     horizontal-align: right;
@@ -82,7 +76,7 @@
 
 .my-button-small {
     border-radius: 5;
-    font-size: 10;
+    font-size: 10em;
     font-family: FontAwesome;
     vertical-align: middle;
     margin: 5px;
@@ -96,8 +90,7 @@
 
 .enableAudio-button {
     color: black;
-    font-size: 18;
-    /* background-color: white; */
+    font-size: 18em;
 }
 
 .align-top {
@@ -129,6 +122,7 @@
 ----------- */
 .tabs {
     margin-top: 50px;
+    height: auto;
 }
 
 .tab1 {
@@ -149,14 +143,14 @@
 ----------- */
 #headerLabel2
 {
-    font-size: 45;
+    font-size: 45em;
     horizontal-align: center;
     margin-top:-25;
     color:#B2EBF2;
 }
 
 #headerLabel{
-    font-size: 45;
+    font-size: 45em;
     horizontal-align: center;
     padding-top:75;
     color:#B2EBF2;
@@ -167,7 +161,6 @@
     background-image:url('~/images/home.jpg');
     height: 205;
     background-size: cover;
-    /* background-position: center top; */
     background-repeat: no-repeat;
 }
 
@@ -179,12 +172,11 @@
     height: 55;
     width:100%;
     background-color:white;
-    /* background-color:#616161; */
 }
 
 #titleLabel{
     font-weight:bold;
-    font-size:25;
+    font-size:25em;
     padding:5 15;
     color:#fff;
 }

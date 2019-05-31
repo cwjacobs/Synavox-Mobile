@@ -3,7 +3,7 @@ import { TestData } from "~/data-models/test-data";
 
 export class Settings {
 
-    private static readonly _version: string = "version: 1.00";
+    private static readonly _version: string = "Version: 1.01";
 
     private static readonly _defaultMedicineCabinet: MedicineCabinet = TestData.defaultMedicineCabinet;
 

@@ -131,6 +131,36 @@ export class I18N {
         return text[this._activeLanguageIndex];
     }
 
+    public get me() {
+        const text: string[] = ["Me", "Me"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get mom() {
+        const text: string[] = ["Mom", "Mamá"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get dad() {
+        const text: string[] = ["Dad", "Papá"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get myPrescriptions() {
+        const text: string[] = ["My Prescriptions", "Mis Recetas"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get momsPrescriptions() {
+        const text: string[] = ["Mom's Prescriptions", "Recetas de Mamá"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get dadsPrescriptions() {
+        const text: string[] = ["Dad's Prescriptions", "Recetas de Papá"];
+        return text[this._activeLanguageIndex];
+    }
+
 
     /******************************
      * Dose Page

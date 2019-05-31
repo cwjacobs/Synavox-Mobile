@@ -58,19 +58,11 @@ let isTabsViewInitialized: boolean = false;
 
 export function onLogoTap() {
     alert(Settings.version);
-    viewModel.set("tabZeroDisplayed", true);
-    viewModel.set("tabOneDisplayed", false);
-    viewModel.set("tabTwoDisplayed", false);
 }
 
 export function onTabsLoaded() {
     // alert("onTabsLoaded");
     // settings.currentTab = 0;
-
-    viewModel.set("tabZeroDisplayed", true);
-    viewModel.set("tabOneDisplayed", false);
-    viewModel.set("tabTwoDisplayed", false);
-
     viewModel.set("tabSelectedIndex", settings.currentTab);
 }
 
@@ -83,7 +75,7 @@ export function onSelectedIndexChanged(args: SelectedIndexChangedEventData) {
         // Get dose numbers for each medicine
         setTimeout(() => {
             displayCurrentListDoses();
-        }, 500);
+        }, 800);
 
         settings.currentTab = args.newIndex;
         settings.currentMedicineCabinet = medicineCabinets[settings.currentTab];
@@ -662,11 +654,17 @@ function registerDoseTaken(medicineName: string): void {
 
 function setActiveLanguageText(): void {
     viewModel.set("i18nPageTitle", i18n.dosePageTitle);
-
     viewModel.set("i18nMyMedicines", i18n.myMedicines);
 
-    viewModel.set("i18nEditTotalDosesPerDayButtonText", i18n.changeDosesPerDay);
+    viewModel.set("i18nMe", i18n.me);
+    viewModel.set("i18nMom", i18n.mom);
+    viewModel.set("i18nDad", i18n.dad);
 
+    viewModel.set("i18nMyPrescriptions", i18n.myPrescriptions);
+    viewModel.set("i18nMomsPrescriptions", i18n.momsPrescriptions);
+    viewModel.set("i18nDadsPrescriptions", i18n.dadsPrescriptions);
+
+    viewModel.set("i18nEditTotalDosesPerDayButtonText", i18n.changeDosesPerDay);
     viewModel.set("i18nEditDosesTakenTodayButtonText", i18n.changeDosesTaken);
 }
 

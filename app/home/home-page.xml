@@ -14,19 +14,19 @@
 			</parallax:Header>
 			<parallax:Anchored class="anchor" height="100vh">
 				<TabView class="list-container" id="tabViewContainer" loaded="onTabsLoaded" selectedIndex="{{ tabSelectedIndex }}" selectedIndexChanged="onSelectedIndexChanged">
-					<TabViewItem class="fa" title="Me">
+					<TabViewItem class="fa" title="{{ i18nMe }}">
 						<StackLayout>
-							<Label text="My Prescriptions" textWrap="true" class="h2 text-left tab1 tabs" />
+							<Label text="{{ i18nMyPrescriptions }}" textWrap="true" class="h2 text-left tab1 tabs" />
 						</StackLayout>
 					</TabViewItem>
-					<TabViewItem class="fa" title="Mom &#xf1e0;">
+					<TabViewItem class="fa" title="{{ i18nMom, i18nMom + ' &#xf1e0;' }}">
 						<StackLayout>
-							<Label text="Mom's Prescriptions" textWrap="true" class="h2 text-left tab1 tabs" />
+							<Label text="{{ i18nMomsPrescriptions }}" textWrap="true" class="h2 text-left tab1 tabs" />
 						</StackLayout>
 					</TabViewItem>
-					<TabViewItem class="fa" title="Dad &#xf1e0;">
+					<TabViewItem class="fa" title="{{ i18nDad, i18nDad + ' &#xf1e0;' }}">
 						<StackLayout>
-							<Label text="Dad's Prescriptions" textWrap="true" class="h2 text-left tab1 tabs" />
+							<Label text="{{ i18nDadsPrescriptions }}" textWrap="true" class="h2 text-left tab1 tabs" />
 						</StackLayout>
 					</TabViewItem>
 				</TabView>

@@ -190,7 +190,6 @@ export function onSaveTap() {
         else { // Add new binding
             binding.dailyDoses = 0;
             binding.dailyRequiredDoses = 0;
-            // settings.currentMedicineCabinet.medicines.push(binding); // use the util function to add new binging to array
             settings.currentMedicineCabinet.addMedicineBinding(binding);
             settings.isNewBinding = true;
 
