@@ -8,7 +8,7 @@
 		<ActionItem icon="res://navigation/menu" android:visibility="collapsed" tap="onDrawerButtonTap" ios.position="left"></ActionItem>
 		<StackLayout>
 			<Label class="action-bar-title" text="{{ i18nPageTitle }}"></Label>
-			<Label class="action-bar-title" text="{{ i18nMedicineCabinetOwner }}"></Label>
+			<Label class="action-bar-subtitle" text="{{ i18nSynavoxSubPageTitle }}"></Label>
 		</StackLayout>
 	</ActionBar>
 	<GridLayout class="page-content">

@@ -44,6 +44,13 @@ ActionBar .action-bar-title {
     horizontal-align: center;
 }
 
+ActionBar .action-bar-subtitle {
+    font-size: 16;
+    font-style: italic;
+    horizontal-align: center;
+    color: rgb(164, 210, 248);
+}
+
 .alert {
     color: white;
     background-color: #7700ff;
@@ -52,7 +59,6 @@ ActionBar .action-bar-title {
 .warning {
     color: black;
     background-color: #B9B90C;
-    // background-color: rgb(185, 185, 12);
 }
 
 .primary {

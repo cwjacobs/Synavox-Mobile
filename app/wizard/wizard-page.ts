@@ -47,7 +47,7 @@ export function onDrawerButtonTap(args: EventData) {
 export function onLoaded(args: EventData) {
     medicineTagPairs = settings.currentMedicineCabinet.medicines;
 
-    viewModel.set("i18nMedicineListTitle", i18n.homePageTitle);
+    viewModel.set("i18nMedicineListTitle", i18n.synavoxSubPageTitle);
     setActiveLanguageText();
 
     // Two ways to get here, tag is scanned or user navigated here
@@ -178,9 +178,9 @@ function letUserSelectMedicine() {
 
 function setActiveLanguageText(): void {
     viewModel.set("i18nPageTitle", i18n.wizardPageTitle);
-    viewModel.set("i18nMedicineCabinetOwner", settings.currentMedicineCabinet.owner);
+    viewModel.set("i18nSynavoxSubPageTitle", i18n.synavoxSubPageTitle);
 
-    viewModel.set("i18nMedicineListTitle", i18n.myMedicines);
+    viewModel.set("i18nMedicineListTitle", settings.currentMedicineCabinet.ownerTitle);
 
     viewModel.set("i18nSelect", i18n.select);
     viewModel.set("i18nScrollInstructions", i18n.scrollInstructions);

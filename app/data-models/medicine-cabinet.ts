@@ -7,6 +7,8 @@ export class MedicineCabinet {
 
     private _owner: string;
 
+    private _ownerTitle: string;
+
     private _medicines: MedicineBinding[] = [];
 
     constructor(owner: string, medicineBindings: MedicineBinding[]) {
@@ -22,6 +24,14 @@ export class MedicineCabinet {
 
     public set owner(value: string) {
         this._owner = value;
+    }
+
+    public get ownerTitle(): string {
+        return this._ownerTitle;
+    }
+
+    public set ownerTitle(value: string) {
+        this._ownerTitle = value;
     }
 
     public get medicines(): MedicineBinding[] {

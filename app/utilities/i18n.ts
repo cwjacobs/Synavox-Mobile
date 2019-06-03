@@ -100,15 +100,15 @@ export class I18N {
         return text[this._activeLanguageIndex];
     }
 
+    public get synavoxSubPageTitle() {
+        const text: string[] = ["Synavox Home Pharmacist", "Synavox Farmacéutico de Casa"];
+        return text[this._activeLanguageIndex];
+    }
+
 
     /******************************
      * Home Page
      ******************************/
-
-    public get homePageTitle() {
-        const text: string[] = ["Home Pharmacist", "Farmacéutico de Casa"];
-        return text[this._activeLanguageIndex];
-    }
 
     public get english() {
         const text: string[] = ["English", "English"];
@@ -132,12 +132,27 @@ export class I18N {
     }
 
     public get mom() {
-        const text: string[] = ["Mom", "Mamá"];
+        const text: string[] = ["Mom'", "Mamá"];
         return text[this._activeLanguageIndex];
     }
 
     public get dad() {
         const text: string[] = ["Dad", "Papá"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get myMedicineCabinet() {
+        const text: string[] = ["My Medicine Cabinet", "Mi Gabinete"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get momsMedicineCabinet() {
+        const text: string[] = ["Mom's Medicine Cabinet", "El Gabinete de Mamá"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get dadsMedicineCabinet() {
+        const text: string[] = ["Dad's Medicine Cabinet", "El Gabinete de Papá"];
         return text[this._activeLanguageIndex];
     }
 
@@ -270,7 +285,7 @@ export class I18N {
     }
 
     public get sharePageHeading() {
-        const text: string[] = ["Share My Home Pharmacist", "Compartir mi Farmacéutico de Casa"];
+        const text: string[] = ["Share ", "Compartir "];
         return text[this._activeLanguageIndex];
     }
 

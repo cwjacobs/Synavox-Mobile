@@ -29,6 +29,8 @@ export class Settings {
 
     private _curentMedicineCabinet: MedicineCabinet;
 
+    private _ownerMedicineCabinetText: MedicineCabinet;
+
     private _medicineCabinets: MedicineCabinet[] = [];
 
     private static _instance: Settings = new Settings();
@@ -56,13 +58,13 @@ export class Settings {
         this._currentTab = value;
     }
 
-    public get currentTabTitle(): string {
-        return this._currentTabTitle;
-    }
+    // public get currentTabTitle(): string {
+    //     return this._currentTabTitle;
+    // }
 
-    public set currentTabTitle(value: string) {
-        this._currentTabTitle = value;
-    }
+    // public set currentTabTitle(value: string) {
+    //     this._currentTabTitle = value;
+    // }
 
     public get currentMedicineCabinet() {
         return this._curentMedicineCabinet;

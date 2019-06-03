@@ -27,7 +27,6 @@ let dadMedicineCabinet: MedicineCabinet = new MedicineCabinet(TestData.dadMedici
 // Init default app Settings
 let settings: Settings = Settings.getInstance();
 settings.isAudioEnabled = true;
-// settings.currentTabTitle = "me";
 settings.currentMedicineCabinet = myMedicineCabinet;
 
 let medicineCabinets: MedicineCabinet[] = [myMedicineCabinet, momMedicineCabinet, dadMedicineCabinet];
@@ -70,6 +69,7 @@ export function onTabsLoaded() {
 export function onSelectedIndexChanged(args: SelectedIndexChangedEventData) {
     if ((isTabsViewInitialized) && (!settings.isNewBinding) && (!settings.isConfirmingDose)) {
         let medicineCabinetOwners: string[] = [i18n.me, i18n.mom, i18n.dad];
+        let medicineCabinetOwnerTitles: string[] = [i18n.myMedicineCabinet, i18n.momsMedicineCabinet, i18n.dadsMedicineCabinet];
 
         let tabView: any = args.object;
         let tab: any = tabView.items[args.newIndex];
@@ -91,8 +91,10 @@ export function onSelectedIndexChanged(args: SelectedIndexChangedEventData) {
         viewModel.set("currentMedicineName", settings.currentMedicineName);
 
         let owner: string = medicineCabinetOwners[settings.currentTab];
+        let ownerMedicineCabinetText: string = medicineCabinetOwnerTitles[settings.currentTab];
         settings.currentMedicineCabinet.owner = capitalizeFirstLetter(owner);
-        viewModel.set("i18nMedicineCabinetOwner", settings.currentMedicineCabinet.owner);
+        settings.currentMedicineCabinet.ownerTitle = ownerMedicineCabinetText;
+        viewModel.set("i18nMedicineCabinetOwner", settings.currentMedicineCabinet.ownerTitle);
 
         const listView: ListView = page.getViewById<ListView>("medicineList");
         listView.refresh();
@@ -665,7 +667,7 @@ function registerDoseTaken(medicineName: string): void {
 }
 
 function setActiveLanguageText(): void {
-    viewModel.set("i18nPageTitle", i18n.homePageTitle);
+    viewModel.set("i18nPageTitle", i18n.synavoxSubPageTitle);
     viewModel.set("i18nMyMedicines", i18n.myMedicines);
 
     viewModel.set("i18nMe", i18n.me);

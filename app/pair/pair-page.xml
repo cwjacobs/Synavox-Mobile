@@ -8,20 +8,22 @@
 		<ActionItem icon="res://navigation/menu" android:visibility="collapsed" tap="onDrawerButtonTap" ios.position="left"></ActionItem>
 		<StackLayout>
 			<Label class="action-bar-title" text="{{ i18nPageTitle }}"></Label>
-			<Label class="action-bar-title" text="{{ i18nMedicineCabinetOwner }}"></Label>
+			<Label class="action-bar-subtitle" text="{{ i18nSynavoxSubPageTitle }}"></Label>
 		</StackLayout>
 	</ActionBar>
 	<StackLayout>
 		<!-- height="75%" Positions buttons correctly on the bottom of the screen -->
 		<parallax:ParallaxView height="75%" background="white">
 			<parallax:Header class="header-template" dropShadow="false"></parallax:Header>
-			<parallax:Anchored class="anchor" height="100vh">
+			<parallax:Anchored class="anchor" height="120vh">
 				<StackLayout class="list-container">
-					<StackLayout class="pairing-TagId" orientation="horizontal">
-						<Label text="Tag Id: " />
-						<Label text="{{ currentTagId }}" />
+					<Label class="title" text="{{ i18nMedicineListTitle }}"></Label>
+					<StackLayout orientation="horizontal">
+						<TextField class="pairing-MedicineName fas" id="medicineName-input" text="{{ currentMedicineName }}" hint="{{ i18nMedicineNameHint }}" returnKeyType="done" />
+						<!-- <Label text="Tag Id: " /> -->
+						<Label class="pairing-TagId" text="{{ currentTagId }}" />
 					</StackLayout>
-					<TextField class="pairing-MedicineName fas" id="medicineName-input" text="{{ currentMedicineName }}" hint="{{ i18nMedicineNameHint }}" returnKeyType="done" />
+					<!-- <TextField class="pairing-MedicineName fas" id="medicineName-input" text="{{ currentMedicineName }}" hint="{{ i18nMedicineNameHint }}" returnKeyType="done" /> -->
 				</StackLayout>
 			</parallax:Anchored>
 			<parallax:Content class="body-template" height="550vh" stretchLastChild="false" background="white">

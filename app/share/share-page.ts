@@ -369,9 +369,9 @@ function logContact(args: GetContactResult) {
 
 function setActiveLanguageText(): void {
     viewModel.set("i18nPageTitle", i18n.sharePageTitle);
-    viewModel.set("i18nMedicineCabinetOwner", settings.currentMedicineCabinet.owner);
+    viewModel.set("i18nSynavoxSubPageTitle", i18n.synavoxSubPageTitle);
 
-    viewModel.set("i18nContentTitle", i18n.sharePageHeading);
+    viewModel.set("i18nContentTitle", i18n.sharePageHeading + settings.currentMedicineCabinet.ownerTitle);
     viewModel.set("i18nContactFilterLabel", i18n.shareContactFilterLabel);
     viewModel.set("i18nContactFilterHint", i18n.shareContactFilterHint);
 
