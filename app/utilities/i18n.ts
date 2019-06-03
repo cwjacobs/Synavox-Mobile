@@ -401,7 +401,7 @@ export class I18N {
     }
 
     public get scrollInstructions() {
-        const text: string[] = ["Scroll then Select medicine", "Desplácese a continuación, seleccione medicamento"];
+        const text: string[] = ["Scroll then Select medicine", "Seleccione medicamento"];
         return text[this._activeLanguageIndex];
     }
 
