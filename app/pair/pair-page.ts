@@ -77,15 +77,12 @@ function capitalizeFirstLetter(string) {
 }
 
 export function onLoaded(args: EventData) {
-    viewModel.set("isAudioEnabled", settings.isAudioEnabled);
-    viewModel.set("myMedicineList", settings.currentMedicineCabinet.medicines);
-
-    // Set text to active language
-    setActiveLanguageText();
+    // viewModel.set("isAudioEnabled", settings.isAudioEnabled);
+    // viewModel.set("myMedicineList", settings.currentMedicineCabinet.medicines);
 
     if (settings.isNewBinding) {
         // We're here because an unpaired tag was scanned, let's walk the user through next steps...
-        viewModel.set("currentTagId", settings.currentTagId);
+        // viewModel.set("currentTagId", settings.currentTagId);
 
         // Request medicine name
         alert(i18n.enterMedicneName);
@@ -101,20 +98,29 @@ export function onLoaded(args: EventData) {
     else {
         if (settings.currentMedicineName) {
             settings.currentTagId = settings.currentMedicineCabinet.getMedicineBinding(settings.currentMedicineName).tagId;
-            viewModel.set("currentTagId", settings.currentTagId);
-            viewModel.set("currentMedicineName", settings.currentMedicineName);
+            // viewModel.set("currentTagId", settings.currentTagId);
+            // viewModel.set("currentMedicineName", settings.currentMedicineName);
         }
     }
+
+    // Update view-model settings
+    updateViewModelGlobals();
+
+    // Set text to active language
+    setActiveLanguageText();
 };
 
 export function onItemTap(args: ItemEventData) {
     settings.currentMedicineName = settings.currentMedicineCabinet.medicines[args.index].medicineName;
-    viewModel.set("currentMedicineName", settings.currentMedicineName);
+    // viewModel.set("currentMedicineName", settings.currentMedicineName);
 
     if (!settings.isNewBinding) {
         settings.currentTagId = settings.currentMedicineCabinet.medicines[args.index].tagId;
-        viewModel.set("currentTagId", settings.currentTagId);
+        // viewModel.set("currentTagId", settings.currentTagId);
     }
+
+    // Update view-model settings
+    updateViewModelGlobals();
 };
 
 export function onDeleteTap(args: ItemEventData) {
@@ -141,12 +147,15 @@ export function onDeleteTap(args: ItemEventData) {
 
             if (index != -1) { // Delete current binding
                 settings.currentMedicineCabinet.medicines.splice(index, 1);
-                viewModel.set("myMedicines", settings.currentMedicineCabinet);
+                // viewModel.set("myMedicines", settings.currentMedicineCabinet);
 
                 const listView: ListView = page.getViewById<ListView>("medicineList");
                 listView.refresh();
 
                 settings.currentMedicineName = "";
+
+                // Update view-model settings
+                updateViewModelGlobals();
             }
         }
     });
@@ -198,7 +207,10 @@ export function onSaveTap() {
             navigateTo(pageTitle, pageRoute);
         }
     }
-    viewModel.set("myMedicines", settings.currentMedicineCabinet);
+    // viewModel.set("myMedicines", settings.currentMedicineCabinet); Doesnt exist in xml
+
+    // Update view-model settings
+    updateViewModelGlobals();
 
     const listView: ListView = page.getViewById<ListView>("medicineList");
     listView.refresh();
@@ -206,8 +218,14 @@ export function onSaveTap() {
 
 export function onCancelTap(args: ItemEventData) {
     settings.isNewBinding = false;
-    viewModel.set("currentTagId", "");
-    viewModel.set("currentMedicineName", "");
+    settings.currentTagId = "";
+    settings.currentMedicineName = "";
+
+    // Update view-model settings
+    updateViewModelGlobals();
+
+    // viewModel.set("currentTagId", "");
+    // viewModel.set("currentMedicineName", "");
     audioPlayer.stop();
 };
 
@@ -239,10 +257,16 @@ export function onAudioEnableTap(args: ItemEventData) {
 
 export function onLogoTap(args: ItemEventData) {
     //audioPlayer.play("default");
-
     vr.startListening();
 };
 
+function updateViewModelGlobals() {
+    viewModel.set("isAudioEnabled", settings.isAudioEnabled);
+    viewModel.set("myMedicineList", settings.currentMedicineCabinet.medicines);
+
+    viewModel.set("currentTagId", settings.currentTagId);
+    viewModel.set("currentMedicineName", settings.currentMedicineName);
+}
 
 function setActiveLanguageText(): void {
     i18n = I18N.getInstance();
@@ -251,7 +275,7 @@ function setActiveLanguageText(): void {
     viewModel.set("i18nSynavoxSubPageTitle", i18n.synavoxSubPageTitle);
 
     viewModel.set("i18nMedicineListTitle", settings.currentMedicineCabinet.ownerTitle);
-    
+
     viewModel.set("i18nMedicineNameHint", i18n.pairMedicineNameHint);
     viewModel.set("i18nSaveButtonText", i18n.save);
     viewModel.set("i18nCancelButtonText", i18n.cancel);

@@ -27,6 +27,8 @@ let dadMedicineCabinet: MedicineCabinet = new MedicineCabinet(TestData.dadMedici
 // Init default app Settings
 let settings: Settings = Settings.getInstance();
 settings.isAudioEnabled = true;
+settings.currentTab = 0;
+
 settings.currentMedicineCabinet = myMedicineCabinet;
 
 let medicineCabinets: MedicineCabinet[] = [myMedicineCabinet, momMedicineCabinet, dadMedicineCabinet];
@@ -61,40 +63,45 @@ export function onLogoTap() {
 }
 
 export function onTabsLoaded() {
-    // alert("onTabsLoaded");
-    // settings.currentTab = 0;
     viewModel.set("tabSelectedIndex", settings.currentTab);
+}
+
+function setMedicineCabinetOwnerInfo() {
+    let medicineCabinetOwners: string[] = [i18n.me, i18n.mom, i18n.dad];
+    let owner: string = medicineCabinetOwners[settings.currentTab];
+    settings.currentMedicineCabinet.owner = capitalizeFirstLetter(owner);
+
+    let medicineCabinetOwnerTitles: string[] = [i18n.myMedicineCabinet, i18n.momsMedicineCabinet, i18n.dadsMedicineCabinet];
+    let ownerMedicineCabinetText: string = medicineCabinetOwnerTitles[settings.currentTab];
+    settings.currentMedicineCabinet.ownerTitle = ownerMedicineCabinetText;
 }
 
 export function onSelectedIndexChanged(args: SelectedIndexChangedEventData) {
     if ((isTabsViewInitialized) && (!settings.isNewBinding) && (!settings.isConfirmingDose)) {
-        let medicineCabinetOwners: string[] = [i18n.me, i18n.mom, i18n.dad];
-        let medicineCabinetOwnerTitles: string[] = [i18n.myMedicineCabinet, i18n.momsMedicineCabinet, i18n.dadsMedicineCabinet];
+        // let medicineCabinetOwners: string[] = [i18n.me, i18n.mom, i18n.dad];
+        // let medicineCabinetOwnerTitles: string[] = [i18n.myMedicineCabinet, i18n.momsMedicineCabinet, i18n.dadsMedicineCabinet];
 
         let tabView: any = args.object;
         let tab: any = tabView.items[args.newIndex];
         let tabTitle: string = tab.title;
 
-        // Get dose numbers for each medicine
-        let self: any = this;
-        setTimeout(() => {
-            displayCurrentListDoses();
-        }, 800);
-
         settings.currentTab = args.newIndex;
         settings.currentMedicineCabinet = medicineCabinets[settings.currentTab];
 
-        viewModel.set("tabSelectedIndex", settings.currentTab);
-        viewModel.set("myMedicineList", settings.currentMedicineCabinet.medicines);
-
         settings.currentMedicineName = settings.currentMedicineCabinet.getMedicineBindingByIndex(0).medicineName;
-        viewModel.set("currentMedicineName", settings.currentMedicineName);
 
-        let owner: string = medicineCabinetOwners[settings.currentTab];
-        let ownerMedicineCabinetText: string = medicineCabinetOwnerTitles[settings.currentTab];
-        settings.currentMedicineCabinet.owner = capitalizeFirstLetter(owner);
-        settings.currentMedicineCabinet.ownerTitle = ownerMedicineCabinetText;
-        viewModel.set("i18nMedicineCabinetOwner", settings.currentMedicineCabinet.ownerTitle);
+        setMedicineCabinetOwnerInfo();
+        // let owner: string = medicineCabinetOwners[settings.currentTab];
+        // let ownerMedicineCabinetText: string = medicineCabinetOwnerTitles[settings.currentTab];
+        // settings.currentMedicineCabinet.owner = capitalizeFirstLetter(owner);
+        // settings.currentMedicineCabinet.ownerTitle = ownerMedicineCabinetText;
+
+        // Update view-model settings
+        // Call after all "settings" have been updated
+        updateViewModelGlobals();
+
+        // Display text in selected language
+        setActiveLanguageText();
 
         const listView: ListView = page.getViewById<ListView>("medicineList");
         listView.refresh();
@@ -102,6 +109,11 @@ export function onSelectedIndexChanged(args: SelectedIndexChangedEventData) {
         displayCurrentDoses();
 
         displayDosesPerDayInstructions(settings.currentMedicineCabinet.getDailyDosesRequired(settings.currentMedicineName));
+
+        // Get dose numbers for each medicine
+        setTimeout(() => {
+            displayCurrentListDoses();
+        }, 300);
     }
     isTabsViewInitialized = true;
 }
@@ -131,13 +143,6 @@ export function onLoaded(args: EventData) {
         displayCurrentListDoses();
     }, 500);
 
-    // Select tab
-    viewModel.set("tabSelectedIndex", settings.currentTab);
-
-    // Current list of paired medications
-    viewModel.set("isAudioEnabled", settings.isAudioEnabled);
-    viewModel.set("myMedicineList", settings.currentMedicineCabinet.medicines);
-
     // Initialize editing buttons state
     isEditingAvailable = true;
     viewModel.set("isEditingAvailable", isEditingAvailable);
@@ -152,7 +157,6 @@ export function onLoaded(args: EventData) {
     let editTotalDosesPerDayButton: Button = page.getViewById("edit-total-required-doses");
     editTotalDosesPerDayButton.backgroundColor = isEditingAvailable ? secondaryOn : secondaryOff;
 
-
     if (settings.isConfirmingDose) {
         viewModel.set("currentMedicineName", settings.currentMedicineName);
         registerDoseTaken(settings.currentMedicineName);
@@ -165,7 +169,12 @@ export function onLoaded(args: EventData) {
         displayCurrentDoses();
     }
 
+    setMedicineCabinetOwnerInfo();
+
     displayDosesPerDayInstructions(settings.currentMedicineCabinet.getDailyDosesRequired(settings.currentMedicineName));
+
+    // Call after all "settings" have been updated
+    updateViewModelGlobals();
 
     // Set text to active language
     setActiveLanguageText();
@@ -666,8 +675,20 @@ function registerDoseTaken(medicineName: string): void {
     });
 }
 
+function updateViewModelGlobals() {
+    viewModel.set("tabSelectedIndex", settings.currentTab);
+    viewModel.set("myMedicineList", settings.currentMedicineCabinet.medicines);
+    viewModel.set("currentMedicineName", settings.currentMedicineName);
+
+    viewModel.set("isAudioEnabled", settings.isAudioEnabled);
+}
+
 function setActiveLanguageText(): void {
-    viewModel.set("i18nPageTitle", i18n.synavoxSubPageTitle);
+    viewModel.set("i18nSynavoxSubPageTitle", i18n.synavoxSubPageTitle);
+
+    viewModel.set("i18nMedicineCabinetOwnerTitle", settings.currentMedicineCabinet.ownerTitle);
+    viewModel.set("i18nSynavoxSubPageTitle", i18n.synavoxSubPageTitle);
+
     viewModel.set("i18nMyMedicines", i18n.myMedicines);
 
     viewModel.set("i18nMe", i18n.me);

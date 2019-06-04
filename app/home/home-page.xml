@@ -7,15 +7,15 @@
 		<NavigationButton ios:visibility="collapsed" icon="res://menu" tap="onDrawerButtonTap"></NavigationButton>
 		<ActionItem icon="res://navigation/menu" android:visibility="collapsed" tap="onDrawerButtonTap" ios.position="left"></ActionItem>
 		<StackLayout>
-			<Label class="action-bar-title" text="{{ i18nMedicineCabinetOwner }}"></Label>
-			<Label class="action-bar-subtitle" text="{{ i18nPageTitle }}"></Label>
+			<Label class="action-bar-title" text="{{ i18nMedicineCabinetOwnerTitle }}"></Label>
+			<Label class="action-bar-subtitle" text="{{ i18nSynavoxSubPageTitle }}"></Label>
 		</StackLayout>
 	</ActionBar>
 	<StackLayout>
 		<parallax:ParallaxView height="75%" background="white">
 			<parallax:Header class="header-template" dropShadow="false"></parallax:Header>
 			<parallax:Anchored class="anchor" height="100vh">
-				<TabView class="list-container" id="tabViewContainer" loaded="onTabsLoaded" selectedIndex="{{ tabSelectedIndex }}" selectedIndexChanged="onSelectedIndexChanged">
+				<TabView class="list-container" id="tabViewContainer" loaded="onTabsLoaded" selectedIndex="{{ tabSelectedIndex ? tabSelectedIndex : 0 }}" selectedIndexChanged="onSelectedIndexChanged">
 					<TabViewItem class="fa" title="{{ i18nMe }}">
 						<StackLayout>
 							<Label text="{{ i18nMyPrescriptions }}" textWrap="true" class="h2 text-left tab1 tabs" />

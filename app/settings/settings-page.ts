@@ -94,6 +94,9 @@ function setI18N(): void {
     let owner: string = medicineCabinetOwners[settings.currentTab];
     settings.currentMedicineCabinet.owner = capitalizeFirstLetter(owner);
 
+    let medicineCabinetOwnerTitles: string[] = [i18n.myMedicineCabinet, i18n.momsMedicineCabinet, i18n.dadsMedicineCabinet];
+    settings.currentMedicineCabinet.ownerTitle = medicineCabinetOwnerTitles[settings.currentTab];
+
     viewModel.set("i18nPageTitle", i18n.settingsPageTitle);
     viewModel.set("i18nLanguageOptionsTitle", i18n.languageOptionsSetting);
     viewModel.set("i18nInstalledLanguagesText", i18n.installedLanguageSetting);

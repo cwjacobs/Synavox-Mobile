@@ -19,11 +19,9 @@
 				<StackLayout class="list-container">
 					<Label class="title" text="{{ i18nMedicineListTitle }}"></Label>
 					<StackLayout orientation="horizontal">
-						<TextField class="pairing-MedicineName fas" id="medicineName-input" text="{{ currentMedicineName }}" hint="{{ i18nMedicineNameHint }}" returnKeyType="done" />
-						<!-- <Label text="Tag Id: " /> -->
-						<Label class="pairing-TagId" text="{{ currentTagId }}" />
+						<TextField class="pairing-MedicineName fas" id="medicineName-input" text="{{ currentMedicineName }}" hint="{{ i18nMedicineNameHint }}" returnKeyType="done" width="50%" />
+						<Label class="pairing-TagId" text="{{ currentTagId }}" width="50%" />
 					</StackLayout>
-					<!-- <TextField class="pairing-MedicineName fas" id="medicineName-input" text="{{ currentMedicineName }}" hint="{{ i18nMedicineNameHint }}" returnKeyType="done" /> -->
 				</StackLayout>
 			</parallax:Anchored>
 			<parallax:Content class="body-template" height="550vh" stretchLastChild="false" background="white">

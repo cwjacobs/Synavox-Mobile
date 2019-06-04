@@ -180,7 +180,7 @@ function setActiveLanguageText(): void {
     viewModel.set("i18nPageTitle", i18n.wizardPageTitle);
     viewModel.set("i18nSynavoxSubPageTitle", i18n.synavoxSubPageTitle);
 
-    viewModel.set("i18nMedicineListTitle", settings.currentMedicineCabinet.ownerTitle);
+    viewModel.set("i18nMedicineCabinetOwnerTitle", settings.currentMedicineCabinet.ownerTitle);
 
     viewModel.set("i18nSelect", i18n.select);
     viewModel.set("i18nScrollInstructions", i18n.scrollInstructions);

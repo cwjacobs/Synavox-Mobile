@@ -248,7 +248,7 @@ export class I18N {
     }
 
     public get pairMedicineNameHint() {
-        const text: string[] = ["Enter Medicine Name", "Ingrese el nombre del medicamento"];
+        const text: string[] = ["Medicine Name", "Nueva Medicina"];
         return text[this._activeLanguageIndex];
     }
 
