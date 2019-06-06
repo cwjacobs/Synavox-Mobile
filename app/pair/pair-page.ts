@@ -76,13 +76,7 @@ export function onDrawerButtonTap(args: EventData) {
 };
 
 export function onLoaded(args: EventData) {
-    // viewModel.set("isAudioEnabled", settings.isAudioEnabled);
-    // viewModel.set("myMedicineList", settings.currentMedicineCabinet.medicines);
-
     if (settings.isNewBinding) {
-        // We're here because an unpaired tag was scanned, let's walk the user through next steps...
-        // viewModel.set("currentTagId", settings.currentTagId);
-
         // Request medicine name
         alert(i18n.enterMedicneName);
         setTimeout(() => {
@@ -97,8 +91,6 @@ export function onLoaded(args: EventData) {
     else {
         if (settings.currentMedicineName) {
             settings.currentTagId = settings.currentMedicineCabinet.getMedicineBinding(settings.currentMedicineName).tagId;
-            // viewModel.set("currentTagId", settings.currentTagId);
-            // viewModel.set("currentMedicineName", settings.currentMedicineName);
         }
     }
 
@@ -111,11 +103,9 @@ export function onLoaded(args: EventData) {
 
 export function onItemTap(args: ItemEventData) {
     settings.currentMedicineName = settings.currentMedicineCabinet.medicines[args.index].medicineName;
-    // viewModel.set("currentMedicineName", settings.currentMedicineName);
 
     if (!settings.isNewBinding) {
         settings.currentTagId = settings.currentMedicineCabinet.medicines[args.index].tagId;
-        // viewModel.set("currentTagId", settings.currentTagId);
     }
 
     // Update view-model settings
@@ -146,7 +136,6 @@ export function onDeleteTap(args: ItemEventData) {
 
             if (index != -1) { // Delete current binding
                 settings.currentMedicineCabinet.medicines.splice(index, 1);
-                // viewModel.set("myMedicines", settings.currentMedicineCabinet);
 
                 const listView: ListView = page.getViewById<ListView>("medicineList");
                 listView.refresh();
@@ -206,7 +195,6 @@ export function onSaveTap() {
             navigateTo(pageTitle, pageRoute);
         }
     }
-    // viewModel.set("myMedicines", settings.currentMedicineCabinet); Doesnt exist in xml
 
     // Update view-model settings
     updateViewModelGlobals();
@@ -223,8 +211,6 @@ export function onCancelTap(args: ItemEventData) {
     // Update view-model settings
     updateViewModelGlobals();
 
-    // viewModel.set("currentTagId", "");
-    // viewModel.set("currentMedicineName", "");
     audioPlayer.stop();
 };
 
@@ -255,8 +241,7 @@ export function onAudioEnableTap(args: ItemEventData) {
 };
 
 export function onLogoTap(args: ItemEventData) {
-    //audioPlayer.play("default");
-    // vr.startListening();
+    audioPlayer.play("default");
 };
 
 function updateViewModelGlobals() {

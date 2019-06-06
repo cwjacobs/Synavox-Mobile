@@ -39,7 +39,7 @@
 					</TabViewItem>
 				</TabView>
 			</parallax:Anchored>
-			<parallax:Content class="body-template" height="600vh" stretchLastChild="false" background="white">
+			<parallax:Content class="body-template" height="550vh" stretchLastChild="false" background="white">
 				<!-- Current Medicine Line-Item: Name and Doses -->
 				<StackLayout class="list-container">
 					<GridLayout rows="auto" columns="200vw,*,*,*,*,*">
@@ -53,7 +53,7 @@
 					<Label class="daily-instruction" text="{{ i18nDailyInstructions }}" />
 					<StackLayout class="hr-light"></StackLayout>
 				</StackLayout>
-				<DockLayout width="auto" height="450vh" background="white">
+				<DockLayout width="auto" height="420vh" background="white">
 					<!-- Medicine Line-Items: Names and Doses -->
 					<ListView class="list-container" id="medicineList" items="{{ myMedicineList }}" itemTap="onItemTap" height="230vh" background="white" dock="top">
 						<ListView.itemTemplate>
@@ -68,7 +68,7 @@
 						</ListView.itemTemplate>
 					</ListView>
 					<StackLayout dock="bottom">
-						<image src="~/images/logo.png" onTap="onLogoTap" />
+						<image src="~/images/logo.png" height="auto" width="230vw" onTap="onLogoTap" />
 					</StackLayout>
 				</DockLayout>
 			</parallax:Content>

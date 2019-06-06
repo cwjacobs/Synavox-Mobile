@@ -93,14 +93,6 @@ export function onDeleteMedTap() {
     });
 }
 
-function getDeleteButton(): any {
-    const medicineDeleteButtonIds: string[] = ["delete-t1-medicine", "delete-t2-medicine", "delete-t3-medicine"]
-
-    let deleteButtonId: string = medicineDeleteButtonIds[settings.currentTab];
-    let deleteButton: any = page.getViewById(deleteButtonId);
-    return deleteButton
-}
-
 export function onAddMedTap() {
     let isAddingNewMedicine: boolean = true;
     viewModel.set("isAddingNewMedicine", isAddingNewMedicine);
@@ -531,6 +523,14 @@ export function onAudioEnableTap(args: ItemEventData) {
 
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function getDeleteButton(): any {
+    const medicineDeleteButtonIds: string[] = ["delete-t1-medicine", "delete-t2-medicine", "delete-t3-medicine"]
+
+    let deleteButtonId: string = medicineDeleteButtonIds[settings.currentTab];
+    let deleteButton: any = page.getViewById(deleteButtonId);
+    return deleteButton
 }
 
 function setMedicineCabinetOwnerInfo() {

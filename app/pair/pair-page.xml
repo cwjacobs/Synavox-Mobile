@@ -24,8 +24,8 @@
 					</StackLayout>
 				</StackLayout>
 			</parallax:Anchored>
-			<parallax:Content class="body-template" height="550vh" stretchLastChild="false" background="white">
-				<DockLayout width="auto" height="450vh" background="white">
+			<parallax:Content class="body-template" height="550vh" background="white">
+				<DockLayout width="auto" height="420vh" background="white">
 					<ListView class="list-container" id="medicineList" items="{{ myMedicineList }}" itemTap="onItemTap" height="300vh" background="white" dock="top">
 						<ListView.itemTemplate>
 							<GridLayout rows="auto" columns="*,*,*,auto">
@@ -35,10 +35,8 @@
 							</GridLayout>
 						</ListView.itemTemplate>
 					</ListView>
-					<Label text= "left" height="290vh" color="white" background="white" dock="left" />
-					<Label text= "right" height="290vh" color="white" background="white" dock="right" />
 					<StackLayout dock="bottom">
-						<image src="~/images/logo.png" onTap="onLogoTap" />
+						<image src="~/images/logo.png" onTap="onLogoTap" height="auto" width="230vw" />
 					</StackLayout>
 				</DockLayout>
 			</parallax:Content>
