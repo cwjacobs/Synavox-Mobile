@@ -55,7 +55,7 @@
 				</StackLayout>
 				<DockLayout width="auto" height="450vh" background="white">
 					<!-- Medicine Line-Items: Names and Doses -->
-					<ListView class="list-container" id="medicineList" items="{{ myMedicineList }}" itemTap="onItemTap" height="300vh" background="white" dock="top">
+					<ListView class="list-container" id="medicineList" items="{{ myMedicineList }}" itemTap="onItemTap" height="230vh" background="white" dock="top">
 						<ListView.itemTemplate>
 							<GridLayout rows="auto" columns="200vw,*,*,*,*,*">
 								<Label class="list-MedicineName" text="{{ medicineName }}" row="0" col="0" colSpan="1" />

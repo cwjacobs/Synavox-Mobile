@@ -16,7 +16,7 @@ export class TestData {
 
     private static readonly _dadMedicineCabinet: MedicineCabinet = new MedicineCabinet("dad",
         [
-            { tagId: "-99,55,102,114", medicineName: "Oxycodone", dailyRequiredDoses: 20, dailyDoses: 3 },
+            { tagId: "-99,55,102,114", medicineName: "Oxycodone", dailyRequiredDoses: 6, dailyDoses: 3 },
         ]);
 
     public static get myMedicineCabinet() {
@@ -168,4 +168,14 @@ export class TestData {
     public get webViewSrcArray() {
         return TestData._webViewSrcArray;
     };
+
+    public static getResourceURL(medicineName: string, column: number): string {
+        let url: string = null;
+        TestData._webViewSrcArray.forEach(element => {
+            if (element.medicineName === medicineName) {
+                url = element.srcLinks[column].webViewSrc;
+            }
+        });
+        return url;
+    }
 }

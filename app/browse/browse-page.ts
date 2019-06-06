@@ -68,9 +68,10 @@ export function onItemTap(args: ItemEventData) {
     let column: number = button.id.substring(0, 1);
     let medicineName: string = button.id.substring(1);
 
-    webViewSrcModel = testData.webViewSrcArray;
-    let index: number = settings.currentMedicineCabinet.getMedicineBindingIndex(medicineName);
-    let wvsMedicineSrc: string = webViewSrcModel[index].srcLinks[column].webViewSrc;
+    // webViewSrcModel = testData.webViewSrcArray;
+    // let index: number = settings.currentMedicineCabinet.getMedicineBindingIndex(medicineName);
+    // let wvsMedicineSrc: string = webViewSrcModel[index].srcLinks[column].webViewSrc;
+    let wvsMedicineSrc: string = TestData.getResourceURL(medicineName, column);
 
     viewModel.set("webViewSrc", wvsMedicineSrc);
     submit(args);
@@ -80,8 +81,6 @@ export function onItemTap(args: ItemEventData) {
 };
 
 export function onWebViewLoaded(webargs) {
-    // alert("onWebViewLoaded");
-
     const page: Page = <Page>webargs.object.page;
     const vm = page.bindingContext;
     const webview: WebView = <WebView>webargs.object;
@@ -98,8 +97,6 @@ export function onWebViewLoaded(webargs) {
 
         vm.set("result", message);
         console.log(`WebView message - ${message}`);
-
-        // alert(message);
     });
 };
 

@@ -205,13 +205,17 @@ export function onSelectedIndexChanged(args: SelectedIndexChangedEventData) {
 
         displayDosesPerDayInstructions(settings.currentMedicineCabinet.getDailyDosesRequired(settings.currentMedicineName));
 
-        displayCurrentListDoses();
+        setTimeout(() => {
+            let isUiComplete: boolean = false;
+            isUiComplete = displayCurrentListDoses();
+            if (!isUiComplete) {
+                setTimeout(() => {
+                    displayCurrentListDoses();
+                }, 400);
+            }
+        }, 200);
     }
     isTabsViewInitialized = true;
-}
-
-function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 export function onNavigatingTo(args: NavigatedData) {
@@ -231,10 +235,15 @@ export function onDrawerButtonTap(args: EventData) {
 }
 
 export function onLoaded(args: EventData) {
-    // Get dose numbers for each medicine
-    // setTimeout(() => {
-    displayCurrentListDoses();
-    // }, 1000);
+    setTimeout(() => {
+        let isUiComplete: boolean = false;
+        isUiComplete = displayCurrentListDoses();
+        if (!isUiComplete) {
+            setTimeout(() => {
+                displayCurrentListDoses();
+            }, 200);
+        }
+    }, 400);
 
     // Initialize editing buttons state
     isEditingAvailable = true;
@@ -520,6 +529,10 @@ export function onAudioEnableTap(args: ItemEventData) {
     }
 };
 
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 function setMedicineCabinetOwnerInfo() {
     let medicineCabinetOwners: string[] = [i18n.me, i18n.mom, i18n.dad];
     let owner: string = medicineCabinetOwners[settings.currentTab];
@@ -730,49 +743,53 @@ function adjustDoses(indicator: any): void {
     }
 }
 
-function displayCurrentListDoses() {
-    setTimeout(() => {
-        settings.currentMedicineCabinet.medicines.forEach((medicine) => {
-            let dosesTakenToday: number = medicine.dailyDoses;
-            let dailyDosesRequired: number = medicine.dailyRequiredDoses;
-            let doseIndicatorIdBase: string = medicine.medicineName;
+function displayCurrentListDoses(): boolean {
+    let isUiComplete: boolean = true;
+    settings.currentMedicineCabinet.medicines.forEach((medicine) => {
+        let dosesTakenToday: number = medicine.dailyDoses;
+        let dailyDosesRequired: number = medicine.dailyRequiredDoses;
+        let doseIndicatorIdBase: string = medicine.medicineName;
 
-            // Iterate over each display position
-            let maxDosesDisplayed: number = 6;
-            for (let i = 1; i < maxDosesDisplayed; i++) {
-                // Get the view id for the current indicator
-                let doseIndicatorId: string = doseIndicatorIdBase + i.toString(10);
-                // console.log("doseIndicatorId: " + doseIndicatorId);
+        // Iterate over each display position
+        let maxDosesDisplayed: number = 6;
+        for (let i = 1; i < maxDosesDisplayed; i++) {
+            // Get the view id for the current indicator
+            let doseIndicatorId: string = doseIndicatorIdBase + i.toString(10);
+            // console.log("doseIndicatorId: " + doseIndicatorId);
 
-                let doseIndicator: any = page.getViewById<any>(doseIndicatorId);
-                // console.dir("doseIndicator: " + doseIndicator);
+            let doseIndicator: any = page.getViewById<any>(doseIndicatorId);
+            if (!doseIndicator) {
+                isUiComplete = false;
+                return isUiComplete;
+            }
+            // console.dir("doseIndicator: " + doseIndicator);
 
-                if (i <= dailyDosesRequired) {
-                    // Has not taken too many
-                    if (i <= dosesTakenToday) {
-                        doseIndicator.color = primaryOn;
-                    }
-                    else {
-                        doseIndicator.color = primaryOff;
-                    }
+            if (i <= dailyDosesRequired) {
+                // Has not taken too many
+                if (i <= dosesTakenToday) {
+                    doseIndicator.color = primaryOn;
                 }
                 else {
-                    if ((i > dailyDosesRequired) && (i <= dosesTakenToday)) {
-                        doseIndicator.color = new Color("red");
-                    }
-                    else {
-                        doseIndicator.color = new Color("white");
-                    }
+                    doseIndicator.color = primaryOff;
                 }
             }
-        })
-
-        if (settings.isNewBinding) {
-            settings.isNewBinding = false;
-            changeTotalDosesPerDay();
-            alert(i18n.enterDosesPrescribed + settings.currentMedicineName);
+            else {
+                if ((i > dailyDosesRequired) && (i <= dosesTakenToday)) {
+                    doseIndicator.color = new Color("red");
+                }
+                else {
+                    doseIndicator.color = new Color("white");
+                }
+            }
         }
-    }, 300);
+    })
+
+    if (settings.isNewBinding) {
+        settings.isNewBinding = false;
+        changeTotalDosesPerDay();
+        alert(i18n.enterDosesPrescribed + settings.currentMedicineName);
+    }
+    return isUiComplete;
 }
 
 function registerDoseTaken(medicineName: string): void {
@@ -799,13 +816,15 @@ function registerDoseTaken(medicineName: string): void {
 }
 
 function updateViewModelGlobals() {
-    const deleteButton: any = getDeleteButton();
-    if (settings.currentMedicineCabinet.medicines.length === 1) {
-        deleteButton.color = primaryOff;
-    }
-    else {
-        deleteButton.color = primaryOn;
-    }
+    setTimeout(() => {
+        let deleteButton: any = getDeleteButton();
+        if (settings.currentMedicineCabinet.medicines.length === 1) {
+            deleteButton.color = primaryOff;
+        }
+        else {
+            deleteButton.color = primaryOn;
+        }
+    }, 400);
 
     viewModel.set("tabSelectedIndex", settings.currentTab);
     viewModel.set("myMedicineList", settings.currentMedicineCabinet.medicines);
