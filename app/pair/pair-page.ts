@@ -18,9 +18,7 @@ import { navigateTo } from "~/app-root/app-root";
 import { TextField } from "tns-core-modules/ui/text-field/text-field";
 import { VR } from "~/utilities/vr";
 
-let rfid = RFID.getInstance();
 let i18n = I18N.getInstance();
-let vr: VR = VR.getInstance(); // Will set settings._isSpeechRecognitionAvailable in private constructor.
 let settings: Settings = Settings.getInstance();
 let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
 
@@ -48,8 +46,19 @@ let viewModel: PairViewModel = null;
  *
  ***/
 
+export function onSpeechRecognition_pair(transcription: string) {
+    const input: TextField = page.getViewById<TextField>("medicineName-input");
+    input.text = capitalizeFirstLetter(transcription);
+    viewModel.set("currentMedicineName", input.text);
+}
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 export function onNavigatingTo(args: NavigatedData) {
     page = <Page>args.object;
+    settings.currentPage = "pair";
     viewModel = new PairViewModel();
     page.bindingContext = viewModel;
 }
@@ -66,16 +75,6 @@ export function onDrawerButtonTap(args: EventData) {
     sideDrawer.showDrawer();
 };
 
-export function onSpeechRecognition(transcription: string) {
-    const input: TextField = page.getViewById<TextField>("medicineName-input");
-    input.text = capitalizeFirstLetter(transcription);
-    viewModel.set("currentMedicineName", input.text);
-}
-
-function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
 export function onLoaded(args: EventData) {
     // viewModel.set("isAudioEnabled", settings.isAudioEnabled);
     // viewModel.set("myMedicineList", settings.currentMedicineCabinet.medicines);
@@ -88,7 +87,7 @@ export function onLoaded(args: EventData) {
         alert(i18n.enterMedicneName);
         setTimeout(() => {
             if (settings.isSpeechRecognitionAvailable) {
-                vr.startListening();
+                VR.getInstance().startListening();
             }
         }, 1000);
 
@@ -140,7 +139,7 @@ export function onDeleteTap(args: ItemEventData) {
         return;
     }
 
-    let confirmMsg: string = getParingUpdatConfirmMsg(binding.medicineName);
+    let confirmMsg: string = getParingUpdateConfirmMsg(binding.medicineName);
     confirm(confirmMsg).then((isConfirmed) => {
         if (isConfirmed) {
             let index: number = settings.currentMedicineCabinet.getMedicineBindingIndex(binding.medicineName);
@@ -257,7 +256,7 @@ export function onAudioEnableTap(args: ItemEventData) {
 
 export function onLogoTap(args: ItemEventData) {
     //audioPlayer.play("default");
-    vr.startListening();
+    // vr.startListening();
 };
 
 function updateViewModelGlobals() {
@@ -287,7 +286,7 @@ function getPairingUpdatedMsg(medicineName: string): string {
     return confirmMsg;
 }
 
-function getParingUpdatConfirmMsg(medicineName: string): string {
-    let confirmMsg: string = i18n.getParingUpdatConfirmMsg(medicineName);
+function getParingUpdateConfirmMsg(medicineName: string): string {
+    let confirmMsg: string = i18n.getParingUpdateConfirmMsg(medicineName);
     return confirmMsg;
 }

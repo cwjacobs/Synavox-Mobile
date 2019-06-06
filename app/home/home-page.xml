@@ -17,19 +17,25 @@
 			<parallax:Anchored class="anchor" height="100vh">
 				<TabView class="list-container" id="tabViewContainer" loaded="onTabsLoaded" selectedIndex="{{ tabSelectedIndex ? tabSelectedIndex : 0 }}" selectedIndexChanged="onSelectedIndexChanged">
 					<TabViewItem class="fa" title="{{ i18nMe }}">
-						<StackLayout>
-							<Label text="{{ i18nMyPrescriptions }}" textWrap="true" class="h2 text-left tab1 tabs" />
-						</StackLayout>
+						<GridLayout rows="auto" columns="auto,*,*">
+							<Label class="h2 text-left tab1 tabs fa" text="{{ i18nMyPrescriptions }}" textWrap="true" row="0" col="0" />
+							<Label class="h2 text-right tab1 tabs fa" style="margin-right: 10vw" text="&#xf196;" row="0" col="1" onTap="onAddMedTap" />
+							<Label class="h2 text-right tab1 tabs fa" style="margin-right: 10vw" id="delete-t1-medicine" text="&#xf147;" row="0" col="2" onTap="onDeleteMedTap" />
+						</GridLayout>
 					</TabViewItem>
 					<TabViewItem class="fa" title="{{ i18nMom, i18nMom + ' &#xf1e0;' }}">
-						<StackLayout>
-							<Label text="{{ i18nMomsPrescriptions }}" textWrap="true" class="h2 text-left tab1 tabs" />
-						</StackLayout>
+						<GridLayout rows="auto" columns="auto,*,*">
+							<Label class="h2 text-left tab1 tabs fa" text="{{ i18nMomsPrescriptions }}" textWrap="true" row="0" col="0" />
+							<Label class="h2 text-right tab1 tabs fa" style="margin-right: 10vw" text="&#xf196;" row="0" col="1" onTap="onAddMedTap" />
+							<Label class="h2 text-right tab1 tabs fa" style="margin-right: 10vw" id="delete-t2-medicine" text="&#xf147;" row="0" col="2" onTap="onDeleteMedTap" />
+						</GridLayout>
 					</TabViewItem>
 					<TabViewItem class="fa" title="{{ i18nDad, i18nDad + ' &#xf1e0;' }}">
-						<StackLayout>
-							<Label text="{{ i18nDadsPrescriptions }}" textWrap="true" class="h2 text-left tab1 tabs" />
-						</StackLayout>
+						<GridLayout rows="auto" columns="auto,*,*">
+							<Label class="h2 text-left tab1 tabs fa" text="{{ i18nDadsPrescriptions }}" textWrap="true" row="0" col="0" />
+							<Label class="h2 text-right tab1 tabs fa" style="margin-right: 10vw" text="&#xf196;" row="0" col="1" onTap="onAddMedTap" />
+							<Label class="h2 text-right tab1 tabs fa" style="margin-right: 10vw" id="delete-t3-medicine" text="&#xf147;" row="0" col="2" onTap="onDeleteMedTap" />
+						</GridLayout>
 					</TabViewItem>
 				</TabView>
 			</parallax:Anchored>
@@ -37,7 +43,7 @@
 				<!-- Current Medicine Line-Item: Name and Doses -->
 				<StackLayout class="list-container">
 					<GridLayout rows="auto" columns="200vw,*,*,*,*,*">
-						<Label class="pairing-MedicineName fas" id="current-medicine-name" text="{{ currentMedicineName, '&#xf484; ' + currentMedicineName }}" row="0" col="0" colSpan="1" />
+						<TextField class="pairing-MedicineName fas" id="current-medicine-name" text="{{ currentMedicineName, '&#xf484; ' + currentMedicineName }}" row="0" col="0" colSpan="1" returnKeyType="done" />
 						<Label class="reminder-mark fa" id="current1" text="&#xf058;" row="0" col="1" onTap="current1"/>
 						<Label class="reminder-mark fa" id="current2" text="&#xf058;" row="0" col="2" onTap="current2" />
 						<Label class="reminder-mark fa" id="current3" text="&#xf058;" row="0" col="3" onTap="current3" />
@@ -67,14 +73,20 @@
 				</DockLayout>
 			</parallax:Content>
 		</parallax:ParallaxView>
-		<GridLayout class="list-container button-row" rows="auto" columns="*,*">
-			<!-- Edit Doses Required Daily -->
+		<GridLayout class="list-container button-row" rows="auto" columns="*,*" visibility="{{ isAddingNewMedicine ? 'visible' : 'collapsed' }}">
+			<!-- Change Doses Required Daily -->
+			<Button class="button my-button primary" text="{{ i18nSave }}" row="0" col="0" onTap="onSaveNewMedicineTap" />
+			<!-- Change Doses Taken Today -->
+			<Button class="button my-button alert" text="{{ i18nCancel }}" row="0" col="1" onTap="onCancelNewMedicineTap" />
+		</GridLayout>
+		<GridLayout class="list-container button-row" rows="auto" columns="*,*" visibility="{{ isAddingNewMedicine ? 'collapsed' : 'visible' }}">
+			<!-- Change Doses Required Daily -->
 			<Button class="button my-button secondary" id="edit-total-required-doses" text="{{ i18nEditTotalDosesPerDayButtonText }}" visibility="{{ isEditingTotalDosesPerDay ? 'collapsed' : 'visible' }}" row="0" col="0" onTap="onChangeTotalDosesPerDayTap" />
 			<GridLayout rows="auto" columns="auto,*" visibility="{{ isEditingTotalDosesPerDay ? 'visible' : 'collapsed' }}" row="0" col="0">
 				<Button class="button my-button-small secondary" text="{{ i18nSaveButtonText }}" row="0" col="0" onTap="onSaveTotalDosesPerDayTap" />
 				<Button class="button my-button-small alert" text="{{ i18nCancelButtonText }}" row="0" col="1" onTap="onCancelTotalDosesPerDayTap" />
 			</GridLayout>
-			<!-- Edit Doses Taken Today -->
+			<!-- Change Doses Taken Today -->
 			<Button class="button my-button primary" id="edit-doses-taken-today" text="{{ i18nEditDosesTakenTodayButtonText }}" visibility="{{ isEditingDosesTakenToday ? 'collapsed' : 'visible' }}" row="0" col="1" onTap="onChangeDosesTakenTodayTap" />
 			<GridLayout rows="auto" columns="auto,*" visibility="{{ isEditingDosesTakenToday ? 'visible' : 'collapsed' }}" row="0" col="1">
 				<Button class="button my-button-small primary" text="{{ i18nSaveButtonText }}" row="0" col="0" onTap="onSaveDosesTakenTodayTap" />

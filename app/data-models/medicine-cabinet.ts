@@ -154,4 +154,11 @@ export class MedicineCabinet {
     public replaceMedicineBinding(index: number, medicineBinding: MedicineBinding) {
         this._medicines.splice(index, 1, medicineBinding);
     };
+
+    public deleteMedicineBinding(medicineName: string) {
+        let index: number = this.getMedicineBindingIndex(medicineName);
+        if (index !== -1) {
+            this._medicines.splice(index, 1);
+        }
+    };
 }

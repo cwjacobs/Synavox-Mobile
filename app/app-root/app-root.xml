@@ -38,7 +38,7 @@ http://docs.telerik.com/devtools/nativescript-ui/Controls/NativeScript/SideDrawe
 						<Label row="0" col="1" text="{{ i18nBrowse }}" class="p-r-10" />
 					</GridLayout>
 					<GridLayout columns="auto, *" class="{{ 'sidedrawer-list-item' + (selectedPage === 'Wizard' ? ' selected': '') }}" route="wizard/wizard-page" title="Wizard" tap="onNavigationItemTap">
-						<Label row="0" col="0" text="&#xf002;" class="fa" />
+						<Label row="0" col="0" text="&#xf0d0;" class="fa" />
 						<Label row="0" col="1" text="{{ i18nWizard }}" class="p-r-10" />
 					</GridLayout>
 					<StackLayout class="hr-light"></StackLayout>

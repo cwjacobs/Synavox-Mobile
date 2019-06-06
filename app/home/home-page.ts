@@ -6,7 +6,7 @@ import { ListView, ItemEventData } from "tns-core-modules/ui/list-view/list-view
 import { Label } from "tns-core-modules/ui/label/label";
 import { HomeViewModel } from "./home-view-model";
 import { confirm } from "tns-core-modules/ui/dialogs";
-import { MedicineCabinet } from "~/data-models/medicine-cabinet";
+import { MedicineCabinet, MedicineBinding } from "~/data-models/medicine-cabinet";
 import { Button } from "tns-core-modules/ui/button/button";
 import { TabView, TabViewItem, SelectedIndexChangedEventData } from "tns-core-modules/ui/tab-view";
 
@@ -15,6 +15,8 @@ import { RFID } from "~/utilities/rfid";
 import { TestData } from "~/data-models/test-data";
 import { Settings } from "~/settings/settings";
 import { AudioPlayer } from "~/audio-player/audio-player";
+import { TextField } from "tns-core-modules/ui/text-field/text-field";
+import { VR } from "~/utilities/vr";
 
 let i18n: I18N = I18N.getInstance();
 let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
@@ -35,6 +37,9 @@ let medicineCabinets: MedicineCabinet[] = [myMedicineCabinet, momMedicineCabinet
 
 // Page scope medicine lists, point local medicineList to shared datastore
 let tempMedicineCabinet: MedicineCabinet;
+
+// Voice (Speech) Recognition
+let vr: VR = VR.getInstance(); // Will set settings._isSpeechRecognitionAvailable in private constructor.
 
 // NFC tag methods
 let rfid: RFID = RFID.getInstance();
@@ -58,6 +63,116 @@ let alertOff: string = "#ffc8c8";
 
 let isTabsViewInitialized: boolean = false;
 
+export function onDeleteMedTap() {
+    const deleteButton: any = getDeleteButton();
+
+    if (deleteButton.color.hex.toUpperCase() === primaryOff.toUpperCase()) {
+        alert(getI18NCannotDeleteLastMedicineMsg());
+        return;
+    }
+
+    let medicineName: string = viewModel.get("currentMedicineName");
+
+    let confirmMsg: string = getI18NDeleteMedicineConfirmMsg(medicineName);
+    confirm(confirmMsg).then((isConfirmed) => {
+        if (isConfirmed) {
+            settings.currentMedicineCabinet.deleteMedicineBinding(medicineName);
+            settings.currentMedicineName = settings.currentMedicineCabinet.medicines[0].medicineName;
+            updateViewModelGlobals();
+
+            const listView: ListView = page.getViewById<ListView>("medicineList");
+            listView.refresh();
+
+            if (settings.currentMedicineCabinet.medicines.length === 1) {
+                deleteButton.color = primaryOff;
+            }
+
+            displayCurrentDoses();
+            displayDosesPerDayInstructions(settings.currentMedicineCabinet.getDailyDosesRequired(settings.currentMedicineName));
+        }
+    });
+}
+
+function getDeleteButton(): any {
+    const medicineDeleteButtonIds: string[] = ["delete-t1-medicine", "delete-t2-medicine", "delete-t3-medicine"]
+
+    let deleteButtonId: string = medicineDeleteButtonIds[settings.currentTab];
+    let deleteButton: any = page.getViewById(deleteButtonId);
+    return deleteButton
+}
+
+export function onAddMedTap() {
+    let isAddingNewMedicine: boolean = true;
+    viewModel.set("isAddingNewMedicine", isAddingNewMedicine);
+    viewModel.set("i18nSave", i18n.save);
+    viewModel.set("i18nCancel", i18n.cancel);
+
+    viewModel.set("currentMedicineName", "");
+    viewModel.set("i18nDailyInstructions", "");
+    clearCurrentDoses();
+
+    // Request medicine name
+    alert(i18n.enterMedicneName);
+    setTimeout(() => {
+        if (settings.isSpeechRecognitionAvailable) {
+            vr.startListening();
+        }
+    }, 1000);
+}
+
+export function onSpeechRecognition_home(transcription: string) {
+    const input: TextField = page.getViewById<TextField>("current-medicine-name");
+    input.text = capitalizeFirstLetter(transcription);
+    viewModel.set("currentMedicineName", input.text);
+}
+
+export function onSaveNewMedicineTap() {
+    let isAddingNewMedicine: boolean = false;
+    viewModel.set("isAddingNewMedicine", isAddingNewMedicine);
+
+    let binding: MedicineBinding = new MedicineBinding();
+
+    binding.tagId = "-1";
+    binding.dailyDoses = 0;
+    binding.dailyRequiredDoses = 0;
+    binding.medicineName = viewModel.get("currentMedicineName");
+    if (!binding.medicineName) {
+        alert(i18n.selectMedicineMsg);
+        return;
+    }
+
+    settings.currentMedicineCabinet.addMedicineBinding(binding);
+    settings.currentMedicineName = binding.medicineName;
+
+    isEditingAvailable = true;
+    viewModel.set("isEditingAvailable", isEditingAvailable);
+
+    isEditingDosesTakenToday = false;
+    viewModel.set("isEditingDosesTakenToday", isEditingDosesTakenToday);
+
+    const listView: ListView = page.getViewById<ListView>("medicineList");
+    listView.refresh();
+
+    alert(i18n.enterDosesPrescribed + binding.medicineName);
+
+    changeTotalDosesPerDay();
+
+    const deleteButton: any = getDeleteButton();
+    deleteButton.color = primaryOn;
+}
+
+export function onCancelNewMedicineTap() {
+    let isAddingNewMedicine: boolean = false;
+    viewModel.set("isAddingNewMedicine", isAddingNewMedicine);
+
+    viewModel.set("currentMedicineName", settings.currentMedicineName);
+
+    displayCurrentDoses();
+    displayDosesPerDayInstructions(settings.currentMedicineCabinet.getDailyDosesRequired(settings.currentMedicineName));
+
+    vr.stopListening();
+}
+
 export function onLogoTap() {
     alert(Settings.version);
 }
@@ -66,35 +181,15 @@ export function onTabsLoaded() {
     viewModel.set("tabSelectedIndex", settings.currentTab);
 }
 
-function setMedicineCabinetOwnerInfo() {
-    let medicineCabinetOwners: string[] = [i18n.me, i18n.mom, i18n.dad];
-    let owner: string = medicineCabinetOwners[settings.currentTab];
-    settings.currentMedicineCabinet.owner = capitalizeFirstLetter(owner);
-
-    let medicineCabinetOwnerTitles: string[] = [i18n.myMedicineCabinet, i18n.momsMedicineCabinet, i18n.dadsMedicineCabinet];
-    let ownerMedicineCabinetText: string = medicineCabinetOwnerTitles[settings.currentTab];
-    settings.currentMedicineCabinet.ownerTitle = ownerMedicineCabinetText;
-}
-
 export function onSelectedIndexChanged(args: SelectedIndexChangedEventData) {
     if ((isTabsViewInitialized) && (!settings.isNewBinding) && (!settings.isConfirmingDose)) {
-        // let medicineCabinetOwners: string[] = [i18n.me, i18n.mom, i18n.dad];
-        // let medicineCabinetOwnerTitles: string[] = [i18n.myMedicineCabinet, i18n.momsMedicineCabinet, i18n.dadsMedicineCabinet];
-
-        let tabView: any = args.object;
-        let tab: any = tabView.items[args.newIndex];
-        let tabTitle: string = tab.title;
+        clearListDosesTakenToday();
 
         settings.currentTab = args.newIndex;
         settings.currentMedicineCabinet = medicineCabinets[settings.currentTab];
+        setMedicineCabinetOwnerInfo();
 
         settings.currentMedicineName = settings.currentMedicineCabinet.getMedicineBindingByIndex(0).medicineName;
-
-        setMedicineCabinetOwnerInfo();
-        // let owner: string = medicineCabinetOwners[settings.currentTab];
-        // let ownerMedicineCabinetText: string = medicineCabinetOwnerTitles[settings.currentTab];
-        // settings.currentMedicineCabinet.owner = capitalizeFirstLetter(owner);
-        // settings.currentMedicineCabinet.ownerTitle = ownerMedicineCabinetText;
 
         // Update view-model settings
         // Call after all "settings" have been updated
@@ -110,10 +205,7 @@ export function onSelectedIndexChanged(args: SelectedIndexChangedEventData) {
 
         displayDosesPerDayInstructions(settings.currentMedicineCabinet.getDailyDosesRequired(settings.currentMedicineName));
 
-        // Get dose numbers for each medicine
-        setTimeout(() => {
-            displayCurrentListDoses();
-        }, 300);
+        displayCurrentListDoses();
     }
     isTabsViewInitialized = true;
 }
@@ -124,6 +216,7 @@ function capitalizeFirstLetter(string) {
 
 export function onNavigatingTo(args: NavigatedData) {
     page = <Page>args.object;
+    settings.currentPage = "home";
     viewModel = new HomeViewModel();
     page.bindingContext = viewModel;
 }
@@ -139,9 +232,9 @@ export function onDrawerButtonTap(args: EventData) {
 
 export function onLoaded(args: EventData) {
     // Get dose numbers for each medicine
-    setTimeout(() => {
-        displayCurrentListDoses();
-    }, 500);
+    // setTimeout(() => {
+    displayCurrentListDoses();
+    // }, 1000);
 
     // Initialize editing buttons state
     isEditingAvailable = true;
@@ -192,9 +285,6 @@ export function onSaveTotalDosesPerDayTap() {
     medicineCabinets[settings.currentTab] = new MedicineCabinet(tempMedicineCabinet.owner, tempMedicineCabinet.medicines);
     settings.currentMedicineCabinet = medicineCabinets[settings.currentTab];;
     tempMedicineCabinet = null;
-
-    // settings.medicineList = new MedicineBindingList(tempMedicineList.bindings);
-    // tempMedicineList = null;
 
     isEditingTotalDosesPerDay = false;
     viewModel.set("isEditingTotalDosesPerDay", isEditingTotalDosesPerDay);
@@ -430,6 +520,16 @@ export function onAudioEnableTap(args: ItemEventData) {
     }
 };
 
+function setMedicineCabinetOwnerInfo() {
+    let medicineCabinetOwners: string[] = [i18n.me, i18n.mom, i18n.dad];
+    let owner: string = medicineCabinetOwners[settings.currentTab];
+    settings.currentMedicineCabinet.owner = capitalizeFirstLetter(owner);
+
+    let medicineCabinetOwnerTitles: string[] = [i18n.myMedicineCabinet, i18n.momsMedicineCabinet, i18n.dadsMedicineCabinet];
+    let ownerMedicineCabinetText: string = medicineCabinetOwnerTitles[settings.currentTab];
+    settings.currentMedicineCabinet.ownerTitle = ownerMedicineCabinetText;
+}
+
 function changeTotalDosesPerDay() {
     if ((isEditingAvailable) && (!isEditingDosesTakenToday)) {
         // Copy list to temp list for editing
@@ -467,6 +567,36 @@ function changeTotalDosesPerDay() {
             }
         }
     }
+}
+
+function clearCurrentDoses() {
+    let doseIndicatorIdBase: string = "current";
+
+    // Iterate over each display position
+    let maxDosesDisplayed: number = 6;
+    for (let i = 1; i < maxDosesDisplayed; i++) {
+        // Get the view id for the current indicator
+        let doseIndicatorId: string = doseIndicatorIdBase + i.toString(10);
+        let doseIndicator: Label = page.getViewById(doseIndicatorId);
+        doseIndicator.color = new Color("white");
+    }
+}
+
+function clearListDosesTakenToday() {
+    settings.currentMedicineCabinet.medicines.forEach((medicine) => {
+        let dosesTakenToday: number = medicine.dailyDoses;
+        let dailyDosesRequired: number = medicine.dailyRequiredDoses;
+        let doseIndicatorIdBase: string = medicine.medicineName;
+
+        // Iterate over each display position
+        let maxDosesDisplayed: number = 6;
+        for (let i = 1; i < maxDosesDisplayed; i++) {
+            // Get the view id for the current indicator
+            let doseIndicatorId: string = doseIndicatorIdBase + i.toString(10);
+            let doseIndicator: any = page.getViewById<any>(doseIndicatorId);
+            doseIndicator.color = new Color("white");
+        }
+    })
 }
 
 function displayCurrentDoses() {
@@ -536,32 +666,23 @@ function adustDailyDoseTaken(indicator: any): void {
     let doseAdjustment: number = toggleIndicator(indicator);
     dosesTakenToday += doseAdjustment;
 
-    // console.log("dosesTakenToday: " + dosesTakenToday);
-    // console.log("dailyDosesRequired: " + dailyDosesRequired);
-
     let dose: number = getIndicatorDoseNumber(indicator.id);
-    // console.log("dose: " + dose);
-
     if (doseAdjustment === 1) {
         // Adding a dose
         if (dose <= dailyDosesRequired) {
             indicator.color = primaryOn;
-            // console.log("primaryOn");
         }
         else {
             indicator.color = alertOn;
-            // console.log("alertOn");
         }
     }
     else {
         // Subtracting a dose
         if (dose <= dailyDosesRequired) {
             indicator.color = primaryOff;
-            // console.log("primaryOff");
         }
         else {
             indicator.color = alertOff;
-            // console.log("alertOff");
         }
     }
 
@@ -610,46 +731,48 @@ function adjustDoses(indicator: any): void {
 }
 
 function displayCurrentListDoses() {
-    settings.currentMedicineCabinet.medicines.forEach((medicine) => {
-        let dosesTakenToday: number = medicine.dailyDoses;
-        let dailyDosesRequired: number = medicine.dailyRequiredDoses;
-        let doseIndicatorIdBase: string = medicine.medicineName;
+    setTimeout(() => {
+        settings.currentMedicineCabinet.medicines.forEach((medicine) => {
+            let dosesTakenToday: number = medicine.dailyDoses;
+            let dailyDosesRequired: number = medicine.dailyRequiredDoses;
+            let doseIndicatorIdBase: string = medicine.medicineName;
 
-        // Iterate over each display position
-        let maxDosesDisplayed: number = 6;
-        for (let i = 1; i < maxDosesDisplayed; i++) {
-            // Get the view id for the current indicator
-            let doseIndicatorId: string = doseIndicatorIdBase + i.toString(10);
-            // console.log("doseIndicatorId: " + doseIndicatorId);
+            // Iterate over each display position
+            let maxDosesDisplayed: number = 6;
+            for (let i = 1; i < maxDosesDisplayed; i++) {
+                // Get the view id for the current indicator
+                let doseIndicatorId: string = doseIndicatorIdBase + i.toString(10);
+                // console.log("doseIndicatorId: " + doseIndicatorId);
 
-            let doseIndicator: any = page.getViewById<any>(doseIndicatorId);
-            // console.dir("doseIndicator: " + doseIndicator);
+                let doseIndicator: any = page.getViewById<any>(doseIndicatorId);
+                // console.dir("doseIndicator: " + doseIndicator);
 
-            if (i <= dailyDosesRequired) {
-                // Has not taken too many
-                if (i <= dosesTakenToday) {
-                    doseIndicator.color = primaryOn;
+                if (i <= dailyDosesRequired) {
+                    // Has not taken too many
+                    if (i <= dosesTakenToday) {
+                        doseIndicator.color = primaryOn;
+                    }
+                    else {
+                        doseIndicator.color = primaryOff;
+                    }
                 }
                 else {
-                    doseIndicator.color = primaryOff;
+                    if ((i > dailyDosesRequired) && (i <= dosesTakenToday)) {
+                        doseIndicator.color = new Color("red");
+                    }
+                    else {
+                        doseIndicator.color = new Color("white");
+                    }
                 }
             }
-            else {
-                if ((i > dailyDosesRequired) && (i <= dosesTakenToday)) {
-                    doseIndicator.color = new Color("red");
-                }
-                else {
-                    doseIndicator.color = new Color("white");
-                }
-            }
+        })
+
+        if (settings.isNewBinding) {
+            settings.isNewBinding = false;
+            changeTotalDosesPerDay();
+            alert(i18n.enterDosesPrescribed + settings.currentMedicineName);
         }
-    })
-
-    if (settings.isNewBinding) {
-        settings.isNewBinding = false;
-        changeTotalDosesPerDay();
-        alert(i18n.enterDosesPrescribed + settings.currentMedicineName);
-    }
+    }, 300);
 }
 
 function registerDoseTaken(medicineName: string): void {
@@ -676,6 +799,14 @@ function registerDoseTaken(medicineName: string): void {
 }
 
 function updateViewModelGlobals() {
+    const deleteButton: any = getDeleteButton();
+    if (settings.currentMedicineCabinet.medicines.length === 1) {
+        deleteButton.color = primaryOff;
+    }
+    else {
+        deleteButton.color = primaryOn;
+    }
+
     viewModel.set("tabSelectedIndex", settings.currentTab);
     viewModel.set("myMedicineList", settings.currentMedicineCabinet.medicines);
     viewModel.set("currentMedicineName", settings.currentMedicineName);
@@ -723,6 +854,16 @@ function getI18nCancelButtonText(): string {
 
 function getI18NConfirmMsg(medicineName: string): string {
     let confirmMsg: string = i18n.doseTakenConfirmMsg(medicineName);
+    return confirmMsg;
+}
+
+function getI18NCannotDeleteLastMedicineMsg(): string {
+    let confirmMsg: string = i18n.getCannotDeleteLastMedicineMsg();
+    return confirmMsg;
+}
+
+function getI18NDeleteMedicineConfirmMsg(medicineName: string): string {
+    let confirmMsg: string = i18n.getDeleteMedicineConfirmMsg(medicineName);
     return confirmMsg;
 }
 

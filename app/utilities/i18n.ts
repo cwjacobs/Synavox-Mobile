@@ -171,7 +171,6 @@ export class I18N {
         return text[this._activeLanguageIndex];
     }
 
-
     public get changeDosesPerDay() {
         const text: string[] = ["Change Doses per Day", "Cambiar Dosis por Día"];
         return text[this._activeLanguageIndex];
@@ -237,6 +236,28 @@ export class I18N {
         return (text[this._activeLanguageIndex] + medicineName);
     }
 
+    public getCannotDeleteLastMedicineMsg(): string {
+        let confirmMsg: string;
+        if (this.activeLanguage === "english") {
+            confirmMsg = "You cannot delete last medicine in your medicine cabinet";
+        }
+        else {
+            confirmMsg = "No puede eliminar el último medicamento en su botiquín";
+        }
+        return confirmMsg;
+    }
+
+    public getDeleteMedicineConfirmMsg(medicineName: string): string {
+        let confirmMsg: string;
+        if (this.activeLanguage === "english") {
+            confirmMsg = "Are you sure you want to delete " + medicineName + " from your medicine cabinet?";
+        }
+        else {
+            confirmMsg = "¿Está seguro de que desea eliminar " + medicineName + " de su botiquín? ";
+        }
+        return confirmMsg;
+    }
+
 
     /******************************
      * Pair Page
@@ -263,7 +284,7 @@ export class I18N {
         return confirmMsg;
     }
 
-    public getParingUpdatConfirmMsg(medicineName: string): string {
+    public getParingUpdateConfirmMsg(medicineName: string): string {
         let confirmMsg: string;
         if (this.activeLanguage === "english") {
             confirmMsg = "Are you sure you want to delete the " + medicineName + " pairing?";

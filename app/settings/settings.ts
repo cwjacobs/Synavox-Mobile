@@ -1,13 +1,16 @@
 import { MedicineCabinet } from "~/data-models/medicine-cabinet";
 import { TestData } from "~/data-models/test-data";
+import { Page } from "tns-core-modules/ui/page/page";
 
 export class Settings {
 
-    private static readonly _version: string = "Version: 1.01";
+    private static readonly _version: string = "Version: 1.10.00";
 
     private static readonly _defaultMedicineCabinet: MedicineCabinet = TestData.defaultMedicineCabinet;
 
     private _currentTab: number;
+
+    private _currentPage: string;
 
     private _currentTabTitle: string;
 
@@ -58,13 +61,13 @@ export class Settings {
         this._currentTab = value;
     }
 
-    // public get currentTabTitle(): string {
-    //     return this._currentTabTitle;
-    // }
+    public get currentPage(): string {
+        return this._currentPage;
+    }
 
-    // public set currentTabTitle(value: string) {
-    //     this._currentTabTitle = value;
-    // }
+    public set currentPage(value: string) {
+        this._currentPage = value;
+    }
 
     public get currentMedicineCabinet() {
         return this._curentMedicineCabinet;
