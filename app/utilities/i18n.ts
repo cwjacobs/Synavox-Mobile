@@ -263,6 +263,16 @@ export class I18N {
      * Pair Page
      ******************************/
 
+    public get pairedTagIdText() {
+        const text: string[] = ["Paired Tag Id: ", "Etiqueta Emparejada: "];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get tagIsNotPairedText() {
+        const text: string[] = ["Not paired with an RFID Tag", "No emparejado con una etiqueta RFID"];
+        return text[this._activeLanguageIndex];
+    }
+
     public get pairPageTitle() {
         const text: string[] = ["Pair RFID Tag to Medicine", "Etiqueta de Coincidencia"];
         return text[this._activeLanguageIndex];

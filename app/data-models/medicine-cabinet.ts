@@ -5,14 +5,13 @@ export class MedicineBinding {
 
 export class MedicineCabinet {
 
-    private _owner: string;
+    // private _owner: string = "_owner";
 
-    private _ownerTitle: string;
+    // private _ownerTitle: string = "_ownerTitle";
 
     private _medicines: MedicineBinding[] = [];
 
-    constructor(owner: string, medicineBindings: MedicineBinding[]) {
-        this._owner = owner;
+    constructor(private _owner: string, medicineBindings: MedicineBinding[], private _ownerTitle?: string) {
         medicineBindings.forEach((binding: MedicineBinding) => {
             this._medicines.push(new MedicineBinding(binding.tagId, binding.medicineName, binding.dailyRequiredDoses, binding.dailyDoses));
         });

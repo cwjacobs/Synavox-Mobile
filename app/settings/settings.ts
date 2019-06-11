@@ -4,9 +4,7 @@ import { Page } from "tns-core-modules/ui/page/page";
 
 export class Settings {
 
-    private static readonly _version: string = "Version: 1.10.00";
-
-    private static readonly _defaultMedicineCabinet: MedicineCabinet = TestData.defaultMedicineCabinet;
+    private static readonly _version: string = "Version: 1.02.0";
 
     private _currentTab: number;
 
@@ -31,8 +29,6 @@ export class Settings {
     private _isSpeechRecognitionAvailable: boolean;
 
     private _curentMedicineCabinet: MedicineCabinet;
-
-    private _ownerMedicineCabinetText: MedicineCabinet;
 
     private _medicineCabinets: MedicineCabinet[] = [];
 

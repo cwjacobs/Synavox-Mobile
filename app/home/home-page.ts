@@ -94,8 +94,7 @@ export function onDeleteMedTap() {
 }
 
 export function onAddMedTap() {
-    let isAddingNewMedicine: boolean = true;
-    viewModel.set("isAddingNewMedicine", isAddingNewMedicine);
+    viewModel.set("isAddingNewMedicine", true);
     viewModel.set("i18nSave", i18n.save);
     viewModel.set("i18nCancel", i18n.cancel);
 
@@ -119,8 +118,7 @@ export function onSpeechRecognition_home(transcription: string) {
 }
 
 export function onSaveNewMedicineTap() {
-    let isAddingNewMedicine: boolean = false;
-    viewModel.set("isAddingNewMedicine", isAddingNewMedicine);
+    viewModel.set("isAddingNewMedicine", false);
 
     let binding: MedicineBinding = new MedicineBinding();
 
@@ -134,6 +132,7 @@ export function onSaveNewMedicineTap() {
     }
 
     settings.currentMedicineCabinet.addMedicineBinding(binding);
+    settings.currentTagId = binding.tagId;
     settings.currentMedicineName = binding.medicineName;
 
     isEditingAvailable = true;
@@ -170,7 +169,12 @@ export function onLogoTap() {
 }
 
 export function onTabsLoaded() {
-    viewModel.set("tabSelectedIndex", settings.currentTab);
+    if (!settings.currentTab) {
+        settings.currentTab = 0;
+    }
+    else {
+        viewModel.set("tabSelectedIndex", settings.currentTab);
+    }
 }
 
 export function onSelectedIndexChanged(args: SelectedIndexChangedEventData) {
@@ -283,8 +287,10 @@ export function onChangeTotalDosesPerDayTap(args: EventData) {
 
 export function onSaveTotalDosesPerDayTap() {
     // Save changes
-    medicineCabinets[settings.currentTab] = new MedicineCabinet(tempMedicineCabinet.owner, tempMedicineCabinet.medicines);
-    settings.currentMedicineCabinet = medicineCabinets[settings.currentTab];;
+    medicineCabinets[settings.currentTab] = new MedicineCabinet(tempMedicineCabinet.owner, tempMedicineCabinet.medicines, tempMedicineCabinet.ownerTitle);
+    settings.currentMedicineCabinet = medicineCabinets[settings.currentTab];
+    setMedicineCabinetOwnerInfo();
+
     tempMedicineCabinet = null;
 
     isEditingTotalDosesPerDay = false;
@@ -325,7 +331,7 @@ export function onCancelTotalDosesPerDayTap() {
 export function onChangeDosesTakenTodayTap(args: EventData) {
     if ((isEditingAvailable) && (!isEditingTotalDosesPerDay)) {
         // Copy list to temp list for editing
-        tempMedicineCabinet = new MedicineCabinet(settings.currentMedicineCabinet.owner, settings.currentMedicineCabinet.medicines);
+        tempMedicineCabinet = new MedicineCabinet(settings.currentMedicineCabinet.owner, settings.currentMedicineCabinet.medicines, settings.currentMedicineCabinet.ownerTitle);
 
         isEditingDosesTakenToday = true;
         viewModel.set("isEditingDosesTakenToday", isEditingDosesTakenToday);
@@ -375,8 +381,10 @@ export function onChangeDosesTakenTodayTap(args: EventData) {
 
 export function onSaveDosesTakenTodayTap() {
     // Save changes
-    medicineCabinets[settings.currentTab] = new MedicineCabinet(tempMedicineCabinet.owner, tempMedicineCabinet.medicines);
-    settings.currentMedicineCabinet = medicineCabinets[settings.currentTab];;
+    medicineCabinets[settings.currentTab] = new MedicineCabinet(tempMedicineCabinet.owner, tempMedicineCabinet.medicines, tempMedicineCabinet.ownerTitle);
+    settings.currentMedicineCabinet = medicineCabinets[settings.currentTab];
+    setMedicineCabinetOwnerInfo();
+
     tempMedicineCabinet = null;
 
     isEditingDosesTakenToday = false;
@@ -546,7 +554,8 @@ function setMedicineCabinetOwnerInfo() {
 function changeTotalDosesPerDay() {
     if ((isEditingAvailable) && (!isEditingDosesTakenToday)) {
         // Copy list to temp list for editing
-        tempMedicineCabinet = new MedicineCabinet(settings.currentMedicineCabinet.owner, settings.currentMedicineCabinet.medicines);
+        tempMedicineCabinet = new MedicineCabinet(settings.currentMedicineCabinet.owner, settings.currentMedicineCabinet.medicines, settings.currentMedicineCabinet.ownerTitle);
+        setMedicineCabinetOwnerInfo();
 
         isEditingTotalDosesPerDay = true;
         viewModel.set("isEditingTotalDosesPerDay", isEditingTotalDosesPerDay);
@@ -755,14 +764,12 @@ function displayCurrentListDoses(): boolean {
         for (let i = 1; i < maxDosesDisplayed; i++) {
             // Get the view id for the current indicator
             let doseIndicatorId: string = doseIndicatorIdBase + i.toString(10);
-            // console.log("doseIndicatorId: " + doseIndicatorId);
 
             let doseIndicator: any = page.getViewById<any>(doseIndicatorId);
             if (!doseIndicator) {
                 isUiComplete = false;
                 return isUiComplete;
             }
-            // console.dir("doseIndicator: " + doseIndicator);
 
             if (i <= dailyDosesRequired) {
                 // Has not taken too many
@@ -818,19 +825,24 @@ function registerDoseTaken(medicineName: string): void {
 function updateViewModelGlobals() {
     setTimeout(() => {
         let deleteButton: any = getDeleteButton();
-        if (settings.currentMedicineCabinet.medicines.length === 1) {
-            deleteButton.color = primaryOff;
-        }
-        else {
-            deleteButton.color = primaryOn;
+        if (deleteButton) {
+            if (settings.currentMedicineCabinet.medicines.length === 1) {
+                deleteButton.color = primaryOff;
+            }
+            else {
+                deleteButton.color = primaryOn;
+            }
         }
     }, 400);
 
     viewModel.set("tabSelectedIndex", settings.currentTab);
     viewModel.set("myMedicineList", settings.currentMedicineCabinet.medicines);
     viewModel.set("currentMedicineName", settings.currentMedicineName);
-
     viewModel.set("isAudioEnabled", settings.isAudioEnabled);
+
+    // let medicineCabinetOwnerTitles: string[] = [i18n.myMedicineCabinet, i18n.momsMedicineCabinet, i18n.dadsMedicineCabinet];
+    // let ownerMedicineCabinetText: string = medicineCabinetOwnerTitles[settings.currentTab];
+    // settings.currentMedicineCabinet.ownerTitle = ownerMedicineCabinetText;
 }
 
 function setActiveLanguageText(): void {

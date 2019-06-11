@@ -15,13 +15,14 @@
 		<!-- height="75%" Positions buttons correctly on the bottom of the screen -->
 		<parallax:ParallaxView height="75%" background="white">
 			<parallax:Header class="header-template" dropShadow="false"></parallax:Header>
-			<parallax:Anchored class="anchor" height="120vh">
+			<parallax:Anchored class="anchor" height="140vh">
 				<StackLayout class="list-container">
-					<Label class="title" text="{{ i18nMedicineListTitle }}"></Label>
-					<StackLayout orientation="horizontal">
-						<TextField class="pairing-MedicineName fas" id="medicineName-input" text="{{ currentMedicineName }}" hint="{{ i18nMedicineNameHint }}" returnKeyType="done" width="50%" />
-						<Label class="pairing-TagId" text="{{ currentTagId }}" width="50%" />
-					</StackLayout>
+					<Label class="title" text="{{ i18nMedicineCabinetOwner }}"></Label>
+					<GridLayout rows="auto, auto" columns="auto, *">
+						<TextField class="pairing-MedicineName fas" id="medicineName-input" text="{{ currentMedicineName }}" hint="{{ i18nMedicineNameHint }}" returnKeyType="done" row="0" col="0" colSpan="2" />
+						<Label class="pairing-TagId" style="margin-left: 7vw" text="{{ i18nPairedTagIdMsg }}" row="1" col="0" />
+						<Label class="pairing-TagId right fa" text="{{ currentTagId, currentTagId + ' &#xf02b;' }}" visibility="{{ isTagPaired ? 'visible' : 'collapsed' }}"  row="1" col="1" />
+					</GridLayout>
 				</StackLayout>
 			</parallax:Anchored>
 			<parallax:Content class="body-template" height="550vh" background="white">

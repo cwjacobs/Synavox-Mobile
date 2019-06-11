@@ -58,9 +58,13 @@ function capitalizeFirstLetter(string) {
 
 export function onNavigatingTo(args: NavigatedData) {
     page = <Page>args.object;
-    settings.currentPage = "pair";
     viewModel = new PairViewModel();
     page.bindingContext = viewModel;
+
+    // if (!settings) {
+    //     settings = Settings.getInstance();
+    //     let settingsString: string = JSON.stringify(settings.currentMedicineCabinet);
+    // }
 }
 
 export function onNavigatingFrom(args: NavigatedData) {
@@ -68,7 +72,7 @@ export function onNavigatingFrom(args: NavigatedData) {
 }
 
 export function onDrawerButtonTap(args: EventData) {
-    // Reset new tag binding flag
+    // Reset global new tag binding flag
     settings.isNewBinding = false;
 
     const sideDrawer = <RadSideDrawer>app.getRootView();
@@ -76,6 +80,9 @@ export function onDrawerButtonTap(args: EventData) {
 };
 
 export function onLoaded(args: EventData) {
+    settings = Settings.getInstance();
+    settings.currentPage = "pair";
+
     if (settings.isNewBinding) {
         // Request medicine name
         alert(i18n.enterMedicneName);
@@ -110,6 +117,8 @@ export function onItemTap(args: ItemEventData) {
 
     // Update view-model settings
     updateViewModelGlobals();
+
+    setActiveLanguageText();
 };
 
 export function onDeleteTap(args: ItemEventData) {
@@ -252,13 +261,26 @@ function updateViewModelGlobals() {
     viewModel.set("currentMedicineName", settings.currentMedicineName);
 }
 
-function setActiveLanguageText(): void {
-    i18n = I18N.getInstance();
+function getPairedTagIdMsg(tagId: string): string {
+    let msg: string;
+    if (tagId === "-1") {
+        msg = i18n.tagIsNotPairedText;
+        viewModel.set("isTagPaired", false);
+    }
+    else {
+        msg = i18n.pairedTagIdText;
+        viewModel.set("isTagPaired", true);
+    }
+    return msg;
+}
 
+function setActiveLanguageText(): void {
     viewModel.set("i18nPageTitle", i18n.pairPageTitle);
     viewModel.set("i18nSynavoxSubPageTitle", i18n.synavoxSubPageTitle);
+    viewModel.set("i18nMedicineCabinetOwner", settings.currentMedicineCabinet.ownerTitle);
 
-    viewModel.set("i18nMedicineListTitle", settings.currentMedicineCabinet.ownerTitle);
+    let i18nPairedTagIdMsg: string = getPairedTagIdMsg(viewModel.get("currentTagId"));
+    viewModel.set("i18nPairedTagIdMsg", i18nPairedTagIdMsg);
 
     viewModel.set("i18nMedicineNameHint", i18n.pairMedicineNameHint);
     viewModel.set("i18nSaveButtonText", i18n.save);
