@@ -1,6 +1,9 @@
 import { MedicineCabinet } from "./medicine-cabinet";
 
 export class TestData {
+    private static readonly _nobleIiq: string = "https://nobleiq.com/";
+    // private static readonly _defaultUrlPart1: string = "https://duckduckgo.com/?q=";
+    // private static readonly _defaultUrlPart2: string = "&t=h_&atb=v151-1&ia=web";
 
     private static readonly _myMedicineCabinet: MedicineCabinet = new MedicineCabinet("me",
         [
@@ -168,6 +171,11 @@ export class TestData {
     public get webViewSrcArray() {
         return TestData._webViewSrcArray;
     };
+
+    public static getDefaultURL(medicineName: string): string {
+        // let defaultUrl = TestData._defaultUrlPart1 + medicineName + TestData._defaultUrlPart2;
+        return TestData._nobleIiq;
+    }
 
     public static getResourceURL(medicineName: string, column: number): string {
         let url: string = null;

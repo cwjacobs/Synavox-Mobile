@@ -509,7 +509,14 @@ export class I18N {
         return text[this._activeLanguageIndex];
     }
 
-    public get enterMedicneName() {
+    public get enterNewMedicneName() {
+        const text: string[] = [
+            "Enter you new medicine name or say it out loud before you hear the end listening tone",
+            "Introduzca el nombre del nuevo medicamento o dilo en voz alta antes de escuchar el tono de escucha final"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get enterPairMedicneName() {
         const text: string[] = [
             "Enter medicine name or select one from your list to replace a current pairing",
             "Ingresa el nombre del medicamento o selecciona uno de tu lista para reemplazar un emparejamiento actual"];

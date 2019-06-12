@@ -56,7 +56,7 @@ export function onLoaded(args: EventData) {
 
     isUserBrowsing = false;
     viewModel.set("isUserBrowsing", isUserBrowsing);
-    viewModel.set("myMedicineList", settings.currentMedicineCabinet.medicines);
+    viewModel.set("medicineList", settings.currentMedicineCabinet.medicines);
 
     // Set text to active language
     setActiveLanguageText();
@@ -72,13 +72,15 @@ export function onItemTap(args: ItemEventData) {
     // let index: number = settings.currentMedicineCabinet.getMedicineBindingIndex(medicineName);
     // let wvsMedicineSrc: string = webViewSrcModel[index].srcLinks[column].webViewSrc;
     let wvsMedicineSrc: string = TestData.getResourceURL(medicineName, column);
-
+    if (wvsMedicineSrc == null) {
+        wvsMedicineSrc = TestData.getDefaultURL(medicineName);
+    }
     viewModel.set("webViewSrc", wvsMedicineSrc);
     submit(args);
 
     isUserBrowsing = true;
     viewModel.set("isUserBrowsing", isUserBrowsing);
-};
+}
 
 export function onWebViewLoaded(webargs) {
     const page: Page = <Page>webargs.object.page;
@@ -120,7 +122,7 @@ export function submit(args) {
                 console.log("Dialog closed!");
             });
     }
-}``
+} ``
 
 export function onGoBackTap() {
     const componentRoute = "browse/browse-page";
