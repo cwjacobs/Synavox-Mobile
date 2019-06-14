@@ -86,6 +86,7 @@ export class MedicineCabinet {
         return (index !== -1) ? this._medicines[index] : null;
     }
 
+    /* Returns -1 if medicine name not found in medicine list */
     public getMedicineBindingIndex(medicineName: string): number {
         let i: number = 0;
         let index: number = -1;

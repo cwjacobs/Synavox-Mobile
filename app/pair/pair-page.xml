@@ -27,7 +27,7 @@
 			</parallax:Anchored>
 			<parallax:Content class="body-template" height="550vh" background="white">
 				<DockLayout width="auto" height="420vh" background="white">
-					<ListView class="list-container" id="medicineList" items="{{ myMedicineList }}" itemTap="onItemTap" height="300vh" background="white" dock="top">
+					<ListView class="list-container" id="medicineList" items="{{ medicineList }}" itemTap="onItemTap" height="300vh" background="white" dock="top">
 						<ListView.itemTemplate>
 							<GridLayout rows="auto" columns="*,*,*,auto">
 								<Label class="list-MedicineName" text="{{ medicineName }}" row="0" col="0" colSpan="2" />
@@ -45,7 +45,7 @@
 		<GridLayout class="list-container pair-button-row" rows="auto" columns="*,*,auto">
 			<Button class="my-button alert fa" text="{{ i18nDeleteButtonText, i18nDeleteButtonText + ' &#xf014;' }} " onTap="onDeleteTap" row="0" col="0" />
 			<Button class="my-button primary fa" text="{{ i18nSaveButtonText, i18nSaveButtonText + ' &#xf0c7;' }}" onTap="onSaveTap" row="0" col="1" />
-			<Button class="my-button secondary fa" text="{{ i18nCancelButtonText, i18nCancelButtonText + ' &#xf05e;' }}" onTap="onCancelTap" row="0" col="2" />
+			<Button class="my-button secondary fa" text="{{ i18nClearButtonText, i18nClearButtonText + ' &#xf12d;' }}" onTap="onClearTap" row="0" col="2" />
 		</GridLayout>
 		<StackLayout class="hr-light"></StackLayout>
 		<GridLayout class="list-container audio-button-row" rows="70" columns="*,*,*">

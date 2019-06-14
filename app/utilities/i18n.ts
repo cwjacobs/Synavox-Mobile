@@ -85,6 +85,10 @@ export class I18N {
         return text[this._activeLanguageIndex];
     }
 
+    public get clear() {
+        const text: string[] = ["Clear", "Claro"];
+        return text[this._activeLanguageIndex];
+    }
     public get cancel() {
         const text: string[] = ["Cancel", "Cancelar"];
         return text[this._activeLanguageIndex];

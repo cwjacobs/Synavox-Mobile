@@ -1,16 +1,12 @@
 import { MedicineCabinet } from "~/data-models/medicine-cabinet";
-import { TestData } from "~/data-models/test-data";
-import { Page } from "tns-core-modules/ui/page/page";
 
 export class Settings {
 
-    private static readonly _version: string = "Version: 1.02.0";
+    private static readonly _version: string = "Version: 1.10.0";   // 6/14/19
 
     private _currentTab: number;
 
     private _currentPage: string;
-
-    private _currentTabTitle: string;
 
     private _currentTagId: string;
 
@@ -94,7 +90,7 @@ export class Settings {
     }
 
     public set currentMedicineName(value: string) {
-        this._currentMedicineName = value;
+        this._currentMedicineName = this.removeSpecialCharacters(value);
     }
 
     public get isConfirmingDose() {
@@ -144,4 +140,10 @@ export class Settings {
     public set isSpeechRecognitionAvailable(value: boolean) {
         this._isSpeechRecognitionAvailable = value;
     }
+
+    private removeSpecialCharacters(src: string): string {
+        let dst: string = src.replace(/[^a-zA-Z]/g, "");
+        return dst;
+    }
 }
+

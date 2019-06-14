@@ -61,17 +61,21 @@ let secondaryOff: string = "#a4cac7";
 let alertOn: string = "#ff0000";
 let alertOff: string = "#ffc8c8";
 
+let medsIconDosesPerDayOn: string = "#00fa00";
+let medsIconDosesTakenTodayOn: string = "#3affe5";
+let medsIconDosesTakenTodayOff: string = "#3ab7ff";
+
 let isTabsViewInitialized: boolean = false;
 
 export function onDeleteMedTap() {
-    const deleteButton: any = getDeleteButton();
+    const deleteButton: any = getDeleteButtonView();
 
     if (deleteButton.color.hex.toUpperCase() === primaryOff.toUpperCase()) {
         alert(getI18NCannotDeleteLastMedicineMsg());
         return;
     }
 
-    let medicineName: string = viewModel.get("currentMedicineName");
+    let medicineName: string = removeSpecialCharacters(viewModel.get("currentMedicineName"));
 
     let confirmMsg: string = getI18NDeleteMedicineConfirmMsg(medicineName);
     confirm(confirmMsg).then((isConfirmed) => {
@@ -115,50 +119,63 @@ export function onSpeechRecognition_home(transcription: string) {
     const input: TextField = page.getViewById<TextField>("current-medicine-name");
     input.text = capitalizeFirstLetter(transcription);
     viewModel.set("currentMedicineName", input.text);
+
+    // settings.currentMedicineName = transcription;
 }
 
 export function onSaveNewMedicineTap() {
+    vr.stopListening();
     viewModel.set("isAddingNewMedicine", false);
 
-    let medicineName: string = viewModel.get("currentMedicineName");
+    let medicineName: string = removeSpecialCharacters(viewModel.get("currentMedicineName"));
     if (medicineName == null) {
         alert(i18n.selectMedicineMsg);
         return;
     }
 
-    let binding: MedicineBinding = new MedicineBinding("-1", medicineName, 0, 0);
+    /* Returns -1 if medicine name not found in medicine list */
+    let index: number = settings.currentMedicineCabinet.getMedicineBindingIndex(medicineName);
+    if (index === -1) {
+        // A new medicine, "medicineName" was not found in list
+        let binding: MedicineBinding = new MedicineBinding("-1", medicineName, 0, 0);
 
-    // binding.tagId = "-1";
-    // binding.dailyDoses = 0;
-    // binding.dailyRequiredDoses = 0;
-    // binding.medicineName = viewModel.get("currentMedicineName");
+        settings.currentMedicineCabinet.addMedicineBinding(binding);
+        settings.currentTagId = binding.tagId;
+        settings.currentMedicineName = binding.medicineName;
+        viewModel.set("medicineList", settings.currentMedicineCabinet.medicines);
 
-    settings.currentMedicineCabinet.addMedicineBinding(binding);
-    settings.currentTagId = binding.tagId;
-    settings.currentMedicineName = binding.medicineName;
-    viewModel.set("medicineList", settings.currentMedicineCabinet.medicines);
+        isEditingAvailable = true;
+        viewModel.set("isEditingAvailable", isEditingAvailable);
 
-    isEditingAvailable = true;
-    viewModel.set("isEditingAvailable", isEditingAvailable);
+        isEditingDosesTakenToday = false;
+        viewModel.set("isEditingDosesTakenToday", isEditingDosesTakenToday);
 
-    isEditingDosesTakenToday = false;
-    viewModel.set("isEditingDosesTakenToday", isEditingDosesTakenToday);
+        const listView: ListView = page.getViewById<ListView>("medicine-list");
+        listView.refresh();
 
-    const listView: ListView = page.getViewById<ListView>("medicine-list");
-    listView.refresh();
+        alert(i18n.enterDosesPrescribed + binding.medicineName);
 
-    alert(i18n.enterDosesPrescribed + binding.medicineName);
+        changeTotalDosesPerDay();
 
-    changeTotalDosesPerDay();
+        const deleteButton: any = getDeleteButtonView();
+        deleteButton.color = primaryOn;
+    }
+    else {
+        // An existing medicine, "medicineName" was found in list
+        isEditingAvailable = true;
+        viewModel.set("isEditingAvailable", isEditingAvailable);
 
-    const deleteButton: any = getDeleteButton();
-    deleteButton.color = primaryOn;
+        isEditingDosesTakenToday = false;
+        viewModel.set("isEditingDosesTakenToday", isEditingDosesTakenToday);
+
+        displayCurrentDoses();
+        displayDosesPerDayInstructions(settings.currentMedicineCabinet.getDailyDosesRequired(settings.currentMedicineName));
+    }
 }
 
 export function onCancelNewMedicineTap() {
     let isAddingNewMedicine: boolean = false;
     viewModel.set("isAddingNewMedicine", isAddingNewMedicine);
-
     viewModel.set("currentMedicineName", settings.currentMedicineName);
 
     displayCurrentDoses();
@@ -305,11 +322,15 @@ export function onSaveTotalDosesPerDayTap() {
     let currentMedicineNameView: any = page.getViewById("current-medicine-name");
     currentMedicineNameView.color = primaryOn;
 
+    let currentMedicineNameIcon: Label = page.getViewById("current-medicine-name-icon");
+    currentMedicineNameIcon.color = new Color(medsIconDosesTakenTodayOff);
+
     displayCurrentDoses();
     displayCurrentListDoses();
 
-    let medicineName: string = viewModel.get("currentMedicineName");
-    displayDosesPerDayInstructions(settings.currentMedicineCabinet.getDailyDosesRequired(medicineName));
+    // let medicineName: string = removeSpecialCharacters(viewModel.get("currentMedicineName"));
+    settings.currentMedicineName = removeSpecialCharacters(viewModel.get("currentMedicineName"));
+    displayDosesPerDayInstructions(settings.currentMedicineCabinet.getDailyDosesRequired(settings.currentMedicineName));
 }
 
 export function onCancelTotalDosesPerDayTap() {
@@ -317,6 +338,9 @@ export function onCancelTotalDosesPerDayTap() {
 
     isEditingTotalDosesPerDay = false;
     viewModel.set("isEditingTotalDosesPerDay", isEditingTotalDosesPerDay);
+
+    let currentMedicineNameIcon: Label = page.getViewById("current-medicine-name-icon");
+    currentMedicineNameIcon.color = new Color(medsIconDosesTakenTodayOff);
 
     let editDosesTakenTodayButton: Button = page.getViewById("edit-doses-taken-today");
     editDosesTakenTodayButton.backgroundColor = primaryOn;
@@ -327,8 +351,10 @@ export function onCancelTotalDosesPerDayTap() {
     displayCurrentDoses();
     displayCurrentListDoses();
 
-    let medicineName: string = viewModel.get("currentMedicineName");
-    displayDosesPerDayInstructions(settings.currentMedicineCabinet.getDailyDosesRequired(medicineName));
+    let medicineName: string = removeSpecialCharacters(viewModel.get("currentMedicineName"));
+    settings.currentMedicineName = removeSpecialCharacters(viewModel.get("currentMedicineName"));
+
+    displayDosesPerDayInstructions(settings.currentMedicineCabinet.getDailyDosesRequired(settings.currentMedicineName));
 }
 
 export function onChangeDosesTakenTodayTap(args: EventData) {
@@ -347,8 +373,11 @@ export function onChangeDosesTakenTodayTap(args: EventData) {
 
         let editTotalDosesPerDayButton: Button = page.getViewById("edit-total-required-doses");
         editTotalDosesPerDayButton.backgroundColor = secondaryOff;
+        
+        let currentMedicineNameIcon: Label = page.getViewById("current-medicine-name-icon");
+        currentMedicineNameIcon.color = new Color(medsIconDosesTakenTodayOn);
 
-        let medicineName: string = viewModel.get("currentMedicineName");
+        let medicineName: string = removeSpecialCharacters(viewModel.get("currentMedicineName"));
         let currentMedicineNameView: any = page.getViewById("current-medicine-name");
         currentMedicineNameView.color = primaryOn;
 
@@ -395,6 +424,9 @@ export function onSaveDosesTakenTodayTap() {
 
     let editTotalDosesPerDayButton: Button = page.getViewById("edit-total-required-doses");
     editTotalDosesPerDayButton.backgroundColor = secondaryOn;
+    
+    let currentMedicineNameIcon: Label = page.getViewById("current-medicine-name-icon");
+    currentMedicineNameIcon.color = new Color(medsIconDosesTakenTodayOff);
 
     let currentMedicineNameView: any = page.getViewById("current-medicine-name");
     currentMedicineNameView.color = primaryOn;
@@ -402,8 +434,8 @@ export function onSaveDosesTakenTodayTap() {
     displayCurrentDoses();
     displayCurrentListDoses();
 
-    let medicineName: string = viewModel.get("currentMedicineName");
-    displayDosesPerDayInstructions(settings.currentMedicineCabinet.getDailyDosesRequired(medicineName));
+    settings.currentMedicineName = removeSpecialCharacters(viewModel.get("currentMedicineName"));
+    displayDosesPerDayInstructions(settings.currentMedicineCabinet.getDailyDosesRequired(settings.currentMedicineName));
 }
 
 export function onCancelDosesTakenTodayTap() {
@@ -415,14 +447,17 @@ export function onCancelDosesTakenTodayTap() {
     let editTotalDosesPerDayButton: Button = page.getViewById("edit-total-required-doses");
     editTotalDosesPerDayButton.backgroundColor = secondaryOn;
 
+    let currentMedicineNameIcon: Label = page.getViewById("current-medicine-name-icon");
+    currentMedicineNameIcon.color = new Color(medsIconDosesTakenTodayOff);
+
     let currentMedicineNameView: any = page.getViewById("current-medicine-name");
     currentMedicineNameView.color = primaryOn;
 
     displayCurrentDoses();
     displayCurrentListDoses();
 
-    let medicineName: string = viewModel.get("currentMedicineName");
-    displayDosesPerDayInstructions(settings.currentMedicineCabinet.getDailyDosesRequired(medicineName));
+    settings.currentMedicineName = removeSpecialCharacters(viewModel.get("currentMedicineName"));
+    displayDosesPerDayInstructions(settings.currentMedicineCabinet.getDailyDosesRequired(settings.currentMedicineName));
 }
 
 export function current1(args: ItemEventData) {
@@ -510,7 +545,7 @@ export function onItemTap(args: ItemEventData) {
 // Audio control functions
 export function onPlayTap(args: ItemEventData) {
     if (settings.isAudioEnabled) {
-        let medicineName: string = viewModel.get("currentMedicineName");
+        let medicineName: string = removeSpecialCharacters(viewModel.get("currentMedicineName"));
         if (!medicineName) {
             alert(i18n.selectMedicineMsg);
             return;
@@ -532,16 +567,21 @@ export function onAudioEnableTap(args: ItemEventData) {
     }
 };
 
-function capitalizeFirstLetter(string) {
+function removeSpecialCharacters(src: string): string {
+    let dst: string = src.replace(/[^a-zA-Z]/g, "");
+    return dst;
+}
+
+function capitalizeFirstLetter(string): string {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function getDeleteButton(): any {
+function getDeleteButtonView(): any {
     const medicineDeleteButtonIds: string[] = ["delete-t1-medicine", "delete-t2-medicine", "delete-t3-medicine"]
 
     let deleteButtonId: string = medicineDeleteButtonIds[settings.currentTab];
-    let deleteButton: any = page.getViewById(deleteButtonId);
-    return deleteButton
+    let deleteButtonView: any = page.getViewById(deleteButtonId);
+    return deleteButtonView
 }
 
 function setMedicineCabinetOwnerInfo() {
@@ -569,14 +609,17 @@ function changeTotalDosesPerDay() {
         let i18nCancelButtonText: string = getI18nCancelButtonText();
         viewModel.set("i18nCancelButtonText", i18nCancelButtonText);
 
+        let currentMedicineNameIcon: Button = page.getViewById("current-medicine-name-icon");
+        currentMedicineNameIcon.color = new Color(medsIconDosesPerDayOn);
+
         let editDosesTakenTodayButton: Button = page.getViewById("edit-doses-taken-today");
         editDosesTakenTodayButton.backgroundColor = primaryOff;
 
-        let medicineName: string = viewModel.get("currentMedicineName");
         let currentMedicineNameView: any = page.getViewById("current-medicine-name");
         currentMedicineNameView.color = secondaryOn;
 
         let doseIndicatorBaseId: string = "current";
+        let medicineName: string = removeSpecialCharacters(viewModel.get("currentMedicineName"));
         let dailyRequiredDoses: number = tempMedicineCabinet.getDailyDosesRequired(medicineName);
 
         let maxDosesDisplayed: number = 6;
@@ -629,7 +672,7 @@ function clearListDosesTakenToday() {
 
 function displayCurrentDoses() {
     let doseIndicatorIdBase: string = "current";
-    let medicineName: string = viewModel.get("currentMedicineName");
+    let medicineName: string = removeSpecialCharacters(viewModel.get("currentMedicineName"));
 
     let dosesTakenToday: number = settings.currentMedicineCabinet.getDosesTakenToday(medicineName);
     let dailyDosesRequired: number = settings.currentMedicineCabinet.getDailyDosesRequired(medicineName);
@@ -687,7 +730,7 @@ function toggleIndicator(indicator: any): number {
 
 // Uses temp list because we're editing
 function adustDailyDoseTaken(indicator: any): void {
-    let medicineName: string = viewModel.get("currentMedicineName");
+    let medicineName: string = removeSpecialCharacters(viewModel.get("currentMedicineName"));
 
     let dosesTakenToday: number = tempMedicineCabinet.getDosesTakenToday(medicineName);
     let dailyDosesRequired: number = tempMedicineCabinet.getDailyDosesRequired(medicineName);
@@ -726,7 +769,7 @@ function getIndicatorDoseNumber(indicator: string): number {
 }
 
 function adustDailyDoseRequirement(indicator: any) {
-    let medicineName: string = viewModel.get("currentMedicineName");
+    let medicineName: string = removeSpecialCharacters(viewModel.get("currentMedicineName"));
     let dailyDosesRequired: number = tempMedicineCabinet.getDailyDosesRequired(medicineName);
 
     if (dailyDosesRequired === 0) {
@@ -831,7 +874,7 @@ function registerDoseTaken(medicineName: string): void {
 
 function updateViewModelGlobals() {
     setTimeout(() => {
-        let deleteButton: any = getDeleteButton();
+        let deleteButton: any = getDeleteButtonView();
         if (deleteButton) {
             if (settings.currentMedicineCabinet.medicines.length === 1) {
                 deleteButton.color = primaryOff;
@@ -854,7 +897,7 @@ function setActiveLanguageText(): void {
     viewModel.set("i18nMedicineCabinetOwnerTitle", settings.currentMedicineCabinet.ownerTitle);
     viewModel.set("i18nSynavoxSubPageTitle", i18n.synavoxSubPageTitle);
 
-    viewModel.set("i18nMyMedicines", i18n.myMedicines);
+    // viewModel.set("i18nMyMedicines", i18n.myMedicines);
 
     viewModel.set("i18nMe", i18n.me);
     viewModel.set("i18nMom", i18n.mom);

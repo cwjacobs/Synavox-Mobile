@@ -212,7 +212,7 @@ export function onSaveTap() {
     listView.refresh();
 }
 
-export function onCancelTap(args: ItemEventData) {
+export function onClearTap(args: ItemEventData) {
     settings.isNewBinding = false;
     settings.currentTagId = "";
     settings.currentMedicineName = "";
@@ -255,7 +255,7 @@ export function onLogoTap(args: ItemEventData) {
 
 function updateViewModelGlobals() {
     viewModel.set("isAudioEnabled", settings.isAudioEnabled);
-    viewModel.set("myMedicineList", settings.currentMedicineCabinet.medicines);
+    viewModel.set("medicineList", settings.currentMedicineCabinet.medicines);
 
     viewModel.set("currentTagId", settings.currentTagId);
     viewModel.set("currentMedicineName", settings.currentMedicineName);
@@ -284,7 +284,7 @@ function setActiveLanguageText(): void {
 
     viewModel.set("i18nMedicineNameHint", i18n.pairMedicineNameHint);
     viewModel.set("i18nSaveButtonText", i18n.save);
-    viewModel.set("i18nCancelButtonText", i18n.cancel);
+    viewModel.set("i18nClearButtonText", i18n.clear);
     viewModel.set("i18nDeleteButtonText", i18n.delete);
 }
 

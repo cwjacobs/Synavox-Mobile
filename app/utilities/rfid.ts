@@ -20,7 +20,6 @@ let tagId: string;
 let appRootContext: AppRootViewModel = null;
 
 export class RFID {
-    // private _tagId: string;
     private _nfc: Nfc = null;
     private _tagScanned: boolean;
     private _tagListenerStarted: boolean;
@@ -56,6 +55,21 @@ export class RFID {
     }
 
     public startTagListener() {
+        if (this._nfc == null) {
+            console.log("this._nfc == null");
+            setTimeout(() => {
+                this._nfc = new Nfc();
+                if (this._nfc == null) {
+                    console.log("Could not create NFC device interface");
+                }
+                else {
+                    console.log("Created NFC device interface");
+                    this.startTagListener();
+                }
+            }, 500);
+            return; // Bail and try again in 500
+        }
+
         console.log("startTagListener() ? this._tagListenerStarted: " + this._tagListenerStarted);
         if (!this._tagListenerStarted) {
             this._nfc.available().then((avail) => {

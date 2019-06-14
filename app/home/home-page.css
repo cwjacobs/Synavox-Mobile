@@ -1,9 +1,3 @@
-/* .title {
-    font-size: 22em;
-    margin-top: 60px;
-    text-align: center;
-} */
-
 .image-container {
     width: 100%;
     height: auto;
@@ -19,6 +13,14 @@
     font-size: 22em;
     margin-top: 5px;
     margin-bottom: 5px;
+}
+
+.pairing-TagIcon {
+    color: #3ab7ff;
+    font-size: 22em;
+    margin-top: 5px;
+    margin-bottom: 45px;
+    vertical-align: bottom;
 }
 
 .pairing-MedicineName {

@@ -42,13 +42,15 @@
 			<parallax:Content class="body-template" height="550vh" stretchLastChild="false" background="white">
 				<!-- Current Medicine Line-Item: Name and Doses -->
 				<StackLayout class="list-container">
-					<GridLayout rows="auto" columns="200vw,*,*,*,*,*">
-						<TextField class="pairing-MedicineName fas" id="current-medicine-name" text="{{ currentMedicineName, '&#xf484; ' + currentMedicineName }}" row="0" col="0" colSpan="1" returnKeyType="done" />
-						<Label class="reminder-mark fa" id="current1" text="&#xf058;" row="0" col="1" onTap="current1"/>
-						<Label class="reminder-mark fa" id="current2" text="&#xf058;" row="0" col="2" onTap="current2" />
-						<Label class="reminder-mark fa" id="current3" text="&#xf058;" row="0" col="3" onTap="current3" />
-						<Label class="reminder-mark fa" id="current4" text="&#xf058;" row="0" col="4" onTap="current4" />
-						<Label class="reminder-mark fa" id="current5" text="&#xf058;" row="0" col="5" onTap="current5" />
+					<GridLayout rows="auto" columns="30vw, 170vw,*,*,*,*,*">
+						<Label class="pairing-TagIcon fas" id="current-medicine-name-icon" text="&#xf484;" row="0" col="0" colSpan="1" returnKeyType="done" />
+						<TextField class="pairing-MedicineName fas" id="current-medicine-name" text="{{ currentMedicineName }}" row="0" col="1" colSpan="1" returnKeyType="done" />
+						<!-- <TextField class="pairing-MedicineName fas" id="current-medicine-name" text="{{ currentMedicineName, '&#xf484; ' + currentMedicineName }}" row="0" col="0" colSpan="1" returnKeyType="done" /> -->
+						<Label class="reminder-mark fa" id="current1" text="&#xf058;" row="0" col="2" onTap="current1"/>
+						<Label class="reminder-mark fa" id="current2" text="&#xf058;" row="0" col="3" onTap="current2" />
+						<Label class="reminder-mark fa" id="current3" text="&#xf058;" row="0" col="4" onTap="current3" />
+						<Label class="reminder-mark fa" id="current4" text="&#xf058;" row="0" col="5" onTap="current4" />
+						<Label class="reminder-mark fa" id="current5" text="&#xf058;" row="0" col="6" onTap="current5" />
 					</GridLayout>
 					<Label class="daily-instruction" text="{{ i18nDailyInstructions }}" />
 					<StackLayout class="hr-light"></StackLayout>
