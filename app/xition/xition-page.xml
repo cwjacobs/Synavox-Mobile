@@ -16,22 +16,26 @@
 			<parallax:Content class="body-template" height="610vh">
 				<StackLayout visibility="{{ isL1 ? 'visible' : 'collapsed' }}">
 					<TextView loaded="onTextViewLoaded" text="{{ i18nNewTagIntro_L1 }}" id="tag-intro_l1" editable="{{ editState }}" class="title primary text-border"></TextView>
-					<GridLayout class="list-container" rows="auto" columns="*">
-						<Button class="button my-button primary" text="{{ i18nNext, i18nNext + ' >>' }}" row="0" col="0" onTap="onNextL1Tap" />
+					<GridLayout class="list-container" rows="auto" columns="*,*">
+						<Button class="button my-button alert" style="font-style: italic; font-weight: bold;" text="{{ i18nCancel }}" row="0" col="0" onTap="onCancelTap" />
+						<Button class="button my-button" style="font-style: italic; font-weight: bold; color: #3A53FF; background-color: white" text="{{ i18nNext, i18nNext + ' >>' }}" row="0" col="1" onTap="onNextL1Tap" />
 					</GridLayout>
 				</StackLayout>
 				<StackLayout visibility="{{ isL2 ? 'visible' : 'collapsed' }}">
 					<TextView text="{{ i18nNewTagIntro_L3 }}" editable="{{ editState }}" class="subtitle text-border"></TextView>
 					<TextView text="{{ i18nNewTagIntro_L2 }}" editable="{{ editState }}" class="subtitle text-border"></TextView>
 					<GridLayout class="list-container" rows="auto" columns="*,*">
-						<Button class="button my-button secondary" text="{{ i18nNo }}" row="0" col="0" onTap="onNoTap" />
-						<Button class="button my-button primary" text="{{ i18nYes }}" row="0" col="1" onTap="onYesTap" />
+						<Button class="button my-button alert" style="font-style: italic; font-weight: bold" text="{{ i18nNo }}" row="0" col="0" onTap="onNoTap" />
+						<Button class="button my-button" style="font-style: italic; font-weight: bold; color: #3A53FF; background-color: white" text="{{ i18nYes, i18nYes + ' >>' }}" row="0" col="1" onTap="onYesTap" />
 					</GridLayout>
 				</StackLayout>
 				<StackLayout visibility="{{ isL3 ? 'visible' : 'collapsed' }}">
 					<TextView text="{{ i18nNewTagIntro_L4 }}" editable="{{ editState }}" class="subtitle alert text-border"></TextView>
 					<TextView text="{{ i18nNewTagIntro_L5 }}" editable="{{ editState }}" class="subtitle alert text-border"></TextView>
-					<Button class="button my-button primary" text="{{ i18nNext, i18nNext + ' >>' }}" row="0" col="0" onTap="onNextL3Tap" />
+					<GridLayout class="list-container" rows="auto" columns="*,*">
+						<Button class="button my-button alert" style="font-style: italic; font-weight: bold" text="{{ i18nBack, '<< '  + i18nBack }}" row="0" col="0" onTap="onBackL3Tap" row="0" col="0"/>
+						<Button class="button my-button" style="font-style: italic; font-weight: bold; color: #3A53FF; background-color: white" text="{{ i18nNext, i18nNext + ' >>' }}" row="0" col="0" onTap="onNextL3Tap" row="0" col="1" />
+					</GridLayout>
 				</StackLayout>
 				<!-- <StackLayout dock="bottom"><image src="~/images/logo.png" height="auto" width="230vw" onTap="onLogoTap" /></StackLayout> -->
 			</parallax:Content>

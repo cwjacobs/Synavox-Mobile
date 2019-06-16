@@ -95,6 +95,11 @@ export class I18N {
         return text[this._activeLanguageIndex];
     }
 
+    public get back() {
+        const text: string[] = ["Back", "Atrás"];
+        return text[this._activeLanguageIndex];
+    }
+
     public get save() {
         const text: string[] = ["Save", "Salvar"];
         return text[this._activeLanguageIndex];

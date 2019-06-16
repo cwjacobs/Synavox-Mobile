@@ -81,6 +81,16 @@ export function onNextL3Tap() {
     navigateTo(pageTitle, pageRoute);
 }
 
+export function onCancelTap() {
+    onNoTap();
+}
+
+export function onBackL3Tap() {
+    onNextL1Tap();
+    // viewModel.set("isL1", false);
+    // viewModel.set("isL2", true);
+}
+
 export function onNoTap() {
     settings.isNewBinding = false;
 
@@ -127,7 +137,9 @@ function setActiveLanguageText(): void {
 
     viewModel.set("i18nNo", i18n.no);
     viewModel.set("i18nYes", i18n.yes);
+    viewModel.set("i18nBack", i18n.back);
     viewModel.set("i18nNext", i18n.next);
+    viewModel.set("i18nCancel", i18n.cancel);
 
     viewModel.set("editState", false);
     viewModel.set("i18nNewTagIntro_L1", i18n.newTagIntro_L1);

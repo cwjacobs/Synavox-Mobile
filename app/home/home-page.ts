@@ -56,6 +56,7 @@ let primaryOn: string = "#3A53FF";
 let primaryOff: string = "#c1c8f8";
 
 let secondaryOn: string = "#398881";
+// let secondaryOn: string = "#68a7a1";
 let secondaryOff: string = "#a4cac7";
 
 let alertOn: string = "#ff0000";
