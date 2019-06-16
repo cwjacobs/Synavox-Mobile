@@ -127,7 +127,8 @@ export function onSaveNewMedicineTap() {
     vr.stopListening();
     viewModel.set("isAddingNewMedicine", false);
 
-    let medicineName: string = removeSpecialCharacters(viewModel.get("currentMedicineName"));
+    let medicineName: string = settings.currentMedicineName = removeSpecialCharacters(viewModel.get("currentMedicineName"));
+    viewModel.set("currentMedicineName", settings.currentMedicineName);
     if (medicineName == null) {
         alert(i18n.selectMedicineMsg);
         return;
