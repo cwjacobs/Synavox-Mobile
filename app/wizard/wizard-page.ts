@@ -64,7 +64,8 @@ export function onLoaded(args: EventData) {
             confirm(confirmMsg).then((isConfirmed) => {
                 if (isConfirmed) {
                     settings.isNewBinding = true; // Informs pair-page that this is a new medicine/tag binding
-                    navigateTo("Pair", "pair/pair-page");
+                    navigateTo("Xition", "xition/xition-page");
+                    // navigateTo("Pair", "pair/pair-page");
                 }
                 else {
                     settings.isNewBinding = false;

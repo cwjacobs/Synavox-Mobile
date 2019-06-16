@@ -80,6 +80,21 @@ export class I18N {
      * Shared
      ******************************/
 
+    public get no() {
+        const text: string[] = ["No", "No"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get yes() {
+        const text: string[] = ["Yes", "Sí"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get next() {
+        const text: string[] = ["Next", "Próximo"];
+        return text[this._activeLanguageIndex];
+    }
+
     public get save() {
         const text: string[] = ["Save", "Salvar"];
         return text[this._activeLanguageIndex];
@@ -538,6 +553,61 @@ export class I18N {
         const text: string[] = [
             "Pairing (NFC) is not enabled on this device",
             "El emparejamiento (NFC) no está habilitado en este dispositivo"];
+        return text[this._activeLanguageIndex];
+    }
+
+
+    /******************************
+     * New Tag Page
+     ******************************/
+
+    public get tagId() {
+        const text: string[] = ["Tag Id", "Identificador de Etiqueta"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get xitionPageTitle() {
+        const text: string[] = ["New RFID Tag", "Nueva Etiqueta RFID"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get newTagIntro_L1() {
+        const text: string[] = [
+            "You’ve scanned an RFID tag which is not currently in your medicine cabinet.",
+            "Ha escaneado una etiqueta RFID que no está actualmente en su botiquín."];
+
+        return text[this._activeLanguageIndex];
+    }
+
+    public get newTagIntro_L2() {
+        const text: string[] = [
+            "Would you like to add this RFID tag now and pair it to a new or existing medication?",
+            "¿Le gustaría añadir esta etiqueta RFID ahora y emparejarla con un medicamento nuevo o existente?"];
+
+        return text[this._activeLanguageIndex];
+    }
+
+    public get newTagIntro_L3() {
+        const text: string[] = [
+            "Adding an RFID tag to your medicine bottle will allow you to scan the bottle at anytime with your phone to get information about your medication.",
+            "Agregar una etiqueta RFID a su frasco de medicamento le permitirá escanear la botella en cualquier momento con su teléfono para obtener información sobre su medicamento."];
+
+        return text[this._activeLanguageIndex];
+    }
+
+    public get newTagIntro_L4() {
+        const text: string[] = [
+            "We suggest adding the tag to your bottle instead of the bottle cap to prevent mistakenly putting the tagged cap on the wrong medicine bottle.",
+            "Le sugerimos que añada la etiqueta a su frasco en lugar de la tapa del frasco para evitar poner por error la tapa etiquetada en el frasco de medicamento equivocado."];
+
+        return text[this._activeLanguageIndex];
+    }
+
+    public get newTagIntro_L5() {
+        const text: string[] = [
+            "On the following screen, say the medicine name or enter it using the keypad.",
+            "En la siguiente pantalla, diga el nombre del medicamento o introdúzcalo con el teclado."];
+
         return text[this._activeLanguageIndex];
     }
 }

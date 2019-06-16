@@ -121,10 +121,10 @@ export class RFID {
         let binding: MedicineBinding = settings.currentMedicineCabinet.getMedicineBindingByTagId(settings.currentTagId);
         if (!binding) {
             // New tag, go to wizard
-            settings.isNewBinding = true;
+            // settings.isNewBinding = true;
 
-            pageTitle = "Wizard";
-            pageRoute = "wizard/wizard-page";
+            pageTitle = "Xition";
+            pageRoute = "xition/xition-page";
             this.navigateTo(pageTitle, pageRoute);
         }
         else {

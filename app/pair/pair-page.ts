@@ -85,7 +85,7 @@ export function onLoaded(args: EventData) {
 
     if (settings.isNewBinding) {
         // Request medicine name
-        alert(i18n.enterPairMedicneName);
+        // alert(i18n.enterPairMedicneName);
         setTimeout(() => {
             if (settings.isSpeechRecognitionAvailable) {
                 VR.getInstance().startListening();
