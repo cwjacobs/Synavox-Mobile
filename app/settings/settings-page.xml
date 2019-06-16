@@ -24,7 +24,7 @@
 				<GridLayout class="button-row" rows="*,*" columns="*,*">
 					<Button class="my-button" style="{{ isEnButtonEnabled ? 'background-color: #3A53FF' : 'background-color: #c1c8f8' }}" isEnabled="{{ isEnButtonEnabled }}" text="{{ i18nEnglishButtonText }}" row="0" col="0" onTap="onEnglishTap" />
 					<Label class="indicator fa" style="{{ isEnButtonEnabled ? 'color: #AAAAAA' : 'color: #000000' }}" text="&#xf046; Active" row="0" col="1" />
-					<Button class="my-button" style="{{ isSpButtonEnabled ? 'background-color: #398881' : 'background-color: #a4cac7' }}" isEnabled="{{ isSpButtonEnabled }}" text="{{ i18nSpanishButtonText }}" row="1" col="0" onTap="onSpanishTap" />
+					<Button class="my-button" style="{{ isSpButtonEnabled ? 'background-color: #587e90' : 'background-color: #9daeb6' }}" isEnabled="{{ isSpButtonEnabled }}" text="{{ i18nSpanishButtonText }}" row="1" col="0" onTap="onSpanishTap" />
 					<Label class="indicator fa" style="{{ isSpButtonEnabled ? 'color: #AAAAAA' : 'color: #000000' }}" text="&#xf046; Activo" row="1" col="2" />
 				</GridLayout>
 				<StackLayout class="hr-light"></StackLayout>
@@ -36,10 +36,6 @@
 					<Button class="my-button secondary" text="{{ i18nAlwaysConfirmDose }}" row="1" col="0" onTap="onAlwaysConfirmTap" />
 					<Label class="indicator fa left" style="{{ isAlwaysConfirmDose ? 'color: black' : 'color: #BBBBBB' }}" text="&#xf046;" row="1" col="1" />
 				</GridLayout>
-				<!-- <GridLayout class="button-row" rows="auto" columns="230, *, *">
-					<Button class="my-button secondary" text="{{ i18nAlwaysConfirmDose }}" row="1" col="0" onTap="onAlwaysConfirmTap" />
-					<Label class="indicator fa left" style="{{ isAlwaysConfirmDose ? 'color: black' : 'color: #BBBBBB' }}" text="&#xf046;" row="1" col="1" />
-				</GridLayout> -->
 			</parallax:Content>
 		</parallax:ParallaxView>
 	</StackLayout>
