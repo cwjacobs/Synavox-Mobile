@@ -21,8 +21,9 @@
     text-align: left;
     font-style: italic;
     border-radius: 50px 20px;
+    border-color: white;
     /* background: linear-gradient(to bottom, #624102, #241703, #616161); */
-    background: linear-gradient(to bottom, #616161, #241703, #624102);
+    background: linear-gradient(to bottom, #3A53FF, #0b1b46, #3aa6ff);
 }
 
 .tag-id {
@@ -40,7 +41,12 @@
 }
 
 .bottom-gradient {
-    background: linear-gradient(to bottom, #624102, orangered, #616161);
+    background: linear-gradient(to bottom, #3A53FF, orangered, #616161);
+}
+
+.background-gradient {
+    /* background: linear-gradient(to bottom, white, #7cc2fb, #3A53FF); */
+    background: linear-gradient(to bottom, #3A53FF, #7cc2fb, white);
 }
 
 .degree-gradient {
@@ -122,15 +128,14 @@
 
 .body-template TextView {
     margin: 30px;
-    background-color: #624102;
-    /* background-image: url('~/images/newTag.png'); */
+    /* background-color: white; */
+    /* background: linear-gradient(to bottom, white, #5a5a5a, #2a2a2a); */
+    /* background-image: url('~/images/background.jpg'); */
 }
 
 .anchor {
     height: 45;
     width: 100%;
-    /* background-color:white; */
-    background-color: #616161;
 }
 
 #titleLabel {
