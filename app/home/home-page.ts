@@ -119,9 +119,8 @@ export function onAddMedTap() {
 export function onSpeechRecognition_home(transcription: string) {
     const input: TextField = page.getViewById<TextField>("current-medicine-name");
     input.text = capitalizeFirstLetter(transcription);
-    viewModel.set("currentMedicineName", input.text);
-
-    // settings.currentMedicineName = transcription;
+    settings.currentMedicineName = removeSpecialCharacters(input.text);
+    viewModel.set("currentMedicineName", settings.currentMedicineName);
 }
 
 export function onSaveNewMedicineTap() {
@@ -329,7 +328,6 @@ export function onSaveTotalDosesPerDayTap() {
     displayCurrentDoses();
     displayCurrentListDoses();
 
-    // let medicineName: string = removeSpecialCharacters(viewModel.get("currentMedicineName"));
     settings.currentMedicineName = removeSpecialCharacters(viewModel.get("currentMedicineName"));
     displayDosesPerDayInstructions(settings.currentMedicineCabinet.getDailyDosesRequired(settings.currentMedicineName));
 }

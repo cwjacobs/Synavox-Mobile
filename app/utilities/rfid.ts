@@ -123,8 +123,8 @@ export class RFID {
             // New tag, go to wizard
             // settings.isNewBinding = true;
 
-            pageTitle = "Xition";
-            pageRoute = "xition/xition-page";
+            pageTitle = "NewTag";
+            pageRoute = "xition/new-tag/new-tag-page";
             this.navigateTo(pageTitle, pageRoute);
         }
         else {

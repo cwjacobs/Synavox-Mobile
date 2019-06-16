@@ -49,7 +49,13 @@ let viewModel: PairViewModel = null;
 export function onSpeechRecognition_pair(transcription: string) {
     const input: TextField = page.getViewById<TextField>("medicineName-input");
     input.text = capitalizeFirstLetter(transcription);
-    viewModel.set("currentMedicineName", input.text);
+    settings.currentMedicineName = removeSpecialCharacters(input.text);
+    viewModel.set("currentMedicineName", settings.currentMedicineName);
+}
+
+function removeSpecialCharacters(src: string): string {
+    let dst: string = src.replace(/[^a-zA-Z]/g, "");
+    return dst;
 }
 
 function capitalizeFirstLetter(string) {
