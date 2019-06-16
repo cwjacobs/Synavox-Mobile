@@ -66,6 +66,9 @@ export function onLoaded(args: EventData) {
 export function onNextL1Tap() {
     viewModel.set("isL1", false);
     viewModel.set("isL2", true);
+    viewModel.set("isL3", false);
+    viewModel.set("isL4", false);
+
 }
 
 // export function onNextL2Tap() {
@@ -87,8 +90,6 @@ export function onCancelTap() {
 
 export function onBackL3Tap() {
     onNextL1Tap();
-    // viewModel.set("isL1", false);
-    // viewModel.set("isL2", true);
 }
 
 export function onNoTap() {
@@ -100,8 +101,10 @@ export function onNoTap() {
 }
 
 export function onYesTap() {
+    viewModel.set("isL1", false);
     viewModel.set("isL2", false);
     viewModel.set("isL3", true);
+    viewModel.set("isL4", false);
 }
 
 export function onItemTap(args: ItemEventData) {
