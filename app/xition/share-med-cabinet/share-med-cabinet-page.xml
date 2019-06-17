@@ -1,0 +1,48 @@
+<Page class="page" navigatingTo="onNavigatingTo" loaded="onLoaded" xmlns="http://schemas.nativescript.org/tns.xsd" xmlns:parallax="nativescript-parallax">
+	<ActionBar class="action-bar">
+		<NavigationButton ios:visibility="collapsed" icon="res://menu" tap="onDrawerButtonTap"></NavigationButton>
+		<ActionItem icon="res://navigation/menu" android:visibility="collapsed" tap="onDrawerButtonTap" ios.position="left"></ActionItem>
+		<StackLayout>
+			<Label class="action-bar-title" text="{{ i18nPageTitle }}"></Label>
+			<Label class="action-bar-subtitle" text="{{ i18nSynavoxSubPageTitle }}"></Label>
+		</StackLayout>
+	</ActionBar>
+	<StackLayout class="background-gradient">
+		<parallax:ParallaxView height="100%">
+			<parallax:Header class="header-template"></parallax:Header>
+			<parallax:Anchored class="anchor secondary">
+				<Label class="list-container email-field secondary" text="{{ i18nEmail }}"></Label>
+			</parallax:Anchored>
+			<parallax:Content class="body-template" height="610vh">
+				<StackLayout visibility="{{ isL1 ? 'visible' : 'collapsed' }}">
+					<TextView loaded="onTextViewLoaded" text="{{ i18nShareMedCabIntro_L1 }}" id="tag-intro_l1" editable="{{ editState }}" class="title primary text-border"></TextView>
+					<GridLayout class="list-container" rows="auto" columns="*,*">
+						<!-- <Button class="button my-button secondary" style="font-style: italic; font-weight: bold;" text="{{ i18nCancel }}" row="0" col="0" onTap="onCancelTap" /> -->
+						<Button class="button my-button secondary" style="font-style: italic; font-weight: bold" text="{{ i18nBack, '<< '  + i18nBack }}" row="0" col="0" onTap="onBackL1Tap" />
+						<Button class="button my-button" style="font-style: italic; font-weight: bold; color: #13413d; background-color: white" text="{{ i18nNext, i18nNext + ' >>' }}" row="0" col="1" onTap="onNextL1Tap" />
+					</GridLayout>
+				</StackLayout>
+				<StackLayout visibility="{{ isL2 ? 'visible' : 'collapsed' }}">
+					<TextView text="{{ i18nShareMedCabIntro_L3 }}" editable="{{ editState }}" class="subtitle text-border"></TextView>
+					<TextView text="{{ i18nShareMedCabIntro_L2 }}" editable="{{ editState }}" class="subtitle text-border"></TextView>
+					<GridLayout class="list-container" rows="auto" columns="*,*">
+						<Button class="button my-button secondary" style="font-style: italic; font-weight: bold" text="{{ i18nBack, '<< '  + i18nBack }}" row="0" col="0" onTap="onBackL2Tap" />
+						<Button class="button my-button" style="font-style: italic; font-weight: bold; color: #13413d; background-color: white" text="{{ i18nNext, i18nNext + ' >>' }}" row="0" col="0" onTap="onNextL2Tap" row="0" col="1" />
+					</GridLayout>
+				</StackLayout>
+				<StackLayout visibility="{{ isL3 ? 'visible' : 'collapsed' }}">
+					<TextView text="{{ i18nShareMedCabIntro_L4 }}" editable="{{ editState }}" class="subtitle alert text-border"></TextView>
+					<TextView text="{{ i18nShareMedCabIntro_L5 }}" editable="{{ editState }}" class="subtitle alert text-border"></TextView>
+					<GridLayout class="list-container" rows="auto" columns="*,*">
+						<Button class="button my-button secondary" style="font-style: italic; font-weight: bold" text="{{ i18nBack, '<< '  + i18nBack }}" row="0" col="0" onTap="onBackL3Tap" />
+						<Button class="button my-button" style="font-style: italic; font-weight: bold; color: #13413d; background-color: white" text="{{ i18nExit }}" row="0" col="1" onTap="onExitL3Tap" />
+					</GridLayout>
+				</StackLayout>
+				<!-- <StackLayout dock="bottom"><image src="~/images/logo.png" height="auto" width="230vw" onTap="onLogoTap" /></StackLayout> -->
+			</parallax:Content>
+		</parallax:ParallaxView>
+		<StackLayout dock="bottom">
+			<image src="~/images/logo.png" height="auto" width="230vw" onTap="onLogoTap" />
+		</StackLayout>
+	</StackLayout>
+</Page>

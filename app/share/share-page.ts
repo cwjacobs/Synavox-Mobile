@@ -15,6 +15,7 @@ import { Button } from "tns-core-modules/ui/button";
 import { AudioPlayer } from "~/audio-player/audio-player";
 import { I18N } from "~/utilities/i18n";
 import { Settings } from "~/settings/settings";
+import { navigateTo } from "~/app-root/app-root";
 
 let page: Page = null;
 let displayNames: string[] = [];
@@ -118,6 +119,12 @@ export function onLoaded(args: EventData) {
     contactsFilterView.on("textChange", () => {
         updateContactFilter();
     });
+}
+
+export function onMoreTap() {
+    let pageTitle: string = "ShareMedCabinet";
+    let pageRoute: string = "xition/share-med-cabinet/share-med-cabinet-page";
+    navigateTo(pageTitle, pageRoute);
 }
 
 // This is a terrible function. TBD: figure out how to do this right
@@ -370,7 +377,8 @@ function logContact(args: GetContactResult) {
 function setActiveLanguageText(): void {
     viewModel.set("i18nPageTitle", i18n.sharePageTitle);
     viewModel.set("i18nSynavoxSubPageTitle", i18n.synavoxSubPageTitle);
-
+    viewModel.set("i18nLearnAboutSharing", i18n.learnAboutSharing);
+    
     viewModel.set("i18nContentTitle", i18n.sharePageHeading + settings.currentMedicineCabinet.ownerTitle);
     viewModel.set("i18nContactFilterLabel", i18n.shareContactFilterLabel);
     viewModel.set("i18nContactFilterHint", i18n.shareContactFilterHint);

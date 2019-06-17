@@ -15,6 +15,10 @@
 		<StackLayout>
 			<image src="~/images/share.jpg" width="100%" height="auto" />
 			<Label class="title" text="{{ i18nContentTitle }}"></Label>
+			<StackLayout class="list-container" orientation="horizontal" style="horizontal-align: center;">
+				<Label class="information-icon fa" text="&#xf05a;" />
+				<Button class="button my-button secondary fa" text="{{ i18nLearnAboutSharing, i18nLearnAboutSharing + ' &#xf054; &#xf054;' }}" onTap="onMoreTap" />
+			</StackLayout>
 			<StackLayout class="list-container" orientation="horizontal">
 				<Label class="sharing-label" text="{{ i18nContactFilterLabel }}" />
 				<TextField class="sharing-name" id="contactsFilterView" hint="{{ i18nContactFilterHint }}" returnKeyType="search" text="{{ contactFilter }}" textWrap="true" />

@@ -25,6 +25,17 @@
     margin-right: 80px;
 }
 
+.information-icon {
+    padding: 12vw;
+    padding-left: 20vw;
+    padding-right: 0vw;
+    color: #587e90;
+    background-color: white;
+    font-size: 36;
+    border-radius: 5;
+    vertical-align: middle;
+}
+
 .my-button {
     border-radius: 5;
     font-family: FontAwesome;

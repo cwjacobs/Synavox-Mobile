@@ -90,6 +90,11 @@ export class I18N {
         return text[this._activeLanguageIndex];
     }
 
+    public get exit() {
+        const text: string[] = ["Exit", "Salida"];
+        return text[this._activeLanguageIndex];
+    }
+
     public get next() {
         const text: string[] = ["Next", "Próximo"];
         return text[this._activeLanguageIndex];
@@ -341,6 +346,11 @@ export class I18N {
 
     public get sharePageHeading() {
         const text: string[] = ["Share ", "Compartir "];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get learnAboutSharing() {
+        const text: string[] = ["Learn more about sharing ", "Más información sobre cómo compartir "];
         return text[this._activeLanguageIndex];
     }
 
@@ -615,6 +625,57 @@ export class I18N {
 
         return text[this._activeLanguageIndex];
     }
+
+
+    /******************************
+     * Share Med Cabinet Page
+     ******************************/
+
+    public get shareMedCabinetPageTitle() {
+        const text: string[] = ["Share your Medicine Cabinet", "Comparta su Gabinete de Medicina"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get shareMedCabIntro_L1() {
+        const text: string[] = [
+            "With Synavox Home Pharmacist, you can share your Synavox Medicine Cabinet via the cloud with loved ones and care-givers or anyone you choose.",
+            "Con Synavox Home Pharmacist, puede compartir su Gabinete de Medicina Synavox a través de la nube con sus seres queridos y cuidadores o cualquier persona que elija"];
+
+        return text[this._activeLanguageIndex];
+    }
+
+    public get shareMedCabIntro_L2() {
+        const text: string[] = [
+            "Simply choose from your list of contacts or any of your Synavox Cloud Friends, and send them an invitation",
+            "Simplemente elige entre tu lista de contactos o cualquiera de tus Amigos de Synavox Cloud, y envíales una invitación"];
+
+        return text[this._activeLanguageIndex];
+    }
+
+    public get shareMedCabIntro_L3() {
+        const text: string[] = [
+            "You choose how much they can see and what remains private.",
+            "Usted elige cuánto pueden ver y qué sigue siendo privado"];
+
+        return text[this._activeLanguageIndex];
+    }
+
+    public get shareMedCabIntro_L4() {
+        const text: string[] = [
+            "Likewise, your friends or loved ones can share their Synavox Medicine Cabinets with you and together assure the best outcomes possible.",
+            "Del mismo modo, sus amigos o seres queridos pueden compartir sus gabinetes de medicina Synavox con usted y juntos asegurar los mejores resultados posibles."];
+
+        return text[this._activeLanguageIndex];
+    }
+
+    public get shareMedCabIntro_L5() {
+        const text: string[] = [
+            "On the next screen, you'll have the opportunity to share your medicine cabinet, simply select the contact wih whom you'd like to share and press the 'Share' button",
+            "¿Desea compartir su Gabinete de Medicina Synavox ahora?"];
+
+        return text[this._activeLanguageIndex];
+    }
+
 }
 
 
