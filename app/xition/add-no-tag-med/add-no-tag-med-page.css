@@ -120,8 +120,8 @@
 
 .header-template {
     background-color: red;
-    background-image: url('~/images/newTag.png');
-    height: 205;
+    background-image: url('~/images/newTag_v1.png');
+    height: 180;
     background-size: cover;
     /* background-position: center top; */
     background-repeat: no-repeat;

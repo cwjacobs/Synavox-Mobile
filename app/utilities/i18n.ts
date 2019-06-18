@@ -380,7 +380,7 @@ export class I18N {
     }
 
     public get share() {
-        const text: string[] = ["Share: ", "Compartir: "];
+        const text: string[] = ["Share", "Compartir"];
         return text[this._activeLanguageIndex];
     }
 
@@ -681,7 +681,7 @@ export class I18N {
      ******************************/
 
     public get shareMedCabinetPageTitle() {
-        const text: string[] = ["Share your Medicine Cabinet", "Comparta su Gabinete de Medicina"];
+        const text: string[] = ["Medicine Cabinet Sharing", "Uso compartido de gabinetes de medicina"];
         return text[this._activeLanguageIndex];
     }
 

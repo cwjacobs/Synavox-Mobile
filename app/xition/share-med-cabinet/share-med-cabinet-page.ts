@@ -109,7 +109,7 @@ export function onExitL3Tap() {
 
 function setActiveLanguageText(): void {
 
-    viewModel.set("i18nPageTitle", i18n.share);
+    viewModel.set("i18nPageTitle", i18n.shareMedCabinetPageTitle);
     viewModel.set("i18nSynavoxSubPageTitle", i18n.synavoxSubPageTitle);
 
     viewModel.set("i18nEmail", "cjacobs@nobleIQ.com");
