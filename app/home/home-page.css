@@ -123,6 +123,7 @@
 /* Tabs
 ----------- */
 .tabs {
+    font-size: 22em;
     margin-top: 50px;
     height: auto;
 }
@@ -133,12 +134,10 @@
 
 .tab2 {
     color: #398881;
-    font-weight:bold;
 }
 
 .tab3 {
     color: #7700ff;
-    font-weight:bold;
 }
 
 /* Parallax

@@ -18,23 +18,23 @@
 				<TabView class="list-container" id="tabViewContainer" loaded="onTabsLoaded" selectedIndex="{{ tabSelectedIndex ? tabSelectedIndex : 0 }}" selectedIndexChanged="onSelectedIndexChanged">
 					<TabViewItem class="fa" title="{{ i18nMe }}">
 						<GridLayout rows="auto" columns="auto,*,*">
-							<Label class="h2 text-left tab1 tabs fa" text="{{ i18nMyPrescriptions }}" textWrap="true" row="0" col="0" />
-							<Label class="h2 text-right tab1 tabs fa" style="margin-right: 10vw" text="&#xf196;" row="0" col="1" onTap="onAddMedTap" />
-							<Label class="h2 text-right tab1 tabs fa" style="margin-right: 10vw" id="delete-t1-medicine" text="&#xf147;" row="0" col="2" onTap="onDeleteMedTap" />
+							<Label class="text-left tab1 tabs fa" text="{{ i18nMyPrescriptions }}" row="0" col="0" />
+							<Label class="text-right tab1 tabs fa" style="margin-right: 10vw" text="&#xf196;" row="0" col="1" onTap="onAddMedTap" />
+							<Label class="text-right tab1 tabs fa" style="margin-right: 10vw" id="delete-t1-medicine" text="&#xf147;" row="0" col="2" onTap="onDeleteMedTap" />
 						</GridLayout>
 					</TabViewItem>
 					<TabViewItem class="fa" title="{{ i18nMom, i18nMom + ' &#xf1e0;' }}">
 						<GridLayout rows="auto" columns="auto,*,*">
-							<Label class="h2 text-left tab1 tabs fa" text="{{ i18nMomsPrescriptions }}" textWrap="true" row="0" col="0" />
-							<Label class="h2 text-right tab1 tabs fa" style="margin-right: 10vw" text="&#xf196;" row="0" col="1" onTap="onAddMedTap" />
-							<Label class="h2 text-right tab1 tabs fa" style="margin-right: 10vw" id="delete-t2-medicine" text="&#xf147;" row="0" col="2" onTap="onDeleteMedTap" />
+							<Label class="h2 text-left tab2 tabs fa" text="{{ i18nMomsPrescriptions }}" textWrap="true" row="0" col="0" />
+							<Label class="h2 text-right tab2 tabs fa" style="margin-right: 10vw" text="&#xf196;" row="0" col="1" onTap="onAddMedTap" />
+							<Label class="h2 text-right tab2 tabs fa" style="margin-right: 10vw" id="delete-t2-medicine" text="&#xf147;" row="0" col="2" onTap="onDeleteMedTap" />
 						</GridLayout>
 					</TabViewItem>
 					<TabViewItem class="fa" title="{{ i18nDad, i18nDad + ' &#xf1e0;' }}">
 						<GridLayout rows="auto" columns="auto,*,*">
-							<Label class="h2 text-left tab1 tabs fa" text="{{ i18nDadsPrescriptions }}" textWrap="true" row="0" col="0" />
-							<Label class="h2 text-right tab1 tabs fa" style="margin-right: 10vw" text="&#xf196;" row="0" col="1" onTap="onAddMedTap" />
-							<Label class="h2 text-right tab1 tabs fa" style="margin-right: 10vw" id="delete-t3-medicine" text="&#xf147;" row="0" col="2" onTap="onDeleteMedTap" />
+							<Label class="h2 text-left tab3 tabs fa" text="{{ i18nDadsPrescriptions }}" textWrap="true" row="0" col="0" />
+							<Label class="h2 text-right tab3 tabs fa" style="margin-right: 10vw" text="&#xf196;" row="0" col="1" onTap="onAddMedTap" />
+							<Label class="h2 text-right tab3 tabs fa" style="margin-right: 10vw" id="delete-t3-medicine" text="&#xf147;" row="0" col="2" onTap="onDeleteMedTap" />
 						</GridLayout>
 					</TabViewItem>
 				</TabView>
