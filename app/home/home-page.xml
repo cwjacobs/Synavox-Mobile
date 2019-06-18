@@ -13,7 +13,7 @@
 	</ActionBar>
 	<StackLayout>
 		<parallax:ParallaxView height="75%" background="white">
-			<parallax:Header class="header-template" dropShadow="false"></parallax:Header>
+			<parallax:Header class="header-template" id="headerTemplate" dropShadow="false"></parallax:Header>
 			<parallax:Anchored class="anchor" height="100vh">
 				<TabView class="list-container" id="tabViewContainer" loaded="onTabsLoaded" selectedIndex="{{ tabSelectedIndex ? tabSelectedIndex : 0 }}" selectedIndexChanged="onSelectedIndexChanged">
 					<TabViewItem class="fa" title="{{ i18nMe }}">
@@ -45,7 +45,6 @@
 					<GridLayout rows="auto" columns="30vw, 170vw,*,*,*,*,*">
 						<Label class="pairing-TagIcon fas" id="current-medicine-name-icon" text="&#xf484;" row="0" col="0" colSpan="1" returnKeyType="done" />
 						<TextField class="pairing-MedicineName fas" id="current-medicine-name" text="{{ currentMedicineName }}" row="0" col="1" colSpan="1" returnKeyType="done" />
-						<!-- <TextField class="pairing-MedicineName fas" id="current-medicine-name" text="{{ currentMedicineName, '&#xf484; ' + currentMedicineName }}" row="0" col="0" colSpan="1" returnKeyType="done" /> -->
 						<Label class="reminder-mark fa" id="current1" text="&#xf058;" row="0" col="2" onTap="current1"/>
 						<Label class="reminder-mark fa" id="current2" text="&#xf058;" row="0" col="3" onTap="current2" />
 						<Label class="reminder-mark fa" id="current3" text="&#xf058;" row="0" col="4" onTap="current3" />

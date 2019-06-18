@@ -545,7 +545,7 @@ export class I18N {
 
     public get enterNewMedicneName() {
         const text: string[] = [
-            "Enter you new medicine name or say it out loud before you hear the end listening tone",
+            "Enter your new medicine name or say it out loud before you hear the end listening tone",
             "Introduzca el nombre del nuevo medicamento o dilo en voz alta antes de escuchar el tono de escucha final"];
         return text[this._activeLanguageIndex];
     }

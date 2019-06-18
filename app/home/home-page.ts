@@ -1,7 +1,7 @@
 import { RadSideDrawer } from "nativescript-ui-sidedrawer";
 import * as app from "tns-core-modules/application";
 import { EventData, Observable } from "tns-core-modules/data/observable";
-import { NavigatedData, Page, Color } from "tns-core-modules/ui/page";
+import { NavigatedData, Page, Color, View } from "tns-core-modules/ui/page";
 import { ListView, ItemEventData } from "tns-core-modules/ui/list-view/list-view";
 import { Label } from "tns-core-modules/ui/label/label";
 import { HomeViewModel } from "./home-view-model";
@@ -115,7 +115,7 @@ export function onAddMedTapAfterWizard() {
     clearCurrentDoses();
 
     // Request medicine name
-    alert(i18n.enterNewMedicneName);
+    //alert(i18n.enterNewMedicneName);
     setTimeout(() => {
         if (settings.isSpeechRecognitionAvailable) {
             vr.startListening();
@@ -125,9 +125,9 @@ export function onAddMedTapAfterWizard() {
 
 export function onSpeechRecognition_home(transcription: string) {
     const input: TextField = page.getViewById<TextField>("current-medicine-name");
-    input.text = capitalizeFirstLetter(transcription);
-    settings.currentMedicineName = removeSpecialCharacters(input.text);
-    viewModel.set("currentMedicineName", settings.currentMedicineName);
+    input.text = removeSpecialCharacters(capitalizeFirstLetter(transcription));
+    //settings.currentMedicineName = removeSpecialCharacters(input.text);
+    viewModel.set("currentMedicineName", input.text);
 }
 
 export function onSaveNewMedicineTap() {
@@ -182,8 +182,7 @@ export function onSaveNewMedicineTap() {
 }
 
 export function onCancelNewMedicineTap() {
-    let isAddingNewMedicine: boolean = false;
-    viewModel.set("isAddingNewMedicine", isAddingNewMedicine);
+    viewModel.set("isAddingNewMedicine", false);
     viewModel.set("currentMedicineName", settings.currentMedicineName);
 
     displayCurrentDoses();
@@ -206,6 +205,7 @@ export function onTabsLoaded() {
 }
 
 export function onSelectedIndexChanged(args: SelectedIndexChangedEventData) {
+    
     if ((isTabsViewInitialized) && (!settings.isNewBinding) && (!settings.isConfirmingDose) && (!settings.isAddingNewMedicine)) {
         clearListDosesTakenToday();
 
@@ -604,6 +604,7 @@ function getDeleteButtonView(): any {
 }
 
 function setMedicineCabinetOwnerInfo() {
+    let medicineCabinetImages: string[] = ['~/images/home.jpg', '~/images/momPharmacist.jpg', '~/images/dadPharmacist.jpg'];
     let medicineCabinetOwners: string[] = [i18n.me, i18n.mom, i18n.dad];
     let owner: string = medicineCabinetOwners[settings.currentTab];
     settings.currentMedicineCabinet.owner = capitalizeFirstLetter(owner);
@@ -611,6 +612,9 @@ function setMedicineCabinetOwnerInfo() {
     let medicineCabinetOwnerTitles: string[] = [i18n.myMedicineCabinet, i18n.momsMedicineCabinet, i18n.dadsMedicineCabinet];
     let ownerMedicineCabinetText: string = medicineCabinetOwnerTitles[settings.currentTab];
     settings.currentMedicineCabinet.ownerTitle = ownerMedicineCabinetText;
+
+    let parallax: View = page.getViewById<ListView>("headerTemplate");
+    parallax.backgroundImage = medicineCabinetImages[settings.currentTab];
 }
 
 function changeTotalDosesPerDay() {

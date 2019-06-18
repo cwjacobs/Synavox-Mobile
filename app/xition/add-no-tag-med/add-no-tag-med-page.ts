@@ -99,8 +99,8 @@ export function onBackL3Tap() {
     viewModel.set("isL4", false);
 }
 
-export function onNoTap() {
-    settings.isNewBinding = false;
+export function onCancelTap() {
+    settings.isAddingNewMedicine = false;
 
     let pageTitle: string = "Home";
     let pageRoute: string = "home/home-page";
