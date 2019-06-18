@@ -267,6 +267,17 @@ function updateViewModelGlobals() {
     viewModel.set("currentMedicineName", settings.currentMedicineName);
 }
 
+export function getIsTagPaired(tagId: string): boolean {
+    let isTagPaired: boolean;
+    if (tagId === "-1") {
+        isTagPaired = false;
+    }
+    else {
+        isTagPaired = true;
+    }
+    return isTagPaired;
+}
+
 function getPairedTagIdMsg(tagId: string): string {
     let msg: string;
     if (tagId === "-1") {

@@ -21,6 +21,14 @@
     margin-bottom: 5px;
 }
 
+.pairing-TagIcon {
+    /* color: #07da07; */
+    font-size: 20;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    /* margin-left: 20px; */
+}
+
 .pairing-MedicineName {
     color: #3A53FF;
     font-size: 22;
@@ -40,8 +48,9 @@
 }
 
 .list-TagIcon {
-    font-size: 14;
-    color: gray;
+    font-size: 18;
+    /* color: gray; */
+    color: #07da07;
     /* vertical-align: middle; */
     text-align: right;
     margin-right: 10px
