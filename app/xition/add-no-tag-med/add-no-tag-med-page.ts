@@ -78,7 +78,7 @@ export function onNextL2Tap() {
 }
 
 export function onNextL3Tap() {
-    settings.isExitingAddNoTagMedWizard = true;
+    settings.isAddingNewMedicine = true;
 
     let pageTitle: string = "Home";
     let pageRoute: string = "home/home-page";

@@ -107,24 +107,6 @@ export function onYesTap() {
     viewModel.set("isL4", false);
 }
 
-export function onItemTap(args: ItemEventData) {
-}
-
-export function onWebViewLoaded(webargs) {
-};
-
-// changing WebView source
-export function submit(args) {
-} ``
-
-export function onGoBackTap() {
-}
-
-export function onSaveTap() {
-    alert(i18n.saved);
-    // TBD: hook the actual current website and save as button property
-}
-
 function getTagIdText(tagId: string): string {
     let text: string = i18n.tagId + ": " + tagId;
     return text;

@@ -88,11 +88,6 @@ export function onNextL1Tap() {
     viewModel.set("isL4", false);
 }
 
-// export function onNextL2Tap() {
-//     viewModel.set("isL2", false);
-//     viewModel.set("isL3", true);
-// }
-
 export function onBackL2Tap() {
     initializeWizardWalkthrough();
 }
@@ -110,44 +105,6 @@ export function onBackL3Tap() {
 
 export function onExitL3Tap() {
     exitWizard();
-}
-
-export function onNoTap() {
-    settings.isNewBinding = false;
-
-    let pageTitle: string = "Home";
-    let pageRoute: string = "home/home-page";
-    navigateTo(pageTitle, pageRoute);
-}
-
-export function onYesTap() {
-    viewModel.set("isL1", false);
-    viewModel.set("isL2", false);
-    viewModel.set("isL3", true);
-    viewModel.set("isL4", false);
-}
-
-export function onItemTap(args: ItemEventData) {
-}
-
-export function onWebViewLoaded(webargs) {
-};
-
-// changing WebView source
-export function submit(args) {
-} ``
-
-export function onGoBackTap() {
-}
-
-export function onSaveTap() {
-    alert(i18n.saved);
-    // TBD: hook the actual current website and save as button property
-}
-
-function getTagIdText(tagId: string): string {
-    let text: string = i18n.tagId + ": " + tagId;
-    return text;
 }
 
 function setActiveLanguageText(): void {

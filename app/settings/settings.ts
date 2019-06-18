@@ -24,7 +24,7 @@ export class Settings {
 
     private _isSpeechRecognitionAvailable: boolean;
 
-    private _isExitingAddNoTagMedWizard: boolean;
+    private _isAddingNewMedicine: boolean;
 
     private _curentMedicineCabinet: MedicineCabinet;
 
@@ -143,12 +143,12 @@ export class Settings {
         this._isSpeechRecognitionAvailable = value;
     }
 
-    public get isExitingAddNoTagMedWizard() {
-        return this._isExitingAddNoTagMedWizard;
+    public get isAddingNewMedicine() {
+        return this._isAddingNewMedicine;
     }
 
-    public set isExitingAddNoTagMedWizard(value: boolean) {
-        this._isExitingAddNoTagMedWizard = value;
+    public set isAddingNewMedicine(value: boolean) {
+        this._isAddingNewMedicine = value;
     }
 
     private removeSpecialCharacters(src: string): string {

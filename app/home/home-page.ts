@@ -206,7 +206,7 @@ export function onTabsLoaded() {
 }
 
 export function onSelectedIndexChanged(args: SelectedIndexChangedEventData) {
-    if ((isTabsViewInitialized) && (!settings.isNewBinding) && (!settings.isConfirmingDose) && (!settings.isExitingAddNoTagMedWizard)) {
+    if ((isTabsViewInitialized) && (!settings.isNewBinding) && (!settings.isConfirmingDose) && (!settings.isAddingNewMedicine)) {
         clearListDosesTakenToday();
 
         settings.currentTab = args.newIndex;
@@ -310,9 +310,9 @@ export function onLoaded(args: EventData) {
     // startTagListener checks if listener is active before starting
     rfid.startTagListener();
 
-    if (settings.isExitingAddNoTagMedWizard) {
+    if (settings.isAddingNewMedicine) {
         setTimeout(() => {
-            settings.isExitingAddNoTagMedWizard = false;
+            settings.isAddingNewMedicine = false;
             onAddMedTapAfterWizard();
         }, 200);
     }

@@ -596,16 +596,16 @@ export class I18N {
 
     public get newTagIntro_L2() {
         const text: string[] = [
-            "Would you like to add this RFID tag now and pair it to a new or existing medication?",
-            "¿Le gustaría añadir esta etiqueta RFID ahora y emparejarla con un medicamento nuevo o existente?"];
+            "Adding an RFID tag to your medicine bottle will allow you to scan the bottle at anytime with your phone to get information about your medication.",
+            "Agregar una etiqueta RFID a su frasco de medicamento le permitirá escanear la botella en cualquier momento con su teléfono para obtener información sobre su medicamento."];
 
         return text[this._activeLanguageIndex];
     }
 
     public get newTagIntro_L3() {
         const text: string[] = [
-            "Adding an RFID tag to your medicine bottle will allow you to scan the bottle at anytime with your phone to get information about your medication.",
-            "Agregar una etiqueta RFID a su frasco de medicamento le permitirá escanear la botella en cualquier momento con su teléfono para obtener información sobre su medicamento."];
+            "Would you like to add this RFID tag now and pair it to a new or existing medication?",
+            "¿Le gustaría añadir esta etiqueta RFID ahora y emparejarla con un medicamento nuevo o existente?"];
 
         return text[this._activeLanguageIndex];
     }

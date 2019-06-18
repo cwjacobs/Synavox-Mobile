@@ -55,7 +55,7 @@
 .background-gradient {
     /* background: linear-gradient(to bottom, white, #7cc2fb, #3A53FF); */
     /* background: linear-gradient(to bottom, #3A53FF, #7cc2fb, white); */
-    background: linear-gradient(to bottom, white, white, #3A53FF);
+    background: linear-gradient(to bottom, white, white, #6176ff);
 }
 
 .degree-gradient {
