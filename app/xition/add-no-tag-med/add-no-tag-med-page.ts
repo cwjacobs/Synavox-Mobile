@@ -20,10 +20,11 @@ let settings: Settings = Settings.getInstance();
 
 import { AudioPlayer } from "~/audio-player/audio-player";
 import { navigateTo } from "~/app-root/app-root";
+import { NoTagMedViewModel } from "./add-no-tag-med-view-model";
 let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
 
 let page: Page = null;
-let viewModel: NewTagViewModel = null;
+let viewModel: NoTagMedViewModel = null;
 
 let appRootContext: AppRootViewModel = null;
 let isUserBrowsing: boolean;
@@ -59,7 +60,6 @@ export function onLoaded(args: EventData) {
     viewModel.set("isL2", false);
     viewModel.set("isL3", false);
     viewModel.set("isL4", false);
-
     setActiveLanguageText();
 }
 
@@ -68,28 +68,35 @@ export function onNextL1Tap() {
     viewModel.set("isL2", true);
     viewModel.set("isL3", false);
     viewModel.set("isL4", false);
-
 }
 
-// export function onNextL2Tap() {
-//     viewModel.set("isL2", false);
-//     viewModel.set("isL3", true);
-// }
+export function onNextL2Tap() {
+    viewModel.set("isL1", false);
+    viewModel.set("isL2", false);
+    viewModel.set("isL3", true);
+    viewModel.set("isL4", false);
+}
 
 export function onNextL3Tap() {
-    settings.isNewBinding = true;
+    settings.isExitingAddNoTagMedWizard = true;
 
-    let pageTitle: string = "Pair";
-    let pageRoute: string = "pair/pair-page";
+    let pageTitle: string = "Home";
+    let pageRoute: string = "home/home-page";
     navigateTo(pageTitle, pageRoute);
 }
 
-export function onCancelTap() {
-    onNoTap();
+export function onBackL2Tap() {
+    viewModel.set("isL1", true);
+    viewModel.set("isL2", false);
+    viewModel.set("isL3", false);
+    viewModel.set("isL4", false);
 }
 
 export function onBackL3Tap() {
-    onNextL1Tap();
+    viewModel.set("isL1", false);
+    viewModel.set("isL2", true);
+    viewModel.set("isL3", false);
+    viewModel.set("isL4", false);
 }
 
 export function onNoTap() {
@@ -100,43 +107,11 @@ export function onNoTap() {
     navigateTo(pageTitle, pageRoute);
 }
 
-export function onYesTap() {
-    viewModel.set("isL1", false);
-    viewModel.set("isL2", false);
-    viewModel.set("isL3", true);
-    viewModel.set("isL4", false);
-}
-
-export function onItemTap(args: ItemEventData) {
-}
-
-export function onWebViewLoaded(webargs) {
-};
-
-// changing WebView source
-export function submit(args) {
-} ``
-
-export function onGoBackTap() {
-}
-
-export function onSaveTap() {
-    alert(i18n.saved);
-    // TBD: hook the actual current website and save as button property
-}
-
-function getTagIdText(tagId: string): string {
-    let text: string = i18n.tagId + ": " + tagId;
-    return text;
-}
-
 function setActiveLanguageText(): void {
 
-    viewModel.set("i18nPageTitle", i18n.newTagPageTitle);
+    viewModel.set("i18nPageTitle", i18n.noTagMedPageAnchorText);
     viewModel.set("i18nSynavoxSubPageTitle", i18n.synavoxSubPageTitle);
-
-    let tagIdText: string = getTagIdText(settings.currentTagId);
-    viewModel.set("i18nNewTagId", tagIdText);
+    viewModel.set("i18nNoTagMedPageAnchorText", i18n.noTagMedPageAnchorText);
 
     viewModel.set("i18nNo", i18n.no);
     viewModel.set("i18nYes", i18n.yes);
@@ -145,10 +120,10 @@ function setActiveLanguageText(): void {
     viewModel.set("i18nCancel", i18n.cancel);
 
     viewModel.set("editState", false);
-    viewModel.set("i18nNewTagIntro_L1", i18n.newTagIntro_L1);
-    viewModel.set("i18nNewTagIntro_L2", i18n.newTagIntro_L2);
-    viewModel.set("i18nNewTagIntro_L3", i18n.newTagIntro_L3);
-    viewModel.set("i18nNewTagIntro_L4", i18n.newTagIntro_L4);
-    viewModel.set("i18nNewTagIntro_L5", i18n.newTagIntro_L5);
+    viewModel.set("i18nNewTagIntro_L1", i18n.noTagMedIntro_L1);
+    viewModel.set("i18nNewTagIntro_L2", i18n.noTagMedIntro_L2);
+    viewModel.set("i18nNewTagIntro_L3", i18n.noTagMedIntro_L3);
+    viewModel.set("i18nNewTagIntro_L4", i18n.noTagMedIntro_L4);
+    viewModel.set("i18nNewTagIntro_L5", i18n.noTagMedIntro_L5);
 };
 

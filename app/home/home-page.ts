@@ -17,6 +17,7 @@ import { Settings } from "~/settings/settings";
 import { AudioPlayer } from "~/audio-player/audio-player";
 import { TextField } from "tns-core-modules/ui/text-field/text-field";
 import { VR } from "~/utilities/vr";
+import { navigateTo } from "~/app-root/app-root";
 
 let i18n: I18N = I18N.getInstance();
 let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
@@ -29,9 +30,9 @@ let dadMedicineCabinet: MedicineCabinet = new MedicineCabinet(TestData.dadMedici
 // Init default app Settings
 let settings: Settings = Settings.getInstance();
 settings.isAudioEnabled = true;
-settings.currentTab = 0;
+settings.currentTab = null;
 
-settings.currentMedicineCabinet = myMedicineCabinet;
+settings.currentMedicineCabinet = null;
 
 let medicineCabinets: MedicineCabinet[] = [myMedicineCabinet, momMedicineCabinet, dadMedicineCabinet];
 
@@ -99,6 +100,12 @@ export function onDeleteMedTap() {
 }
 
 export function onAddMedTap() {
+    let pageTitle: string = "NoTagMed";
+    let pageRoute: string = "xition/add-no-tag-med/add-no-tag-med-page";
+    navigateTo(pageTitle, pageRoute);
+}
+
+export function onAddMedTapAfterWizard() {
     viewModel.set("isAddingNewMedicine", true);
     viewModel.set("i18nSave", i18n.save);
     viewModel.set("i18nCancel", i18n.cancel);
@@ -199,7 +206,7 @@ export function onTabsLoaded() {
 }
 
 export function onSelectedIndexChanged(args: SelectedIndexChangedEventData) {
-    if ((isTabsViewInitialized) && (!settings.isNewBinding) && (!settings.isConfirmingDose)) {
+    if ((isTabsViewInitialized) && (!settings.isNewBinding) && (!settings.isConfirmingDose) && (!settings.isExitingAddNoTagMedWizard)) {
         clearListDosesTakenToday();
 
         settings.currentTab = args.newIndex;
@@ -252,6 +259,10 @@ export function onDrawerButtonTap(args: EventData) {
 }
 
 export function onLoaded(args: EventData) {
+    if (settings.currentMedicineCabinet === null) {
+        settings.currentMedicineCabinet = myMedicineCabinet;
+    }
+
     setTimeout(() => {
         let isUiComplete: boolean = false;
         isUiComplete = displayCurrentListDoses();
@@ -290,8 +301,6 @@ export function onLoaded(args: EventData) {
 
     setMedicineCabinetOwnerInfo();
 
-    displayDosesPerDayInstructions(settings.currentMedicineCabinet.getDailyDosesRequired(settings.currentMedicineName));
-
     // Call after all "settings" have been updated
     updateViewModelGlobals();
 
@@ -300,6 +309,16 @@ export function onLoaded(args: EventData) {
 
     // startTagListener checks if listener is active before starting
     rfid.startTagListener();
+
+    if (settings.isExitingAddNoTagMedWizard) {
+        setTimeout(() => {
+            settings.isExitingAddNoTagMedWizard = false;
+            onAddMedTapAfterWizard();
+        }, 200);
+    }
+    else {
+        displayDosesPerDayInstructions(settings.currentMedicineCabinet.getDailyDosesRequired(settings.currentMedicineName));
+    }
 };
 
 export function onChangeTotalDosesPerDayTap(args: EventData) {
@@ -373,7 +392,7 @@ export function onChangeDosesTakenTodayTap(args: EventData) {
 
         let editTotalDosesPerDayButton: Button = page.getViewById("edit-total-required-doses");
         editTotalDosesPerDayButton.backgroundColor = secondaryOff;
-        
+
         let currentMedicineNameIcon: Label = page.getViewById("current-medicine-name-icon");
         currentMedicineNameIcon.color = new Color(medsIconDosesTakenTodayOn);
 
@@ -424,7 +443,7 @@ export function onSaveDosesTakenTodayTap() {
 
     let editTotalDosesPerDayButton: Button = page.getViewById("edit-total-required-doses");
     editTotalDosesPerDayButton.backgroundColor = secondaryOn;
-    
+
     let currentMedicineNameIcon: Label = page.getViewById("current-medicine-name-icon");
     currentMedicineNameIcon.color = new Color(medsIconDosesTakenTodayOff);
 

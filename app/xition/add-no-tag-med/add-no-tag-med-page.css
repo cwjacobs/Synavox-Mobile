@@ -1,0 +1,157 @@
+.list-container {
+    margin: 20px;
+    margin-bottom: 0px;
+}
+
+.title {
+    font-size: 22;
+    margin: 20px;
+    text-align: center;
+}
+
+.subtitle {
+    font-size: 18;
+    /* margin: 10px; */
+    color: white;
+    text-align: center;
+}
+
+.alert {
+    color: white;
+    background-color: #7e69f6;
+}
+
+.text-border {
+    padding: 60px;
+    text-align: left;
+    font-style: italic;
+    /* font-weight: bold; */
+    border-radius: 50px 20px;
+    border-color: white;
+    /* color: #383838; */
+    /* background: linear-gradient(to bottom, #624102, #241703, #616161); */
+    /* background: linear-gradient(to bottom, #3A53FF, #0b1b46, #3aa6ff); */
+    background: linear-gradient(to bottom, #a395f5, #7025fa, #7e69f6);
+}
+
+.anchor-title {
+    color: white;
+    font-size: 18;
+    text-align: center;
+    border-radius: 20px 20px;
+}
+
+.row-text {
+    color: black;
+    font-size: 18;
+    text-align: left;
+    margin-left: 30px;
+}
+
+.bottom-gradient {
+    background: linear-gradient(to bottom, #3A53FF, orangered, #616161);
+}
+
+.background-gradient {
+    /* background: linear-gradient(to bottom, white, #7cc2fb, #3A53FF); */
+    /* background: linear-gradient(to bottom, #3A53FF, #7cc2fb, white); */
+    background: linear-gradient(to bottom, white, white, #7e69f6);
+}
+
+.degree-gradient {
+    background: linear-gradient(45deg, #3A53FF, white);
+}
+
+.top-button-row {
+    width: auto;
+    height: 56vh;
+    margin: 0px;
+    background-color: white;
+    /* background-color: #3A53FF; */
+    vertical-align: middle;
+}
+
+.my-button {
+    border-width: 2px;
+    border-color: #3A53FF;
+    border-radius: 10;
+    font-family: FontAwesome;
+    vertical-align: middle;
+    margin: 10px;
+}
+
+.my-button:active {
+    background-color: lightslategray;
+    color: white;
+}
+
+.logo {
+    width: 100%;
+    height: 100%;
+    margin-bottom: 30px;
+}
+
+.left {
+    horizontal-align: left;
+}
+
+.center {
+    horizontal-align: center;
+}
+
+.right {
+    horizontal-align: right;
+}
+
+/* Parallax */
+
+#headerLabel2 {
+    font-size: 45;
+    horizontal-align: center;
+    margin-top: -25;
+    color: #B2EBF2;
+}
+
+#headerLabel {
+    font-size: 45;
+    horizontal-align: center;
+    padding-top: 75;
+    color: #B2EBF2;
+}
+
+.header-template {
+    background-color: red;
+    background-image: url('~/images/newTag.png');
+    height: 205;
+    background-size: cover;
+    /* background-position: center top; */
+    background-repeat: no-repeat;
+}
+
+.logo-template {
+    background-color: red;
+    background-image: url('~/images/logo.png');
+    height: 55;
+    background-size: cover;
+    /* background-position: center top; */
+    background-repeat: no-repeat;
+}
+
+.body-template TextView {
+    margin: 30px;
+    /* background-color: white; */
+    /* background: linear-gradient(to bottom, white, #5a5a5a, #2a2a2a); */
+    /* background-image: url('~/images/background.jpg'); */
+}
+
+.anchor {
+    height: 45;
+    width: 100%;
+}
+
+#titleLabel {
+    font-weight: bold;
+    font-size: 25;
+    padding: 5 15;
+    color: #fff;
+}

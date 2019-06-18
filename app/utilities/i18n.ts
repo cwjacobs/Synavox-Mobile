@@ -581,7 +581,7 @@ export class I18N {
         return text[this._activeLanguageIndex];
     }
 
-    public get xitionPageTitle() {
+    public get newTagPageTitle() {
         const text: string[] = ["New RFID Tag", "Nueva Etiqueta RFID"];
         return text[this._activeLanguageIndex];
     }
@@ -622,6 +622,55 @@ export class I18N {
         const text: string[] = [
             "On the following screen, say the medicine name or enter it using the keypad.",
             "En la siguiente pantalla, diga el nombre del medicamento o introdúzcalo con el teclado."];
+
+        return text[this._activeLanguageIndex];
+    }
+
+    /******************************
+     * No Tag Medicine Page
+     ******************************/
+
+    public get noTagMedPageAnchorText() {
+        const text: string[] = ["Adding a New Medicine", "Adición de una nueva medicina"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get noTagMedIntro_L1() {
+        const text: string[] = [
+            "You can add a medicine to your medicine cabinet without paring it to an RFID tag.",
+            "Puede añadir un medicamento a su botiquín sin analizarlo con una etiqueta RFID."];
+
+        return text[this._activeLanguageIndex];
+    }
+
+    public get noTagMedIntro_L2() {
+        const text: string[] = [
+            "Adding an RFID tag to your medicine bottle will allow you to scan the bottle at anytime with your phone to get information about your medication.",
+            "Agregar una etiqueta RFID a su frasco de medicamento le permitirá escanear la botella en cualquier momento con su teléfono para obtener información sobre su medicamento."];
+
+        return text[this._activeLanguageIndex];
+    }
+
+    public get noTagMedIntro_L3() {
+        const text: string[] = [
+            "Don't worry, you can easily pair your medicine with an RFID tag later.",
+            "No se preocupe, puede emparejar fácilmente su medicamento con una etiqueta RFID más tarde."];
+
+        return text[this._activeLanguageIndex];
+    }
+
+    public get noTagMedIntro_L4() {
+        const text: string[] = [
+            "On the following screen, enter the medicine name using the keypad, or, after the tone, say medicine name out loud.",
+            "En la siguiente pantalla, introduzca el nombre del medicamento utilizando el teclado o, después del tono, diga el nombre del medicamento en voz alta."];
+
+        return text[this._activeLanguageIndex];
+    }
+
+    public get noTagMedIntro_L5() {
+        const text: string[] = [
+            "After saying or entering the medicine name, you will be asked to indicate how many doses per day have been prescribed by your doctor or pharmacist.",
+            "Después de decir o introducir el nombre del medicamento, se le pedirá que indique cuántas dosis por día han prescrito su médico o farmacéutico."];
 
         return text[this._activeLanguageIndex];
     }

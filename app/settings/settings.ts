@@ -24,6 +24,8 @@ export class Settings {
 
     private _isSpeechRecognitionAvailable: boolean;
 
+    private _isExitingAddNoTagMedWizard: boolean;
+
     private _curentMedicineCabinet: MedicineCabinet;
 
     private _medicineCabinets: MedicineCabinet[] = [];
@@ -139,6 +141,14 @@ export class Settings {
 
     public set isSpeechRecognitionAvailable(value: boolean) {
         this._isSpeechRecognitionAvailable = value;
+    }
+
+    public get isExitingAddNoTagMedWizard() {
+        return this._isExitingAddNoTagMedWizard;
+    }
+
+    public set isExitingAddNoTagMedWizard(value: boolean) {
+        this._isExitingAddNoTagMedWizard = value;
     }
 
     private removeSpecialCharacters(src: string): string {
