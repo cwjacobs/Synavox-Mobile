@@ -695,7 +695,7 @@ export class I18N {
 
     public get shareMedCabIntro_L2() {
         const text: string[] = [
-            "Simply choose from your list of contacts or any of your Synavox Cloud Friends, and send them an invitation",
+            "Simply select from your list of contacts or any of your Synavox Cloud Friends, and send them an invitation",
             "Simplemente elige entre tu lista de contactos o cualquiera de tus Amigos de Synavox Cloud, y envíales una invitación"];
 
         return text[this._activeLanguageIndex];

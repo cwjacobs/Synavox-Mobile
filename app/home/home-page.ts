@@ -60,8 +60,11 @@ let primaryOff: string = "#c1c8f8";
 let secondaryOn: string = "#587e90";
 let secondaryOff: string = "#a4cac7";
 
-let alertOn: string = "#ff0000";
-let alertOff: string = "#ffc8c8";
+let alertOn: string = "#7700ff";
+let alertOff: string = "#c99aff";
+
+const deleteButtonColors_On: string[] = [primaryOn, secondaryOn, alertOn];
+const deleteButtonColors_Off: string[] = [primaryOff, secondaryOff, alertOff];
 
 let medsIconDosesPerDayOn: string = "#00fa00";
 let medsIconDosesTakenTodayOn: string = "#3affe5";
@@ -72,7 +75,7 @@ let isTabsViewInitialized: boolean = false;
 export function onDeleteMedTap() {
     const deleteButton: any = getDeleteButtonView();
 
-    if (deleteButton.color.hex.toUpperCase() === primaryOff.toUpperCase()) {
+    if (deleteButton.color.hex.toUpperCase() === deleteButtonColors_Off[settings.currentTab].toUpperCase()) {
         alert(getI18NCannotDeleteLastMedicineMsg());
         return;
     }
@@ -90,7 +93,7 @@ export function onDeleteMedTap() {
             listView.refresh();
 
             if (settings.currentMedicineCabinet.medicines.length === 1) {
-                deleteButton.color = primaryOff;
+                deleteButton.color = deleteButtonColors_Off[settings.currentTab];
             }
 
             displayCurrentDoses();
@@ -125,8 +128,7 @@ export function onAddMedTapAfterWizard() {
 
 export function onSpeechRecognition_home(transcription: string) {
     const input: TextField = page.getViewById<TextField>("current-medicine-name");
-    input.text = removeSpecialCharacters(capitalizeFirstLetter(transcription));
-    //settings.currentMedicineName = removeSpecialCharacters(input.text);
+    input.text = capitalizeFirstLetter(removeSpecialCharacters(transcription));
     viewModel.set("currentMedicineName", input.text);
 }
 
@@ -134,12 +136,14 @@ export function onSaveNewMedicineTap() {
     vr.stopListening();
     viewModel.set("isAddingNewMedicine", false);
 
-    let medicineName: string = settings.currentMedicineName = removeSpecialCharacters(viewModel.get("currentMedicineName"));
+    let medicineName: string = removeSpecialCharacters(viewModel.get("currentMedicineName"));
     viewModel.set("currentMedicineName", settings.currentMedicineName);
     if (medicineName == null) {
         alert(i18n.selectMedicineMsg);
         return;
     }
+
+    settings.currentMedicineName = medicineName;
 
     /* Returns -1 if medicine name not found in medicine list */
     let index: number = settings.currentMedicineCabinet.getMedicineBindingIndex(medicineName);
@@ -166,7 +170,7 @@ export function onSaveNewMedicineTap() {
         changeTotalDosesPerDay();
 
         const deleteButton: any = getDeleteButtonView();
-        deleteButton.color = primaryOn;
+        deleteButton.color = deleteButtonColors_On[settings.currentTab];
     }
     else {
         // An existing medicine, "medicineName" was found in list
@@ -900,10 +904,10 @@ function updateViewModelGlobals() {
         let deleteButton: any = getDeleteButtonView();
         if (deleteButton) {
             if (settings.currentMedicineCabinet.medicines.length === 1) {
-                deleteButton.color = primaryOff;
+                deleteButton.color = deleteButtonColors_Off[settings.currentTab];
             }
             else {
-                deleteButton.color = primaryOn;
+                deleteButton.color = deleteButtonColors_On[settings.currentTab];
             }
         }
     }, 400);
