@@ -7,7 +7,7 @@ import { WebView, LoadEventData } from "tns-core-modules/ui/web-view";
 import * as dialogs from "tns-core-modules/ui/dialogs";
 
 import { BrowseViewModel } from "./browse-view-model";
-import { MedicineCabinet } from "~/data-models/medicine-cabinet";
+import { MedicineCabinet, MedicineBinding } from "~/data-models/medicine-cabinet";
 
 // import * as Test from "../data-models/test-data";
 import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
@@ -143,6 +143,21 @@ export function onSaveTap() {
     // TBD: hook the actual current website and save as button property
 }
 
+let trumpOn: boolean = false;
+export function onLogoTap() {
+    if (!trumpOn) {
+        let magaDoses: number = settings.currentMedicineCabinet.getDailyDosesRequired("TRUMP");
+        if (magaDoses === 5) {
+            trumpOn = true;
+            audioPlayer.playFrom("~/audio/en/rally.mp3");
+        }
+    }
+    else {
+        trumpOn = false;
+        audioPlayer.stop();
+    }
+}
+
 function setActiveLanguageText(): void {
     viewModel.set("i18nPageTitle", i18n.browsePageTitle);
     viewModel.set("i18nSynavoxSubPageTitle", i18n.synavoxSubPageTitle);
@@ -150,6 +165,5 @@ function setActiveLanguageText(): void {
     viewModel.set("i18nMedicineListTitle", settings.currentMedicineCabinet.ownerTitle);
     viewModel.set("i18nBackButtonText", i18n.browseBack);
     viewModel.set("i18nSaveButtonText", i18n.browseSave);
-
 };
 

@@ -63,6 +63,10 @@ export function onLoaded(args: EventData) {
     setActiveLanguageText();
 }
 
+export function onSkipL1Tap() {
+    onNextL3Tap();
+}
+
 export function onNextL1Tap() {
     viewModel.set("isL1", false);
     viewModel.set("isL2", true);
@@ -117,6 +121,7 @@ function setActiveLanguageText(): void {
     viewModel.set("i18nYes", i18n.yes);
     viewModel.set("i18nBack", i18n.back);
     viewModel.set("i18nNext", i18n.next);
+    viewModel.set("i18nSkip", i18n.skip);
     viewModel.set("i18nCancel", i18n.cancel);
 
     viewModel.set("editState", false);

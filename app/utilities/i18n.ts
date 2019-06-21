@@ -80,8 +80,18 @@ export class I18N {
      * Shared
      ******************************/
 
+    public get ok() {
+        const text: string[] = ["Ok", "Vale"];
+        return text[this._activeLanguageIndex];
+    }
+
     public get no() {
         const text: string[] = ["No", "No"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get tip() {
+        const text: string[] = ["Tip", "Propina"];
         return text[this._activeLanguageIndex];
     }
 
@@ -96,7 +106,12 @@ export class I18N {
     }
 
     public get next() {
-        const text: string[] = ["Next", "Próximo"];
+        const text: string[] = ["Next", "Saltar"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get skip() {
+        const text: string[] = ["Skip", "Próximo"];
         return text[this._activeLanguageIndex];
     }
 
@@ -210,6 +225,22 @@ export class I18N {
         return text[this._activeLanguageIndex];
     }
 
+    public get dosagePrescribedHeading() {
+        const text: string[] = ["Doses per Day", "Dosis por día"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get youAreDeletingMedMsg() {
+        const text: string[] = ["You are deleting a medication", "Está eliminando un medicamento"];
+        return text[this._activeLanguageIndex];
+    }
+    
+
+    public get selectingMedicineTitle() {
+        const text: string[] = ["You are selecting a medicine by name", "Está seleccionando un medicamento por su nombre"];
+        return text[this._activeLanguageIndex];
+    }
+    
     public dosesTaken(dosesTaken: number): string {
         const enText: string[] = [
             "Take as needed",
@@ -531,14 +562,14 @@ export class I18N {
 
     public get selectMedicineMsg() {
         const text: string[] = [
-            "Please select a medicine from the list below or enter a new medicine name",
-            "Por favor, seleccione un medicamento de la lista siguiente o introduzca un nuevo nombre de medicamento"];
+            "Please select a medicine name from the list below or enter a new medicine name",
+            "Seleccione un nombre de medicamento de la lista a continuación o introduzca un nuevo nombre de medicamento"];
         return text[this._activeLanguageIndex];
     }
 
     public get enterDosesPrescribed() {
         const text: string[] = [
-            "Enter number of daily doses prescribed for ",
+            "Enter the number of daily doses prescribed for ",
             "Introduzca el número de dosis diarias prescritas para "];
         return text[this._activeLanguageIndex];
     }

@@ -50,6 +50,7 @@ let viewModel: HomeViewModel = null;
 
 // Editing buttons
 let isEditingAvailable: boolean = false;
+let isMedicineNameEditable: boolean = false;
 let isEditingDosesTakenToday: boolean = false;
 let isEditingTotalDosesPerDay: boolean = false;
 
@@ -72,34 +73,50 @@ let medsIconDosesTakenTodayOff: string = "#3ab7ff";
 
 let isTabsViewInitialized: boolean = false;
 
+const platform = require("tns-core-modules/platform");
+// const dialog = require("@nstudio/nativescript-dialog");
+import * as dialog from "tns-core-modules/ui/dialogs";
+
 export function onDeleteMedTap() {
     const deleteButton: any = getDeleteButtonView();
 
     if (deleteButton.color.hex.toUpperCase() === deleteButtonColors_Off[settings.currentTab].toUpperCase()) {
-        alert(getI18NCannotDeleteLastMedicineMsg());
+        dialog.alert({
+            title: i18n.tip,
+            message: getI18NCannotDeleteLastMedicineMsg(),
+            okButtonText: i18n.ok,
+        })
         return;
     }
 
     let medicineName: string = removeSpecialCharacters(viewModel.get("currentMedicineName"));
 
     let confirmMsg: string = getI18NDeleteMedicineConfirmMsg(medicineName);
-    confirm(confirmMsg).then((isConfirmed) => {
-        if (isConfirmed) {
-            settings.currentMedicineCabinet.deleteMedicineBinding(medicineName);
-            settings.currentMedicineName = settings.currentMedicineCabinet.medicines[0].medicineName;
-            updateViewModelGlobals();
+    dialog.confirm({
+        title: i18n.youAreDeletingMedMsg,
+        message: confirmMsg,
+        cancelButtonText: i18n.cancel,
+        okButtonText: i18n.ok,
+    })
+        .then((isConfirmed) => {
+            console.log("result: " + isConfirmed);
+            if (isConfirmed) {
+                settings.currentMedicineCabinet.deleteMedicineBinding(medicineName);
+                settings.currentMedicineName = settings.currentMedicineCabinet.medicines[0].medicineName;
+                updateViewModelGlobals();
 
-            const listView: ListView = page.getViewById<ListView>("medicine-list");
-            listView.refresh();
+                const listView: ListView = page.getViewById<ListView>("medicine-list");
+                listView.refresh();
 
-            if (settings.currentMedicineCabinet.medicines.length === 1) {
-                deleteButton.color = deleteButtonColors_Off[settings.currentTab];
+                if (settings.currentMedicineCabinet.medicines.length === 1) {
+                    deleteButton.color = deleteButtonColors_Off[settings.currentTab];
+                }
+
+                displayCurrentDoses();
+                displayDosesPerDayInstructions(settings.currentMedicineCabinet.getDailyDosesRequired(settings.currentMedicineName));
             }
-
-            displayCurrentDoses();
-            displayDosesPerDayInstructions(settings.currentMedicineCabinet.getDailyDosesRequired(settings.currentMedicineName));
-        }
-    });
+        })
+        .catch((e) => { console.log("error: " + e) })
 }
 
 export function onAddMedTap() {
@@ -110,9 +127,10 @@ export function onAddMedTap() {
 
 export function onAddMedTapAfterWizard() {
     viewModel.set("isAddingNewMedicine", true);
+    viewModel.set("isMedicineNameEditable", true);
     viewModel.set("i18nSave", i18n.save);
     viewModel.set("i18nCancel", i18n.cancel);
-
+    
     viewModel.set("currentMedicineName", "");
     viewModel.set("i18nDailyInstructions", "");
     clearCurrentDoses();
@@ -123,7 +141,18 @@ export function onAddMedTapAfterWizard() {
         if (settings.isSpeechRecognitionAvailable) {
             vr.startListening();
         }
-    }, 1000);
+    }, 800);
+}
+
+export function onListenTap() {
+    vr.stopListening();
+
+    setTimeout(() => {
+        if (settings.isSpeechRecognitionAvailable) {
+            vr.startListening();
+            viewModel.set("currentMedicineName", "");
+        }
+    }, 400);
 }
 
 export function onSpeechRecognition_home(transcription: string) {
@@ -135,11 +164,16 @@ export function onSpeechRecognition_home(transcription: string) {
 export function onSaveNewMedicineTap() {
     vr.stopListening();
     viewModel.set("isAddingNewMedicine", false);
+    viewModel.set("isMedicineNameEditable", false);
 
     let medicineName: string = removeSpecialCharacters(viewModel.get("currentMedicineName"));
-    viewModel.set("currentMedicineName", settings.currentMedicineName);
     if (medicineName == null) {
-        alert(i18n.selectMedicineMsg);
+        // alert(i18n.selectMedicineMsg);
+        dialog.alert({
+            title: i18n.selectingMedicineTitle,
+            message: i18n.selectMedicineMsg,
+            okButtonText: i18n.ok,
+        })
         return;
     }
 
@@ -165,7 +199,12 @@ export function onSaveNewMedicineTap() {
         const listView: ListView = page.getViewById<ListView>("medicine-list");
         listView.refresh();
 
-        alert(i18n.enterDosesPrescribed + binding.medicineName);
+        // alert(i18n.enterDosesPrescribed + binding.medicineName);
+        dialog.alert({
+            title: i18n.dosagePrescribedHeading,
+            message: i18n.enterDosesPrescribed + binding.medicineName,
+            okButtonText: i18n.ok,
+        })
 
         changeTotalDosesPerDay();
 
@@ -196,7 +235,12 @@ export function onCancelNewMedicineTap() {
 }
 
 export function onLogoTap() {
-    alert(Settings.version);
+    // alert(Settings.version);
+    dialog.alert({
+        title: "nobleIQ Home Pharmacist",
+        message: Settings.version,
+        okButtonText: "Dismiss",
+    })  
 }
 
 export function onTabsLoaded() {
@@ -209,7 +253,7 @@ export function onTabsLoaded() {
 }
 
 export function onSelectedIndexChanged(args: SelectedIndexChangedEventData) {
-    
+
     if ((isTabsViewInitialized) && (!settings.isNewBinding) && (!settings.isConfirmingDose) && (!settings.isAddingNewMedicine)) {
         clearListDosesTakenToday();
 
@@ -570,7 +614,12 @@ export function onPlayTap(args: ItemEventData) {
     if (settings.isAudioEnabled) {
         let medicineName: string = removeSpecialCharacters(viewModel.get("currentMedicineName"));
         if (!medicineName) {
-            alert(i18n.selectMedicineMsg);
+            // alert(i18n.selectMedicineMsg);
+            dialog.alert({
+                title: i18n.selectingMedicineTitle,
+                message: i18n.selectMedicineMsg,
+                okButtonText: i18n.ok,
+            })
             return;
         }
         audioPlayer.play(medicineName);
@@ -871,7 +920,12 @@ function displayCurrentListDoses(): boolean {
     if (settings.isNewBinding) {
         settings.isNewBinding = false;
         changeTotalDosesPerDay();
-        alert(i18n.enterDosesPrescribed + settings.currentMedicineName);
+        // alert(i18n.enterDosesPrescribed + settings.currentMedicineName);
+        dialog.alert({
+            title: i18n.dosagePrescribedHeading,
+            message: i18n.enterDosesPrescribed + settings.currentMedicineName,
+            okButtonText: i18n.ok,
+        })
     }
     return isUiComplete;
 }
@@ -924,8 +978,6 @@ function setActiveLanguageText(): void {
     viewModel.set("i18nMedicineCabinetOwnerTitle", settings.currentMedicineCabinet.ownerTitle);
     viewModel.set("i18nSynavoxSubPageTitle", i18n.synavoxSubPageTitle);
 
-    // viewModel.set("i18nMyMedicines", i18n.myMedicines);
-
     viewModel.set("i18nMe", i18n.me);
     viewModel.set("i18nMom", i18n.mom);
     viewModel.set("i18nDad", i18n.dad);
@@ -936,6 +988,8 @@ function setActiveLanguageText(): void {
 
     viewModel.set("i18nEditTotalDosesPerDayButtonText", i18n.changeDosesPerDay);
     viewModel.set("i18nEditDosesTakenTodayButtonText", i18n.changeDosesTaken);
+
+    viewModel.set("isMedicineNameEditable", isMedicineNameEditable);
 }
 
 function displayDosesTakenMsg(dosesTaken: number): void {
