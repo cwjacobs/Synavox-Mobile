@@ -2,7 +2,7 @@ import { MedicineCabinet } from "~/data-models/medicine-cabinet";
 
 export class Settings {
 
-    private static readonly _version: string = "Version: 1.12.0\n\n(6/21/2019)";
+    private static readonly _version: string = "Version: 1.20.0\n\n(6/24/2019)";
 
     private _currentTab: number;
 
