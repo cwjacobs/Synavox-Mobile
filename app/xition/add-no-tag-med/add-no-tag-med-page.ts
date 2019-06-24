@@ -63,7 +63,7 @@ export function onLoaded(args: EventData) {
     setActiveLanguageText();
 }
 
-export function onSkipL1Tap() {
+export function onSkipTap() {
     onNextL3Tap();
 }
 

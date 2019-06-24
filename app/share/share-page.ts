@@ -42,7 +42,7 @@ let i18nShareButtonText: string = null;
 let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
 
 // Dose indicator colors
-const alertColor: string = "#7700ff";
+const alertColor: string = "#7e69f6";
 const primary: string = "#3A53FF";
 const secondary: string = "#398881";
 const warning: string = "#B9B90C";
@@ -181,6 +181,7 @@ function displayContact(displayName: string): Contact {
         viewModel.set("isPhoneDefined", isPhoneDefined);
     }
     else {
+        // Should never be seen... but if it is ->
         alert("displayName not found in contactList!");
     }
 }
@@ -216,6 +217,27 @@ export function onShareTap(args: EventData) {
     console.log("back from shareLibrary");
 };
 
+export function onRemoveShareTap(args: EventData) {
+    let removeShareButton: Button = page.getViewById("remove-share-button");
+    let removeShareText: string = removeShareButton.text;
+
+    let removeSharingText: string = get18NRemoveSharingText(removeShareText);
+
+    i18nShareButtonText = removeSharingText;
+    viewModel.set("i18nRemoveShareButtonText", i18nShareButtonText);
+
+    removeShareButton.backgroundColor = "#3ab7ff";
+    // shareButton.backgroundColor = "#7700ff";
+
+    isShareComplete = false;
+    viewModel.set("isShareComplete", isShareComplete);
+
+    removeShare(0);
+    console.log("back from removeShare");
+}
+
+function isOdd(num) { return num % 2; }
+
 function get18NSharingText(baseText: string): string {
     let i18nText: string;
     if (i18n.activeLanguage === "english") {
@@ -227,7 +249,19 @@ function get18NSharingText(baseText: string): string {
     return i18nText;
 }
 
+function get18NRemoveSharingText(baseText: string): string {
+    let i18nText: string;
+    if (i18n.activeLanguage === "english") {
+        i18nText = baseText.replace("Remove", "Removing...");
+    }
+    else {
+        i18nText = baseText.replace("Eliminar", "Quitar...");
+    }
+    return i18nText;
+}
+
 let shareTimeout: any;
+let removeShareTimeout: any;
 const interations: number = 6;
 function shareLibrary(counter) {
     if (counter < interations) {
@@ -263,13 +297,40 @@ function shareLibrary(counter) {
     }
 }
 
-function isOdd(num) { return num % 2; }
+function removeShare(counter) {
+    if (counter < interations) {
+        removeShareTimeout = setTimeout(function () {
+            counter++;
 
-export function onCancelTap(args: EventData) {
-    alert("onCancelTap");
-    // clearTimeout(shareTimeout);
-    // This works, but need to clean up ui when cancel is invoked...
+            let removeShareButton: Button = page.getViewById("remove-share-button");
+            if (isOdd(counter)) {
+                removeShareButton.backgroundColor = alertColor;
+            }
+            else {
+                removeShareButton.backgroundColor = "#3ab7ff";
+            }
+            removeShare(counter);
+        }, 1000);
+    }
+    else {
+        if (counter === interations) {
+            let name: string = viewModel.get("selectedContactName");
+
+            isShareComplete = true;
+            viewModel.set("isShareComplete", isShareComplete);
+
+            viewModel.set("i18nRemoveShareButtonText", i18n.removeShare);
+            viewModel.set("i18nShareCompleteNotification", i18n.getRemoveShareCompleteMsg(name));
+
+            let removeShareButton: Button = page.getViewById("remove-share-button");
+            removeShareButton.backgroundColor = alertColor;
+
+            let audioPath: string = "~/audio/sounds/success.mp3";
+            audioPlayer.playFrom(audioPath);
+        }
+    }
 }
+
 
 function containsNameFilter(element: string, index, array): boolean {
     return (element.includes(contactFilter));
@@ -388,5 +449,5 @@ function setActiveLanguageText(): void {
     viewModel.set("i18nContactPhoneLabel", i18n.shareContactPhoneLabel);
 
     viewModel.set("i18nShareButtonText", i18n.share);
-    viewModel.set("i18nCancelButtonText", i18n.cancel);
+    viewModel.set("i18nRemoveShareButtonText", i18n.removeShare);
 }

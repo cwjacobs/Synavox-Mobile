@@ -19,7 +19,8 @@
 				<StackLayout class="list-container">
 					<Label class="title" text="{{ i18nMedicineCabinetOwner }}"></Label>
 					<GridLayout rows="auto, auto" columns="auto, *">
-						<TextField class="pairing-MedicineName fas" id="medicineName-input" text="{{ currentMedicineName }}" hint="{{ i18nMedicineNameHint }}" returnKeyType="done" row="0" col="0" colSpan="2" />
+						<TextField class="pairing-MedicineName fas" id="medicineName-input" text="{{ currentMedicineName }}" editable="{{ isMedicineNameEditable }}" hint="{{ i18nMedicineNameHint }}" returnKeyType="done" row="0" col="0" colSpan="1" />
+						<Label style="horizontal-align: left; margin-left: 15vw" visibility="{{ isAddingNewMedicine ? 'visible' : 'collapsed' }}" class="pairing-TagIcon fas" id="current-medicine-name-listen-icon" text="&#xf130;" row="0" col="2" onTap="onStartListeningTap" />
 						<Label class="pairing-TagId" style="margin-left: 7vw" text="{{ i18nPairedTagIdMsg }}" row="1" col="0" />
 						<Label class="pairing-TagId" style="horizontal-align: right" text="{{ currentTagId }}" visibility="{{ isTagPaired ? 'visible' : 'collapsed' }}"  row="1" col="1" />
 						<!-- <Label class="pairing-TagIcon right fa" text="&#xf02b;" visibility="{{ isTagPaired ? 'visible' : 'collapsed' }}"  row="1" col="2" /> -->

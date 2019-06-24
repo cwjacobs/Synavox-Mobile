@@ -64,6 +64,9 @@ let secondaryOff: string = "#a4cac7";
 let alertOn: string = "#7700ff";
 let alertOff: string = "#c99aff";
 
+let overdoseOn: string = "#ff0000";
+let overdoseOff: string = "#f6a9a9";
+
 const deleteButtonColors_On: string[] = [primaryOn, secondaryOn, alertOn];
 const deleteButtonColors_Off: string[] = [primaryOff, secondaryOff, alertOff];
 
@@ -73,8 +76,7 @@ let medsIconDosesTakenTodayOff: string = "#3ab7ff";
 
 let isTabsViewInitialized: boolean = false;
 
-const platform = require("tns-core-modules/platform");
-// const dialog = require("@nstudio/nativescript-dialog");
+import platform = require("tns-core-modules/platform");
 import * as dialog from "tns-core-modules/ui/dialogs";
 
 export function onDeleteMedTap() {
@@ -130,13 +132,12 @@ export function onAddMedTapAfterWizard() {
     viewModel.set("isMedicineNameEditable", true);
     viewModel.set("i18nSave", i18n.save);
     viewModel.set("i18nCancel", i18n.cancel);
-    
+
     viewModel.set("currentMedicineName", "");
     viewModel.set("i18nDailyInstructions", "");
     clearCurrentDoses();
 
     // Request medicine name
-    //alert(i18n.enterNewMedicneName);
     setTimeout(() => {
         if (settings.isSpeechRecognitionAvailable) {
             vr.startListening();
@@ -144,7 +145,7 @@ export function onAddMedTapAfterWizard() {
     }, 800);
 }
 
-export function onListenTap() {
+export function onStartListeningTap() {
     vr.stopListening();
 
     setTimeout(() => {
@@ -240,7 +241,7 @@ export function onLogoTap() {
         title: "nobleIQ Home Pharmacist",
         message: Settings.version,
         okButtonText: "Dismiss",
-    })  
+    })
 }
 
 export function onTabsLoaded() {
@@ -448,13 +449,13 @@ export function onChangeDosesTakenTodayTap(args: EventData) {
         let currentMedicineNameView: any = page.getViewById("current-medicine-name");
         currentMedicineNameView.color = primaryOn;
 
-        let doseIndicatorBaseId: string = "current";
 
         let dosesTakenToday: number = tempMedicineCabinet.getDosesTakenToday(medicineName);
         let dailyDosesRequired: number = tempMedicineCabinet.getDailyDosesRequired(medicineName);
 
-        let maxDosesDisplayed: number = 6;
-        for (let i = 1; i < maxDosesDisplayed; i++) {
+        let indicatorIdLoopExitIndx: number = 6;
+        let doseIndicatorBaseId: string = "current";
+        for (let i = 1; i < indicatorIdLoopExitIndx; i++) {
             let doseIndicatorId: string = doseIndicatorBaseId + i.toString(10);
             let doseIndicator: any = page.getViewById<any>(doseIndicatorId);
 
@@ -463,7 +464,8 @@ export function onChangeDosesTakenTodayTap(args: EventData) {
                     doseIndicator.color = primaryOn;
                 }
                 else {
-                    doseIndicator.color = alertOn;
+                    // doseIndicator.color = "lightgreen";
+                    doseIndicator.color = overdoseOn;
                 }
             }
             else {
@@ -471,7 +473,7 @@ export function onChangeDosesTakenTodayTap(args: EventData) {
                     doseIndicator.color = primaryOff;
                 }
                 else {
-                    doseIndicator.color = alertOff;
+                    doseIndicator.color = overdoseOff;
                 }
             }
         }
@@ -536,7 +538,7 @@ export function current1(args: ItemEventData) {
         adjustDoses(indicator);
     }
 }
-
+overdoseOn
 export function current2(args: ItemEventData) {
     let indicator: any = page.getViewById("current2");
     if ((!isEditingDosesTakenToday) && (!isEditingTotalDosesPerDay) && (indicator.color.name === "red")) {
@@ -771,7 +773,7 @@ function displayCurrentDoses() {
             }
             else {
                 if ((i > dailyDosesRequired) && (i <= dosesTakenToday)) {
-                    doseIndicator.color = new Color("red");
+                    doseIndicator.color = new Color(overdoseOn);
                 }
                 else {
                     doseIndicator.color = new Color("white");
@@ -786,13 +788,15 @@ function toggleIndicator(indicator: any): number {
     let indicatorCurrentColor: string = indicator.color.toString().toLowerCase();
 
     if (isEditingDosesTakenToday) {
-        if (indicatorCurrentColor === primaryOff.toLowerCase() || indicatorCurrentColor === alertOff.toLowerCase()) {
+        // Doses taken today
+        if (indicatorCurrentColor === primaryOff.toLowerCase() || indicatorCurrentColor === overdoseOff.toLowerCase()) {
             adjustTotal = 1;
         }
         else {
             adjustTotal = -1;
         }
     }
+    // Total doses per day
     else if (isEditingTotalDosesPerDay) {
         if (indicatorCurrentColor === secondaryOff.toLowerCase()) {
             adjustTotal = 1;
@@ -821,7 +825,7 @@ function adustDailyDoseTaken(indicator: any): void {
             indicator.color = primaryOn;
         }
         else {
-            indicator.color = alertOn;
+            indicator.color = overdoseOn;
         }
     }
     else {
@@ -830,7 +834,7 @@ function adustDailyDoseTaken(indicator: any): void {
             indicator.color = primaryOff;
         }
         else {
-            indicator.color = alertOff;
+            indicator.color = overdoseOff;
         }
     }
 
@@ -908,7 +912,7 @@ function displayCurrentListDoses(): boolean {
             }
             else {
                 if ((i > dailyDosesRequired) && (i <= dosesTakenToday)) {
-                    doseIndicator.color = new Color("red");
+                    doseIndicator.color = new Color(overdoseOn);
                 }
                 else {
                     doseIndicator.color = new Color("white");
@@ -920,7 +924,6 @@ function displayCurrentListDoses(): boolean {
     if (settings.isNewBinding) {
         settings.isNewBinding = false;
         changeTotalDosesPerDay();
-        // alert(i18n.enterDosesPrescribed + settings.currentMedicineName);
         dialog.alert({
             title: i18n.dosagePrescribedHeading,
             message: i18n.enterDosesPrescribed + settings.currentMedicineName,
@@ -930,27 +933,49 @@ function displayCurrentListDoses(): boolean {
     return isUiComplete;
 }
 
+
 function registerDoseTaken(medicineName: string): void {
-    let confirmMsg: string = getI18NConfirmMsg(medicineName);
-    confirm(confirmMsg).then((isConfirmed) => {
-        if (isConfirmed) {
-            let _activeMedicineList: MedicineCabinet;
-            if (settings.isConfirmingDose) {
-                // Scanned a tag if here
-                _activeMedicineList = settings.currentMedicineCabinet;
-            }
-            else {
-                // User changing doses if here
-                _activeMedicineList = tempMedicineCabinet;
-            }
-            let dosesTakenToday = _activeMedicineList.getDosesTakenToday(medicineName);
-            _activeMedicineList.setDosesTakenToday(medicineName, (dosesTakenToday + 1));
-            displayCurrentDoses();
-            displayCurrentListDoses();
+    if (settings.isAlwaysConfirmDose) {
+        let _activeMedicineList: MedicineCabinet;
+        if (settings.isConfirmingDose) {
+            // Scanned a tag if here
+            _activeMedicineList = settings.currentMedicineCabinet;
         }
+        else {
+            // User changing doses if here
+            _activeMedicineList = tempMedicineCabinet;
+        }
+        let dosesTakenToday = _activeMedicineList.getDosesTakenToday(medicineName);
+        _activeMedicineList.setDosesTakenToday(medicineName, (dosesTakenToday + 1));
+        displayCurrentDoses();
+        displayCurrentListDoses();
+
         // Reset trigger whether confirmed or not
         settings.isConfirmingDose = false;
-    });
+    }
+    else {
+        let confirmMsg: string = getI18NConfirmMsg(medicineName);
+        confirm(confirmMsg).then((isConfirmed) => {
+            if (isConfirmed) {
+                let _activeMedicineList: MedicineCabinet;
+                if (settings.isConfirmingDose) {
+                    // Scanned a tag if here
+                    _activeMedicineList = settings.currentMedicineCabinet;
+                }
+                else {
+                    // User changing doses if here
+                    _activeMedicineList = tempMedicineCabinet;
+                }
+                let dosesTakenToday = _activeMedicineList.getDosesTakenToday(medicineName);
+                _activeMedicineList.setDosesTakenToday(medicineName, (dosesTakenToday + 1));
+            }
+            displayCurrentDoses();
+            displayCurrentListDoses();
+
+            // Reset trigger whether confirmed or not
+            settings.isConfirmingDose = false;
+        });
+    }
 }
 
 function updateViewModelGlobals() {

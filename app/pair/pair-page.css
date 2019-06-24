@@ -22,11 +22,11 @@
 }
 
 .pairing-TagIcon {
-    /* color: #07da07; */
-    font-size: 20;
+    color: #3ab7ff;
+    font-size: 22em;
     margin-top: 5px;
-    margin-bottom: 5px;
-    /* margin-left: 20px; */
+    margin-bottom: 45px;
+    vertical-align: bottom;
 }
 
 .pairing-MedicineName {

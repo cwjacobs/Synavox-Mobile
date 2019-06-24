@@ -4,7 +4,7 @@ import { EventData } from "tns-core-modules/data/observable";
 import { NavigatedData, Page } from "tns-core-modules/ui/page";
 
 import { WebView, LoadEventData } from "tns-core-modules/ui/web-view";
-import * as dialogs from "tns-core-modules/ui/dialogs";
+// import * as dialogs from "tns-core-modules/ui/dialogs";
 
 import { BrowseViewModel } from "./browse-view-model";
 import { MedicineCabinet, MedicineBinding } from "~/data-models/medicine-cabinet";
@@ -16,12 +16,13 @@ import { AppRootViewModel } from "~/app-root/app-root-view-model";
 import { I18N } from "~/utilities/i18n";
 
 import { TestData } from "~/data-models/test-data";
-let testData: TestData = new TestData();
-
 import { Settings } from "~/settings/settings";
-let settings: Settings = Settings.getInstance();
-
 import { AudioPlayer } from "~/audio-player/audio-player";
+
+import * as dialog from "tns-core-modules/ui/dialogs";
+
+let testData: TestData = new TestData();
+let settings: Settings = Settings.getInstance();
 let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
 
 let page: Page = null;
@@ -30,6 +31,9 @@ let viewModel: BrowseViewModel = null;
 let appRootContext: AppRootViewModel = null;
 let isUserBrowsing: boolean;
 let webViewSrcModel = null;
+
+let column: number = null;
+let medicineName: string = null;
 
 // Page Text
 let i18n = I18N.getInstance();
@@ -65,8 +69,8 @@ export function onLoaded(args: EventData) {
 export function onItemTap(args: ItemEventData) {
     let button: any = args.object;
 
-    let column: number = button.id.substring(0, 1);
-    let medicineName: string = button.id.substring(1);
+    column = button.id.substring(0, 1);
+    medicineName = button.id.substring(1);
 
     // webViewSrcModel = testData.webViewSrcArray;
     // let index: number = settings.currentMedicineCabinet.getMedicineBindingIndex(medicineName);
@@ -104,12 +108,6 @@ export function onWebViewLoaded(webargs) {
 
 // changing WebView source
 export function submit(args) {
-    // alert("submit");
-
-    // const page: Page = <Page>args.object.page;
-    // const vm = page.bindingContext;
-    // const textField: TextField = <TextField>args.object;
-    // const text = textField.text;
     const text = viewModel.get("webViewSrc");
 
     viewModel.set("enabled", false);
@@ -117,7 +115,7 @@ export function submit(args) {
         viewModel.set("webViewSrc", text);
         //textField.dismissSoftInput();
     } else {
-        dialogs.alert("Please, add `http://` or `https://` in front of the URL string")
+        dialog.alert("Please, add `http://` or `https://` in front of the URL string")
             .then(() => {
                 console.log("Dialog closed!");
             });
@@ -138,8 +136,17 @@ export function onGoBackTap() {
     });
 }
 
+// Does not actual work...
 export function onSaveTap() {
-    alert(i18n.saved);
+    // alert(i18n.saved);
+    const text = viewModel.get("webViewSrc");
+
+    dialog.alert({
+        title: i18n.saved,
+        message: medicineName + " " + i18n.bookmarkUpdatedMsg,
+        okButtonText: i18n.ok,
+    })
+
     // TBD: hook the actual current website and save as button property
 }
 

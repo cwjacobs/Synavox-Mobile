@@ -1,7 +1,7 @@
 import { RadSideDrawer } from "nativescript-ui-sidedrawer";
 import * as app from "tns-core-modules/application";
 import { EventData } from "tns-core-modules/data/observable";
-import { NavigatedData, Page } from "tns-core-modules/ui/page";
+import { NavigatedData, Page, View } from "tns-core-modules/ui/page";
 import { ListView, ItemEventData } from "tns-core-modules/ui/list-view/list-view";
 
 import { PairViewModel } from "./pair-view-model";
@@ -18,9 +18,14 @@ import { navigateTo } from "~/app-root/app-root";
 import { TextField } from "tns-core-modules/ui/text-field/text-field";
 import { VR } from "~/utilities/vr";
 
+import platform = require("tns-core-modules/platform");
+import * as dialog from "tns-core-modules/ui/dialogs";
+
 let i18n = I18N.getInstance();
 let settings: Settings = Settings.getInstance();
 let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
+let vr: VR; // Will set settings._isSpeechRecognitionAvailable in private constructor.
+
 
 let page: Page = null;
 let viewModel: PairViewModel = null;
@@ -46,6 +51,17 @@ let viewModel: PairViewModel = null;
  *
  ***/
 
+export function onStartListeningTap() {
+    VR.getInstance().stopListening();
+
+    setTimeout(() => {
+        if (settings.isSpeechRecognitionAvailable) {
+            VR.getInstance().startListening();
+            viewModel.set("currentMedicineName", "");
+        }
+    }, 400);
+}
+
 export function onSpeechRecognition_pair(transcription: string) {
     const input: TextField = page.getViewById<TextField>("medicineName-input");
     input.text = capitalizeFirstLetter(transcription);
@@ -66,11 +82,6 @@ export function onNavigatingTo(args: NavigatedData) {
     page = <Page>args.object;
     viewModel = new PairViewModel();
     page.bindingContext = viewModel;
-
-    // if (!settings) {
-    //     settings = Settings.getInstance();
-    //     let settingsString: string = JSON.stringify(settings.currentMedicineCabinet);
-    // }
 }
 
 export function onNavigatingFrom(args: NavigatedData) {
@@ -91,17 +102,18 @@ export function onLoaded(args: EventData) {
 
     if (settings.isNewBinding) {
         // Request medicine name
-        // alert(i18n.enterPairMedicneName);
         setTimeout(() => {
             if (settings.isSpeechRecognitionAvailable) {
                 VR.getInstance().startListening();
-            }
-        }, 1000);
 
-        const input: TextField = page.getViewById<TextField>("medicineName-input");
-        input.focus();
+                viewModel.set("currentMedicineName", "");
+                viewModel.set("isAddingNewMedicine", true);
+                viewModel.set("isMedicineNameEditable", true);
+            }
+        }, 800);
     }
     else {
+        viewModel.set("isMedicineNameEditable", false);
         if (settings.currentMedicineName) {
             settings.currentTagId = settings.currentMedicineCabinet.getMedicineBinding(settings.currentMedicineName).tagId;
         }
@@ -133,14 +145,14 @@ export function onDeleteTap(args: ItemEventData) {
     let binding: MedicineBinding = new MedicineBinding();
 
     binding.tagId = viewModel.get("currentTagId");
-    if (binding.tagId.length === 0) {
-        alert(i18n.selectMedicineMsg);
-        return;
-    }
-
     binding.medicineName = viewModel.get("currentMedicineName");
-    if (binding.medicineName.length === 0) {
-        alert(i18n.selectMedicineMsg);
+
+    if ((!binding.tagId) || (!binding.medicineName)) {
+        dialog.alert({
+            title: i18n.selectingMedicineTitle,
+            message: i18n.selectMedicineMsg,
+            okButtonText: i18n.ok,
+        })
         return;
     }
 
@@ -165,20 +177,33 @@ export function onDeleteTap(args: ItemEventData) {
 };
 
 export function onSaveTap() {
+    // Use displayed medicine name
+    viewModel.set("isAddingNewMedicine", false);
+    viewModel.set("isMedicineNameEditable", false);
+
     settings.isNewBinding = false; // Saved, so this will be complete now
     let binding: MedicineBinding = new MedicineBinding();
 
-    // Use displayed medicine name
     binding.medicineName = viewModel.get("currentMedicineName");
     if (!binding.medicineName) {
-        alert(i18n.selectMedicineMsg);
+        dialog.alert({
+            title: i18n.selectingMedicineTitle,
+            message: i18n.selectMedicineMsg,
+            okButtonText: i18n.ok,
+        })
         return;
     }
 
     // Use displayed tagId
     binding.tagId = viewModel.get("currentTagId");
     if (!binding.tagId) {
-        alert(i18n.enterTagIdMsg + binding.medicineName);
+        dialog.confirm({
+            title: i18n.youAreDeletingMedMsg,
+            message: i18n.enterTagIdMsg + binding.medicineName,
+            cancelButtonText: i18n.cancel,
+            okButtonText: i18n.ok,
+        })
+
         return;
     }
 
@@ -189,7 +214,11 @@ export function onSaveTap() {
         binding.dailyDoses = settings.currentMedicineCabinet.medicines[index].dailyDoses;
         binding.dailyRequiredDoses = settings.currentMedicineCabinet.medicines[index].dailyRequiredDoses;
         settings.currentMedicineCabinet.replaceMedicineBinding(index, binding);
-        alert(getPairingUpdatedMsg(binding.medicineName));
+        dialog.alert({
+            title: i18n.tip,
+            message: getPairingUpdatedMsg(binding.medicineName),
+            okButtonText: i18n.ok,
+        })
     }
     else {
         index = settings.currentMedicineCabinet.getMedicineBindingIndexByTagId(binding.tagId);
@@ -197,7 +226,11 @@ export function onSaveTap() {
             binding.dailyDoses = settings.currentMedicineCabinet.medicines[index].dailyDoses;
             binding.dailyRequiredDoses = settings.currentMedicineCabinet.medicines[index].dailyRequiredDoses;
             settings.currentMedicineCabinet.replaceMedicineBinding(index, binding);
-            alert(getPairingUpdatedMsg(binding.medicineName));
+            dialog.alert({
+                title: i18n.tip,
+                message: getPairingUpdatedMsg(binding.medicineName),
+                okButtonText: i18n.ok,
+            })
         }
         else { // Add new binding
             binding.dailyDoses = 0;
@@ -219,6 +252,8 @@ export function onSaveTap() {
 }
 
 export function onClearTap(args: ItemEventData) {
+    viewModel.set("isAddingNewMedicine", false);
+
     settings.isNewBinding = false;
     settings.currentTagId = "";
     settings.currentMedicineName = "";
@@ -234,7 +269,11 @@ export function onPlayTap(args: ItemEventData) {
     if (settings.isAudioEnabled) {
         let medicineName: string = viewModel.get("currentMedicineName");
         if (!medicineName) {
-            alert(i18n.selectMedicineMsg);
+            dialog.alert({
+                title: i18n.selectingMedicineTitle,
+                message: i18n.selectMedicineMsg,
+                okButtonText: i18n.ok,
+            })
             return;
         }
         audioPlayer.play(medicineName);

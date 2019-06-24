@@ -415,6 +415,11 @@ export class I18N {
         return text[this._activeLanguageIndex];
     }
 
+    public get removeShare() {
+        const text: string[] = ["Remove Share", "Eliminar compartir"];
+        return text[this._activeLanguageIndex];
+    }
+
     public getShareCompleteMsg(name: string): string {
         let confirmMsg: string;
         if (this.activeLanguage === "english") {
@@ -422,6 +427,17 @@ export class I18N {
         }
         else {
             confirmMsg = "Compartir con " + name + " completado con éxito";
+        }
+        return confirmMsg;
+    }
+
+    public getRemoveShareCompleteMsg(name: string): string {
+        let confirmMsg: string;
+        if (this.activeLanguage === "english") {
+            confirmMsg = "Sharing with " + name + " has been removed";
+        }
+        else {
+            confirmMsg = "Compartir con " + name + " se ha eliminado";
         }
         return confirmMsg;
     }
@@ -448,6 +464,11 @@ export class I18N {
 
     public get saved() {
         const text: string[] = ["Saved", "Guardado"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get bookmarkUpdatedMsg() {
+        const text: string[] = ["bookmark has been updated", "marcador se ha actualizado"];
         return text[this._activeLanguageIndex];
     }
 

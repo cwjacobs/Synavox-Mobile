@@ -18,7 +18,7 @@
 					<TextView loaded="onTextViewLoaded" text="{{ i18nNewTagIntro_L1 }}" id="tag-intro_l1" editable="{{ editState }}" class="title alert text-border"></TextView>
 					<GridLayout class="list-container" rows="auto" columns="*,*,*">
 						<Button class="button my-button alert" style="font-style: italic; font-weight: bold;" text="{{ i18nCancel }}" row="0" col="0" onTap="onCancelTap" />
-						<Button class="button my-button primary" style="font-style: italic; font-weight: bold" text="{{ i18nSkip, i18nSkip + ' >|' }}" row="0" col="1" onTap="onSkipL1Tap" />
+						<Button class="button my-button primary" style="font-style: italic; font-weight: bold" text="{{ i18nSkip, i18nSkip + ' >|' }}" row="0" col="1" onTap="onSkipTap" />
 						<Button class="button my-button" style="font-style: italic; font-weight: bold; color: #3A53FF; background-color: white" text="{{ i18nNext, i18nNext + ' >>' }}" row="0" col="2" onTap="onNextL1Tap" />
 					</GridLayout>
 				</StackLayout>
@@ -27,7 +27,7 @@
 					<TextView text="{{ i18nNewTagIntro_L3 }}" editable="{{ editState }}" class="subtitle text-border"></TextView>
 					<GridLayout class="list-container" rows="auto" columns="*,*,*">
 						<Button class="button my-button alert" style="font-style: italic; font-weight: bold" text="{{ i18nBack, '<< '  + i18nBack }}" row="0" col="0" onTap="onBackL2Tap" />
-						<Button class="button my-button primary" style="font-style: italic; font-weight: bold" text="{{ i18nSkip, i18nSkip + ' >|' }}" row="0" col="1" onTap="onSkipL1Tap" />
+						<Button class="button my-button primary" style="font-style: italic; font-weight: bold" text="{{ i18nSkip, i18nSkip + ' >|' }}" row="0" col="1" onTap="onSkipTap" />
 						<Button class="butt on my-button" style="font-style: italic; font-weight: bold; color: #3A53FF; background-color: white" text="{{ i18nNext, i18nNext + ' >>' }}" row="0" col="2" onTap="onNextL2Tap" />
 					</GridLayout>
 				</StackLayout>
