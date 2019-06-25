@@ -935,47 +935,22 @@ function displayCurrentListDoses(): boolean {
 
 
 function registerDoseTaken(medicineName: string): void {
-    if (settings.isAlwaysConfirmDose) {
-        let _activeMedicineList: MedicineCabinet;
-        if (settings.isConfirmingDose) {
-            // Scanned a tag if here
-            _activeMedicineList = settings.currentMedicineCabinet;
-        }
-        else {
-            // User changing doses if here
-            _activeMedicineList = tempMedicineCabinet;
-        }
-        let dosesTakenToday = _activeMedicineList.getDosesTakenToday(medicineName);
-        _activeMedicineList.setDosesTakenToday(medicineName, (dosesTakenToday + 1));
-        displayCurrentDoses();
-        displayCurrentListDoses();
-
-        // Reset trigger whether confirmed or not
-        settings.isConfirmingDose = false;
+    let _activeMedicineList: MedicineCabinet;
+    if (settings.isConfirmingDose) {
+        // Scanned a tag if here
+        _activeMedicineList = settings.currentMedicineCabinet;
     }
     else {
-        let confirmMsg: string = getI18NConfirmMsg(medicineName);
-        confirm(confirmMsg).then((isConfirmed) => {
-            if (isConfirmed) {
-                let _activeMedicineList: MedicineCabinet;
-                if (settings.isConfirmingDose) {
-                    // Scanned a tag if here
-                    _activeMedicineList = settings.currentMedicineCabinet;
-                }
-                else {
-                    // User changing doses if here
-                    _activeMedicineList = tempMedicineCabinet;
-                }
-                let dosesTakenToday = _activeMedicineList.getDosesTakenToday(medicineName);
-                _activeMedicineList.setDosesTakenToday(medicineName, (dosesTakenToday + 1));
-            }
-            displayCurrentDoses();
-            displayCurrentListDoses();
-
-            // Reset trigger whether confirmed or not
-            settings.isConfirmingDose = false;
-        });
+        // User changing doses if here
+        _activeMedicineList = tempMedicineCabinet;
     }
+    let dosesTakenToday = _activeMedicineList.getDosesTakenToday(medicineName);
+    _activeMedicineList.setDosesTakenToday(medicineName, (dosesTakenToday + 1));
+    displayCurrentDoses();
+    displayCurrentListDoses();
+
+    // Reset trigger whether confirmed or not
+    settings.isConfirmingDose = false;
 }
 
 function updateViewModelGlobals() {

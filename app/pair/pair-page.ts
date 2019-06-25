@@ -203,7 +203,6 @@ export function onSaveTap() {
             cancelButtonText: i18n.cancel,
             okButtonText: i18n.ok,
         })
-
         return;
     }
 

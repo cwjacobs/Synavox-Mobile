@@ -63,7 +63,6 @@ export function onLoaded(args: EventData) {
             let confirmMsg: string = i18n.newTagMsg;
             confirm(confirmMsg).then((isConfirmed) => {
                 if (isConfirmed) {
-                    settings.isNewBinding = true; // Informs pair-page that this is a new medicine/tag binding
                     navigateTo("NewTag", "xition/new-tag/new-tag-page");
                 }
                 else {
@@ -130,14 +129,12 @@ export function onPairTap() {
 
 // Audio control functions
 export function onPlayTap(args: ItemEventData) {
-    if (settings.isAudioEnabled) {
-        let medicineName: string = viewModel.get("currentMedicineName");
-        if (!medicineName) {
-            alert(i18n.selectMedicineMsg);
-            return;
-        }
-        audioPlayer.play(medicineName);
+    let medicineName: string = viewModel.get("currentMedicineName");
+    if (!medicineName) {
+        alert(i18n.selectMedicineMsg);
+        return;
     }
+    audioPlayer.play(medicineName);
 };
 
 export function onStopTap(args: EventData) {

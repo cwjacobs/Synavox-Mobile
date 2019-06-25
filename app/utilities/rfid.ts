@@ -128,6 +128,7 @@ export class RFID {
             this.navigateTo(pageTitle, pageRoute);
         }
         else {
+            settings.currentMedicineName = binding.medicineName;
             if (settings.isAlwaysPlayAudio) {
                 audioPlayer.play(binding.medicineName);
             }

@@ -19,6 +19,7 @@
         "nativescript-audio": "^5.0.1",
         "nativescript-contacts-lite": "^0.2.6",
         "nativescript-filter-select": "^1.2.9",
+        "nativescript-mqtt": "^1.2.0",
         "nativescript-nfc": "^3.0.1",
         "nativescript-parallax": "^1.4.0",
         "nativescript-permissions": "^1.2.3",
