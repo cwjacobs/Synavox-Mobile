@@ -79,6 +79,38 @@ let isTabsViewInitialized: boolean = false;
 import platform = require("tns-core-modules/platform");
 import * as dialog from "tns-core-modules/ui/dialogs";
 
+export function onCustomRecord() {
+    alert("onCustomRecord");
+}
+
+// export function setRecordIconColor() {
+//     return new Color("red");
+// }
+
+function setRecordIconColor() {
+    const tabIds: string[] = ["my-tab", "mom-tab", "dad-tab"];
+
+    let medicineCabinetTabId: string = tabIds[settings.currentTab];
+    if (!medicineCabinetTabId) {
+        alert("!medicineCabinetTabId. settings.currentTab: " + settings.currentTab);
+        return;
+    }
+
+    let medicineCabinetLabelView: Label = page.getViewById(medicineCabinetTabId);
+    if (!medicineCabinetLabelView) {
+        alert("!medicineCabinetLabelView. medicineCabinetTabId: " + medicineCabinetTabId);
+        return;
+    }
+
+    let recordButtonView: Label = page.getViewById("record-custom-button");
+    if (!recordButtonView) {
+        alert("!recordButtonView...");
+        return;
+    }
+
+    recordButtonView.color = medicineCabinetLabelView.color;
+}
+
 export function onDeleteMedTap() {
     const deleteButton: any = getDeleteButtonView();
 
@@ -261,6 +293,7 @@ export function onSelectedIndexChanged(args: SelectedIndexChangedEventData) {
         settings.currentTab = args.newIndex;
         settings.currentMedicineCabinet = medicineCabinets[settings.currentTab];
         setMedicineCabinetOwnerInfo();
+        setRecordIconColor();
 
         settings.currentMedicineName = settings.currentMedicineCabinet.getMedicineBindingByIndex(0).medicineName;
 
@@ -320,6 +353,8 @@ export function onLoaded(args: EventData) {
                 displayCurrentListDoses();
             }, 200);
         }
+        setRecordIconColor();
+
     }, 400);
 
     // Initialize editing buttons state
@@ -349,6 +384,7 @@ export function onLoaded(args: EventData) {
     }
 
     setMedicineCabinetOwnerInfo();
+    // setRecordIconColor();
 
     // Call after all "settings" have been updated
     updateViewModelGlobals();
@@ -933,7 +969,6 @@ function displayCurrentListDoses(): boolean {
     return isUiComplete;
 }
 
-
 function registerDoseTaken(medicineName: string): void {
     let _activeMedicineList: MedicineCabinet;
     if (settings.isConfirmingDose) {
@@ -970,6 +1005,26 @@ function updateViewModelGlobals() {
     viewModel.set("medicineList", settings.currentMedicineCabinet.medicines);
     viewModel.set("currentMedicineName", settings.currentMedicineName);
     viewModel.set("isAudioEnabled", settings.isAudioEnabled);
+
+    /** Record icon color determination */
+    // const tabIds: string[] = ["my-tab", "mom-tab", "dad-tab"];
+
+    // let medicineCabinetTabId: string = tabIds[settings.currentTab];
+    // if (!medicineCabinetTabId) {
+    //     alert("!medicineCabinetTabId. settings.currentTab: " + settings.currentTab);
+    //     return;
+    // }
+
+    // let medicineCabinetLabelView: Label = page.getViewById(medicineCabinetTabId);
+    // if (!medicineCabinetLabelView) {
+    //     alert("!medicineCabinetLabelView. medicineCabinetTabId: " + medicineCabinetTabId);
+    //     return;
+    // }
+
+    // viewModel.set("recordIconColor", medicineCabinetLabelView.color);
+
+    // let recordButtonView: Label = page.getViewById("record-custom-button");
+    // recordButtonView.color = medicineCabinetLabelView.color;
 }
 
 function setActiveLanguageText(): void {

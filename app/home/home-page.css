@@ -30,6 +30,12 @@
     margin-bottom: 5px;
 }
 
+.record-custom {
+    color: gray;
+    font-size: 24em;
+    margin-right: 40px;
+}
+
 .list-MedicineName {
     font-size: 18em;
     color: #3A53FF;
@@ -104,11 +110,11 @@
 }
 
 .align-bottom {
-    vertical-align: middle;
+    vertical-align: bottom;
 }
 
 .align-left {
-    horizontal-align: middle;
+    horizontal-align: left;
 }
 
 .hAlign-center {
@@ -116,7 +122,7 @@
 }
 
 .align-right {
-    horizontal-align: middle;
+    horizontal-align: right;
 }
 
 

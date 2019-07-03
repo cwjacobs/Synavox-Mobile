@@ -32,28 +32,6 @@ export class AudioPlayer {
         return this._instance;
     }
 
-    // private useAudio(medicineName: string) {
-    //     let audioPath: string = this.getAudioPath(medicineName);
-    //     AudioPlayer._player
-    //         .initFromFile({
-    //             audioFile: audioPath, // ~ = app directory
-    //             loop: false,
-    //             completeCallback: AudioPlayer._trackComplete.bind(this),
-    //             errorCallback: AudioPlayer._trackError.bind(this)
-    //         })
-    //         .then(() => {
-    //             AudioPlayer._player.getAudioTrackDuration().then(duration => {
-    //                 // iOS: duration is in seconds
-    //                 // Android: duration is in milliseconds
-    //                 // console.log(`audio duration:`, duration);
-    //                 // alert("Audio duration: " + duration);
-    //             });
-    //         })
-    //         .then(() => {
-    //             AudioPlayer._player.play()
-    //         });;
-    // }
-
     public play(medicineName: string) {
         let audioPath: string = this.getAudioPath(medicineName);
         AudioPlayer._player
