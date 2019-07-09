@@ -3,9 +3,15 @@ import { I18N } from "~/utilities/i18n";
 import { Settings } from "~/settings/settings";
 import { MedicineBinding } from '~/data-models/medicine-cabinet';
 
+// import { File, Folder, FileSystemEntity  } from "tns-core-modules/file-system";
+import fileSystemModule = require('tns-core-modules/file-system');
+import platform = require('tns-core-modules/platform');
+
 export class AudioRecorder {
+    private static source: number;
+
     private _i18n: I18N = I18N.getInstance();
-    private static readonly _lanugageDirectoryRoot: string = "~/audio/";
+    private static readonly _lanugageDirectoryRoot: string = "/audio/";
 
     // App scope variables
     private _settings: Settings;
@@ -21,7 +27,7 @@ export class AudioRecorder {
         AudioRecorder._instance = this;
 
         AudioRecorder._recorder = new TNSRecorder();
-        AudioRecorder._recorder.debug = true; // set true to enable TNSPlayer console logs for debugging.
+        AudioRecorder._recorder.debug = true;// set true to enable TNSPlayer console logs for debugging.
 
         this._i18n = I18N.getInstance();
         this._settings = Settings.getInstance();
@@ -40,16 +46,35 @@ export class AudioRecorder {
     }
 
     public record(medicineName: string) {
-        let audioPath: string = this.getAudioPath(medicineName);
+        let audioFolder = fileSystemModule.knownFolders.currentApp().getFolder(this.getAudioFolder());
+
+        let audioFile: string = audioFolder.path + this.getAudioFile(medicineName);
+        alert(audioFile);
+
+        // let hasPermission: boolean = AudioRecorder._recorder.hasRecordPermission();
+        // alert("Has permission: " + AudioRecorder._recorder.hasRecordPermission());
+
+        let androidEncoder = 3;
+
         let options: AudioRecorderOptions = {
-            filename: audioPath,
+            filename: audioFile,
+            source: 1,
+            format: "mp3",
+            encoder: androidEncoder,
             infoCallback: AudioRecorder._onInfo.bind(this),
             errorCallback: AudioRecorder._onError.bind(this),
-        };
+        }
 
         AudioRecorder._recorder
             .start(options)
             .then(() => {
+                console.log(".then(() => {");
+                // setTimeout(() => {
+                //     AudioRecorder._recorder.stop()
+                //         .then(() => {
+                //             console.log("recording complete");
+                //         })
+                // }, 3000);
                 console.log("Promise has been resolved, or 'onfulfilled");
             })
             .then(() => {
@@ -57,6 +82,18 @@ export class AudioRecorder {
             })
     }
 
+    public stop() {
+        if (AudioRecorder._recorder.isRecording) {
+            AudioRecorder._recorder
+                .stop()
+                .then(() => {
+                    AudioRecorder._recorder.audioRecorderDidFinishRecording(AudioRecorder._recorder, true);
+                })
+        }
+        else {
+            console.log("AudioRecorder is not recording");
+        }
+    }
     // public record(medicineName: string) {
     //     let audioPath: string = this.getAudioPath(medicineName);
     //     AudioRecorder._recorder
@@ -120,23 +157,32 @@ export class AudioRecorder {
         let languageDirectory: string;
         let activeLanguage: string = this._i18n.activeLanguage;
         if (activeLanguage === "english") {
-            languageDirectory = "en/custom";
+            languageDirectory = "en/";
         }
         else {
-            languageDirectory = "sp/custom";
+            languageDirectory = "sp/";
         }
 
         let audioPath = AudioRecorder._lanugageDirectoryRoot + languageDirectory + medicineName.toLowerCase() + ".mp3";
-
-        //let file: fs.File = new fs.File();
-        //let fileExists: boolean = fs.File.exists(audioPath);
-        //fileExists= true; // Until I figure out how to use or get a better fs object
-
-        // if (!fileExists) {
-        // alert("No corresponding audio: " + audioPath + " using default...");
-        // audioPath = getDefaultAudio(languageDirectory);
-        // }
         return audioPath;
+    }
+
+    private getAudioFile(medicineName: string): string {
+        let audioFile = "/" + medicineName.toLowerCase() + ".mp3";
+        return audioFile;
+    }
+
+    private getAudioFolder(): string {
+        let languageDirectory: string;
+        if (this._i18n.activeLanguage === "english") {
+            languageDirectory = "en/";
+        }
+        else {
+            languageDirectory = "sp/";
+        }
+
+        let audioFolder = AudioRecorder._lanugageDirectoryRoot + languageDirectory;
+        return audioFolder;
     }
 
     public getAudioPathByTagId(tagId: string): string {
@@ -159,15 +205,6 @@ export class AudioRecorder {
             medicineName = binding.medicineName;
         }
         let audioPath = AudioRecorder._lanugageDirectoryRoot + languageDirectory + medicineName.toLowerCase() + ".mp3";
-
-        //let file: fs.File = new fs.File();
-        //let fileExists: boolean = fs.File.exists(audioPath);
-        //fileExists= true; // Until I figure out how to use or get a better fs object
-
-        // if (!fileExists) {
-        // alert("No corresponding audio: " + audioPath + " using default...");
-        // audioPath = getDefaultAudio(languageDirectory);
-        // }
         return audioPath;
     }
 

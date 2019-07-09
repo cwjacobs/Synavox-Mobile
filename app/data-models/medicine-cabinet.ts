@@ -1,5 +1,11 @@
 export class MedicineBinding {
-    constructor(public tagId?: string, public medicineName?: string, public dailyRequiredDoses?: number, public dailyDoses?: number) {
+    constructor(
+        public tagId?: string, 
+        public medicineName?: string, 
+        public dailyRequiredDoses?: number, 
+        public dailyDoses?: number,
+        public audioTrack?: string,
+        ) {
     };
 }
 
@@ -72,6 +78,7 @@ export class MedicineCabinet {
         return index;
     }
 
+    /* Returns null if medicine name is not found */
     public getMedicineBinding(medicineName: string): MedicineBinding {
         let i: number = 0;
         let index: number = -1;
@@ -136,15 +143,12 @@ export class MedicineCabinet {
 
     public setDailyDoseRequirement(medicineName: string, doses: number): void {
         let index: number = this.getMedicineBindingIndex(medicineName);
-        this.medicines[index].dailyRequiredDoses = doses;
-
-        // let medicineBinding: MedicineBinding = this.getMedicineBindingByName(medicineName);
-        // if (medicineBinding) {
-        //     medicineBinding.dailyRequiredDoses = doses;
-        // }
-        // else {
-        //     console.log("setDailyDoseRequirement: " + medicineName + " not found in _medicineBindings");
-        // }
+        if(index !== -1) {
+            this.medicines[index].dailyRequiredDoses = doses;
+        }
+        else {
+            console.log("setDailyDoseRequirement: " + medicineName + " not found in _medicineBindings");
+        }
     }
 
     public addMedicineBinding(medicineBinding: MedicineBinding) {

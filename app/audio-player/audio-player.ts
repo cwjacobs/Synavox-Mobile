@@ -92,57 +92,51 @@ export class AudioPlayer {
     }
 
     private getAudioPath(medicineName: string): string {
-        let languageDirectory: string;
-        let activeLanguage: string = this._i18n.activeLanguage;
-        if (activeLanguage === "english") {
-            languageDirectory = "en/";
+        let audioPath: string;
+        let binding: MedicineBinding = this._settings.currentMedicineCabinet.getMedicineBinding(medicineName);
+        if (binding.audioTrack) {
+            audioPath = binding.audioTrack;
         }
         else {
-            languageDirectory = "sp/";
+            let languageDirectory: string;
+            let activeLanguage: string = this._i18n.activeLanguage;
+            if (activeLanguage === "english") {
+                languageDirectory = "en/";
+            }
+            else {
+                languageDirectory = "sp/";
+            }
+            audioPath = AudioPlayer._lanugageDirectoryRoot + languageDirectory + medicineName.toLowerCase() + ".mp3";
         }
-
-        let audioPath = AudioPlayer._lanugageDirectoryRoot + languageDirectory + medicineName.toLowerCase() + ".mp3";
-
-        //let file: fs.File = new fs.File();
-        //let fileExists: boolean = fs.File.exists(audioPath);
-        //fileExists= true; // Until I figure out how to use or get a better fs object
-
-        // if (!fileExists) {
-        // alert("No corresponding audio: " + audioPath + " using default...");
-        // audioPath = getDefaultAudio(languageDirectory);
-        // }
         return audioPath;
     }
 
     public getAudioPathByTagId(tagId: string): string {
-        let languageDirectory: string;
-        let activeLanguage: string = this._i18n.activeLanguage;
-        if (activeLanguage === "english") {
-            languageDirectory = "en/";
-        }
-        else {
-            languageDirectory = "sp/";
-        }
-
-        let medicineName: string;
+        let audioPath: string;
         let binding: MedicineBinding = this._settings.currentMedicineCabinet.getMedicineBindingByTagId(tagId);
-        if (binding === null) {
-            // medicineName not found in current list of medicine bindings
-            medicineName = "default";
+        if (binding.audioTrack) {
+            audioPath = binding.audioTrack;
         }
         else {
-            medicineName = binding.medicineName;
+            let languageDirectory: string;
+            let activeLanguage: string = this._i18n.activeLanguage;
+            if (activeLanguage === "english") {
+                languageDirectory = "en/";
+            }
+            else {
+                languageDirectory = "sp/";
+            }
+
+            let medicineName: string;
+            if (binding === null) {
+                // medicineName not found in current list of medicine bindings
+                medicineName = "default";
+            }
+            else {
+                medicineName = binding.medicineName;
+            }
+            audioPath = AudioPlayer._lanugageDirectoryRoot + languageDirectory + medicineName.toLowerCase() + ".mp3";
         }
-        let audioPath = AudioPlayer._lanugageDirectoryRoot + languageDirectory + medicineName.toLowerCase() + ".mp3";
-
-        //let file: fs.File = new fs.File();
-        //let fileExists: boolean = fs.File.exists(audioPath);
-        //fileExists= true; // Until I figure out how to use or get a better fs object
-
-        // if (!fileExists) {
-        // alert("No corresponding audio: " + audioPath + " using default...");
-        // audioPath = getDefaultAudio(languageDirectory);
-        // }
         return audioPath;
     }
 

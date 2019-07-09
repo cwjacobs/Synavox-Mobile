@@ -15,12 +15,15 @@ import { RFID } from "~/utilities/rfid";
 import { TestData } from "~/data-models/test-data";
 import { Settings } from "~/settings/settings";
 import { AudioPlayer } from "~/audio-player/audio-player";
+import { AudioRecorder } from "~/audio-recorder/audio-recorder";
+
 import { TextField } from "tns-core-modules/ui/text-field/text-field";
 import { VR } from "~/utilities/vr";
 import { navigateTo } from "~/app-root/app-root";
 
 let i18n: I18N = I18N.getInstance();
 let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
+let audioRecorder: AudioRecorder = AudioRecorder.getInstance();
 
 // Individual medicine lists
 let myMedicineCabinet: MedicineCabinet = new MedicineCabinet(TestData.myMedicineCabinet.owner, TestData.myMedicineCabinet.medicines);
@@ -76,16 +79,110 @@ let medsIconDosesTakenTodayOff: string = "#3ab7ff";
 
 let isTabsViewInitialized: boolean = false;
 
-import platform = require("tns-core-modules/platform");
+// import platform = require("tns-core-modules/platform");
 import * as dialog from "tns-core-modules/ui/dialogs";
+import { async } from "rxjs/internal/scheduler/async";
+// import fileSystemModule = require('tns-core-modules/file-system');
+// import { TNSPlayer, TNSRecorder, AudioRecorderOptions } from 'nativescript-audio';
 
-export function onCustomRecord() {
-    alert("onCustomRecord");
+import audio = require('nativescript-audio');
+import fileSystemModule = require('tns-core-modules/file-system');
+const audioFolder = fileSystemModule.knownFolders.currentApp().getFolder('recordings');
+import platform = require('tns-core-modules/platform');
+
+// let audio: TNSRecorder;
+
+let recording: boolean = false;
+
+export async function onCustomRecord2() {
+    // alert("onCustomRecord: " + audioRecorder);
+    if (!recording) {
+        recording = true;
+        audioRecorder.record(settings.currentMedicineName);
+    }
+    else {
+        recording = false;
+        audioRecorder.stop();
+    }
 }
 
-// export function setRecordIconColor() {
-//     return new Color("red");
-// }
+export function onCustomRecord() {
+    // alert("onCustomRecord: " + audioRecorder);
+
+    //methods: {
+    // async doRecord() {
+    console.log('doRecord Called 1e');
+    let recorder = new audio.TNSRecorder();
+    /*
+    from the sample app
+    */
+    let androidFormat;
+    let androidEncoder;
+    if (platform.isAndroid) {
+        // static constants are not available, using raw values here
+        // androidFormat = android.media.MediaRecorder.OutputFormat.MPEG_4;
+        androidFormat = 2;
+        // androidEncoder = android.media.MediaRecorder.AudioEncoder.AAC;
+        androidEncoder = 3;
+    }
+
+    let options = {
+        filename: audioFolder.path + '/recording.mp4',
+        format: androidFormat,
+        encoder: androidEncoder,
+        infoCallback: info => {
+            //apparently I'm necessary even if blank
+        },
+        errorCallback: e => {
+            console.log('error cb', e);
+        }
+    };
+
+    recorder.start(options);
+    // console.log('in theory recording: ' + options.filename);
+    // console.log('audioFolder.parent: ' + audioFolder.parent.name);
+    // console.log('audioFolder.parent.parent: ' + audioFolder.parent.parent.name);
+    // console.log('audioFolder.parent.parent.parent: ' + audioFolder.parent.parent.parent.name);
+    // console.log('audioFolder.parent.parent.parent.parent: ' + audioFolder.parent.parent.parent.parent.name);
+    // console.log('audioFolder.parent.parent.parent.parent.parent: ' + audioFolder.parent.parent.parent.parent.parent.name);
+    // console.log('audioFolder.parent.parent.parent.parent.parent.parent: ' + audioFolder.parent.parent.parent.parent.parent.parent.name);
+    setTimeout(() => {
+        console.log('calling stop');
+        recorder.stop()
+            .then(() => {
+                console.log('fileSystemModule.File.exists: ' + fileSystemModule.File.exists(options.filename));
+                audioPlayer.playFrom(options.filename);
+                
+                let index: number = settings.currentMedicineCabinet.getMedicineBindingIndex(settings.currentMedicineName);
+                if(index !== -1) {
+                    let medicineBinding: MedicineBinding = settings.currentMedicineCabinet.getMedicineBindingByIndex(index);
+                    medicineBinding.audioTrack = options.filename;
+                    settings.currentMedicineCabinet.replaceMedicineBinding(index, medicineBinding)
+                }
+                console.log('really done');
+            })
+            .catch(e => {
+                console.log('error stopping', e);
+            });
+    }, 3000);
+    // },
+
+    // doPlay() {
+
+    // let player = new audio.TNSPlayer();
+    // console.log("doPlay()");
+    //     player.playFromFile({
+    //         audioFile: audioFolder.path + '/recording.mp4'
+    //     })
+    //         .then(() => {
+    //             console.log('in then');
+    //         })
+    //         .catch(e => {
+    //             console.log('in error', e);
+    //         });
+    // }
+    //}
+};
 
 function setRecordIconColor() {
     const tabIds: string[] = ["my-tab", "mom-tab", "dad-tab"];
@@ -354,7 +451,6 @@ export function onLoaded(args: EventData) {
             }, 200);
         }
         setRecordIconColor();
-
     }, 400);
 
     // Initialize editing buttons state
@@ -1005,26 +1101,6 @@ function updateViewModelGlobals() {
     viewModel.set("medicineList", settings.currentMedicineCabinet.medicines);
     viewModel.set("currentMedicineName", settings.currentMedicineName);
     viewModel.set("isAudioEnabled", settings.isAudioEnabled);
-
-    /** Record icon color determination */
-    // const tabIds: string[] = ["my-tab", "mom-tab", "dad-tab"];
-
-    // let medicineCabinetTabId: string = tabIds[settings.currentTab];
-    // if (!medicineCabinetTabId) {
-    //     alert("!medicineCabinetTabId. settings.currentTab: " + settings.currentTab);
-    //     return;
-    // }
-
-    // let medicineCabinetLabelView: Label = page.getViewById(medicineCabinetTabId);
-    // if (!medicineCabinetLabelView) {
-    //     alert("!medicineCabinetLabelView. medicineCabinetTabId: " + medicineCabinetTabId);
-    //     return;
-    // }
-
-    // viewModel.set("recordIconColor", medicineCabinetLabelView.color);
-
-    // let recordButtonView: Label = page.getViewById("record-custom-button");
-    // recordButtonView.color = medicineCabinetLabelView.color;
 }
 
 function setActiveLanguageText(): void {

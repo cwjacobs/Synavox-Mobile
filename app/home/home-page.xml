@@ -55,6 +55,7 @@
 					<GridLayout rows="auto" columns="auto,*">
 						<Label class="daily-instruction" text="{{ i18nDailyInstructions }}" row="0" col="0" />
 						<Label class="record-custom text-right fa" id="record-custom-button" text="&#xf130;" row="0" col="1" onTap="onCustomRecord" />
+						<!-- <Label class="record-custom text-right fa" id="record-custom-button" text="&#xf130;" row="0" col="1"  onTap="onCustomRecord" /> -->
 					</GridLayout>
 					<StackLayout class="hr-light"></StackLayout>
 				</StackLayout>
