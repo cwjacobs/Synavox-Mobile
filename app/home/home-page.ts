@@ -82,35 +82,21 @@ let isTabsViewInitialized: boolean = false;
 // import platform = require("tns-core-modules/platform");
 import * as dialog from "tns-core-modules/ui/dialogs";
 import { async } from "rxjs/internal/scheduler/async";
-// import fileSystemModule = require('tns-core-modules/file-system');
-// import { TNSPlayer, TNSRecorder, AudioRecorderOptions } from 'nativescript-audio';
 
 import audio = require('nativescript-audio');
 import fileSystemModule = require('tns-core-modules/file-system');
 const audioFolder = fileSystemModule.knownFolders.currentApp().getFolder('recordings');
 import platform = require('tns-core-modules/platform');
 
-// let audio: TNSRecorder;
-
 let recording: boolean = false;
 
-export async function onCustomRecord2() {
-    // alert("onCustomRecord: " + audioRecorder);
-    if (!recording) {
-        recording = true;
-        audioRecorder.record(settings.currentMedicineName);
-    }
-    else {
-        recording = false;
-        audioRecorder.stop();
-    }
+export function onCustomRecord() {
+    let pageTitle: string = "CustomAudio";
+    let pageRoute: string = "xition/custom-audio/custom-audio-page";
+    navigateTo(pageTitle, pageRoute);
 }
 
-export function onCustomRecord() {
-    // alert("onCustomRecord: " + audioRecorder);
-
-    //methods: {
-    // async doRecord() {
+export function onCustomRecordWizardExit() {
     console.log('doRecord Called 1e');
     let recorder = new audio.TNSRecorder();
     /*
@@ -139,12 +125,6 @@ export function onCustomRecord() {
     };
 
     recorder.start(options);
-    // console.log('in theory recording: ' + options.filename);
-    // console.log('audioFolder.parent: ' + audioFolder.parent.name);
-    // console.log('audioFolder.parent.parent: ' + audioFolder.parent.parent.name);
-    // console.log('audioFolder.parent.parent.parent: ' + audioFolder.parent.parent.parent.name);
-    // console.log('audioFolder.parent.parent.parent.parent: ' + audioFolder.parent.parent.parent.parent.name);
-    // console.log('audioFolder.parent.parent.parent.parent.parent: ' + audioFolder.parent.parent.parent.parent.parent.name);
     // console.log('audioFolder.parent.parent.parent.parent.parent.parent: ' + audioFolder.parent.parent.parent.parent.parent.parent.name);
     setTimeout(() => {
         console.log('calling stop');
@@ -152,9 +132,9 @@ export function onCustomRecord() {
             .then(() => {
                 console.log('fileSystemModule.File.exists: ' + fileSystemModule.File.exists(options.filename));
                 audioPlayer.playFrom(options.filename);
-                
+
                 let index: number = settings.currentMedicineCabinet.getMedicineBindingIndex(settings.currentMedicineName);
-                if(index !== -1) {
+                if (index !== -1) {
                     let medicineBinding: MedicineBinding = settings.currentMedicineCabinet.getMedicineBindingByIndex(index);
                     medicineBinding.audioTrack = options.filename;
                     settings.currentMedicineCabinet.replaceMedicineBinding(index, medicineBinding)
@@ -165,47 +145,15 @@ export function onCustomRecord() {
                 console.log('error stopping', e);
             });
     }, 3000);
-    // },
-
-    // doPlay() {
-
-    // let player = new audio.TNSPlayer();
-    // console.log("doPlay()");
-    //     player.playFromFile({
-    //         audioFile: audioFolder.path + '/recording.mp4'
-    //     })
-    //         .then(() => {
-    //             console.log('in then');
-    //         })
-    //         .catch(e => {
-    //             console.log('in error', e);
-    //         });
-    // }
-    //}
 };
 
 function setRecordIconColor() {
-    const tabIds: string[] = ["my-tab", "mom-tab", "dad-tab"];
-
-    let medicineCabinetTabId: string = tabIds[settings.currentTab];
-    if (!medicineCabinetTabId) {
-        alert("!medicineCabinetTabId. settings.currentTab: " + settings.currentTab);
-        return;
-    }
-
-    let medicineCabinetLabelView: Label = page.getViewById(medicineCabinetTabId);
-    if (!medicineCabinetLabelView) {
-        alert("!medicineCabinetLabelView. medicineCabinetTabId: " + medicineCabinetTabId);
-        return;
-    }
-
     let recordButtonView: Label = page.getViewById("record-custom-button");
     if (!recordButtonView) {
         alert("!recordButtonView...");
         return;
     }
-
-    recordButtonView.color = medicineCabinetLabelView.color;
+    recordButtonView.color = new Color(Settings.brightIconColors[settings.currentTab]);
 }
 
 export function onDeleteMedTap() {
@@ -670,7 +618,7 @@ export function current1(args: ItemEventData) {
         adjustDoses(indicator);
     }
 }
-overdoseOn
+
 export function current2(args: ItemEventData) {
     let indicator: any = page.getViewById("current2");
     if ((!isEditingDosesTakenToday) && (!isEditingTotalDosesPerDay) && (indicator.color.name === "red")) {

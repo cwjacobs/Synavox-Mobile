@@ -20,6 +20,7 @@ let settings: Settings = Settings.getInstance();
 
 import { AudioPlayer } from "~/audio-player/audio-player";
 import { navigateTo } from "~/app-root/app-root";
+import { onCustomRecordWizardExit } from "~/home/home-page";
 let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
 
 let page: Page = null;
@@ -64,7 +65,7 @@ export function onLoaded(args: EventData) {
 }
 
 export function onSkipTap() {
-    onNextL3Tap();
+    onNextL2Tap();
 }
 
 export function onNextL1Tap() {
@@ -74,23 +75,12 @@ export function onNextL1Tap() {
     viewModel.set("isL4", false);
 }
 
-export function onNextL3Tap() {
-    settings.isNewBinding = true;
-
-    let pageTitle: string = "Pair";
-    let pageRoute: string = "pair/pair-page";
-    navigateTo(pageTitle, pageRoute);
+export function onRecordTap() {
+    onCustomRecordWizardExit();
 }
 
-export function onCancelTap() {
-    onNoTap();
-}
-
-export function onBackL3Tap() {
-    onNextL1Tap();
-}
-
-export function onNoTap() {
+export function onSaveTap() {
+    // settings.isNewRecording = true;
     settings.isNewBinding = false;
 
     let pageTitle: string = "Home";
@@ -98,7 +88,19 @@ export function onNoTap() {
     navigateTo(pageTitle, pageRoute);
 }
 
-export function onYesTap() {
+export function onBackL3Tap() {
+    onNextL1Tap();
+}
+
+export function onCancelTap() {
+    settings.isNewBinding = false;
+
+    let pageTitle: string = "Home";
+    let pageRoute: string = "home/home-page";
+    navigateTo(pageTitle, pageRoute);
+}
+
+export function onNextL2Tap() {
     viewModel.set("isL1", false);
     viewModel.set("isL2", false);
     viewModel.set("isL3", true);
@@ -112,24 +114,22 @@ function getTagIdText(tagId: string): string {
 
 function setActiveLanguageText(): void {
 
-    viewModel.set("i18nPageTitle", i18n.newTagPageTitle);
+    viewModel.set("i18nPageTitle", i18n.customAudioPageTitle);
     viewModel.set("i18nSynavoxSubPageTitle", i18n.synavoxSubPageTitle);
 
-    let tagIdText: string = getTagIdText(settings.currentTagId);
-    viewModel.set("i18nNewTagId", tagIdText);
+    let tagIdText: string = getTagIdText(settings.currentMedicineName);
+    viewModel.set("medicineName", settings.currentMedicineName);
 
-    viewModel.set("i18nNo", i18n.no);
-    viewModel.set("i18nYes", i18n.yes);
+    viewModel.set("i18nSave", i18n.save);
     viewModel.set("i18nBack", i18n.back);
     viewModel.set("i18nSkip", i18n.skip);
     viewModel.set("i18nNext", i18n.next);
     viewModel.set("i18nCancel", i18n.cancel);
+    viewModel.set("i18nRecord", i18n.record);
 
     viewModel.set("editState", false);
-    viewModel.set("i18nNewTagIntro_L1", i18n.newTagIntro_L1);
-    viewModel.set("i18nNewTagIntro_L2", i18n.newTagIntro_L2);
-    viewModel.set("i18nNewTagIntro_L3", i18n.newTagIntro_L3);
-    viewModel.set("i18nNewTagIntro_L4", i18n.newTagIntro_L4);
-    viewModel.set("i18nNewTagIntro_L5", i18n.newTagIntro_L5);
+    viewModel.set("i18nCustomAudioIntro_L1", i18n.customAudioIntro_L1);
+    viewModel.set("i18nCustomAudioIntro_L2", i18n.customAudioIntro_L2);
+    viewModel.set("i18nCustomAudioIntro_L3", i18n.customAudioIntro_L3);
 };
 

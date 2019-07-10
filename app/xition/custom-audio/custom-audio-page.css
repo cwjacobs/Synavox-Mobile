@@ -16,6 +16,14 @@
     text-align: center;
 }
 
+.test {
+    color: #35db02;
+}
+
+.test2 {
+    color: #b104f5;
+}
+
 .alert {
     color: white;
     background-color: #7e69f6;
@@ -34,7 +42,7 @@
     background: linear-gradient(to bottom, #8090fa, #0000ff, #3A53FF);
 }
 
-.tag-id {
+.medicine-name {
     color: white;
     font-size: 18;
     text-align: center;
@@ -49,13 +57,13 @@
 }
 
 .bottom-gradient {
-    background: linear-gradient(to bottom, #3A53FF, orangered, #616161);
+    background: linear-gradient(to bottom, #3A53FF, white, #616161);
 }
 
 .background-gradient {
     /* background: linear-gradient(to bottom, white, #7cc2fb, #3A53FF); */
     /* background: linear-gradient(to bottom, #3A53FF, #7cc2fb, white); */
-    background: linear-gradient(to bottom, white, white, #6176ff);
+    background: linear-gradient(to bottom, white, #afbbfd, #7687f6);
 }
 
 .degree-gradient {
@@ -121,7 +129,7 @@
 
 .header-template {
     background-color: red;
-    background-image: url('~/images/newTagWizard.jpg');
+    background-image: url('~/images/customAudio.jpg');
     height: 205;
     background-size: cover;
     /* background-position: center top; */

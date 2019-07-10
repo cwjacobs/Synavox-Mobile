@@ -234,13 +234,13 @@ export class I18N {
         const text: string[] = ["You are deleting a medication", "Está eliminando un medicamento"];
         return text[this._activeLanguageIndex];
     }
-    
+
 
     public get selectingMedicineTitle() {
         const text: string[] = ["You are selecting a medicine by name", "Está seleccionando un medicamento por su nombre"];
         return text[this._activeLanguageIndex];
     }
-    
+
     public dosesTaken(dosesTaken: number): string {
         const enText: string[] = [
             "Take as needed",
@@ -777,6 +777,44 @@ export class I18N {
         return text[this._activeLanguageIndex];
     }
 
+
+    /******************************
+     * Custom Audio Page
+     ******************************/
+
+    public get record() {
+        const text: string[] = ["Record ", "Grabar"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get customAudioPageTitle() {
+        const text: string[] = ["Record Your Own Audio", "Graba tu propio audio"];
+        return text[this._activeLanguageIndex];
+    }
+
+    public get customAudioIntro_L1() {
+        const text: string[] = [
+            "You can create your own custom audio track for any medicine in your medicine cabinet.",
+            "Puede crear su propia pista de audio personalizada para cualquier medicamento en su botiquín"];
+
+        return text[this._activeLanguageIndex];
+    }
+
+    public get customAudioIntro_L2() {
+        const text: string[] = [
+            "You can revert back to the original Home Pharmacist audio at any time.",
+            "Puede volver al audio original del farmacéutico doméstico en cualquier momento"];
+
+        return text[this._activeLanguageIndex];
+    }
+
+    public get customAudioIntro_L3() {
+        const text: string[] = [
+            "On the next screen, press the 'record' button to begin recording, then press the 'done' button to save you new audio track.",
+            "En la siguiente pantalla, pulse el botón 'grabar' para comenzar la grabación, luego presione el botón 'hecho' para guardar nueva pista de audio"];
+
+        return text[this._activeLanguageIndex];
+    }
 }
 
 

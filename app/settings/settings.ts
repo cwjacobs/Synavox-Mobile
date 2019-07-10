@@ -4,6 +4,8 @@ export class Settings {
 
     private static readonly _version: string = "Version: 1.20.0\n\n(6/24/2019)";
 
+    public static readonly brightIconColors: string[] = ["#3ab7ff", "#35db02", "#b104f5"];
+
     private _currentTab: number;
 
     private _currentPage: string;
