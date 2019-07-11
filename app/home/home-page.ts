@@ -89,8 +89,8 @@ const audioFolder = fileSystemModule.knownFolders.currentApp().getFolder('record
 import platform = require('tns-core-modules/platform');
 import { TNSRecorder } from "nativescript-audio";
 
-let audioFileName: string;
 let isRecording: boolean = false;
+let recordedAudioFilePath: string = null;
 
 export function onCustomRecord() {
     let pageTitle: string = "CustomAudio";
@@ -99,8 +99,10 @@ export function onCustomRecord() {
 }
 
 export function onCustomRecordWizardExit(medicineName: string): audio.TNSRecorder {
-    console.log('doRecord Called 1e');
+    console.log('onCustomRecordWizardExit(medicineName: ' + medicineName + ' )');
     let recorder = new audio.TNSRecorder();
+    let recordedAudioFileName: string = medicineName.toLowerCase() + ".rec";
+
     /*
     from the sample app
     */
@@ -115,7 +117,7 @@ export function onCustomRecordWizardExit(medicineName: string): audio.TNSRecorde
     }
 
     let options = {
-        filename: audioFolder.path + '/recording.mp4',
+        filename: (audioFolder.path + '/' + recordedAudioFileName),
         format: androidFormat,
         encoder: androidEncoder,
         infoCallback: info => {
@@ -125,9 +127,10 @@ export function onCustomRecordWizardExit(medicineName: string): audio.TNSRecorde
             console.log('error cb', e);
         }
     };
-    audioFileName = options.filename;
+    recordedAudioFilePath = options.filename;
     recorder.start(options);
-    // console.log('audioFolder.parent.parent.parent.parent.parent.parent: ' + audioFolder.parent.parent.parent.parent.parent.parent.name);
+    isRecording = true;
+
     setTimeout(() => {
         stopRecording(recorder);
     }, 20000);
@@ -135,24 +138,18 @@ export function onCustomRecordWizardExit(medicineName: string): audio.TNSRecorde
     return recorder;
 };
 
-export function stopRecording(recorder: audio.TNSRecorder): void {
-    console.log('calling stop');
-    recorder.stop()
-        .then(() => {
-            console.log('fileSystemModule.File.exists: ' + fileSystemModule.File.exists(audioFileName));
-            audioPlayer.playFrom(audioFileName);
-
-            let index: number = settings.currentMedicineCabinet.getMedicineBindingIndex(settings.currentMedicineName);
-            if (index !== -1) {
-                let medicineBinding: MedicineBinding = settings.currentMedicineCabinet.getMedicineBindingByIndex(index);
-                medicineBinding.audioTrack = audioFileName;
-                settings.currentMedicineCabinet.replaceMedicineBinding(index, medicineBinding)
-            }
-            console.log('really done');
-        })
-        .catch(e => {
-            console.log('error stopping', e);
-        });
+export function stopRecording(recorder: audio.TNSRecorder): string {
+    if (isRecording) {
+        recorder.stop()
+            .then(() => {
+                isRecording = false;
+                audioPlayer.playFrom(recordedAudioFilePath);
+            })
+            .catch(e => {
+                console.log('error stopping', e);
+            });
+    }
+    return recordedAudioFilePath;
 }
 
 function setRecordIconColor() {

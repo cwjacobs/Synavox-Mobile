@@ -24,8 +24,13 @@ import { onCustomRecordWizardExit, stopRecording } from "~/home/home-page";
 import { Label } from "tns-core-modules/ui/label/label";
 import { Button } from "tns-core-modules/ui/button/button";
 import { AudioRecorder } from "~/audio-recorder/audio-recorder";
+import { MedicineBinding } from "~/data-models/medicine-cabinet";
+
+import fileSystemModule = require('tns-core-modules/file-system');
+const audioFolder = fileSystemModule.knownFolders.currentApp().getFolder('recordings');
 
 let recorder: any;
+let recordedAudioFilePath: string = null;
 let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
 
 let page: Page = null;
@@ -79,6 +84,7 @@ export function onNextL1Tap() {
 }
 
 export function onRecordTap() {
+    recordedAudioFilePath = null;
     viewModel.set("isRecording", true);
 
     setRecordButtonStateColor(isPressed);
@@ -89,12 +95,41 @@ export function onStopTap() {
     viewModel.set("isRecording", false);
 
     setRecordButtonStateColor(!isPressed);
-    stopRecording(recorder);
+    recordedAudioFilePath = stopRecording(recorder);
 }
 
 export function onSaveTap() {
     viewModel.set("isRecording", false);
     setRecordButtonStateColor(!isPressed);
+
+    if (recordedAudioFilePath === null) {
+        alert("audioFileName === null");
+    }
+    else {
+        let index: number = settings.currentMedicineCabinet.getMedicineBindingIndex(settings.currentMedicineName);
+        if (index === -1) {
+            alert("onSaveTap index for " + settings.currentMedicineName + " not found");
+        }
+        else {
+            // Get medicine name track, then delete if it already exists
+            let customAudioFileName: string = settings.currentMedicineName.toLowerCase() + ".mp3";
+            let customAudioFile: fileSystemModule.File = audioFolder.getFile(customAudioFileName);
+            customAudioFile.remove();
+
+            // Get and rename the newly recorded audio for settings.currentMedicineName
+            let recordedAudioFileName: string = settings.currentMedicineName.toLowerCase() + ".rec";
+            let recordedAudioFile: fileSystemModule.File = audioFolder.getFile(recordedAudioFileName)
+            recordedAudioFile.rename(customAudioFileName);
+
+            let customAudioFilePath: string = recordedAudioFile.path;
+            audioPlayer.playFrom(customAudioFilePath);
+            console.log("customAudioFilePath: " + customAudioFilePath);
+
+            let medicineBinding: MedicineBinding = settings.currentMedicineCabinet.getMedicineBindingByIndex(index);
+            medicineBinding.audioTrack = customAudioFilePath;
+            settings.currentMedicineCabinet.replaceMedicineBinding(index, medicineBinding);
+        }
+    }
 
     // settings.isNewRecording = true;
     settings.isNewBinding = false;
@@ -109,6 +144,7 @@ export function onBackL3Tap() {
 }
 
 export function onCancelTap() {
+    recordedAudioFilePath = null;
     settings.isNewBinding = false;
 
     let pageTitle: string = "Home";
@@ -158,7 +194,6 @@ function getTagIdText(tagId: string): string {
 }
 
 function setActiveLanguageText(): void {
-
     viewModel.set("i18nPageTitle", i18n.customAudioPageTitle);
     viewModel.set("i18nSynavoxSubPageTitle", i18n.synavoxSubPageTitle);
 
