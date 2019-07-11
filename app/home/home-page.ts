@@ -87,8 +87,10 @@ import audio = require('nativescript-audio');
 import fileSystemModule = require('tns-core-modules/file-system');
 const audioFolder = fileSystemModule.knownFolders.currentApp().getFolder('recordings');
 import platform = require('tns-core-modules/platform');
+import { TNSRecorder } from "nativescript-audio";
 
-let recording: boolean = false;
+let audioFileName: string;
+let isRecording: boolean = false;
 
 export function onCustomRecord() {
     let pageTitle: string = "CustomAudio";
@@ -96,7 +98,7 @@ export function onCustomRecord() {
     navigateTo(pageTitle, pageRoute);
 }
 
-export function onCustomRecordWizardExit() {
+export function onCustomRecordWizardExit(medicineName: string): audio.TNSRecorder {
     console.log('doRecord Called 1e');
     let recorder = new audio.TNSRecorder();
     /*
@@ -123,29 +125,35 @@ export function onCustomRecordWizardExit() {
             console.log('error cb', e);
         }
     };
-
+    audioFileName = options.filename;
     recorder.start(options);
     // console.log('audioFolder.parent.parent.parent.parent.parent.parent: ' + audioFolder.parent.parent.parent.parent.parent.parent.name);
     setTimeout(() => {
-        console.log('calling stop');
-        recorder.stop()
-            .then(() => {
-                console.log('fileSystemModule.File.exists: ' + fileSystemModule.File.exists(options.filename));
-                audioPlayer.playFrom(options.filename);
+        stopRecording(recorder);
+    }, 20000);
 
-                let index: number = settings.currentMedicineCabinet.getMedicineBindingIndex(settings.currentMedicineName);
-                if (index !== -1) {
-                    let medicineBinding: MedicineBinding = settings.currentMedicineCabinet.getMedicineBindingByIndex(index);
-                    medicineBinding.audioTrack = options.filename;
-                    settings.currentMedicineCabinet.replaceMedicineBinding(index, medicineBinding)
-                }
-                console.log('really done');
-            })
-            .catch(e => {
-                console.log('error stopping', e);
-            });
-    }, 3000);
+    return recorder;
 };
+
+export function stopRecording(recorder: audio.TNSRecorder): void {
+    console.log('calling stop');
+    recorder.stop()
+        .then(() => {
+            console.log('fileSystemModule.File.exists: ' + fileSystemModule.File.exists(audioFileName));
+            audioPlayer.playFrom(audioFileName);
+
+            let index: number = settings.currentMedicineCabinet.getMedicineBindingIndex(settings.currentMedicineName);
+            if (index !== -1) {
+                let medicineBinding: MedicineBinding = settings.currentMedicineCabinet.getMedicineBindingByIndex(index);
+                medicineBinding.audioTrack = audioFileName;
+                settings.currentMedicineCabinet.replaceMedicineBinding(index, medicineBinding)
+            }
+            console.log('really done');
+        })
+        .catch(e => {
+            console.log('error stopping', e);
+        });
+}
 
 function setRecordIconColor() {
     let recordButtonView: Label = page.getViewById("record-custom-button");

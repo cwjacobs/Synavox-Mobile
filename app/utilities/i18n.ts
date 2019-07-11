@@ -125,6 +125,11 @@ export class I18N {
         return text[this._activeLanguageIndex];
     }
 
+    public get stop() {
+        const text: string[] = ["Stop", "Salvar"];
+        return text[this._activeLanguageIndex];
+    }
+
     public get clear() {
         const text: string[] = ["Clear", "Claro"];
         return text[this._activeLanguageIndex];
@@ -810,8 +815,24 @@ export class I18N {
 
     public get customAudioIntro_L3() {
         const text: string[] = [
-            "On the next screen, press the 'record' button to begin recording, then press the 'done' button to save you new audio track.",
-            "En la siguiente pantalla, pulse el botón 'grabar' para comenzar la grabación, luego presione el botón 'hecho' para guardar nueva pista de audio"];
+            "On the next screen, press the 'Record' button to begin recording, then press the 'Stop' button to end recording.",
+            "En la siguiente pantalla, pulse el botón 'Grabar' para comenzar la grabación y, a continuación, pulse el botón 'Detener' para finalizar la grabación"];
+
+        return text[this._activeLanguageIndex];
+    }
+
+    public get customAudioIntro_L4() {
+        const text: string[] = [
+            "When you're finished recording, press the Stop button, your recording will automatically be played for your review.",
+            "Cuando haya terminado de grabar, pulse el botón Detener, la grabación se reproducirá automáticamente para su revisión"];
+
+        return text[this._activeLanguageIndex];
+    }
+
+    public get customAudioIntro_L5() {
+        const text: string[] = [
+            "If you're happy with your recording, press Save. Otherwise, you can record it again or press Cancel to end the custom recording session.",
+            "Si estás satisfecho con la grabación, presiona Guardar. De lo contrario, puede grabarlo de nuevo o pulsar Cancelar para finalizar la sesión de grabación personalizada"];
 
         return text[this._activeLanguageIndex];
     }

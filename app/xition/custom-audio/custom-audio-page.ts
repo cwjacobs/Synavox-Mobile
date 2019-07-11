@@ -1,7 +1,7 @@
 import { RadSideDrawer } from "nativescript-ui-sidedrawer";
 import * as app from "tns-core-modules/application";
 import { EventData } from "tns-core-modules/data/observable";
-import { NavigatedData, Page } from "tns-core-modules/ui/page";
+import { NavigatedData, Page, Color } from "tns-core-modules/ui/page";
 
 import { WebView, LoadEventData } from "tns-core-modules/ui/web-view";
 import * as dialogs from "tns-core-modules/ui/dialogs";
@@ -20,23 +20,25 @@ let settings: Settings = Settings.getInstance();
 
 import { AudioPlayer } from "~/audio-player/audio-player";
 import { navigateTo } from "~/app-root/app-root";
-import { onCustomRecordWizardExit } from "~/home/home-page";
+import { onCustomRecordWizardExit, stopRecording } from "~/home/home-page";
+import { Label } from "tns-core-modules/ui/label/label";
+import { Button } from "tns-core-modules/ui/button/button";
+import { AudioRecorder } from "~/audio-recorder/audio-recorder";
+
+let recorder: any;
 let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
 
 let page: Page = null;
 let viewModel: NewTagViewModel = null;
 
-let appRootContext: AppRootViewModel = null;
 let isUserBrowsing: boolean;
+const isPressed: boolean = true;
+let appRootContext: AppRootViewModel = null;
 
 // Page Text
 let i18n = I18N.getInstance();
 
 export function onTextViewLoaded(args) {
-    // const textView: TextView = <TextView>args.object;
-    // textView.on("textChange", (argstv) => {
-    //     console.dir(argstv);
-    // });
     setActiveLanguageText();
 }
 
@@ -62,6 +64,7 @@ export function onLoaded(args: EventData) {
     viewModel.set("isL4", false);
 
     setActiveLanguageText();
+    setRecordButtonStateColor(!isPressed);
 }
 
 export function onSkipTap() {
@@ -76,10 +79,23 @@ export function onNextL1Tap() {
 }
 
 export function onRecordTap() {
-    onCustomRecordWizardExit();
+    viewModel.set("isRecording", true);
+
+    setRecordButtonStateColor(isPressed);
+    recorder = onCustomRecordWizardExit(settings.currentMedicineName);
+}
+
+export function onStopTap() {
+    viewModel.set("isRecording", false);
+
+    setRecordButtonStateColor(!isPressed);
+    stopRecording(recorder);
 }
 
 export function onSaveTap() {
+    viewModel.set("isRecording", false);
+    setRecordButtonStateColor(!isPressed);
+
     // settings.isNewRecording = true;
     settings.isNewBinding = false;
 
@@ -107,6 +123,35 @@ export function onNextL2Tap() {
     viewModel.set("isL4", false);
 }
 
+function setRecordButtonStateColor(isPressed: boolean): void {
+    return;
+    let recordButtonView: Button = page.getViewById("record-button");
+    if (!recordButtonView) {
+        alert("setRecordButtonColor: !recordButtonView...");
+        return;
+    }
+
+    let color: Color = null;
+    let backgroundColor: Color = null;
+    if (isPressed) {
+        recordButtonView.color = new Color("black");
+        recordButtonView.backgroundColor = new Color("red");
+        // recordButtonView.backgroundColor = new Color(Settings.brightIconColors[settings.currentTab]);
+    }
+    else {
+        recordButtonView.color = new Color("white");
+        recordButtonView.backgroundColor = new Color("#3A53FF");
+    }
+
+    if (color) {
+        recordButtonView.color = color;
+    }
+
+    if (backgroundColor) {
+        recordButtonView.backgroundColor = backgroundColor;
+    }
+}
+
 function getTagIdText(tagId: string): string {
     let text: string = i18n.tagId + ": " + tagId;
     return text;
@@ -120,6 +165,7 @@ function setActiveLanguageText(): void {
     let tagIdText: string = getTagIdText(settings.currentMedicineName);
     viewModel.set("medicineName", settings.currentMedicineName);
 
+    viewModel.set("i18nStop", i18n.stop);
     viewModel.set("i18nSave", i18n.save);
     viewModel.set("i18nBack", i18n.back);
     viewModel.set("i18nSkip", i18n.skip);
@@ -131,5 +177,7 @@ function setActiveLanguageText(): void {
     viewModel.set("i18nCustomAudioIntro_L1", i18n.customAudioIntro_L1);
     viewModel.set("i18nCustomAudioIntro_L2", i18n.customAudioIntro_L2);
     viewModel.set("i18nCustomAudioIntro_L3", i18n.customAudioIntro_L3);
+    viewModel.set("i18nCustomAudioIntro_L4", i18n.customAudioIntro_L4);
+    viewModel.set("i18nCustomAudioIntro_L5", i18n.customAudioIntro_L5);
 };
 

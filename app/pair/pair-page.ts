@@ -209,7 +209,8 @@ export function onSaveTap() {
     settings.currentMedicineName = binding.medicineName;
     let index: number = settings.currentMedicineCabinet.getMedicineBindingIndex(binding.medicineName);
 
-    if (index != -1) { // Medicine Name not found, replace a current binding
+    if (index != -1) { // Medicine Name is found, replace its current binding
+        binding.audioTrack = settings.currentMedicineCabinet.medicines[index].audioTrack;
         binding.dailyDoses = settings.currentMedicineCabinet.medicines[index].dailyDoses;
         binding.dailyRequiredDoses = settings.currentMedicineCabinet.medicines[index].dailyRequiredDoses;
         settings.currentMedicineCabinet.replaceMedicineBinding(index, binding);
@@ -221,7 +222,8 @@ export function onSaveTap() {
     }
     else {
         index = settings.currentMedicineCabinet.getMedicineBindingIndexByTagId(binding.tagId);
-        if (index != -1) { // Medicine Tag not found, replace a current binding
+        if (index != -1) { // Medicine Tag is found, replace its current binding
+            binding.audioTrack = settings.currentMedicineCabinet.medicines[index].audioTrack;
             binding.dailyDoses = settings.currentMedicineCabinet.medicines[index].dailyDoses;
             binding.dailyRequiredDoses = settings.currentMedicineCabinet.medicines[index].dailyRequiredDoses;
             settings.currentMedicineCabinet.replaceMedicineBinding(index, binding);

@@ -21,7 +21,7 @@
 }
 
 .test2 {
-    color: #b104f5;
+    color: #a55335;
 }
 
 .alert {
@@ -44,8 +44,10 @@
 
 .medicine-name {
     color: white;
-    font-size: 18;
+    font-size: 24;
+    font-weight: bold;
     text-align: center;
+    vertical-align: middle;
     border-radius: 20px 20px;
 }
 

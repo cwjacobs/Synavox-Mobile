@@ -32,11 +32,12 @@
 				</StackLayout>
 				<StackLayout visibility="{{ isL3 ? 'visible' : 'collapsed' }}">
 					<TextView text="{{ i18nCustomAudioIntro_L4 }}" editable="{{ editState }}" class="subtitle primary text-border"></TextView>
-					<TextView text="{{ i18nCustomAudioIntro_L5 }}" editable="{{ editState }}" class="subtitle primary text }}-border"></TextView>
+					<TextView text="{{ i18nCustomAudioIntro_L5 }}" editable="{{ editState }}" class="subtitle primary text-border"></TextView>
 					<GridLayout class="list-container" rows="auto" columns="*,*,*">
 						<Button class="button my-button alert" style="font-style: italic; font-weight: bold" text="{{ i18nCancel }}" row="0" col="0" onTap="onCancelTap"/>
-						<Button class="button my-button primary fas" style="font-style: italic; font-weight: bold" text="{{ i18nRecord, i18nRecord + ' &#xf130;' }}" row="0" col="1" onTap="onRecordTap"/>
-						<Button class="button my-button" style="font-style: italic; font-weight: bold; color: #3A53FF; background-color: white" text="{{ i18nSave, i18nSave + ' >>' }}" row="0" col="2" onTap="onSaveTap" />
+						<Button visibility="{{ isRecording ? 'collapsed' : 'visible' }}" class="button my-button fas primary" id="record-button" style="font-style: italic; font-weight: bold;" text="{{ i18nRecord, i18nRecord + ' &#xf130;' }}" row="0" col="1" onTap="onRecordTap"/>
+						<Button visibility="{{ isRecording ? 'visible' : 'collapsed' }}" class="button my-button fas" id="stop-button" style="font-style: italic; font-weight: bold; color: white; background-color: #ff4500" text="{{ i18nStop, i18nStop + ' &#xf130;' }}" row="0" col="1" onTap="onStopTap"/>
+						<Button class="button my-button" style="font-style: italic; font-weight: bold; color: #3A53FF; background-color: white" text="{{ i18nSave }}" row="0" col="2" onTap="onSaveTap" />
 					</GridLayout>
 				</StackLayout>
 				<!-- <StackLayout dock="bottom"><image src="~/images/logo.png" height="auto" width="230vw" onTap="onLogoTap" /></StackLayout> -->
