@@ -2,30 +2,31 @@ import { TNSPlayer } from 'nativescript-audio';
 import { I18N } from "~/utilities/i18n";
 import { Settings } from "~/settings/settings";
 import { MedicineBinding } from '~/data-models/medicine-cabinet';
-// import { MedicineBinding } from '~/data-models/medicine-binding';
 
 export class AudioPlayer {
     private _i18n: I18N = I18N.getInstance();
     private static readonly _lanugageDirectoryRoot: string = "~/audio/";
 
     // App scope variables
-    private _settings: Settings;
+    private settings: Settings = Settings.getInstance();
 
     private static _player: TNSPlayer = null;
     private static _instance: AudioPlayer = new AudioPlayer();
 
     constructor() {
-        console.log("AudioPlayer - private constructor() invoked");
+        if (Settings.isDebugBuild) {
+            console.log("AudioPlayer - private constructor() invoked");
+        }
+
         if (AudioPlayer._player) {
             throw new Error("Error: Instantiation failed: Use AudioPlayer.getInstance() instead of new.");
         }
         AudioPlayer._instance = this;
 
         AudioPlayer._player = new TNSPlayer();
-        AudioPlayer._player.debug = true; // set true to enable TNSPlayer console logs for debugging.
+        AudioPlayer._player.debug = Settings.isDebugBuild; // set true to enable TNSPlayer console logs for debugging.
 
         this._i18n = I18N.getInstance();
-        this._settings = Settings.getInstance();
     }
 
     public static getInstance() {
@@ -33,46 +34,50 @@ export class AudioPlayer {
     }
 
     public play(medicineName: string) {
-        let audioPath: string = this.getAudioPath(medicineName);
-        AudioPlayer._player
-            .initFromFile({
-                audioFile: audioPath, // ~ = app directory
-                loop: false,
-                completeCallback: AudioPlayer._trackComplete.bind(this),
-                errorCallback: AudioPlayer._trackError.bind(this)
-            })
-            .then(() => {
-                AudioPlayer._player.getAudioTrackDuration().then(duration => {
-                    // iOS: duration is in seconds
-                    // Android: duration is in milliseconds
-                    // console.log(`audio duration:`, duration);
-                    // alert("Audio duration: " + duration);
+        if (this.settings.isAudioEnabled) {
+            let audioPath: string = this.getAudioPath(medicineName);
+            AudioPlayer._player
+                .initFromFile({
+                    audioFile: audioPath, // ~ = app directory
+                    loop: false,
+                    completeCallback: AudioPlayer._trackComplete.bind(this),
+                    errorCallback: AudioPlayer._trackError.bind(this)
+                })
+                .then(() => {
+                    AudioPlayer._player.getAudioTrackDuration().then(duration => {
+                        // iOS: duration is in seconds
+                        // Android: duration is in milliseconds
+                        // console.log(`audio duration:`, duration);
+                        // alert("Audio duration: " + duration);
+                    });
+                })
+                .then(() => {
+                    AudioPlayer._player.play()
                 });
-            })
-            .then(() => {
-                AudioPlayer._player.play()
-            });;
+        }
     }
 
     public playFrom(audioPath: string) {
-        AudioPlayer._player
-            .initFromFile({
-                audioFile: audioPath, // ~ = app directory
-                loop: false,
-                completeCallback: AudioPlayer._trackComplete.bind(this),
-                errorCallback: AudioPlayer._trackError.bind(this)
-            })
-            .then(() => {
-                AudioPlayer._player.getAudioTrackDuration().then(duration => {
-                    // iOS: duration is in seconds
-                    // Android: duration is in milliseconds
-                    // console.log(`audio duration:`, duration);
-                    // alert("Audio duration: " + duration);
+        if (this.settings.isAudioEnabled) {
+            AudioPlayer._player
+                .initFromFile({
+                    audioFile: audioPath, // ~ = app directory
+                    loop: false,
+                    completeCallback: AudioPlayer._trackComplete.bind(this),
+                    errorCallback: AudioPlayer._trackError.bind(this)
+                })
+                .then(() => {
+                    AudioPlayer._player.getAudioTrackDuration().then(duration => {
+                        // iOS: duration is in seconds
+                        // Android: duration is in milliseconds
+                        // console.log(`audio duration:`, duration);
+                        // alert("Audio duration: " + duration);
+                    });
+                })
+                .then(() => {
+                    AudioPlayer._player.play()
                 });
-            })
-            .then(() => {
-                AudioPlayer._player.play()
-            });
+        }
     }
 
     public pause() {
@@ -84,17 +89,19 @@ export class AudioPlayer {
     }
 
     public togglePlay() {
-        if (AudioPlayer._player.isAudioPlaying()) {
-            AudioPlayer._player.pause();
-        } else {
-            AudioPlayer._player.play();
+        if (this.settings.isAudioEnabled) {
+            if (AudioPlayer._player.isAudioPlaying()) {
+                AudioPlayer._player.pause();
+            } else {
+                AudioPlayer._player.play();
+            }
         }
     }
 
     private getAudioPath(medicineName: string): string {
         let audioPath: string;
-        let binding: MedicineBinding = this._settings.currentMedicineCabinet.getMedicineBinding(medicineName);
-        if (binding.audioTrack) {
+        let binding: MedicineBinding = this.settings.currentMedicineCabinet.getMedicineBinding(medicineName);
+        if (binding && binding.audioTrack) {
             audioPath = binding.audioTrack;
         }
         else {
@@ -113,8 +120,8 @@ export class AudioPlayer {
 
     public getAudioPathByTagId(tagId: string): string {
         let audioPath: string;
-        let binding: MedicineBinding = this._settings.currentMedicineCabinet.getMedicineBindingByTagId(tagId);
-        if (binding.audioTrack) {
+        let binding: MedicineBinding = this.settings.currentMedicineCabinet.getMedicineBindingByTagId(tagId);
+        if (binding && binding.audioTrack) {
             audioPath = binding.audioTrack;
         }
         else {
@@ -155,15 +162,18 @@ export class AudioPlayer {
     }
 
     private static _trackComplete(args: any) {
-        console.log('reference back to player:', args.player);
         // iOS only: flag indicating if completed succesfully
-        console.log('whether song play completed successfully:', args.flag);
+        if (Settings.isDebugBuild) {
+            console.log('reference back to player:' + args.player);
+            console.log('whether song play completed successfully:' + args.flag);
+        }
     }
 
     private static _trackError(args: any) {
-        console.log('reference back to player:', args.player);
-        console.log('the error:', args.error);
-        // Android only: extra detail on error
-        console.log('extra info on the error:', args.extra);
+        if (Settings.isDebugBuild) {
+            console.log('reference back to player:' + args.player);
+            console.log('the error:' + args.error);
+            console.log('extra info on the error:' + args.extra);
+        }
     }
 }

@@ -32,10 +32,14 @@ export class VR {
             .then((available: boolean) => {
                 // alert(available ? "Voice Recognition is available on this device" : "Voice Recognition is NOT available on this device");
                 this.settings.isSpeechRecognitionAvailable = available;
-                // console.log("isSpeechRecognitionAvailable: " + available);
+                if (Settings.isDebugBuild) {
+                    console.log("isSpeechRecognitionAvailable: ", available);
+                }
             },
                 (err: string) => {
-                    console.log(err);
+                    if (Settings.isDebugBuild) {
+                        console.log(err);
+                    }
                 }
             )
             .then(() => {
@@ -68,8 +72,16 @@ export class VR {
                 }
             }
         ).then(
-            (started: boolean) => { /* console.log(`started listening`) */ },
-            (errorMessage: string) => { console.log(`Error: ${errorMessage}`); }
+            (started: boolean) => {
+                if (Settings.isDebugBuild) {
+                    console.log(`started listening`)
+                }
+            },
+            (errorMessage: string) => {
+                if (Settings.isDebugBuild) {
+                    console.log(`Error: ${errorMessage}`);
+                }
+            }
         ).catch((error: string | number) => {
             // same as the 'onError' handler, but this may not return if the error occurs after listening has successfully started (because that resolves the promise,
             // hence the' onError' handler was created.
@@ -78,8 +90,16 @@ export class VR {
 
     public stopListening() {
         this.speechRecognition.stopListening().then(
-            () => { console.log(`stopped listening`) },
-            (errorMessage: string) => { console.log(`Stop error: ${errorMessage}`); }
+            () => {
+                if (Settings.isDebugBuild) {
+                    console.log(`stopped listening`)
+                }
+            },
+            (errorMessage: string) => {
+                if (Settings.isDebugBuild) {
+                    console.log(`Stop error: ${errorMessage}`);
+                }
+            }
         );
     }
 

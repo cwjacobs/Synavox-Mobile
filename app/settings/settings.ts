@@ -2,7 +2,11 @@ import { MedicineCabinet } from "~/data-models/medicine-cabinet";
 
 export class Settings {
 
-    private static readonly _version: string = "Version: 1.20.0\n\n(6/24/2019)";
+    public static readonly isDebugBuild: boolean = true;
+
+    private static readonly _version: string = "Version: 1.30.1";
+    
+    private static readonly _versionDate: string = "Build Date: 7/16/2019";
 
     public static readonly brightIconColors: string[] = ["#3ab7ff", "#35db02", "#b104f5"];
 
@@ -45,8 +49,21 @@ export class Settings {
         return Settings._instance;
     }
 
+    // public static get isDebugBuild() {
+    //     return Settings._isDebugBuild;
+    // }
+
     public static get version() {
         return this._version;
+    }
+
+    public static get versionDate() {
+        return this._versionDate;
+    }
+
+    public static get buildType() {
+        let buildType: string = Settings.isDebugBuild ? "Debug build" : "Release build";
+        return buildType;
     }
 
     public get currentTab(): number {

@@ -1,9 +1,8 @@
-import { TNSPlayer, TNSRecorder, AudioRecorderOptions } from 'nativescript-audio';
+import { TNSRecorder, AudioRecorderOptions } from 'nativescript-audio';
 import { I18N } from "~/utilities/i18n";
 import { Settings } from "~/settings/settings";
 import { MedicineBinding } from '~/data-models/medicine-cabinet';
 
-// import { File, Folder, FileSystemEntity  } from "tns-core-modules/file-system";
 import fileSystemModule = require('tns-core-modules/file-system');
 import platform = require('tns-core-modules/platform');
 
@@ -20,14 +19,17 @@ export class AudioRecorder {
     private static _instance: AudioRecorder = new AudioRecorder();
 
     constructor() {
-        console.log("AudioRecorder - private constructor() invoked");
         if (AudioRecorder._recorder) {
             throw new Error("Error: Instantiation failed: Use AudioRecorder.getInstance() instead of new.");
         }
         AudioRecorder._instance = this;
 
+        if (Settings.isDebugBuild) {
+            console.log("AudioRecorder - private constructor() invoked");
+        }
+
         AudioRecorder._recorder = new TNSRecorder();
-        AudioRecorder._recorder.debug = true;// set true to enable TNSPlayer console logs for debugging.
+        AudioRecorder._recorder.debug = Settings.isDebugBuild;  // set true to enable TNSPlayer console logs for debugging.
 
         this._i18n = I18N.getInstance();
         this._settings = Settings.getInstance();
@@ -38,11 +40,15 @@ export class AudioRecorder {
     }
 
     private static _onInfo(info: any) {
-        console.log("options infoCallback: infoCallback.info = " + info);
+        if (Settings.isDebugBuild) {
+            console.log("options infoCallback: infoCallback.info = ", info);
+        }
     }
 
     private static _onError(error: any) {
-        console.log("options errorCallback: onError.error = " + error);
+        if (Settings.isDebugBuild) {
+            console.log("options errorCallback: onError.error = ", error);
+        }
     }
 
     public record(medicineName: string) {
@@ -68,17 +74,14 @@ export class AudioRecorder {
         AudioRecorder._recorder
             .start(options)
             .then(() => {
-                console.log(".then(() => {");
-                // setTimeout(() => {
-                //     AudioRecorder._recorder.stop()
-                //         .then(() => {
-                //             console.log("recording complete");
-                //         })
-                // }, 3000);
-                console.log("Promise has been resolved, or 'onfulfilled");
+                if (Settings.isDebugBuild) {
+                    console.log("Promise has been resolved, or 'onfulfilled");
+                }
             })
             .then(() => {
-                console.log("Promise has been rejected, or 'onrejected");
+                if (Settings.isDebugBuild) {
+                    console.log("Promise has been rejected, or 'onrejected");
+                }
             })
     }
 
@@ -91,7 +94,9 @@ export class AudioRecorder {
                 })
         }
         else {
-            console.log("AudioRecorder is not recording");
+            if (Settings.isDebugBuild) {
+                console.log("AudioRecorder is not recording");
+            }
         }
     }
     // public record(medicineName: string) {
@@ -107,7 +112,7 @@ export class AudioRecorder {
     //             AudioRecorder._recorder.getAudioTrackDuration().then(duration => {
     //                 // iOS: duration is in seconds
     //                 // Android: duration is in milliseconds
-    //                 // console.log(`audio duration:`, duration);
+    //                 // _debug.console_log(`audio duration:`, duration);
     //                 // alert("Audio duration: " + duration);
     //             });
     //         })
@@ -128,7 +133,7 @@ export class AudioRecorder {
     //             AudioRecorder._recorder.getAudioTrackDuration().then(duration => {
     //                 // iOS: duration is in seconds
     //                 // Android: duration is in milliseconds
-    //                 // console.log(`audio duration:`, duration);
+    //                 // _debug.console_log(`audio duration:`, duration);
     //                 // alert("Audio duration: " + duration);
     //             });
     //         })
@@ -223,15 +228,16 @@ export class AudioRecorder {
     }
 
     private static _trackComplete(args: any) {
-        console.log('reference back to player:', args.player);
-        // iOS only: flag indicating if completed succesfully
-        console.log('whether song play completed successfully:', args.flag);
+        if (Settings.isDebugBuild) {
+            console.log('reference back to player:', args.player);
+        }
     }
 
     private static _trackError(args: any) {
-        console.log('reference back to player:', args.player);
-        console.log('the error:', args.error);
-        // Android only: extra detail on error
-        console.log('extra info on the error:', args.extra);
+        if (Settings.isDebugBuild) {
+            console.log('reference back to player:', args.player);
+            console.log('the error:', args.error);
+            console.log('extra info on the error:', args.extra);
+        }
     }
 }

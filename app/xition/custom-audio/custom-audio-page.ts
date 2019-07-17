@@ -4,15 +4,9 @@ import { EventData } from "tns-core-modules/data/observable";
 import { NavigatedData, Page, Color } from "tns-core-modules/ui/page";
 
 import { WebView, LoadEventData } from "tns-core-modules/ui/web-view";
-import * as dialogs from "tns-core-modules/ui/dialogs";
 
 import { NewTagViewModel } from "~/xition/new-tag/new-tag-view-model";
-import { TextView } from "tns-core-modules/ui/text-view";
 
-// import * as Test from "../data-models/test-data";
-import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
-import { topmost } from "tns-core-modules/ui/frame/frame";
-import { AppRootViewModel } from "~/app-root/app-root-view-model";
 import { I18N } from "~/utilities/i18n";
 
 import { Settings } from "~/settings/settings";
@@ -21,9 +15,7 @@ let settings: Settings = Settings.getInstance();
 import { AudioPlayer } from "~/audio-player/audio-player";
 import { navigateTo } from "~/app-root/app-root";
 import { onCustomRecordWizardExit, stopRecording } from "~/home/home-page";
-import { Label } from "tns-core-modules/ui/label/label";
 import { Button } from "tns-core-modules/ui/button/button";
-import { AudioRecorder } from "~/audio-recorder/audio-recorder";
 import { MedicineBinding } from "~/data-models/medicine-cabinet";
 
 import fileSystemModule = require('tns-core-modules/file-system');
@@ -36,9 +28,7 @@ let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
 let page: Page = null;
 let viewModel: NewTagViewModel = null;
 
-let isUserBrowsing: boolean;
 const isPressed: boolean = true;
-let appRootContext: AppRootViewModel = null;
 
 // Page Text
 let i18n = I18N.getInstance();
@@ -122,9 +112,11 @@ export function onSaveTap() {
             recordedAudioFile.rename(customAudioFileName);
 
             let customAudioFilePath: string = recordedAudioFile.path;
-            audioPlayer.playFrom(customAudioFilePath);
-            console.log("customAudioFilePath: " + customAudioFilePath);
+            // audioPlayer.playFrom(customAudioFilePath); // Audio plays too often, remove this. User can always play audio from home screen
 
+            if (Settings.isDebugBuild) {
+                console.log("customAudioFilePath: " + customAudioFilePath);
+            }
             let medicineBinding: MedicineBinding = settings.currentMedicineCabinet.getMedicineBindingByIndex(index);
             medicineBinding.audioTrack = customAudioFilePath;
             settings.currentMedicineCabinet.replaceMedicineBinding(index, medicineBinding);

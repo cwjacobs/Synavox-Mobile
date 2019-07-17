@@ -4,12 +4,10 @@ import { EventData } from "tns-core-modules/data/observable";
 import { NavigatedData, Page } from "tns-core-modules/ui/page";
 
 import { WebView, LoadEventData } from "tns-core-modules/ui/web-view";
-// import * as dialogs from "tns-core-modules/ui/dialogs";
 
 import { BrowseViewModel } from "./browse-view-model";
 import { MedicineCabinet, MedicineBinding } from "~/data-models/medicine-cabinet";
 
-// import * as Test from "../data-models/test-data";
 import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
 import { topmost } from "tns-core-modules/ui/frame/frame";
 import { AppRootViewModel } from "~/app-root/app-root-view-model";
@@ -72,12 +70,13 @@ export function onItemTap(args: ItemEventData) {
     column = button.id.substring(0, 1);
     medicineName = button.id.substring(1);
 
-    // webViewSrcModel = testData.webViewSrcArray;
-    // let index: number = settings.currentMedicineCabinet.getMedicineBindingIndex(medicineName);
-    // let wvsMedicineSrc: string = webViewSrcModel[index].srcLinks[column].webViewSrc;
     let wvsMedicineSrc: string = TestData.getResourceURL(medicineName, column);
-    if (wvsMedicineSrc == null) {
+    if (!wvsMedicineSrc) {
         wvsMedicineSrc = TestData.getDefaultURL(medicineName);
+    }
+
+    if (Settings.isDebugBuild) {
+        console.log(wvsMedicineSrc);
     }
     viewModel.set("webViewSrc", wvsMedicineSrc);
     submit(args);
@@ -102,7 +101,9 @@ export function onWebViewLoaded(webargs) {
         }
 
         vm.set("result", message);
-        console.log(`WebView message - ${message}`);
+        if (Settings.isDebugBuild) {
+            console.log(`WebView message - ${message}`);
+        }
     });
 };
 
@@ -117,7 +118,9 @@ export function submit(args) {
     } else {
         dialog.alert("Please, add `http://` or `https://` in front of the URL string")
             .then(() => {
-                console.log("Dialog closed!");
+                if (Settings.isDebugBuild) {
+                    console.log("Dialog closed!");
+                }
             });
     }
 } ``

@@ -146,9 +146,6 @@ export function onListPickerLoaded(args: EventData) {
     listPicker.on("selectedIndexChange", (lpargs) => {
         viewModel.set("index", listPicker.selectedIndex);
         medicineName = (<any>listPicker).selectedValue;
-
-        // console.log(`ListPicker selected value: ${(<any>listPicker).selectedValue}`);
-        // console.log(`ListPicker selected index: ${listPicker.selectedIndex}`);
     });
 };
 

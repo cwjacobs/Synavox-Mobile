@@ -38,7 +38,9 @@ export class RFID {
         // NFC device interface component requires app to be up and running, so delay here...
         setTimeout(() => {
             this._nfc = new Nfc();
-            console.log("Created NFC device interface");
+            if (Settings.isDebugBuild) {
+                console.log("Created NFC device interface");
+            }
         }, 500);
     }
 
@@ -56,21 +58,28 @@ export class RFID {
 
     public startTagListener() {
         if (this._nfc == null) {
-            console.log("this._nfc == null");
+            if (Settings.isDebugBuild) {
+                console.log("this._nfc == null");
+            }
             setTimeout(() => {
                 this._nfc = new Nfc();
-                if (this._nfc == null) {
-                    console.log("Could not create NFC device interface");
+                if (this._nfc == null && Settings.isDebugBuild) {
+                    if (Settings.isDebugBuild) {
+                        console.log("Could not create NFC device interface");
+                    }
                 }
                 else {
-                    console.log("Created NFC device interface");
+                    if (Settings.isDebugBuild) {
+                        console.log("Created NFC device interface");
+                    }
                     this.startTagListener();
                 }
             }, 500);
             return; // Bail and try again in 500
         }
-
-        console.log("startTagListener() ? this._tagListenerStarted: " + this._tagListenerStarted);
+        if (Settings.isDebugBuild) {
+            console.log("startTagListener() ? this._tagListenerStarted: " + this._tagListenerStarted);
+        }
         if (!this._tagListenerStarted) {
             this._nfc.available().then((avail) => {
                 if (!avail) {
@@ -84,7 +93,9 @@ export class RFID {
                         else {
                             let self = this;
                             this._tagListenerStarted = true;
-                            console.log("this._nfc.setOnTagDiscoveredListener - this._tagListenerStarted: " + this._tagListenerStarted);
+                            if (Settings.isDebugBuild) {
+                                console.log("this._nfc.setOnTagDiscoveredListener - this._tagListenerStarted: " + this._tagListenerStarted);
+                            }
                             this._nfc.setOnTagDiscoveredListener((data: NfcTagData) => {
                                 self.scanWizard(data);
                             }).then(() => {
@@ -105,9 +116,13 @@ export class RFID {
     public stopTagListener(): void {
         this._nfc.setOnTagDiscoveredListener(null).then(() => {
             this._tagListenerStarted = false;
-            console.log("rfid - stopTagListener()");
+            if (Settings.isDebugBuild) {
+                console.log("rfid - stopTagListener()");
+            }
         }, (err) => {
-            console.log(err);
+            if (Settings.isDebugBuild) {
+                console.log(err);
+            }
         });
     }
 

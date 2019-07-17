@@ -8,7 +8,7 @@ import { HomeViewModel } from "./home-view-model";
 import { confirm } from "tns-core-modules/ui/dialogs";
 import { MedicineCabinet, MedicineBinding } from "~/data-models/medicine-cabinet";
 import { Button } from "tns-core-modules/ui/button/button";
-import { TabView, TabViewItem, SelectedIndexChangedEventData } from "tns-core-modules/ui/tab-view";
+import { SelectedIndexChangedEventData } from "tns-core-modules/ui/tab-view";
 
 import { I18N } from "~/utilities/i18n";
 import { RFID } from "~/utilities/rfid";
@@ -23,7 +23,8 @@ import { navigateTo } from "~/app-root/app-root";
 
 let i18n: I18N = I18N.getInstance();
 let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
-let audioRecorder: AudioRecorder = AudioRecorder.getInstance();
+let vr: VR = VR.getInstance(); // Will set settings._isSpeechRecognitionAvailable in private constructor.
+let rfid: RFID = RFID.getInstance();
 
 // Individual medicine lists
 let myMedicineCabinet: MedicineCabinet = new MedicineCabinet(TestData.myMedicineCabinet.owner, TestData.myMedicineCabinet.medicines);
@@ -41,12 +42,6 @@ let medicineCabinets: MedicineCabinet[] = [myMedicineCabinet, momMedicineCabinet
 
 // Page scope medicine lists, point local medicineList to shared datastore
 let tempMedicineCabinet: MedicineCabinet;
-
-// Voice (Speech) Recognition
-let vr: VR = VR.getInstance(); // Will set settings._isSpeechRecognitionAvailable in private constructor.
-
-// NFC tag methods
-let rfid: RFID = RFID.getInstance();
 
 let page: Page = null;
 let viewModel: HomeViewModel = null;
@@ -87,7 +82,6 @@ import audio = require('nativescript-audio');
 import fileSystemModule = require('tns-core-modules/file-system');
 const audioFolder = fileSystemModule.knownFolders.currentApp().getFolder('recordings');
 import platform = require('tns-core-modules/platform');
-import { TNSRecorder } from "nativescript-audio";
 
 let isRecording: boolean = false;
 let recordedAudioFilePath: string = null;
@@ -99,7 +93,9 @@ export function onCustomRecord() {
 }
 
 export function onCustomRecordWizardExit(medicineName: string): audio.TNSRecorder {
-    console.log('onCustomRecordWizardExit(medicineName: ' + medicineName + ' )');
+    if (Settings.isDebugBuild) {
+        console.log('onCustomRecordWizardExit(medicineName: ' + medicineName + ' )');
+    }
     let recorder = new audio.TNSRecorder();
     let recordedAudioFileName: string = medicineName.toLowerCase() + ".rec";
 
@@ -124,7 +120,9 @@ export function onCustomRecordWizardExit(medicineName: string): audio.TNSRecorde
             //apparently I'm necessary even if blank
         },
         errorCallback: e => {
-            console.log('error cb', e);
+            if (Settings.isDebugBuild) {
+                console.log('error cb', e);
+            }
         }
     };
     recordedAudioFilePath = options.filename;
@@ -146,7 +144,9 @@ export function stopRecording(recorder: audio.TNSRecorder): string {
                 audioPlayer.playFrom(recordedAudioFilePath);
             })
             .catch(e => {
-                console.log('error stopping', e);
+                if (Settings.isDebugBuild) {
+                    console.log('error stopping', e);
+                }
             });
     }
     return recordedAudioFilePath;
@@ -183,7 +183,6 @@ export function onDeleteMedTap() {
         okButtonText: i18n.ok,
     })
         .then((isConfirmed) => {
-            console.log("result: " + isConfirmed);
             if (isConfirmed) {
                 settings.currentMedicineCabinet.deleteMedicineBinding(medicineName);
                 settings.currentMedicineName = settings.currentMedicineCabinet.medicines[0].medicineName;
@@ -200,7 +199,11 @@ export function onDeleteMedTap() {
                 displayDosesPerDayInstructions(settings.currentMedicineCabinet.getDailyDosesRequired(settings.currentMedicineName));
             }
         })
-        .catch((e) => { console.log("error: " + e) })
+        .catch((e) => {
+            if (Settings.isDebugBuild) {
+                console.log("error: ", e)
+            }
+        })
 }
 
 export function onAddMedTap() {
@@ -321,7 +324,7 @@ export function onLogoTap() {
     // alert(Settings.version);
     dialog.alert({
         title: "nobleIQ Home Pharmacist",
-        message: Settings.version,
+        message: Settings.version + ":  " + Settings.buildType + "\n\n" + Settings.versionDate,
         okButtonText: "Dismiss",
     })
 }

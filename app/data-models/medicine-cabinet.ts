@@ -1,25 +1,22 @@
+import { Settings } from "~/settings/settings";
+
 export class MedicineBinding {
     constructor(
-        public tagId?: string, 
-        public medicineName?: string, 
-        public dailyRequiredDoses?: number, 
+        public tagId?: string,
+        public medicineName?: string,
+        public dailyRequiredDoses?: number,
         public dailyDoses?: number,
         public audioTrack?: string,
-        ) {
+    ) {
     };
 }
 
 export class MedicineCabinet {
-
-    // private _owner: string = "_owner";
-
-    // private _ownerTitle: string = "_ownerTitle";
-
     private _medicines: MedicineBinding[] = [];
 
     constructor(private _owner: string, medicineBindings: MedicineBinding[], private _ownerTitle?: string) {
         medicineBindings.forEach((binding: MedicineBinding) => {
-            this._medicines.push(new MedicineBinding(binding.tagId, binding.medicineName, binding.dailyRequiredDoses, binding.dailyDoses));
+            this._medicines.push(new MedicineBinding(binding.tagId, binding.medicineName, binding.dailyRequiredDoses, binding.dailyDoses, binding.audioTrack));
         });
     };
 
@@ -143,11 +140,13 @@ export class MedicineCabinet {
 
     public setDailyDoseRequirement(medicineName: string, doses: number): void {
         let index: number = this.getMedicineBindingIndex(medicineName);
-        if(index !== -1) {
+        if (index !== -1) {
             this.medicines[index].dailyRequiredDoses = doses;
         }
         else {
-            console.log("setDailyDoseRequirement: " + medicineName + " not found in _medicineBindings");
+            if (Settings.isDebugBuild) {
+                console.log("setDailyDoseRequirement: " + medicineName + " not found in _medicineBindings");
+            }
         }
     }
 

@@ -214,7 +214,6 @@ export function onShareTap(args: EventData) {
     viewModel.set("isShareComplete", isShareComplete);
 
     shareLibrary(0);
-    console.log("back from shareLibrary");
 };
 
 export function onRemoveShareTap(args: EventData) {
@@ -233,7 +232,6 @@ export function onRemoveShareTap(args: EventData) {
     viewModel.set("isShareComplete", isShareComplete);
 
     removeShare(0);
-    console.log("back from removeShare");
 }
 
 function isOdd(num) { return num % 2; }
@@ -363,29 +361,13 @@ export function onGetContactLite_main(args: EventData) {
         "Permission to access your contacts is requested")
         .then(() => {
             Contacts.getContacts(displayNames).then((result) => {
-                // console.log(`Found ${result.length} contacts.`);
-                // console.dir(result);
-
                 contact_list = result;
-
-                //let names: string[] = [];
                 contact_list.forEach((contact) => { displayNames.push(contact.display_name); });
                 displayNames.sort();
-                // viewModel.set("contact_list", names);
-
 
                 let index: number = (contact_list.length / 2);
                 viewModel.set("index", index);
                 viewModel.set("contact_list", displayNames);
-
-                console.log("contact_id: " + contact_list[0].contact_id);
-                console.log("display_name: " + contact_list[0].display_name);
-                console.log("email: " + contact_list[0].email[0].address);
-                console.log("phone: " + contact_list[0].phone[0].number);
-                console.log("phone: " + contact_list[0].organization[0].company);
-
-                //console.dir(contact_list);
-
             }, (e) => { console.dir(e); });
         });
 }
@@ -412,34 +394,38 @@ function storeContact(contact: Contact): void {
 }
 
 function logContact(args: GetContactResult) {
-    console.log("args.response: " + args.response);
-    console.log("args.response: " + JSON.stringify(args.data));
+    if (Settings.isDebugBuild) {
+        console.log("args.response: " + args.response);
+        console.log("args.response: " + JSON.stringify(args.data));
+    }
 
     let contact: Contact = args.data;
-
     let name: Contacts.ContactName = contact.name;
-    console.log("name.given: " + name.given);
-    console.log("name.middle: " + name.middle);
-    console.log("name.family: " + name.family);
-    console.log("name.prefix: " + name.prefix);
-    console.log("name.suffix: " + name.suffix);
-    console.log("name.displayname: " + name.displayname);
-    console.log("name.phonetic.given: " + name.phonetic.given);
-    console.log("name.phonetic.middle: " + name.phonetic.middle);
-    console.log("name.phonetic.family: " + name.phonetic.family);
-    console.log("");
-
     let email: Contacts.ContactField = contact.emailAddresses[0];
-    console.log("email.id: " + email.id);
-    console.log("email.label: " + email.label);
-    console.log("email.value: " + email.value);
+
+    if (Settings.isDebugBuild) {
+        console.log("name.given: " + name.given);
+        console.log("name.middle: " + name.middle);
+        console.log("name.family: " + name.family);
+        console.log("name.prefix: " + name.prefix);
+        console.log("name.suffix: " + name.suffix);
+        console.log("name.displayname: " + name.displayname);
+        console.log("name.phonetic.given: " + name.phonetic.given);
+        console.log("name.phonetic.middle: " + name.phonetic.middle);
+        console.log("name.phonetic.family: " + name.phonetic.family);
+        console.log("");
+
+        console.log("email.id: " + email.id);
+        console.log("email.label: " + email.label);
+        console.log("email.value: " + email.value);
+    }
 }
 
 function setActiveLanguageText(): void {
     viewModel.set("i18nPageTitle", i18n.sharePageTitle);
     viewModel.set("i18nSynavoxSubPageTitle", i18n.synavoxSubPageTitle);
     viewModel.set("i18nLearnAboutSharing", i18n.learnAboutSharing);
-    
+
     viewModel.set("i18nContentTitle", i18n.sharePageHeading + settings.currentMedicineCabinet.ownerTitle);
     viewModel.set("i18nContactFilterLabel", i18n.shareContactFilterLabel);
     viewModel.set("i18nContactFilterHint", i18n.shareContactFilterHint);
