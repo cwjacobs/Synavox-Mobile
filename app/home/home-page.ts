@@ -8,7 +8,7 @@ import { HomeViewModel } from "./home-view-model";
 import { confirm } from "tns-core-modules/ui/dialogs";
 import { MedicineCabinet, MedicineBinding } from "~/data-models/medicine-cabinet";
 import { Button } from "tns-core-modules/ui/button/button";
-import { SelectedIndexChangedEventData } from "tns-core-modules/ui/tab-view";
+import { SelectedIndexChangedEventData, TabView } from "tns-core-modules/ui/tab-view";
 
 import { I18N } from "~/utilities/i18n";
 import { RFID } from "~/utilities/rfid";
@@ -73,10 +73,9 @@ let medsIconDosesTakenTodayOn: string = "#3affe5";
 let medsIconDosesTakenTodayOff: string = "#3ab7ff";
 
 let isTabsViewInitialized: boolean = false;
+let isNavigatingFromAnotherPage: boolean = false;
 
-// import platform = require("tns-core-modules/platform");
 import * as dialog from "tns-core-modules/ui/dialogs";
-import { async } from "rxjs/internal/scheduler/async";
 
 import audio = require('nativescript-audio');
 import fileSystemModule = require('tns-core-modules/file-system');
@@ -254,7 +253,6 @@ export function onSaveNewMedicineTap() {
 
     let medicineName: string = removeSpecialCharacters(viewModel.get("currentMedicineName"));
     if (medicineName == null) {
-        // alert(i18n.selectMedicineMsg);
         dialog.alert({
             title: i18n.selectingMedicineTitle,
             message: i18n.selectMedicineMsg,
@@ -321,7 +319,6 @@ export function onCancelNewMedicineTap() {
 }
 
 export function onLogoTap() {
-    // alert(Settings.version);
     dialog.alert({
         title: "nobleIQ Home Pharmacist",
         message: Settings.version + ":  " + Settings.buildType + "\n\n" + Settings.versionDate,
@@ -333,9 +330,6 @@ export function onTabsLoaded() {
     if (!settings.currentTab) {
         settings.currentTab = 0;
     }
-    else {
-        viewModel.set("tabSelectedIndex", settings.currentTab);
-    }
 }
 
 export function onSelectedIndexChanged(args: SelectedIndexChangedEventData) {
@@ -343,8 +337,20 @@ export function onSelectedIndexChanged(args: SelectedIndexChangedEventData) {
     if ((isTabsViewInitialized) && (!settings.isNewBinding) && (!settings.isConfirmingDose) && (!settings.isAddingNewMedicine)) {
         clearListDosesTakenToday();
 
-        settings.currentTab = args.newIndex;
-        settings.currentMedicineCabinet = medicineCabinets[settings.currentTab];
+        if (isNavigatingFromAnotherPage) {
+            isNavigatingFromAnotherPage = false;
+        }
+        else {
+            settings.currentTab = args.newIndex;
+            settings.currentMedicineCabinet = medicineCabinets[settings.currentTab];
+        }
+
+        var tabView = <TabView>page.getViewById("tabViewContainer");
+        tabView.selectedIndex = settings.currentTab;
+        if (Settings.isDebugBuild) {
+            console.log("onSelectedIndexChanged tabView.selectedIndex: " + tabView.selectedIndex);
+        }
+
         setMedicineCabinetOwnerInfo();
         setRecordIconColor();
 
@@ -386,6 +392,7 @@ export function onNavigatingTo(args: NavigatedData) {
 
 export function onNavigatingFrom() {
     audioPlayer.stop();
+    isNavigatingFromAnotherPage = true;
 }
 
 export function onDrawerButtonTap(args: EventData) {
@@ -395,7 +402,14 @@ export function onDrawerButtonTap(args: EventData) {
 
 export function onLoaded(args: EventData) {
     if (settings.currentMedicineCabinet === null) {
+        settings.currentTab = 0;
         settings.currentMedicineCabinet = myMedicineCabinet;
+    }
+
+    var tabView = <TabView>page.getViewById("tabViewContainer");
+    tabView.selectedIndex = settings.currentTab;
+    if (Settings.isDebugBuild) {
+        console.log("onLoaded tabView.selectedIndex: " + tabView.selectedIndex);
     }
 
     setTimeout(() => {
@@ -1053,7 +1067,6 @@ function updateViewModelGlobals() {
         }
     }, 400);
 
-    viewModel.set("tabSelectedIndex", settings.currentTab);
     viewModel.set("medicineList", settings.currentMedicineCabinet.medicines);
     viewModel.set("currentMedicineName", settings.currentMedicineName);
     viewModel.set("isAudioEnabled", settings.isAudioEnabled);

@@ -2,7 +2,7 @@ import { MedicineCabinet } from "~/data-models/medicine-cabinet";
 
 export class Settings {
 
-    public static readonly isDebugBuild: boolean = true;
+    public static readonly isDebugBuild: boolean = false;
 
     private static readonly _version: string = "Version: 1.30.1";
     

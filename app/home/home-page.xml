@@ -15,7 +15,7 @@
 		<parallax:ParallaxView height="75%" background="white">
 			<parallax:Header class="header-template" id="headerTemplate" dropShadow="false"></parallax:Header>
 			<parallax:Anchored class="anchor" height="100vh">
-				<TabView class="list-container" id="tabViewContainer" loaded="onTabsLoaded" selectedIndex="{{ tabSelectedIndex ? tabSelectedIndex : 0 }}" selectedIndexChanged="onSelectedIndexChanged">
+				<TabView class="list-container" id="tabViewContainer" loaded="onTabsLoaded" selectedIndexChanged="onSelectedIndexChanged">
 					<TabViewItem class="fa" title="{{ i18nMe }}">
 						<GridLayout rows="auto" columns="auto,*,*">
 							<Label class="text-left tab1 tabs fa" id="my-tab" text="{{ i18nMyPrescriptions }}" row="0" col="0" />

@@ -6,7 +6,6 @@ import { NavigatedData, Page } from "tns-core-modules/ui/page";
 import { WebView, LoadEventData } from "tns-core-modules/ui/web-view";
 
 import { BrowseViewModel } from "./browse-view-model";
-import { MedicineCabinet, MedicineBinding } from "~/data-models/medicine-cabinet";
 
 import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
 import { topmost } from "tns-core-modules/ui/frame/frame";
@@ -19,7 +18,6 @@ import { AudioPlayer } from "~/audio-player/audio-player";
 
 import * as dialog from "tns-core-modules/ui/dialogs";
 
-let testData: TestData = new TestData();
 let settings: Settings = Settings.getInstance();
 let audioPlayer: AudioPlayer = AudioPlayer.getInstance();
 
@@ -28,7 +26,6 @@ let viewModel: BrowseViewModel = null;
 
 let appRootContext: AppRootViewModel = null;
 let isUserBrowsing: boolean;
-let webViewSrcModel = null;
 
 let column: number = null;
 let medicineName: string = null;
@@ -94,10 +91,12 @@ export function onWebViewLoaded(webargs) {
 
     webview.on(WebView.loadFinishedEvent, (args: LoadEventData) => {
         let message = "";
-        if (!args.error) {
-            message = `WebView finished loading of ${args.url}`;
-        } else {
-            message = `Error loading ${args.url} : ${args.error}`;
+        if (Settings.isDebugBuild) {
+            if (!args.error) {
+                message = `WebView finished loading of ${args.url}`;
+            } else {
+                message = `Error loading ${args.url} : ${args.error}`;
+            }
         }
 
         vm.set("result", message);
