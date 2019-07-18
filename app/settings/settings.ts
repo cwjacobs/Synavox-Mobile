@@ -6,7 +6,7 @@ export class Settings {
 
     private static readonly _version: string = "Version: 1.30.1";
     
-    private static readonly _versionDate: string = "Build Date: 7/16/2019";
+    private static readonly _versionDate: string = "Build Date: 7/17/2019";
 
     public static readonly brightIconColors: string[] = ["#3ab7ff", "#35db02", "#b104f5"];
 
