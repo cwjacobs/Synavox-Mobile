@@ -4,9 +4,9 @@ export class Settings {
 
     public static readonly isDebugBuild: boolean = false;
 
-    private static readonly _version: string = "Version: 1.30.1";
+    private static readonly _version: string = "Version: 1.30.3";
     
-    private static readonly _versionDate: string = "Build Date: 7/17/2019";
+    private static readonly _versionDate: string = "Build Date: 7/23/2019";
 
     public static readonly brightIconColors: string[] = ["#3ab7ff", "#35db02", "#b104f5"];
 
@@ -48,10 +48,6 @@ export class Settings {
     public static getInstance(): Settings {
         return Settings._instance;
     }
-
-    // public static get isDebugBuild() {
-    //     return Settings._isDebugBuild;
-    // }
 
     public static get version() {
         return this._version;

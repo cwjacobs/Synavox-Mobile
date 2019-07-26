@@ -5,7 +5,6 @@ import { NavigatedData, Page, Color, View } from "tns-core-modules/ui/page";
 import { ListView, ItemEventData } from "tns-core-modules/ui/list-view/list-view";
 import { Label } from "tns-core-modules/ui/label/label";
 import { HomeViewModel } from "./home-view-model";
-import { confirm } from "tns-core-modules/ui/dialogs";
 import { MedicineCabinet, MedicineBinding } from "~/data-models/medicine-cabinet";
 import { Button } from "tns-core-modules/ui/button/button";
 import { SelectedIndexChangedEventData, TabView } from "tns-core-modules/ui/tab-view";
@@ -15,7 +14,6 @@ import { RFID } from "~/utilities/rfid";
 import { TestData } from "~/data-models/test-data";
 import { Settings } from "~/settings/settings";
 import { AudioPlayer } from "~/audio-player/audio-player";
-import { AudioRecorder } from "~/audio-recorder/audio-recorder";
 
 import { TextField } from "tns-core-modules/ui/text-field/text-field";
 import { VR } from "~/utilities/vr";
@@ -321,7 +319,7 @@ export function onCancelNewMedicineTap() {
 export function onLogoTap() {
     dialog.alert({
         title: "nobleIQ Home Pharmacist",
-        message: Settings.version + ":  " + Settings.buildType + "\n\n" + Settings.versionDate,
+        message: Settings.version + " - " + Settings.buildType + "\n\n" + Settings.versionDate,
         okButtonText: "Dismiss",
     })
 }
@@ -633,7 +631,7 @@ export function onCancelDosesTakenTodayTap() {
 
 export function current1(args: ItemEventData) {
     let indicator: any = page.getViewById("current1");
-    if ((!isEditingDosesTakenToday) && (!isEditingTotalDosesPerDay) && (indicator.color.name === "red")) {
+    if ((!isEditingDosesTakenToday) && (!isEditingTotalDosesPerDay) && (indicator.color.r === 255)) {
         alert("Call a doctor!!!");
     }
     else {
@@ -643,7 +641,7 @@ export function current1(args: ItemEventData) {
 
 export function current2(args: ItemEventData) {
     let indicator: any = page.getViewById("current2");
-    if ((!isEditingDosesTakenToday) && (!isEditingTotalDosesPerDay) && (indicator.color.name === "red")) {
+    if ((!isEditingDosesTakenToday) && (!isEditingTotalDosesPerDay) && (indicator.color.r === 255)) {
         alert("Call a doctor!!!");
     }
     else {
@@ -653,7 +651,7 @@ export function current2(args: ItemEventData) {
 
 export function current3(args: ItemEventData) {
     let indicator: any = page.getViewById("current3");
-    if ((!isEditingDosesTakenToday) && (!isEditingTotalDosesPerDay) && (indicator.color.name === "red")) {
+    if ((!isEditingDosesTakenToday) && (!isEditingTotalDosesPerDay) && (indicator.color.r === 255)) {
         alert("Call a doctor!!!");
     }
     else {
@@ -663,7 +661,7 @@ export function current3(args: ItemEventData) {
 
 export function current4(args: ItemEventData) {
     let indicator: any = page.getViewById("current4");
-    if ((!isEditingDosesTakenToday) && (!isEditingTotalDosesPerDay) && (indicator.color.name === "red")) {
+    if ((!isEditingDosesTakenToday) && (!isEditingTotalDosesPerDay) && (indicator.color.r === 255)) {
         alert("Call a doctor!!!");
     }
     else {
@@ -673,7 +671,7 @@ export function current4(args: ItemEventData) {
 
 export function current5(args: ItemEventData) {
     let indicator: any = page.getViewById("current5");
-    if ((!isEditingDosesTakenToday) && (!isEditingTotalDosesPerDay) && (indicator.color.name === "red")) {
+    if ((!isEditingDosesTakenToday) && (!isEditingTotalDosesPerDay) && (indicator.color.r === 255)) {
         alert("Call a doctor!!!");
     }
     else {
@@ -708,9 +706,9 @@ export function onItemTap(args: ItemEventData) {
     // Display dose instructions
     displayDosesPerDayInstructions(settings.currentMedicineCabinet.medicines[args.index].dailyRequiredDoses);
 
-    if (settings.isAudioEnabled) {
-        audioPlayer.play(medicineName);
-    }
+    // if (settings.isAudioEnabled) {
+    //     audioPlayer.play(medicineName);
+    // }
 };
 
 // Audio control functions
